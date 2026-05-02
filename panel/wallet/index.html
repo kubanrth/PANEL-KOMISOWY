@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet · Panel klienta · Kickback</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,30..100;1,9..144,300..900,30..100&family=Geist:wght@300..800&family=Geist+Mono:wght@300..600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: {
+        colors:{ink:'#0B0A07',surface:'#100F0B',elev1:'#17150F',elev2:'#211E15',divider:'#2A271D',cream:'#F2EBDD',creamSoft:'#BFB8A8',creamMute:'#7E7868',creamFaint:'#4D4839',acid:'#D6FE5C',acidDeep:'#A7CC3E',gold:'#C4A77D',ember:'#E2532D'},
+        fontFamily:{display:['Fraunces','serif'],sans:['Geist','sans-serif'],mono:['"Geist Mono"','monospace']},
+        letterSpacing:{denser:'-0.055em',dense:'-0.045em',tightest:'-0.03em',widest2:'0.32em',wider2:'0.18em'}
+      }}};
+    </script>
+    <style>
+      html,body{background:#0B0A07;color:#F2EBDD;font-family:'Geist',sans-serif;-webkit-font-smoothing:antialiased}
+      .ff-display{font-family:'Fraunces',serif;font-variation-settings:'opsz' 144,'SOFT' 100}
+      .ff-display-print{font-family:'Fraunces',serif;font-variation-settings:'opsz' 11,'SOFT' 30}
+      ::selection{background:#D6FE5C;color:#0B0A07}
+      .grain::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.35;mix-blend-mode:overlay;
+        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.95 0 0 0 0 0.92 0 0 0 0 0.86 0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+      .frame{background:#100F0B;border:1px solid #2A271D;box-shadow:0 1px 0 rgba(242,235,221,0.04) inset, 0 24px 60px -28px rgba(0,0,0,0.85)}
+      .pill{background:rgba(214,254,92,0.08);color:#D6FE5C;border:1px solid rgba(214,254,92,0.25)}
+      .pill-gold{background:rgba(196,167,125,0.06);color:#C4A77D;border:1px solid rgba(196,167,125,0.25)}
+      .pill-mute{background:transparent;color:#BFB8A8;border:1px solid #2A271D}
+      .btn-acid{background:#D6FE5C;color:#0B0A07;transition:transform .35s cubic-bezier(0.22,1,0.36,1),box-shadow .35s ease,background-color .25s ease}
+      .btn-acid:hover{background:#E1FF74;transform:translate3d(0,-2px,0);box-shadow:0 0 0 1px rgba(214,254,92,0.6),0 24px 60px -22px rgba(214,254,92,0.5)}
+      .btn-ghost{transition:transform .35s cubic-bezier(0.22,1,0.36,1),color .25s ease}
+      .btn-ghost:hover{color:#D6FE5C;transform:translate3d(0,-1px,0)}
+      .nav-item{transition:color .25s ease,background-color .25s ease,border-color .25s ease}
+      .nav-item.is-active{color:#D6FE5C;border-left:2px solid #D6FE5C;background:rgba(214,254,92,0.04);margin-left:-1.5rem;padding-left:calc(1.5rem - 2px)}
+      .nav-item:hover{color:#F2EBDD}
+      .row{transition:background-color .2s ease}
+      .row:hover{background:rgba(23,21,15,0.7)}
+      @keyframes pulse-dot{0%,100%{opacity:0.4;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+      .live-dot{animation:pulse-dot 2s ease-in-out infinite}
+      .seg{display:flex;height:14px;border-radius:2px;overflow:hidden;background:#211E15;border:1px solid #2A271D}
+      .seg span{display:block;height:100%}
+      .stat-num{font-feature-settings:'tnum'}
+      .field{background:transparent;border:0;border-bottom:1px solid #2A271D;color:#F2EBDD;padding:10px 0;width:100%;font-size:14px;outline:none;transition:border-color .25s ease}
+      .field:focus{border-bottom-color:#D6FE5C}
+      .field::placeholder{color:#4D4839}
+    </style>
+</head>
+<body class="grain min-h-screen flex">
+
+  <!-- LEFT RAIL (same as panel) -->
+  <aside class="hidden lg:flex flex-col w-[260px] xl:w-[280px] border-r border-divider/70 bg-surface/60 sticky top-0 h-screen">
+    <div class="px-6 pt-6 pb-5 border-b border-divider/70">
+      <a href="../../" class="flex items-baseline gap-2">
+        <span class="ff-display-print text-2xl tracking-dense text-cream">Kickback</span>
+        <span class="font-mono text-[9px] uppercase tracking-widest2 text-creamMute">v.4</span>
+      </a>
+      <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute mt-1">Panel klienta</div>
+    </div>
+    <nav class="px-6 py-6 flex-1 overflow-y-auto">
+      <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Sprzedaż</div>
+      <ul class="mt-3 space-y-1.5 text-[14px]">
+        <li><a href="../" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>My Sales</span><span class="font-mono text-[10px] text-creamMute">12</span></a></li>
+        <li><a href="../submissions/" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Submissions</span><span class="font-mono text-[10px] text-creamMute">8</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Negocjacje</span><span class="font-mono text-[10px] text-gold">●3</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Posprzedażowe</span></a></li>
+      </ul>
+      <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute mt-9">Środki</div>
+      <ul class="mt-3 space-y-1.5 text-[14px]">
+        <li><a href="./" class="nav-item is-active flex items-center justify-between py-2"><span>Wallet</span><span class="font-mono text-[10px]">7 240 zł</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Wypłaty</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Dokumenty</span><span class="font-mono text-[10px] text-creamMute">2</span></a></li>
+      </ul>
+      <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute mt-9">Konto</div>
+      <ul class="mt-3 space-y-1.5 text-[14px]">
+        <li><a href="../notifications/" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Powiadomienia</span><span class="font-mono text-[10px] text-acid">3</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Statystyki</span></a></li>
+        <li><a href="#" class="nav-item flex items-center justify-between py-2 text-creamSoft"><span>Ustawienia</span></a></li>
+      </ul>
+    </nav>
+    <div class="px-6 py-5 border-t border-divider/70">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-full bg-elev2 border border-divider flex items-center justify-center font-mono text-acid text-[12px]">KN</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[13px] text-cream truncate">Kuba North</div>
+          <div class="font-mono text-[10px] text-creamMute">@kuban · indywidualne</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 min-w-0">
+
+    <header class="sticky top-0 z-20 backdrop-blur-md bg-ink/70 border-b border-divider/70">
+      <div class="px-6 lg:px-10 h-[64px] flex items-center justify-between">
+        <span class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest2 text-creamMute">
+          <a href="../" class="hover:text-acid">Panel</a>
+          <span class="text-creamFaint">/</span>
+          <span class="text-creamSoft">Wallet</span>
+        </span>
+        <div class="flex items-center gap-3">
+          <span class="hidden lg:flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest2 text-creamMute"><span class="live-dot inline-block h-1.5 w-1.5 rounded-full bg-acid"></span> Subkonto Santander · synchronizacja co 30s</span>
+          <button class="btn-acid inline-flex items-center gap-2 px-4 py-2 text-[12px] font-medium tracking-tight">+ Wypłać na konto</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="px-6 lg:px-10 py-8 lg:py-12 space-y-12">
+
+      <!-- HERO BALANCE -->
+      <section>
+        <div class="font-mono text-[11px] uppercase tracking-widest2 text-creamMute flex items-center gap-3">
+          <span class="inline-block h-px w-8 bg-creamFaint"></span>
+          Saldo · stan na 02.05.2026 · 18:42
+        </div>
+        <div class="mt-4 grid grid-cols-12 gap-6 lg:gap-10 items-end">
+          <div class="col-span-12 lg:col-span-7">
+            <div class="ff-display text-[18vw] sm:text-[14vw] lg:text-[160px] xl:text-[200px] leading-[0.9] tracking-denser text-cream">
+              7 240<span class="text-creamMute text-2xl ml-3 font-sans tracking-normal align-top">zł</span>
+            </div>
+            <div class="font-mono text-[11px] uppercase tracking-widest2 text-creamMute mt-2">Total · Funds in Wallet</div>
+          </div>
+          <div class="col-span-12 lg:col-span-5">
+            <div class="seg"><span class="bg-acid" style="width:65%"></span><span class="bg-gold" style="width:35%"></span></div>
+            <div class="flex items-center justify-between mt-3 font-mono text-[10px] uppercase tracking-widest2">
+              <span class="flex items-center gap-2 text-acid"><span class="h-1.5 w-1.5 rounded-full bg-acid"></span>Odblokowane · 4 720 zł</span>
+              <span class="flex items-center gap-2 text-gold"><span class="h-1.5 w-1.5 rounded-full bg-gold"></span>Pending · 2 520 zł</span>
+            </div>
+
+            <div class="mt-8 grid grid-cols-3 gap-4">
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Dostępne</div>
+                <div class="ff-display text-3xl tracking-denser text-acid mt-1 stat-num">4 720</div>
+                <div class="font-mono text-[10px] text-creamMute">do wypłaty</div>
+              </div>
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">14d karencja</div>
+                <div class="ff-display text-3xl tracking-denser text-gold mt-1 stat-num">2 520</div>
+                <div class="font-mono text-[10px] text-creamMute">odblok. ~ 12.05</div>
+              </div>
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">YTD</div>
+                <div class="ff-display text-3xl tracking-denser text-cream mt-1 stat-num">18.4<span class="text-creamMute text-base font-sans tracking-normal ml-1">tys.</span></div>
+                <div class="font-mono text-[10px] text-acid">▲ +22% vs. 2025</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIONS GRID -->
+      <section class="grid grid-cols-12 gap-5 lg:gap-6">
+
+        <!-- Withdraw -->
+        <article class="col-span-12 lg:col-span-7 frame rounded-sm p-6 lg:p-9 relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-acid/8 blur-3xl pointer-events-none"></div>
+          <div class="relative">
+            <div class="flex items-center justify-between">
+              <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Wypłata na konto bankowe</div>
+              <span class="pill px-2 py-1 font-mono text-[10px] tracking-widest2">DOSTĘPNE 4 720 zł</span>
+            </div>
+            <h2 class="mt-4 ff-display text-[44px] lg:text-[64px] leading-[0.95] tracking-denser text-cream">Wypłać <span class="italic text-creamSoft">kiedy chcesz.</span></h2>
+
+            <div class="mt-8 grid grid-cols-12 gap-6">
+              <div class="col-span-12 md:col-span-6">
+                <label class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Kwota</label>
+                <div class="flex items-baseline gap-3 border-b border-divider mt-2 pb-3 focus-within:border-acid transition-colors">
+                  <input type="text" value="4 720" class="bg-transparent ff-display text-5xl lg:text-6xl tracking-denser text-cream w-full outline-none" />
+                  <span class="font-sans text-creamMute text-xl">zł</span>
+                </div>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <button class="text-[11px] px-3 py-1.5 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">25%</button>
+                  <button class="text-[11px] px-3 py-1.5 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">50%</button>
+                  <button class="text-[11px] px-3 py-1.5 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">75%</button>
+                  <button class="text-[11px] px-3 py-1.5 rounded-sm bg-acid text-ink font-medium">Cała dostępna</button>
+                </div>
+              </div>
+
+              <div class="col-span-12 md:col-span-6">
+                <label class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Konto docelowe</label>
+                <div class="mt-2 frame rounded-sm p-4 flex items-center gap-4">
+                  <div class="h-10 w-10 rounded-sm bg-elev2 border border-divider flex items-center justify-center font-mono text-[10px] text-acid">SAN</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[13px] text-cream">Santander Bank Polska</div>
+                    <div class="font-mono text-[10px] text-creamMute">PL 12 1090 0000 0000 0000 **** 3214</div>
+                  </div>
+                  <button class="text-creamMute hover:text-acid"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+                <button class="mt-3 text-[12px] text-creamSoft hover:text-acid transition-colors inline-flex items-center gap-2">+ Dodaj nowe konto</button>
+
+                <div class="mt-6 p-4 border border-divider/60 rounded-sm bg-elev1/40">
+                  <div class="flex items-baseline justify-between mb-2"><span class="text-[12px] text-creamSoft">Kwota wypłaty</span><span class="font-mono text-[13px] text-cream">4 720,00 zł</span></div>
+                  <div class="flex items-baseline justify-between mb-2"><span class="text-[12px] text-creamSoft">Opłata Kickback</span><span class="font-mono text-[13px] text-cream">0,00 zł</span></div>
+                  <div class="flex items-baseline justify-between border-t border-divider pt-3"><span class="text-[12px] text-cream">Otrzymasz</span><span class="ff-display text-2xl tracking-denser text-acid">4 720,00 zł</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <button class="btn-acid inline-flex items-center gap-3 px-7 py-4 text-[14px] font-medium tracking-tight">
+                Zleć wypłatę
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+              <span class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Realizacja: do 24h roboczych · autoryzacja Autopay/PZ</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Documents (unlock funds) -->
+        <article class="col-span-12 lg:col-span-5 frame rounded-sm p-6 lg:p-8">
+          <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Odblokowanie środków</div>
+          <h2 class="mt-3 ff-display text-3xl lg:text-4xl tracking-denser text-cream">Dokumenty <span class="italic text-creamSoft">do podpisu.</span></h2>
+          <p class="mt-3 text-[13px] leading-[1.6] text-creamSoft max-w-[42ch]">
+            Dla konta indywidualnego — Umowa Kupna-Sprzedaży po każdej sprzedaży. Po uploadzie podpisanego dokumentu Funds przechodzą z Pending do Dostępne.
+          </p>
+
+          <ul class="mt-6 space-y-3">
+            <li class="border border-divider rounded-sm p-4 flex items-center gap-4">
+              <div class="h-10 w-10 rounded-sm bg-elev2 border border-divider flex items-center justify-center text-acid">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[13px] text-cream truncate">Umowa K-S · SUB-08407</div>
+                <div class="font-mono text-[10px] text-creamMute">Acne Studios Bla Konst · 1 920 zł</div>
+              </div>
+              <span class="pill-mute px-2 py-1 font-mono text-[9px] tracking-widest2">CZEKA</span>
+            </li>
+            <li class="border border-divider rounded-sm p-4 flex items-center gap-4">
+              <div class="h-10 w-10 rounded-sm bg-elev2 border border-divider flex items-center justify-center text-acid">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[13px] text-cream truncate">Umowa K-S · SUB-08233</div>
+                <div class="font-mono text-[10px] text-creamMute">Travis Scott Lo · 3 480 zł</div>
+              </div>
+              <span class="pill-gold px-2 py-1 font-mono text-[9px] tracking-widest2">PILNE 2d</span>
+            </li>
+          </ul>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            <button class="btn-acid px-4 py-2 text-[12px] font-medium">Pobierz template Umowy K-S</button>
+            <button class="px-4 py-2 text-[12px] border border-divider rounded-sm text-cream hover:border-acid hover:text-acid transition-colors">Upload podpisanego pliku</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- HISTORY -->
+      <section>
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+          <div>
+            <div class="font-mono text-[11px] uppercase tracking-widest2 text-creamMute">Ruch w portfelu</div>
+            <h2 class="mt-2 ff-display text-3xl lg:text-4xl tracking-denser text-cream">Historia transakcji</h2>
+          </div>
+          <div class="flex items-center gap-2 text-[12px]">
+            <button class="px-3 py-2 rounded-sm bg-acid text-ink font-medium">Wszystkie · 18</button>
+            <button class="px-3 py-2 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">Wpływy · 12</button>
+            <button class="px-3 py-2 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">Wypłaty · 4</button>
+            <button class="px-3 py-2 rounded-sm border border-divider text-creamSoft hover:border-acid hover:text-acid transition-colors">Pending · 2</button>
+          </div>
+        </div>
+
+        <div class="frame rounded-sm overflow-hidden">
+          <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-elev1 border-b border-divider font-mono text-[10px] uppercase tracking-widest2 text-creamMute">
+            <div class="col-span-1">Data</div>
+            <div class="col-span-5">Operacja</div>
+            <div class="col-span-2">Typ</div>
+            <div class="col-span-2 text-right">Brutto</div>
+            <div class="col-span-2 text-right">Netto · Funds</div>
+          </div>
+
+          <!-- pending sale -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">02.05</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-gold"></span>
+              <div>
+                <div class="text-[13px] text-cream">Sprzedaż · Bottega Cassette (oczekuje)</div>
+                <div class="font-mono text-[10px] text-creamMute">SUB-08376 · oferta 720 zł</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill-gold px-2 py-1 font-mono text-[10px] tracking-widest2">OFFER</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-creamSoft">720,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-creamSoft">+ 576,00</div>
+          </div>
+
+          <!-- recent sale -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">28.04</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-acid"></span>
+              <div>
+                <div class="text-[13px] text-cream">Sprzedaż · Acne Studios Bla Konst</div>
+                <div class="font-mono text-[10px] text-creamMute">SUB-08407 · pending 14d (do 12.05)</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill px-2 py-1 font-mono text-[10px] tracking-widest2">PENDING</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-cream">1 920,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-cream">+ 1 536,00</div>
+          </div>
+
+          <!-- payout -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">22.04</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-creamMute"></span>
+              <div>
+                <div class="text-[13px] text-cream">Wypłata · Santander **** 3214</div>
+                <div class="font-mono text-[10px] text-creamMute">PRZELEW 2 800,00 zł · zrealizowana</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill-mute px-2 py-1 font-mono text-[10px] tracking-widest2">WYPŁATA</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-creamSoft">2 800,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-creamSoft">— 2 800,00</div>
+          </div>
+
+          <!-- sale unlocked -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">18.04</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-acid"></span>
+              <div>
+                <div class="text-[13px] text-cream">Sprzedaż · Off-White™ Industrial Belt</div>
+                <div class="font-mono text-[10px] text-creamMute">SUB-08390 · Funds odblokowane (Umowa K-S)</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill px-2 py-1 font-mono text-[10px] tracking-widest2">FUNDS</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-cream">820,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-acid">+ 576,00</div>
+          </div>
+
+          <!-- sale -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">11.04</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-acid"></span>
+              <div>
+                <div class="text-[13px] text-cream">Sprzedaż · Travis Scott Lo</div>
+                <div class="font-mono text-[10px] text-creamMute">SUB-08233 · Funds odblokowane (Umowa K-S)</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill px-2 py-1 font-mono text-[10px] tracking-widest2">FUNDS</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-cream">3 480,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-acid">+ 2 784,00</div>
+          </div>
+
+          <!-- payout -->
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-divider">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">04.04</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-creamMute"></span>
+              <div>
+                <div class="text-[13px] text-cream">Wypłata · ING **** 1029</div>
+                <div class="font-mono text-[10px] text-creamMute">PRZELEW 1 200,00 zł · zrealizowana</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill-mute px-2 py-1 font-mono text-[10px] tracking-widest2">WYPŁATA</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-creamSoft">1 200,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-creamSoft">— 1 200,00</div>
+          </div>
+
+          <div class="row grid grid-cols-12 gap-4 px-6 py-4 items-center">
+            <div class="col-span-1 font-mono text-[12px] text-creamSoft">28.03</div>
+            <div class="col-span-5 flex items-center gap-3">
+              <span class="h-1.5 w-1.5 rounded-full bg-acid"></span>
+              <div>
+                <div class="text-[13px] text-cream">Sprzedaż · Hermès Twilly (silk)</div>
+                <div class="font-mono text-[10px] text-creamMute">SUB-08144</div>
+              </div>
+            </div>
+            <div class="col-span-2"><span class="pill px-2 py-1 font-mono text-[10px] tracking-widest2">FUNDS</span></div>
+            <div class="col-span-2 text-right font-mono text-[13px] text-cream">1 200,00 zł</div>
+            <div class="col-span-2 text-right ff-display text-[18px] tracking-denser text-acid">+ 960,00</div>
+          </div>
+        </div>
+
+        <div class="mt-5 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest2 text-creamMute">
+          <span>7 z 18 pozycji</span>
+          <span class="flex items-center gap-3">
+            <button class="btn-ghost text-creamSoft hover:text-acid">Pokaż więcej</button>
+            <span class="opacity-40">·</span>
+            <button class="btn-ghost text-creamSoft hover:text-acid">Eksport CSV</button>
+            <span class="opacity-40">·</span>
+            <button class="btn-ghost text-creamSoft hover:text-acid">Pobierz wyciąg PDF</button>
+          </span>
+        </div>
+      </section>
+
+      <!-- SECURITY / TRUST FOOTER -->
+      <section class="border-t border-divider/70 pt-12 grid grid-cols-12 gap-6 lg:gap-10">
+        <div class="col-span-12 lg:col-span-5">
+          <div class="font-mono text-[11px] uppercase tracking-widest2 text-creamMute">Bezpieczeństwo środków</div>
+          <h3 class="mt-3 ff-display text-3xl lg:text-4xl tracking-denser text-cream">Subkonto bankowe.</h3>
+          <p class="mt-3 max-w-[44ch] text-[14px] leading-[1.6] text-creamSoft">
+            Środki klientów Kickback przechowujemy na osobnym subkoncie w Santander Bank Polska — odseparowanym od środków operacyjnych spółki. Każda operacja jest księgowana na Twoim subkoncie.
+          </p>
+        </div>
+        <div class="col-span-12 lg:col-span-7 grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+          <div class="frame rounded-sm p-5">
+            <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">IBAN subkonta</div>
+            <div class="font-mono text-[12px] text-cream mt-2 break-all">PL 84 1090 1014 0000 0000 0042 0042</div>
+          </div>
+          <div class="frame rounded-sm p-5">
+            <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">BFG · gwarancje</div>
+            <div class="ff-display text-2xl tracking-denser text-cream mt-1">100k €</div>
+            <div class="font-mono text-[10px] text-creamMute">na klienta</div>
+          </div>
+          <div class="frame rounded-sm p-5">
+            <div class="font-mono text-[10px] uppercase tracking-widest2 text-creamMute">Saldo subkonta</div>
+            <div class="ff-display text-2xl tracking-denser text-cream mt-1">7 240,00</div>
+            <div class="font-mono text-[10px] text-creamMute">PLN · 18:42</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="border-t border-divider/70 pt-6 flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-widest2 text-creamMute">
+        <span>Kickback sp. z o. o. · Wallet v.4.2</span>
+        <span class="flex items-center gap-3">
+          <a href="../../" class="hover:text-acid">Landing</a>
+          <span class="opacity-40">·</span>
+          <a href="#" class="hover:text-acid">Regulamin Wallet</a>
+          <span class="opacity-40">·</span>
+          <a href="#" class="hover:text-acid">Kontakt</a>
+        </span>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
