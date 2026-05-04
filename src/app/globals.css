@@ -237,3 +237,32 @@ html { scroll-behavior: smooth; }
 /* Hide scrollbar but allow scroll (for ticker rows) */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/* line-clamp utility (can be removed when Tailwind v4 has it built-in) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================================ */
+/* Print styles — clean shipping label only                     */
+/* ============================================================ */
+
+@media print {
+  body { background: #FFFFFF !important; color: #000000 !important; }
+  /* hide everything except the shipping label */
+  body > *:not(:has(#ship-label)) { display: none !important; }
+  header, footer, nav, aside, .print\:hidden { display: none !important; }
+  /* show only ship-label area */
+  #ship-label {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 24px !important;
+    page-break-inside: avoid;
+  }
+  @page { size: A4; margin: 12mm; }
+}
