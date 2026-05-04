@@ -1,12 +1,10 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./env";
 
 /**
  * Supabase client for use in Client Components ("use client").
  * Reads NEXT_PUBLIC_* env vars — safe to expose.
  */
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  return createBrowserClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 }

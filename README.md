@@ -40,10 +40,10 @@ Utwórz projekt na [supabase.com](https://supabase.com), potem:
    ```bash
    cp .env.example .env.local
    ```
-2. Wypełnij wartości z **Project Settings → API**:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (do server-side admin operacji)
+2. Wypełnij wartości z **Project Settings → API Keys**:
+   - `NEXT_PUBLIC_SUPABASE_URL` (z **Data API → API URL**, bez końcówki `/rest/v1/`)
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (klucz `sb_publishable_...`)
+   - Legacy JWT-format `eyJ...` keys (poprzednia nazwa `NEXT_PUBLIC_SUPABASE_ANON_KEY`) **też działają** jako fallback
 
 3. Wykonaj migrację SQL w **Supabase Dashboard → SQL Editor**:
    - Skopiuj zawartość [supabase/migrations/20260504_001_init.sql](supabase/migrations/20260504_001_init.sql)

@@ -1,27 +1,24 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_CONFIGURED } from "@/lib/supabase/env";
 
 /**
  * Proxy (formerly middleware in Next.js < 16).
- * Refreshes Supabase auth cookies on every request and gates /panel /admin routes.
+ * Refreshes Supabase auth cookies on every request and gates /panel /admin /start routes.
  *
- * Resilient mode: if Supabase env vars are missing/invalid, pass requests through
- * without auth gating. This lets the marketing landing render even before Supabase
- * is configured (e.g. on a fresh Vercel deploy with empty env vars).
+ * Resilient: if Supabase env vars are missing/invalid, pass requests through
+ * without auth gating so the marketing landing renders even before Supabase
+ * is configured.
  */
 export async function proxy(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  // No Supabase config → just pass through.
-  if (!url || !anon || !url.startsWith("http")) {
+  if (!SUPABASE_CONFIGURED) {
     return NextResponse.next({ request });
   }
 
   let response = NextResponse.next({ request });
 
   try {
-    const supabase = createServerClient(url, anon, {
+    const supabase = createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
       cookies: {
         getAll() {
           return request.cookies.getAll();
