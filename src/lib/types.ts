@@ -103,3 +103,191 @@ export const PRODUCT_STATUS_LABEL: Record<ProductStatus, string> = {
   withdrawn: "Wycofane",
   returned: "Zwrot",
 };
+
+/* =========================================================== */
+/* Sesja 4: Wallet, payouts, documents, notifications          */
+/* =========================================================== */
+
+export type WalletTxType =
+  | "sale_pending"
+  | "sale_unlocked"
+  | "payout_request"
+  | "payout_done"
+  | "payout_cancelled"
+  | "return_fee"
+  | "deposit_topup"
+  | "manual_adjustment";
+
+export type WalletTransaction = {
+  id: string;
+  klient_id: string;
+  type: WalletTxType;
+  amount_cents: number; // signed
+  reference_id: string | null;
+  available_at: string | null;
+  description: string | null;
+  created_at: string;
+};
+
+export type PayoutStatus = "requested" | "authorized" | "executing" | "done" | "failed" | "cancelled";
+
+export type Payout = {
+  id: string;
+  klient_id: string;
+  amount_cents: number;
+  bank_account_id: string | null;
+  status: PayoutStatus;
+  requested_at: string;
+  authorized_by: string | null;
+  authorized_at: string | null;
+  executed_at: string | null;
+  bank_ref: string | null;
+  notes: string | null;
+};
+
+export type BankAccount = {
+  id: string;
+  klient_id: string;
+  bank_name: string;
+  iban: string;
+  is_default: boolean;
+  created_at: string;
+};
+
+export type DocumentType = "umowa_komisowa" | "umowa_ks" | "faktura" | "inne";
+
+export type AppDocument = {
+  id: string;
+  klient_id: string;
+  submission_id: string | null;
+  type: DocumentType;
+  file_url: string | null;
+  signed_at: string | null;
+  signed_method: string | null;
+  created_at: string;
+};
+
+export type NotificationType =
+  | "submission_signed"
+  | "submission_received"
+  | "aqc_started"
+  | "aqc_complete"
+  | "valuation_ready"
+  | "price_reduction_suggestion"
+  | "offer_received"
+  | "offer_accepted"
+  | "offer_rejected"
+  | "sale"
+  | "sale_unlocked"
+  | "payout_pending"
+  | "payout_done"
+  | "payout_failed"
+  | "return_decision"
+  | "document_required";
+
+export type AppNotification = {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  body: string | null;
+  ref_id: string | null;
+  read_at: string | null;
+  payload: Record<string, unknown>;
+  created_at: string;
+};
+
+/* =========================================================== */
+/* Sesja 6/7: AQC + Offers + Returns + QR                      */
+/* =========================================================== */
+
+export type AqcVerdict = "pass" | "warn" | "fail";
+
+export type AqcAudit = {
+  id: string;
+  product_id: string;
+  inspector_id: string | null;
+  scores: Record<string, number>;
+  score_total: number | null;
+  verdict: AqcVerdict | null;
+  notes: string | null;
+  recommended_price_cents: number | null;
+  decided_at: string | null;
+  created_at: string;
+};
+
+/** 12 punktów audytu (klucze pasują do scores jsonb). */
+export const AQC_CHECKLIST: Array<{ key: string; label: string }> = [
+  { key: "stitching",    label: "Stitching · regularność" },
+  { key: "leather",      label: "Leather / materiał" },
+  { key: "hardware",     label: "Hardware · klamry, suwak" },
+  { key: "logo",         label: "Logo · grawer, wyciski" },
+  { key: "lining",       label: "Lining · podszewka" },
+  { key: "heat_stamp",   label: "Heat stamp · numer seryjny" },
+  { key: "wear",         label: "Stan ogólny · ślady noszenia" },
+  { key: "box",          label: "Box · oryginalne pudełko" },
+  { key: "tags",         label: "Tagi · metki produktowe" },
+  { key: "dust_bag",     label: "Worek pyłowy" },
+  { key: "accessories",  label: "Kompletność akcesoriów" },
+  { key: "congruence",   label: "Kongruencja z deklaracją" },
+];
+
+export type OfferStatus = "pending" | "accepted" | "countered" | "rejected" | "expired" | "withdrawn";
+
+export type Offer = {
+  id: string;
+  product_id: string;
+  listing_id: string | null;
+  buyer_token: string | null;
+  buyer_name: string | null;
+  amount_cents: number;
+  message: string | null;
+  status: OfferStatus;
+  parent_offer_id: string | null;
+  expires_at: string | null;
+  created_at: string;
+  responded_at: string | null;
+  responded_by: string | null;
+  is_seller_message: boolean;
+};
+
+export type ReturnReason =
+  | "not_authentic"
+  | "damaged_irreparable"
+  | "below_standards"
+  | "client_rejection"
+  | "withdraw_short_term"
+  | "withdraw_long_term";
+
+export type ReturnResolution = "pending" | "pickup_paid" | "disposal_free" | "returned" | "cancelled";
+
+export type AppReturn = {
+  id: string;
+  product_id: string;
+  reason: ReturnReason;
+  fee_cents: number;
+  decision_deadline: string | null;
+  resolution: ReturnResolution;
+  notes: string | null;
+  initiated_by: string | null;
+  resolved_at: string | null;
+  created_at: string;
+};
+
+export const RETURN_REASON_LABEL: Record<ReturnReason, { title: string; fee: number; description: string }> = {
+  not_authentic:        { title: "Produkt nieoryginalny",          fee: 0,    description: "Wykryto cechy niegrające z autentykiem. Zwrot bez opłat." },
+  damaged_irreparable:  { title: "Uszkodzenia poza naprawialnym",  fee: 0,    description: "Stan poniżej minimum, naprawa niemożliwa. Zwrot bez opłat." },
+  below_standards:      { title: "Poniżej standardów Kickback",    fee: 0,    description: "Produkt nie spełnia naszych kryteriów jakości. Zwrot bez opłat." },
+  client_rejection:     { title: "Klient nie akceptuje warunków",  fee: 4900, description: "Klient odmawia akceptacji wyceny lub kosztu napraw. Opłata 49 zł." },
+  withdraw_short_term:  { title: "Wycofanie < 3 miesiące",          fee: 9900, description: "Wycofanie produktu w okresie do 3 miesięcy. Opłata 99 zł (magazyn + obsługa)." },
+  withdraw_long_term:   { title: "Wycofanie > 3 miesiące",          fee: 19900,description: "Wycofanie produktu po 3 miesiącach. Opłata 199 zł (długie magazynowanie)." },
+};
+
+export type QrCode = {
+  id: string;
+  product_id: string;
+  slug: string;
+  scans_count: number;
+  last_scanned_at: string | null;
+  created_at: string;
+};
