@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* ============================================================ */
+/* Revolut Design Tokens                                        */
+/* ============================================================ */
+
+@theme {
+  /* Backgrounds */
+  --color-bg:           #0A0B10;
+  --color-bg-soft:      #0F1018;
+  --color-surface:      #13141A;
+  --color-surface-2:    #1B1D26;
+  --color-surface-3:    #232531;
+  --color-overlay:      rgba(255, 255, 255, 0.03);
+  --color-border:       #252834;
+  --color-border-soft:  #1D1F28;
+
+  /* Text */
+  --color-text:         #F5F5F8;
+  --color-text-soft:    #A8AAB8;
+  --color-text-mute:    #6B6E7E;
+  --color-text-faint:   #45495A;
+
+  /* Accents */
+  --color-blue:         #0066FF;   /* primary CTA */
+  --color-blue-soft:    #1F7AFF;
+  --color-blue-deep:    #0050CC;
+  --color-purple:       #9358FF;   /* gradient feature */
+  --color-pink:         #FF3D71;   /* highlight */
+  --color-mint:         #00D29F;   /* success / Funds */
+  --color-amber:        #FF8A3D;   /* warning */
+  --color-coral:        #FF5C50;   /* danger */
+
+  /* Fonts */
+  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Radius */
+  --radius-card:   16px;
+  --radius-pill:   999px;
+  --radius-button: 12px;
+  --radius-hero:   24px;
+
+  /* Shadow */
+  --shadow-card:    0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px -8px rgba(0,0,0,0.6);
+  --shadow-elev:    0 1px 0 rgba(255,255,255,0.06) inset, 0 24px 48px -16px rgba(0,0,0,0.8);
+  --shadow-blue:    0 8px 32px -8px rgba(0,102,255,0.5);
+  --shadow-purple:  0 8px 32px -8px rgba(147,88,255,0.4);
+}
+
+/* ============================================================ */
+/* Base                                                          */
+/* ============================================================ */
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: var(--color-blue);
+  color: var(--color-text);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+/* Tabular numerics for prices/IDs */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ============================================================ */
+/* Utility classes                                               */
+/* ============================================================ */
+
+/* Buttons */
+.btn-primary {
+  background: var(--color-blue);
+  color: white;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-button);
+  transition: transform .25s cubic-bezier(0.22,1,0.36,1), background-color .2s ease, box-shadow .25s ease;
+}
+.btn-primary:hover {
+  background: var(--color-blue-soft);
+  transform: translate3d(0, -1px, 0);
+  box-shadow: var(--shadow-blue);
+}
+.btn-primary:active { transform: translate3d(0, 0, 0); }
+.btn-primary:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
+.btn-primary:disabled { opacity: .55; pointer-events: none; }
+
+.btn-ghost {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  border-radius: var(--radius-button);
+  transition: background-color .2s ease, transform .25s cubic-bezier(0.22,1,0.36,1);
+}
+.btn-ghost:hover { background: var(--color-surface-2); transform: translate3d(0, -1px, 0); }
+.btn-ghost:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+
+.btn-soft {
+  background: rgba(255,255,255,0.06);
+  color: var(--color-text);
+  border-radius: var(--radius-button);
+  transition: background-color .2s ease;
+}
+.btn-soft:hover { background: rgba(255,255,255,0.10); }
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+.card-elev {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-elev);
+}
+.card-bare {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+}
+
+/* Gradient feature card */
+.card-gradient-purple {
+  background: linear-gradient(135deg, #9358FF 0%, #FF3D71 100%);
+  color: white;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-purple);
+}
+.card-gradient-blue {
+  background: linear-gradient(135deg, #0066FF 0%, #00D29F 100%);
+  color: white;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-blue);
+}
+.card-gradient-dark {
+  background: linear-gradient(135deg, #1B1D26 0%, #0F1018 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+/* Pills / chips */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.pill-mint  { background: rgba(0,210,159,0.15);  color: var(--color-mint); }
+.pill-blue  { background: rgba(0,102,255,0.15);  color: var(--color-blue-soft); }
+.pill-amber { background: rgba(255,138,61,0.15); color: var(--color-amber); }
+.pill-pink  { background: rgba(255,61,113,0.15); color: var(--color-pink); }
+.pill-mute  { background: rgba(255,255,255,0.06); color: var(--color-text-soft); }
+
+/* Label (small caps mono — used VERY sparingly) */
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-mute);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Live dot pulse */
+@keyframes pulse-dot {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.2); }
+}
+.live-dot { animation: pulse-dot 2.2s ease-in-out infinite; }
+
+/* Hero entrance */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.rise { animation: rise .8s cubic-bezier(0.22,1,0.36,1) both; }
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.15s; }
+.delay-3 { animation-delay: 0.28s; }
+.delay-4 { animation-delay: 0.42s; }
+
+/* Smooth scroll for anchor nav */
+html { scroll-behavior: smooth; }
+
+/* Glow background blob (used in heroes) */
+.glow-blob {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 30% at 80% 0%, rgba(0,102,255,0.18), transparent 60%),
+    radial-gradient(45% 35% at 20% 80%, rgba(147,88,255,0.16), transparent 60%);
+}
+
+/* Inputs */
+.input {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  padding: 14px 16px;
+  font-size: 16px;
+  color: var(--color-text);
+  width: 100%;
+  outline: none;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.input::placeholder { color: var(--color-text-faint); }
+.input:focus { border-color: var(--color-blue); background: var(--color-surface-2); }
+
+.input-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Hide scrollbar but allow scroll (for ticker rows) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
