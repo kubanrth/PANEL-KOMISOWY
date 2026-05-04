@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "@/components/ui/Button";
+import { PhotoDropzone } from "@/components/ui/PhotoDropzone";
 import { formatPLN, parsePriceToCents, takeHomeCents } from "@/lib/format";
 import { createSubmission } from "./actions";
 import type { Photo } from "@/lib/types";
@@ -39,6 +40,9 @@ const emptyProduct = (): ProductForm => ({
 export function StartFlow({ accountType }: { accountType: "individual" | "business" }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
+
+  // A stable folder hint per submission attempt — used to scope photos in Storage.
+  const folderHint = useMemo(() => `draft-${Date.now()}`, []);
 
   // Step 1 state
   const [signMethod, setSignMethod] = useState<SignMethod>("autopay");
@@ -159,6 +163,7 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
               setStep(3);
             }}
             error={submitError}
+            folderHint={folderHint}
           />
         )}
         {step === 3 && (
@@ -358,7 +363,7 @@ function MethodCard({
 
 /* ====================================================== STEP 2 */
 function Step2({
-  products, updateProduct, addProduct, removeProduct, onBack, onNext, error,
+  products, updateProduct, addProduct, removeProduct, onBack, onNext, error, folderHint,
 }: {
   products: ProductForm[];
   updateProduct: (idx: number, patch: Partial<ProductForm>) => void;
@@ -367,6 +372,7 @@ function Step2({
   onBack: () => void;
   onNext: () => void;
   error: string | null;
+  folderHint: string;
 }) {
   return (
     <div className="space-y-8">
@@ -387,6 +393,7 @@ function Step2({
             product={p}
             onChange={(patch) => updateProduct(idx, patch)}
             onRemove={products.length > 1 ? () => removeProduct(idx) : undefined}
+            folderHint={`${folderHint}/p${idx}`}
           />
         ))}
       </div>
@@ -422,12 +429,13 @@ function Step2({
 }
 
 function ProductCard({
-  idx, product, onChange, onRemove,
+  idx, product, onChange, onRemove, folderHint,
 }: {
   idx: number;
   product: ProductForm;
   onChange: (patch: Partial<ProductForm>) => void;
   onRemove?: () => void;
+  folderHint: string;
 }) {
   const cents = parsePriceToCents(product.expectedPrice);
   const takeHome = takeHomeCents(cents, COMMISSION);
@@ -487,6 +495,14 @@ function ProductCard({
             placeholder="Bardzo dobry stan. Oryginalne pudełko. Worek pyłowy. Lekkie ślady noszenia."
             value={product.description}
             onChange={(e) => onChange({ description: e.target.value })}
+          />
+        </Field>
+
+        <Field className="col-span-12" label="Zdjęcia produktu">
+          <PhotoDropzone
+            photos={product.photos}
+            onChange={(photos) => onChange({ photos })}
+            folderHint={folderHint}
           />
         </Field>
       </div>

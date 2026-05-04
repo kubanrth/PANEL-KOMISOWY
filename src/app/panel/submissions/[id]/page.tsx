@@ -3,7 +3,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
-import { ArrowRight, ButtonLink } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
+import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate, formatDateTime, takeHomeCents } from "@/lib/format";
 import type { Submission, Product, Profile } from "@/lib/types";
 
@@ -118,8 +119,8 @@ export default async function SubmissionDetailPage(props: {
       <section className="mt-12">
         <div className="label mb-5">Produkty</div>
         <div className="space-y-4">
-          {products.map((p, i) => (
-            <ProductRow key={p.id} idx={i} product={p} commissionRate={submission.commission_rate} />
+          {products.map((p) => (
+            <ProductRow key={p.id} product={p} commissionRate={submission.commission_rate} />
           ))}
         </div>
       </section>
@@ -175,33 +176,33 @@ export default async function SubmissionDetailPage(props: {
 /* ------------------------------ Components */
 
 function ProductRow({
-  idx, product, commissionRate,
+  product, commissionRate,
 }: {
-  idx: number;
   product: Product;
   commissionRate: number;
 }) {
   const price = product.listing_price_cents ?? product.expected_price_cents ?? 0;
   const takeHome = takeHomeCents(price, commissionRate) ?? 0;
   return (
-    <div className="card p-6 grid grid-cols-12 gap-5 items-center">
-      <div className="col-span-1 hidden md:block">
-        <span className="text-text-mute font-semibold text-[14px] num">
-          {String(idx + 1).padStart(2, "0")}
-        </span>
-      </div>
-      <div className="col-span-12 md:col-span-5">
-        <div className="font-semibold text-[16px]">
-          {product.brand} <span className="text-text-soft">·</span> {product.model}
+    <Link
+      href={`/panel/products/${product.id}`}
+      className="card p-5 lg:p-6 grid grid-cols-12 gap-5 items-center hover:border-blue/40 transition-colors group"
+    >
+      <div className="col-span-12 md:col-span-6 flex items-center gap-4">
+        <ProductThumb photos={product.photos} brand={product.brand} size="md" />
+        <div className="min-w-0">
+          <div className="font-semibold text-[15px] truncate">
+            {product.brand} <span className="text-text-soft">·</span> {product.model}
+          </div>
+          <div className="mt-1 text-[12px] text-text-mute num">
+            {[product.category, product.size, product.condition && `stan ${product.condition}/10`]
+              .filter(Boolean)
+              .join(" · ")}
+          </div>
+          {product.description && (
+            <div className="mt-1.5 text-[12px] text-text-soft line-clamp-1">{product.description}</div>
+          )}
         </div>
-        <div className="mt-1 text-[12px] text-text-mute num">
-          {[product.category, product.size, product.condition && `stan ${product.condition}/10`]
-            .filter(Boolean)
-            .join(" · ")}
-        </div>
-        {product.description && (
-          <div className="mt-2 text-[13px] text-text-soft line-clamp-2">{product.description}</div>
-        )}
       </div>
       <div className="col-span-6 md:col-span-2">
         <ProductStatusPill status={product.status} />
@@ -218,7 +219,7 @@ function ProductRow({
           {formatPLN(takeHome, { decimals: false })}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

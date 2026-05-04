@@ -9,7 +9,7 @@ export type PanelShellProps = {
   profile: { first_name: string | null; last_name: string | null; account_type: "individual" | "business" | null };
   walletBalance?: number; // in cents
   walletAvailable?: number; // unlocked amount in cents
-  active: "dashboard" | "submissions" | "wallet" | "notifications" | "stats" | "settings";
+  active: "dashboard" | "submissions" | "my-sales" | "wallet" | "notifications" | "stats" | "settings";
   pageTitle?: string;
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
@@ -37,6 +37,7 @@ export function PanelShell({
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <NavItem label="Panel" href="/panel" active={active === "dashboard"} />
             <NavItem label="Submissions" href="/panel/submissions" active={active === "submissions"} />
+            <NavItem label="My Sales" href="/panel/my-sales" active={active === "my-sales"} />
           </ul>
 
           <div className="label mt-9">Środki</div>
