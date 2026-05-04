@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
-import path from "node:path";
 
 const nextConfig: NextConfig = {
-  // We're inside a multi-package workspace; pin Turbopack root explicitly.
+  // Pin Turbopack root to this project (silences workspace-root warning)
+  // when this app is checked out as part of a multi-package workspace.
   turbopack: {
-    root: path.join(__dirname),
+    root: process.cwd(),
   },
 };
 
