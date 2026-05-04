@@ -3,9 +3,17 @@
 -- Run in Supabase SQL editor (or via supabase CLI: supabase db push)
 -- ============================================================
 
--- Account types
-create type if not exists account_type as enum ('individual', 'business');
-create type if not exists user_role    as enum ('klient', 'admin', 'super_admin');
+-- Account types (Postgres doesn't support IF NOT EXISTS on CREATE TYPE,
+-- so we wrap in DO blocks that swallow duplicate_object errors).
+do $$ begin
+  create type account_type as enum ('individual', 'business');
+exception when duplicate_object then null;
+end $$;
+
+do $$ begin
+  create type user_role as enum ('klient', 'admin', 'super_admin');
+exception when duplicate_object then null;
+end $$;
 
 -- Profiles (1:1 with auth.users)
 create table if not exists public.profiles (
