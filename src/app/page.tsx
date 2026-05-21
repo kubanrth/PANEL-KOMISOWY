@@ -29,16 +29,11 @@ function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-border-soft">
       <div className="glow-blob" />
-      <div className="mx-auto max-w-[1240px] px-6 lg:px-10 py-20 lg:py-28 relative">
-        <div className="grid grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className="mx-auto max-w-[1240px] px-6 lg:px-10 pt-10 lg:pt-14 pb-16 lg:pb-20 relative">
+        <div className="grid grid-cols-12 gap-8 lg:gap-12 items-stretch">
 
-          <div className="col-span-12 lg:col-span-7">
-            <div className="rise label flex items-center gap-3">
-              <span className="live-dot inline-block h-1.5 w-1.5 rounded-full bg-mint" />
-              Konsygnacja · Polska · od 2024
-            </div>
-
-            <h1 className="rise delay-1 mt-7 font-bold text-[52px] sm:text-[68px] lg:text-[88px] xl:text-[104px] leading-[0.98] tracking-[-0.045em]">
+          <div className="col-span-12 lg:col-span-7 flex flex-col">
+            <h1 className="rise font-bold text-[44px] sm:text-[56px] lg:text-[72px] xl:text-[84px] leading-[0.98] tracking-[-0.045em]">
               Sprzedaj swoje<br />
               rzeczy, na które<br />
               <span className="bg-gradient-to-r from-blue via-purple to-pink bg-clip-text text-transparent">
@@ -46,29 +41,29 @@ function Hero() {
               </span>
             </h1>
 
-            <p className="rise delay-2 mt-8 max-w-[58ch] text-[18px] leading-[1.6] text-text-soft">
-              Przekazujesz nam swoje przedmioty. Weryfikujemy autentyczność, ustalamy wycenę,
+            <p className="rise delay-1 mt-6 max-w-[56ch] text-[16px] lg:text-[17px] leading-[1.55] text-text-soft">
+              Powierzasz nam swoje przedmioty. Weryfikujemy autentyczność, ustalamy wycenę,
               sprzedajemy w naszych kanałach. Ty śledzisz każdą sprzedaż i wypłatę z jednego panelu.
             </p>
 
-            <div className="rise delay-3 mt-10 flex flex-wrap items-center gap-4">
+            <div className="rise delay-2 mt-8 flex flex-wrap items-center gap-3">
               <ButtonLink href="/register" size="lg">
-                Rozpocznij konsygnację
+                Wypełnij formularz
                 <ArrowRight size={18} />
               </ButtonLink>
-              <Link href="#proces" className="inline-flex items-center gap-2 px-2 h-14 text-[15px] text-text-soft hover:text-text transition-colors">
+              <ButtonLink href="#proces" variant="ghost" size="lg">
                 Jak to działa
-              </Link>
+              </ButtonLink>
             </div>
 
-            <div className="rise delay-4 mt-14 grid grid-cols-3 gap-6 max-w-xl border-t border-border-soft pt-8">
+            <div className="rise delay-3 mt-auto pt-10 grid grid-cols-3 gap-6 max-w-xl border-t border-border-soft">
               <Stat value="3" unit="dni" label="Średni czas wyceny" />
               <Stat value="14" unit="dni" label="Wypłata po sprzedaży" />
               <Stat value="12" unit="pkt." label="Audyt autentyczności" />
             </div>
           </div>
 
-          <div className="col-span-12 lg:col-span-5">
+          <div className="col-span-12 lg:col-span-5 flex">
             <HeroCard />
           </div>
         </div>
@@ -91,11 +86,11 @@ function Stat({ value, unit, label }: { value: string; unit: string; label: stri
 
 function HeroCard() {
   return (
-    <div className="card-gradient-purple rounded-[24px] p-7 lg:p-8 relative overflow-hidden min-h-[480px] flex flex-col">
+    <div className="card-gradient-purple rounded-[24px] p-7 lg:p-8 relative overflow-hidden flex flex-col w-full">
       <div className="flex items-center justify-between">
         <span className="pill bg-white/15 text-white">
           <span className="h-1.5 w-1.5 rounded-full bg-white" />
-          Twoja Wallet
+          Twój Wallet
         </span>
         <span className="text-white/60 text-[12px] font-medium">02.05.2026</span>
       </div>
@@ -197,8 +192,11 @@ function Process() {
               <span className="text-text-soft">do wypłaty.</span>
             </h2>
           </div>
-          <div className="col-span-12 lg:col-span-6 lg:col-start-7 lg:pt-2">
-            <p className="text-[17px] leading-[1.7] text-text-soft max-w-[58ch]">
+          <div className="col-span-12 lg:col-span-6 lg:col-start-7">
+            {/* spacer matches the height of the "Proces" label on the left so the paragraph
+                aligns with the H2 heading, not with the section label. */}
+            <div aria-hidden className="label hidden lg:block invisible">Proces</div>
+            <p className="lg:mt-4 text-[17px] leading-[1.7] text-text-soft max-w-[58ch]">
               Konsygnacja Kickback to model, w którym Ty zatrzymujesz wartość, a my zdejmujemy z Ciebie ryzyko i obsługę. Wszystko — od umowy po wypłatę — w jednym, jasnym panelu.
             </p>
           </div>
@@ -314,7 +312,7 @@ function PanelPreview() {
           </div>
           <div className="col-span-12 lg:col-span-5">
             <p className="text-[16px] leading-[1.65] text-text-soft max-w-[44ch]">
-              Submissions, My Sales, Wallet, powiadomienia. Decydujesz o każdej cenie, akceptujesz wycenę, redukujesz, wycofujesz rzecz na żądanie.
+              Oferty, Inventory, My Sales, Wallet. Decydujesz o każdej cenie, akceptujesz wycenę, redukujesz, wycofujesz rzecz na żądanie.
             </p>
           </div>
         </div>
@@ -336,7 +334,8 @@ function PanelPreview() {
             <aside className="col-span-12 md:col-span-3 border-r border-border p-6 bg-surface">
               <div className="label">Panel</div>
               <ul className="mt-4 space-y-2.5 text-[14px]">
-                <RailItem label="Submissions" badge="8" />
+                <RailItem label="Oferty" badge="8" />
+                <RailItem label="Inventory" badge="12" />
                 <RailItem label="My Sales" badge="12" active />
                 <RailItem label="Wallet" badge="7 240 zł" badgeAccent />
                 <RailItem label="Powiadomienia" badge="3" badgeAccent />
@@ -417,7 +416,7 @@ function TableHeader() {
   return (
     <div className="grid grid-cols-12 gap-4 px-1 py-3 label">
       <div className="col-span-5">Produkt</div>
-      <div className="col-span-2">Submission</div>
+      <div className="col-span-2">Oferta</div>
       <div className="col-span-2">Status</div>
       <div className="col-span-2 text-right">Cena</div>
       <div className="col-span-1 text-right">Twój udział</div>
@@ -577,7 +576,7 @@ function Tx({ avatar, title, sub, amount, amountClass = "" }: { avatar: string; 
 function Stats() {
   const items = [
     { label: "Sprzedanych", value: "3 240", sub: "Od stycznia 2024" },
-    { label: "Średnia prowizja", value: "20%", sub: "Negocjowalna od 2 000 zł" },
+    { label: "Domyślna prowizja", value: "20%", sub: "Lub stała wypłata (Grail Point)" },
     { label: "Najszybsza wypłata", value: "9 dni", sub: "Od dostarczenia rzeczy" },
     { label: "Skuteczność A&QC", value: "99,4%", sub: "Trafność wyceny ±10%" },
   ];
@@ -604,8 +603,8 @@ function Faq() {
       a: "Twoją. Konsygnacja oznacza, że Kickback przechowuje i sprzedaje Twoje rzeczy jako magazyn dostawcy. Własność przechodzi na Kickback dopiero po podpisaniu Umowy Kupna-Sprzedaży lub wystawieniu FV.",
     },
     {
-      q: "Jaka jest prowizja Kickback?",
-      a: "Domyślnie 20% — negocjowalna od 2 000 zł / pozycję. Pełna stawka jest ustalana w Umowie Sprzedaży w Formie Konsygnacji przed wysyłką rzeczy do nas.",
+      q: "Jaki jest model rozliczenia?",
+      a: "Dla każdej rzeczy wybierasz: (A) Prowizja 20% — Kickback sprzedaje, otrzymujesz 80% z ceny sprzedaży. (B) Stała wypłata — deklarujesz kwotę jaką chcesz otrzymać, sprzedajemy za dowolną cenę powyżej, różnica = nasza marża. Model wybierasz osobno per produkt w panelu.",
     },
     {
       q: "Mogę wycofać rzecz przed sprzedażą?",

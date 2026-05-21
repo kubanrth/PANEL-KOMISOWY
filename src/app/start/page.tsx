@@ -13,11 +13,12 @@ export default async function StartPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
+    .select("first_name, last_name, account_type, onboarded_at, master_agreement_signed_at")
     .eq("id", user.id)
     .maybeSingle();
 
   if (!profile?.onboarded_at) redirect("/onboarding");
+  if (!profile.master_agreement_signed_at) redirect("/panel/umowa?next=/start");
 
   const accountType = (profile.account_type ?? "individual") as "individual" | "business";
 

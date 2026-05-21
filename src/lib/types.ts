@@ -44,6 +44,11 @@ export type Profile = {
   city: string | null;
   country: string;
   onboarded_at: string | null;
+  /** Master Umowa Komisowa signed once per klient (migration 007). Legacy DBs return null. */
+  master_agreement_signed_at: string | null;
+  master_agreement_signed_method: string | null;
+  master_agreement_signed_ip: string | null;
+  master_agreement_version: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -63,6 +68,8 @@ export type Submission = {
   updated_at: string;
 };
 
+export type PricingMode = "commission" | "payout";
+
 export type Product = {
   id: string;
   submission_id: string;
@@ -77,8 +84,23 @@ export type Product = {
   listing_price_cents: number | null;
   status: ProductStatus;
   photos: Photo[];
+  /** migration 007 */
+  pricing_mode: PricingMode;
+  /** migration 007: required when pricing_mode === 'payout' */
+  payout_price_cents: number | null;
   created_at: string;
   updated_at: string;
+};
+
+export const PRICING_MODE_LABEL: Record<PricingMode, { title: string; sub: string }> = {
+  commission: {
+    title: "Prowizja 20%",
+    sub: "Kickback sprzedaje, prowizja od ceny sprzedaży.",
+  },
+  payout: {
+    title: "Stała wypłata",
+    sub: "Ty deklarujesz ile chcesz dostać — my sprzedajemy za dowolną cenę powyżej.",
+  },
 };
 
 /** Polski label dla statusu submission (UI). */

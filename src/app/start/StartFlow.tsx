@@ -6,10 +6,9 @@ import { ArrowRight } from "@/components/ui/Button";
 import { PhotoDropzone } from "@/components/ui/PhotoDropzone";
 import { formatPLN, parsePriceToCents, takeHomeCents } from "@/lib/format";
 import { createSubmission } from "./actions";
-import type { Photo } from "@/lib/types";
+import type { Photo, PricingMode } from "@/lib/types";
 
-type Step = 1 | 2 | 3;
-type SignMethod = "autopay" | "pz";
+type Step = 1 | 2;
 
 type ProductForm = {
   brand: string;
@@ -18,8 +17,10 @@ type ProductForm = {
   size: string;
   condition: number;
   description: string;
-  expectedPrice: string; // user input, parsed at submit
-  minPrice: string;
+  pricingMode: PricingMode;
+  expectedPrice: string;     // user input, parsed at submit (also used as listing target in payout mode)
+  minPrice: string;          // commission mode only
+  payoutPrice: string;       // payout mode only — how much klient wants
   photos: Photo[];
 };
 
@@ -32,42 +33,23 @@ const emptyProduct = (): ProductForm => ({
   size: "",
   condition: 9,
   description: "",
+  pricingMode: "commission",
   expectedPrice: "",
   minPrice: "",
+  payoutPrice: "",
   photos: [],
 });
 
-export function StartFlow({ accountType }: { accountType: "individual" | "business" }) {
+export function StartFlow({ accountType: _accountType }: { accountType: "individual" | "business" }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
 
-  // A stable folder hint per submission attempt — used to scope photos in Storage.
   const folderHint = useMemo(() => `draft-${Date.now()}`, []);
 
-  // Step 1 state
-  const [signMethod, setSignMethod] = useState<SignMethod>("autopay");
-  const [signing, setSigning] = useState(false);
-  const [signed, setSigned] = useState(false);
-
-  // Step 2 state
   const [products, setProducts] = useState<ProductForm[]>([emptyProduct()]);
-
-  // Submit state
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, startSubmit] = useTransition();
 
-  // ---------- step 1: sign ----------
-  function handleSign() {
-    setSigning(true);
-    // Mock Autopay/PZ flow — in production this opens OAuth in a popup
-    setTimeout(() => {
-      setSigning(false);
-      setSigned(true);
-      setTimeout(() => setStep(2), 600);
-    }, 1500);
-  }
-
-  // ---------- step 2: products ----------
   function updateProduct(idx: number, patch: Partial<ProductForm>) {
     setProducts((prev) => prev.map((p, i) => (i === idx ? { ...p, ...patch } : p)));
   }
@@ -82,14 +64,18 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
     for (const [i, p] of products.entries()) {
       if (!p.brand.trim()) return `Produkt ${i + 1}: podaj markę.`;
       if (!p.model.trim()) return `Produkt ${i + 1}: podaj model.`;
-      const expected = parsePriceToCents(p.expectedPrice);
-      if (!expected || expected <= 0) return `Produkt ${i + 1}: podaj cenę oczekiwaną (np. 2 480 zł).`;
+      if (p.pricingMode === "commission") {
+        const expected = parsePriceToCents(p.expectedPrice);
+        if (!expected || expected <= 0) return `Produkt ${i + 1}: podaj cenę listingu.`;
+      } else {
+        const payout = parsePriceToCents(p.payoutPrice);
+        if (!payout || payout <= 0) return `Produkt ${i + 1}: podaj kwotę wypłaty.`;
+      }
       if (p.condition < 1 || p.condition > 10) return `Produkt ${i + 1}: stan musi być z zakresu 1–10.`;
     }
     return null;
   }
 
-  // ---------- step 3: submit ----------
   function handleSubmit() {
     setSubmitError(null);
     const err = validateProducts();
@@ -99,18 +85,25 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
     }
     startSubmit(async () => {
       const result = await createSubmission({
-        signed_method: signMethod,
-        products: products.map((p) => ({
-          brand: p.brand.trim(),
-          model: p.model.trim(),
-          category: p.category.trim() || null,
-          size: p.size.trim() || null,
-          condition: p.condition,
-          description: p.description.trim() || null,
-          expected_price_cents: parsePriceToCents(p.expectedPrice)!,
-          min_price_cents: parsePriceToCents(p.minPrice),
-          photos: p.photos,
-        })),
+        products: products.map((p) => {
+          const expectedCents =
+            p.pricingMode === "commission"
+              ? parsePriceToCents(p.expectedPrice)!
+              : parsePriceToCents(p.payoutPrice)!; // for payout mode listing target = klient's payout to start
+          return {
+            brand: p.brand.trim(),
+            model: p.model.trim(),
+            category: p.category.trim() || null,
+            size: p.size.trim() || null,
+            condition: p.condition,
+            description: p.description.trim() || null,
+            expected_price_cents: expectedCents,
+            min_price_cents: parsePriceToCents(p.minPrice),
+            pricing_mode: p.pricingMode,
+            payout_price_cents: p.pricingMode === "payout" ? parsePriceToCents(p.payoutPrice) : null,
+            photos: p.photos,
+          };
+        }),
       });
       if (!result.ok) {
         setSubmitError(result.error);
@@ -120,12 +113,18 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
     });
   }
 
-  // ---------- totals (for step 3) ----------
+  // Totals — depends on mode per row
   const totals = products.reduce(
     (acc, p) => {
-      const cents = parsePriceToCents(p.expectedPrice) ?? 0;
-      acc.gross += cents;
-      acc.takeHome += takeHomeCents(cents, COMMISSION) ?? 0;
+      if (p.pricingMode === "commission") {
+        const cents = parsePriceToCents(p.expectedPrice) ?? 0;
+        acc.gross += cents;
+        acc.takeHome += takeHomeCents(cents, COMMISSION) ?? 0;
+      } else {
+        const payout = parsePriceToCents(p.payoutPrice) ?? 0;
+        acc.gross += payout;     // minimum klient expects to receive
+        acc.takeHome += payout;  // payout = klient's guaranteed take
+      }
       return acc;
     },
     { gross: 0, takeHome: 0 },
@@ -135,24 +134,13 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
     <>
       <Stepper step={step} />
 
-      <div className="mt-12">
+      <div className="mt-10">
         {step === 1 && (
           <Step1
-            method={signMethod}
-            setMethod={setSignMethod}
-            signing={signing}
-            signed={signed}
-            onSign={handleSign}
-            accountType={accountType}
-          />
-        )}
-        {step === 2 && (
-          <Step2
             products={products}
             updateProduct={updateProduct}
             addProduct={addProduct}
             removeProduct={removeProduct}
-            onBack={() => setStep(1)}
             onNext={() => {
               const err = validateProducts();
               if (err) {
@@ -160,19 +148,18 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
                 return;
               }
               setSubmitError(null);
-              setStep(3);
+              setStep(2);
             }}
             error={submitError}
             folderHint={folderHint}
           />
         )}
-        {step === 3 && (
-          <Step3
+        {step === 2 && (
+          <Step2
             products={products}
             totals={totals}
-            signMethod={signMethod}
             commission={COMMISSION}
-            onBack={() => setStep(2)}
+            onBack={() => setStep(1)}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
             error={submitError}
@@ -186,14 +173,13 @@ export function StartFlow({ accountType }: { accountType: "individual" | "busine
 /* ====================================================== STEPPER */
 function Stepper({ step }: { step: Step }) {
   const steps = [
-    { n: 1, label: "Umowa Komisowa" },
-    { n: 2, label: "Produkty" },
-    { n: 3, label: "Potwierdzenie" },
+    { n: 1, label: "Produkty" },
+    { n: 2, label: "Potwierdzenie" },
   ];
   return (
     <div>
       <div className="text-text-mute text-[12px] font-semibold uppercase tracking-wider">
-        Nowa Submission
+        Nowa Oferta · paczka
       </div>
       <div className="mt-4 flex items-center gap-3">
         {steps.map((s, i) => {
@@ -220,156 +206,22 @@ function Stepper({ step }: { step: Step }) {
           );
         })}
       </div>
+
+      <div className="mt-4 text-[12px] text-text-mute">
+        Umowa Komisowa podpisana raz · obowiązuje dla wszystkich Twoich Ofert.
+      </div>
     </div>
   );
 }
 
-/* ====================================================== STEP 1 */
+/* ====================================================== STEP 1: produkty */
 function Step1({
-  method,
-  setMethod,
-  signing,
-  signed,
-  onSign,
-  accountType,
-}: {
-  method: SignMethod;
-  setMethod: (m: SignMethod) => void;
-  signing: boolean;
-  signed: boolean;
-  onSign: () => void;
-  accountType: "individual" | "business";
-}) {
-  return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
-          Podpisz Umowę<br />
-          <span className="text-text-soft">Komisową.</span>
-        </h1>
-        <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">
-          Umowa Sprzedaży w Formie Konsygnacji definiuje, że Kickback przechowuje i sprzedaje Twoje rzeczy jako magazyn dostawcy.{" "}
-          <strong className="text-text">Numer Submission = Numer Umowy.</strong>
-        </p>
-      </div>
-
-      {/* Contract preview */}
-      <div className="card p-6 lg:p-8">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div>
-            <div className="label">Treść umowy</div>
-            <div className="mt-2 font-semibold text-xl tracking-[-0.025em]">
-              Umowa Sprzedaży w Formie Konsygnacji
-            </div>
-            <div className="mt-1 text-[12px] text-text-mute">Wersja 4.2 · obowiązuje od 01.04.2026</div>
-          </div>
-          <span className="pill pill-mute">
-            Konto: {accountType === "individual" ? "Indywidualne" : "Biznesowe"}
-          </span>
-        </div>
-        <div className="mt-5 max-h-[180px] overflow-y-auto border-t border-b border-border-soft py-4 text-[13px] leading-[1.7] text-text-soft space-y-2 pr-2">
-          <p><span className="text-text font-semibold">§1.</span> Komitent powierza Komisantowi (Kickback sp. z o. o.) rzeczy ruchome, których specyfikacja stanowi załącznik nr 1 (Submission), w celu ich sprzedaży.</p>
-          <p><span className="text-text font-semibold">§2.</span> Własność rzeczy pozostaje przy Komitencie do momentu podpisania Umowy Kupna-Sprzedaży lub wystawienia FV.</p>
-          <p><span className="text-text font-semibold">§3.</span> Komisant zobowiązuje się do procedury Authentication & Quality Control (12-punktowy audyt) w terminie do 5 dni roboczych od dostarczenia.</p>
-          <p><span className="text-text font-semibold">§4.</span> Komisant ma prawo do prowizji od ceny sprzedaży w wysokości 20% (negocjowalne od kwoty 2 000 zł netto za pozycję).</p>
-          <p><span className="text-text font-semibold">§5.</span> Komitent zachowuje prawo akceptacji wyceny, redukcji ceny oraz wycofania rzeczy zgodnie z polityką zwrotów.</p>
-          <p><span className="text-text font-semibold">§6.</span> Środki ze sprzedaży deponowane są w Wallet. Wypłata odbywa się na pisemną dyspozycję Komitenta.</p>
-        </div>
-      </div>
-
-      {/* Method */}
-      <div>
-        <div className="label mb-4">Metoda podpisu</div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <MethodCard
-            letter="A"
-            title="Autopay"
-            desc="Logowanie do banku (mTransfer, Santander, ING, PKO BP). Tożsamość przez Open Banking."
-            tags={["~ 90 sek", "14 banków PL"]}
-            active={method === "autopay"}
-            onClick={() => setMethod("autopay")}
-          />
-          <MethodCard
-            letter="B"
-            title="Profil zaufany"
-            desc="Logowanie do gov.pl. Podpis elektroniczny z mocą prawną dokumentu papierowego."
-            tags={["~ 3 min", "gov.pl"]}
-            active={method === "pz"}
-            onClick={() => setMethod("pz")}
-          />
-        </div>
-      </div>
-
-      {/* Demo banner */}
-      <div className="rounded-[12px] bg-amber/10 border border-amber/30 px-4 py-3 text-[13px] text-amber inline-flex items-center gap-3">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
-        </svg>
-        Tryb demo — Autopay i PZ symulowane (real OAuth w Phase 4).
-      </div>
-
-      {/* CTA */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <a href="/panel" className="text-[14px] text-text-soft hover:text-text transition-colors">
-          ← Anuluj
-        </a>
-        <button
-          onClick={onSign}
-          disabled={signing || signed}
-          className="btn-primary h-12 px-7 text-[14px] inline-flex items-center gap-3"
-        >
-          {signing
-            ? <>Podpisywanie…</>
-            : signed
-              ? <>Podpisano <span className="text-mint">✓</span></>
-              : <>Podpisz przez {method === "autopay" ? "Autopay" : "Profil zaufany"} <ArrowRight /></>}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function MethodCard({
-  letter, title, desc, tags, active, onClick,
-}: {
-  letter: string; title: string; desc: string; tags: string[]; active: boolean; onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-left p-6 rounded-[16px] border-2 transition-all ${
-        active ? "border-blue bg-blue/5" : "border-border hover:border-text-mute bg-surface"
-      }`}
-    >
-      <div className="flex items-start justify-between">
-        <span className="font-bold text-2xl tracking-[-0.04em] text-blue">{letter}</span>
-        <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-blue bg-blue" : "border-border"} flex items-center justify-center`}>
-          {active && <span className="h-2 w-2 rounded-full bg-white" />}
-        </span>
-      </div>
-      <div className="mt-5 font-semibold text-xl tracking-[-0.025em]">{title}</div>
-      <div className="mt-2 text-[13px] text-text-soft leading-[1.5]">{desc}</div>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {tags.map((t) => (
-          <span key={t} className="text-[11px] px-2 py-1 rounded-md bg-surface-2 border border-border text-text-soft">
-            {t}
-          </span>
-        ))}
-      </div>
-    </button>
-  );
-}
-
-/* ====================================================== STEP 2 */
-function Step2({
-  products, updateProduct, addProduct, removeProduct, onBack, onNext, error, folderHint,
+  products, updateProduct, addProduct, removeProduct, onNext, error, folderHint,
 }: {
   products: ProductForm[];
   updateProduct: (idx: number, patch: Partial<ProductForm>) => void;
   addProduct: () => void;
   removeProduct: (idx: number) => void;
-  onBack: () => void;
   onNext: () => void;
   error: string | null;
   folderHint: string;
@@ -378,10 +230,12 @@ function Step2({
     <div className="space-y-8">
       <div>
         <h1 className="font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
-          Co <span className="text-text-soft">powierzasz?</span>
+          Co <span className="text-text-soft">wysyłasz w tej paczce?</span>
         </h1>
         <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">
-          Dodaj produkty, które przekazujesz do konsygnacji. Wycenę otrzymasz po audycie A&QC w panelu My Sales — zwykle w ciągu 3 dni roboczych od dostarczenia.
+          Dodaj produkty z paczki, którą wyślesz do Kickback. Dla każdej rzeczy wybierz model rozliczenia:
+          prowizja 20% albo stała wypłata. Wycenę listingu otrzymasz po audycie A&amp;QC w panelu My Sales —
+          zwykle w ciągu 3 dni roboczych od dostarczenia.
         </p>
       </div>
 
@@ -416,14 +270,56 @@ function Step2({
       )}
 
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="text-[14px] text-text-soft hover:text-text transition-colors">
-          ← Cofnij
-        </button>
+        <a href="/panel" className="text-[14px] text-text-soft hover:text-text transition-colors">
+          ← Anuluj
+        </a>
         <button onClick={onNext} className="btn-primary h-12 px-7 text-[14px] inline-flex items-center gap-3">
           Dalej · Podgląd
           <ArrowRight />
         </button>
       </div>
+    </div>
+  );
+}
+
+function PricingToggle({
+  value, onChange,
+}: {
+  value: PricingMode;
+  onChange: (v: PricingMode) => void;
+}) {
+  const options: Array<{ v: PricingMode; title: string; sub: string; tag: string }> = [
+    { v: "commission", title: "Prowizja 20%", sub: "Kickback sprzedaje, prowizja od ceny sprzedaży.", tag: "Domyślny" },
+    { v: "payout", title: "Stała wypłata", sub: "Deklarujesz ile chcesz dostać. Sprzedajemy za dowolną cenę powyżej.", tag: "Grail Point" },
+  ];
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {options.map((o) => {
+        const active = value === o.v;
+        return (
+          <button
+            type="button"
+            key={o.v}
+            onClick={() => onChange(o.v)}
+            className={`text-left p-4 rounded-[14px] border-2 transition-colors ${
+              active ? "border-blue bg-blue/5" : "border-border hover:border-text-mute bg-surface"
+            }`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="font-semibold text-[15px] tracking-[-0.015em]">{o.title}</div>
+              <span className={`h-4 w-4 rounded-full border-2 flex items-center justify-center ${
+                active ? "border-blue bg-blue" : "border-border"
+              }`}>
+                {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+              </span>
+            </div>
+            <div className="mt-2 text-[12px] text-text-soft leading-[1.45]">{o.sub}</div>
+            <div className="mt-3 inline-flex text-[11px] px-2 py-0.5 rounded-md bg-surface-2 border border-border text-text-mute">
+              {o.tag}
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -437,8 +333,9 @@ function ProductCard({
   onRemove?: () => void;
   folderHint: string;
 }) {
-  const cents = parsePriceToCents(product.expectedPrice);
-  const takeHome = takeHomeCents(cents, COMMISSION);
+  const isCommission = product.pricingMode === "commission";
+  const expectedCents = parsePriceToCents(product.expectedPrice);
+  const payoutCents = parsePriceToCents(product.payoutPrice);
 
   return (
     <div className="card p-6 lg:p-7">
@@ -479,15 +376,38 @@ function ProductCard({
             onChange={(e) => onChange({ condition: Math.max(1, Math.min(10, parseInt(e.target.value || "9", 10))) })}
           />
         </Field>
+      </div>
 
-        <Field className="col-span-12 md:col-span-6" label="Cena oczekiwana * (zł)">
-          <input className="input" placeholder="2 480" value={product.expectedPrice}
-            onChange={(e) => onChange({ expectedPrice: e.target.value })} />
-        </Field>
-        <Field className="col-span-12 md:col-span-6" label="Cena minimalna (zł)">
-          <input className="input" placeholder="1 950" value={product.minPrice}
-            onChange={(e) => onChange({ minPrice: e.target.value })} />
-        </Field>
+      {/* Pricing mode */}
+      <div className="mt-6 pt-5 border-t border-border-soft">
+        <div className="input-label mb-3">Model rozliczenia *</div>
+        <PricingToggle value={product.pricingMode} onChange={(v) => onChange({ pricingMode: v })} />
+      </div>
+
+      <div className="mt-5 grid grid-cols-12 gap-4">
+        {isCommission ? (
+          <>
+            <Field className="col-span-12 md:col-span-6" label="Cena oczekiwana * (zł)">
+              <input className="input" placeholder="2 480" value={product.expectedPrice}
+                onChange={(e) => onChange({ expectedPrice: e.target.value })} />
+            </Field>
+            <Field className="col-span-12 md:col-span-6" label="Cena minimalna (zł)">
+              <input className="input" placeholder="1 950" value={product.minPrice}
+                onChange={(e) => onChange({ minPrice: e.target.value })} />
+            </Field>
+          </>
+        ) : (
+          <>
+            <Field className="col-span-12 md:col-span-6" label="Chcę otrzymać * (zł)">
+              <input className="input" placeholder="3 000" value={product.payoutPrice}
+                onChange={(e) => onChange({ payoutPrice: e.target.value })} />
+            </Field>
+            <div className="col-span-12 md:col-span-6 self-end text-[12px] text-text-mute leading-[1.5] pb-2">
+              Sprzedajemy za dowolną cenę powyżej tej kwoty.
+              Marża Kickback = cena sprzedaży − Twoja wypłata.
+            </div>
+          </>
+        )}
 
         <Field className="col-span-12" label="Opis stanu, akcesoria, uwagi">
           <textarea
@@ -507,13 +427,23 @@ function ProductCard({
         </Field>
       </div>
 
-      {cents !== null && cents > 0 && (
+      {isCommission && expectedCents !== null && expectedCents > 0 && (
         <div className="mt-5 pt-4 border-t border-border-soft flex flex-wrap items-center justify-between gap-3 text-[13px]">
           <span className="text-text-soft">
-            Po prowizji 20% otrzymasz: <strong className="text-mint num">{formatPLN(takeHome, { decimals: false })}</strong>
+            Po prowizji 20% otrzymasz: <strong className="text-mint num">{formatPLN(takeHomeCents(expectedCents, COMMISSION), { decimals: false })}</strong>
           </span>
           <span className="text-text-mute num text-[12px]">
-            {formatPLN(cents, { decimals: false })} (brutto)
+            {formatPLN(expectedCents, { decimals: false })} (brutto)
+          </span>
+        </div>
+      )}
+      {!isCommission && payoutCents !== null && payoutCents > 0 && (
+        <div className="mt-5 pt-4 border-t border-border-soft flex flex-wrap items-center justify-between gap-3 text-[13px]">
+          <span className="text-text-soft">
+            Gwarantowana wypłata: <strong className="text-mint num">{formatPLN(payoutCents, { decimals: false })}</strong>
+          </span>
+          <span className="text-text-mute num text-[12px]">
+            cena listingu &gt; {formatPLN(payoutCents, { decimals: false })}
           </span>
         </div>
       )}
@@ -530,13 +460,12 @@ function Field({ children, label, className = "" }: { children: React.ReactNode;
   );
 }
 
-/* ====================================================== STEP 3 */
-function Step3({
-  products, totals, signMethod, commission, onBack, onSubmit, isSubmitting, error,
+/* ====================================================== STEP 2: potwierdzenie */
+function Step2({
+  products, totals, commission, onBack, onSubmit, isSubmitting, error,
 }: {
   products: ProductForm[];
   totals: { gross: number; takeHome: number };
-  signMethod: SignMethod;
   commission: number;
   onBack: () => void;
   onSubmit: () => void;
@@ -550,7 +479,7 @@ function Step3({
           Sprawdź <span className="text-text-soft">i zatwierdź.</span>
         </h1>
         <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">
-          Po zatwierdzeniu wygenerujemy numer Submission, etykietę nadania i wyślemy potwierdzenie na e-mail.
+          Po zatwierdzeniu wygenerujemy numer Oferty, etykietę nadania i wyślemy potwierdzenie na e-mail.
         </p>
       </div>
 
@@ -559,7 +488,10 @@ function Step3({
         <div className="label mb-5">Produkty · {products.length}</div>
         <ul className="space-y-4">
           {products.map((p, i) => {
-            const cents = parsePriceToCents(p.expectedPrice) ?? 0;
+            const isCommission = p.pricingMode === "commission";
+            const cents = isCommission
+              ? parsePriceToCents(p.expectedPrice) ?? 0
+              : parsePriceToCents(p.payoutPrice) ?? 0;
             return (
               <li key={i} className="flex items-center justify-between gap-4 pb-4 border-b border-border-soft last:border-0 last:pb-0">
                 <div className="min-w-0">
@@ -570,9 +502,19 @@ function Step3({
                   <div className="text-[12px] text-text-mute mt-0.5 num">
                     {[p.category, p.size, `stan ${p.condition}/10`].filter(Boolean).join(" · ")}
                   </div>
+                  <div className="mt-1.5">
+                    <span className={`pill ${isCommission ? "pill-blue" : "pill-mint"}`}>
+                      {isCommission ? "Prowizja 20%" : "Stała wypłata"}
+                    </span>
+                  </div>
                 </div>
-                <div className="font-bold text-xl tracking-[-0.025em] num">
-                  {formatPLN(cents, { decimals: false })}
+                <div className="text-right">
+                  <div className="font-bold text-xl tracking-[-0.025em] num">
+                    {formatPLN(cents, { decimals: false })}
+                  </div>
+                  <div className="text-[11px] text-text-mute mt-0.5">
+                    {isCommission ? "cena listingu" : "Twoja wypłata"}
+                  </div>
                 </div>
               </li>
             );
@@ -584,21 +526,21 @@ function Step3({
       <div className="card-gradient-blue p-7 rounded-[24px]">
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 text-white">
           <div>
-            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Suma wycen</div>
+            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Wartość paczki</div>
             <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">
               {formatPLN(totals.gross, { decimals: false })}
             </div>
           </div>
           <div>
-            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Prowizja Kickback</div>
+            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Tw. wypłata (min.)</div>
             <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">
-              −{Math.round(commission * 100)}%
+              {formatPLN(totals.takeHome, { decimals: false })}
             </div>
           </div>
           <div>
-            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Twój udział</div>
+            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Prowizja (commission)</div>
             <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">
-              {formatPLN(totals.takeHome, { decimals: false })}
+              −{Math.round(commission * 100)}%
             </div>
           </div>
         </div>
@@ -606,7 +548,7 @@ function Step3({
 
       {/* Meta */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <MetaTile label="Metoda podpisu" value={signMethod === "autopay" ? "Autopay" : "Profil zaufany"} />
+        <MetaTile label="Umowa Komisowa" value="Podpisana (master)" />
         <MetaTile label="Audyt A&QC" value="3 dni rob." />
         <MetaTile label="Wypłata" value="14 dni od sprzedaży" />
       </div>
@@ -626,7 +568,7 @@ function Step3({
           disabled={isSubmitting}
           className="btn-primary h-14 px-8 text-[15px] inline-flex items-center gap-3"
         >
-          {isSubmitting ? "Tworzenie Submission…" : <>Zatwierdź i wyślij <ArrowRight size={18} /></>}
+          {isSubmitting ? "Tworzenie Oferty…" : <>Zatwierdź i wyślij <ArrowRight size={18} /></>}
         </button>
       </div>
     </div>

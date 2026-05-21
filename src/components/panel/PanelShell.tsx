@@ -9,7 +9,7 @@ export type PanelShellProps = {
   profile: { first_name: string | null; last_name: string | null; account_type: "individual" | "business" | null };
   walletBalance?: number; // in cents
   walletAvailable?: number; // unlocked amount in cents
-  active: "dashboard" | "submissions" | "my-sales" | "wallet" | "notifications" | "stats" | "settings";
+  active: "dashboard" | "submissions" | "my-sales" | "inventory" | "wallet" | "notifications" | "stats" | "settings" | "umowa";
   pageTitle?: string;
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
@@ -36,13 +36,19 @@ export function PanelShell({
           <div className="label">Sprzedaż</div>
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <NavItem label="Panel" href="/panel" active={active === "dashboard"} />
-            <NavItem label="Submissions" href="/panel/submissions" active={active === "submissions"} />
+            <NavItem label="Oferty" href="/panel/submissions" active={active === "submissions"} />
+            <NavItem label="Inventory" href="/panel/inventory" active={active === "inventory"} />
             <NavItem label="My Sales" href="/panel/my-sales" active={active === "my-sales"} />
           </ul>
 
           <div className="label mt-9">Środki</div>
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <NavItem label="Wallet" href="/panel/wallet" active={active === "wallet"} badge={walletBalance > 0 ? formatPLN(walletBalance, { decimals: false }) : undefined} badgeAccent />
+          </ul>
+
+          <div className="label mt-9">Dokumenty</div>
+          <ul className="mt-3 space-y-1.5 text-[14px]">
+            <NavItem label="Umowa Komisowa" href="/panel/umowa" active={active === "umowa"} />
           </ul>
 
           <div className="label mt-9">Konto</div>
@@ -99,7 +105,7 @@ export function PanelShell({
             <div className="flex items-center gap-3">
               {cta ?? (
                 <ButtonLink href="/start" size="md">
-                  Nowa Submission
+                  Nowa Oferta
                   <ArrowRight size={14} />
                 </ButtonLink>
               )}

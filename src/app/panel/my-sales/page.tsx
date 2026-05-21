@@ -9,7 +9,7 @@ import { formatPLN, formatDate, takeHomeCents } from "@/lib/format";
 import type { Product, ProductStatus } from "@/lib/types";
 
 type ProductWithSubmission = Product & {
-  submissions: { id: string; status: string; commission_rate: number; created_at: string } | null;
+  submission: { id: string; status: string; commission_rate: number; created_at: string } | null;
 };
 
 type FilterKey = "all" | "listed" | "sold" | "aqc" | "offer" | "draft";
@@ -42,15 +42,29 @@ export default async function MySalesPage(props: {
     .maybeSingle();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
+  // Two separate queries — embedded relations through RLS sometimes 500 in PostgREST.
+  // Klienci widzą tylko swoje przez RLS, więc nie potrzebujemy .eq po stronie klienta.
   const { data: productsRaw } = await supabase
     .from("products")
-    .select(`
-      *,
-      submissions ( id, status, commission_rate, created_at )
-    `)
+    .select("*")
     .order("created_at", { ascending: false });
 
-  const allProducts = (productsRaw ?? []) as ProductWithSubmission[];
+  const productList = (productsRaw ?? []) as Product[];
+  const submissionIds = Array.from(new Set(productList.map((p) => p.submission_id))).filter(Boolean);
+
+  const { data: subsRaw } = submissionIds.length
+    ? await supabase
+        .from("submissions")
+        .select("id, status, commission_rate, created_at")
+        .in("id", submissionIds)
+    : { data: [] as Array<{ id: string; status: string; commission_rate: number; created_at: string }> };
+
+  const subById = new Map((subsRaw ?? []).map((s) => [s.id, s]));
+
+  const allProducts: ProductWithSubmission[] = productList.map((p) => ({
+    ...p,
+    submission: subById.get(p.submission_id) ?? null,
+  }));
   const activeFilter = FILTERS.find((f) => f.key === filterKey)!;
   const products = allProducts.filter((p) => activeFilter.matches(p.status));
 
@@ -73,7 +87,7 @@ export default async function MySalesPage(props: {
       acc +
       (takeHomeCents(
         p.listing_price_cents ?? p.expected_price_cents ?? 0,
-        p.submissions?.commission_rate ?? 0.2,
+        p.submission?.commission_rate ?? 0.2,
       ) ?? 0),
     0,
   );
@@ -91,7 +105,7 @@ export default async function MySalesPage(props: {
           My Sales <span className="text-text-soft">/ Twoja sprzedaż.</span>
         </h1>
         <p className="mt-4 text-[16px] text-text-soft max-w-[60ch]">
-          Wszystkie powierzone rzeczy z różnych Submissions w jednym widoku. Filtruj po statusie, klikaj w produkt by zobaczyć szczegóły.
+          Wszystkie powierzone rzeczy z różnych Ofert w jednym widoku. Filtruj po statusie, klikaj w produkt by zobaczyć szczegóły.
         </p>
       </section>
 
@@ -160,7 +174,7 @@ export default async function MySalesPage(props: {
 
 function ProductRow({ product }: { product: ProductWithSubmission }) {
   const price = product.listing_price_cents ?? product.expected_price_cents ?? 0;
-  const commission = product.submissions?.commission_rate ?? 0.2;
+  const commission = product.submission?.commission_rate ?? 0.2;
   const takeHome = takeHomeCents(price, commission) ?? 0;
 
   return (
@@ -188,15 +202,15 @@ function ProductRow({ product }: { product: ProductWithSubmission }) {
         </div>
 
         <div className="col-span-6 md:col-span-2">
-          {product.submissions && (
+          {product.submission && (
             <Link
-              href={`/panel/submissions/${product.submissions.id}`}
+              href={`/panel/submissions/${product.submission.id}`}
               onClick={(e) => e.stopPropagation()}
               className="text-[12px] text-text-mute hover:text-text num"
             >
-              {product.submissions.id}
+              {product.submission.id}
               <span className="block text-[11px] text-text-faint">
-                {formatDate(product.submissions.created_at)}
+                {formatDate(product.submission.created_at)}
               </span>
             </Link>
           )}
@@ -247,11 +261,11 @@ function EmptyState() {
           Brak produktów w My Sales
         </div>
         <p className="mt-3 text-text-soft max-w-[44ch] mx-auto">
-          Po dodaniu Submission Twoje produkty pojawią się tutaj — z statusami, wycenami i kontrolą sprzedaży.
+          Po dodaniu Oferty Twoje produkty pojawią się tutaj — ze statusami, wycenami i kontrolą sprzedaży.
         </p>
         <div className="mt-8">
           <ButtonLink href="/start" size="lg">
-            Stwórz pierwszą Submission <ArrowRight size={18} />
+            Stwórz pierwszą Ofertę <ArrowRight size={18} />
           </ButtonLink>
         </div>
       </div>

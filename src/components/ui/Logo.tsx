@@ -1,9 +1,22 @@
 import Link from "next/link";
 
-export function Logo({ href = "/", showSuffix = true }: { href?: string; showSuffix?: boolean }) {
+export function Logo({
+  href = "/",
+  showSuffix = true,
+  className = "",
+}: {
+  href?: string;
+  showSuffix?: boolean;
+  className?: string;
+}) {
   return (
-    <Link href={href} className="inline-flex items-baseline gap-2 group">
-      <span className="font-bold text-[22px] tracking-[-0.04em] text-text">Kickback</span>
+    <Link href={href} className={`inline-flex items-center gap-3 group ${className}`}>
+      <img
+        src="/brand_assets/kickback_logo.svg"
+        alt="Kickback"
+        className="h-5 w-auto select-none"
+        style={{ filter: "brightness(0) invert(1)" }}
+      />
       {showSuffix && (
         <span className="hidden sm:inline label text-text-faint">/ panel</span>
       )}

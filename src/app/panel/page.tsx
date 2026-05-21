@@ -73,19 +73,19 @@ export default async function PanelPage() {
         </h1>
         {totalSubmissions === 0 && (
           <p className="mt-4 text-[17px] text-text-soft max-w-[60ch]">
-            Nie masz jeszcze żadnej Submission. Zacznij od pierwszej — zajmie to ~6 minut.
+            Nie masz jeszcze żadnej Oferty. Zacznij od pierwszej — zajmie to ~6 minut.
           </p>
         )}
         {totalSubmissions > 0 && (
           <p className="mt-4 text-[17px] text-text-soft max-w-[60ch]">
-            Masz {totalSubmissions} {plural(totalSubmissions, ["Submission", "Submissions", "Submissions"])} z {totalProducts} {plural(totalProducts, ["produktem", "produktami", "produktami"])}.
+            Masz {totalSubmissions} {plural(totalSubmissions, ["Ofertę", "Oferty", "Ofert"])} z {totalProducts} {plural(totalProducts, ["produktem", "produktami", "produktami"])}.
           </p>
         )}
       </section>
 
       {/* KPIs */}
       <section className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Kpi label="Submissions" value={totalSubmissions} sub="łącznie" />
+        <Kpi label="Oferty" value={totalSubmissions} sub="łącznie" />
         <Kpi label="W sprzedaży" value={listed} sub={`z ${totalProducts} produktów`} />
         <Kpi label="Sprzedane" value={sold} sub="zakończone" />
         <Kpi
@@ -112,14 +112,14 @@ export default async function PanelPage() {
                 Powierz pierwszą rzecz.
               </h2>
               <p className="mt-4 text-white/85 text-[16px] leading-[1.6]">
-                Wypełnij formularz Submission, podpisz Umowę Komisową, dostaniesz etykietę nadania DPD. My weryfikujemy, sprzedajemy, wypłacamy.
+                Wypełnij formularz Oferty, podpisz Umowę Komisową, dostaniesz etykietę nadania DPD. My weryfikujemy, sprzedajemy, wypłacamy.
               </p>
               <div className="mt-8">
                 <Link
                   href="/start"
                   className="inline-flex items-center gap-2 bg-white text-bg px-7 py-4 text-[15px] font-semibold rounded-[12px] hover:bg-white/90 transition-colors"
                 >
-                  Rozpocznij konsygnację
+                  Wypełnij formularz
                   <ArrowRight size={16} />
                 </Link>
               </div>
@@ -131,7 +131,7 @@ export default async function PanelPage() {
           <div className="flex items-end justify-between mb-6">
             <div>
               <div className="label">Ostatnie</div>
-              <h2 className="mt-2 font-bold text-2xl lg:text-3xl tracking-[-0.025em]">Twoje Submissions</h2>
+              <h2 className="mt-2 font-bold text-2xl lg:text-3xl tracking-[-0.025em]">Twoje Oferty</h2>
             </div>
             <Link href="/panel/submissions" className="text-[14px] text-text-soft hover:text-text inline-flex items-center gap-2">
               Zobacz wszystkie <ArrowRight size={14} />
@@ -140,7 +140,7 @@ export default async function PanelPage() {
 
           <div className="card overflow-hidden">
             <div className="grid grid-cols-12 gap-4 px-6 py-3 label border-b border-border-soft">
-              <div className="col-span-3">Submission</div>
+              <div className="col-span-3">Oferta</div>
               <div className="col-span-3">Status</div>
               <div className="col-span-2">Data</div>
               <div className="col-span-2 text-right">Liczba</div>
@@ -177,7 +177,7 @@ export default async function PanelPage() {
       {/* Demo banner */}
       <div className="mt-12 inline-flex items-center gap-3 px-5 py-4 rounded-[16px] bg-amber/10 border border-amber/30 text-amber">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" /></svg>
-        <span className="text-[14px]">Tryb demo — bez integracji Autopay/PZ/banku DPD. Submissions zapisywane w DB, pieniądze testowe.</span>
+        <span className="text-[14px]">Tryb demo — bez integracji Autopay/PZ/banku DPD. Oferty zapisywane w DB, pieniądze testowe.</span>
       </div>
     </PanelShell>
   );
