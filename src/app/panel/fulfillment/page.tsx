@@ -16,11 +16,15 @@ export default async function FulfillmentPage() {
     .maybeSingle();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  const { data: ordersRaw } = await supabase
+  // Defensive query: if the table doesn't exist yet (migration 010 partial /
+  // not applied), surface the error in UI instead of crashing the page.
+  const ordersQuery = await supabase
     .from("fulfillment_orders")
     .select("*")
     .order("created_at", { ascending: false });
-  const orders = (ordersRaw ?? []) as FulfillmentOrder[];
+
+  const tableMissing = ordersQuery.error?.code === "42P01"; // relation does not exist
+  const orders = (ordersQuery.data ?? []) as FulfillmentOrder[];
 
   // Monthly summary (current month)
   const now = new Date();
@@ -46,6 +50,25 @@ export default async function FulfillmentPage() {
         </p>
       </section>
 
+      {tableMissing && (
+        <section className="mt-6">
+          <div className="card-bare bg-amber/5 border border-amber/30 rounded-[14px] p-5 flex items-start gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber mt-0.5 flex-shrink-0">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4M12 16h.01" />
+            </svg>
+            <div className="text-[13px]">
+              <div className="font-semibold text-amber">Tabela fulfillment_orders nie istnieje</div>
+              <p className="mt-1 text-text-soft">
+                Uruchom migrację{" "}
+                <span className="num">supabase/migrations/20260523_010_domain_and_demand.sql</span>{" "}
+                w Supabase SQL Editor. Po wykonaniu reszta strony zacznie działać.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="card p-6">
           <div className="label">Umowa fulfillmentowa</div>
@@ -54,18 +77,11 @@ export default async function FulfillmentPage() {
             Standardowe warunki współpracy w modelu fulfillment. Po akceptacji warunki obowiązują dla
             wszystkich Twoich zamówień obsługiwanych przez Kickback.
           </p>
-          <div className="mt-4 flex items-center gap-3">
-            <a
-              href="#"
-              className="text-[13px] text-blue hover:underline"
-              aria-disabled
-              onClick={(e) => e.preventDefault()}
-            >
-              Pobierz PDF umowy (wkrótce)
-            </a>
+          <div className="mt-4 flex items-center gap-3 flex-wrap">
+            <span className="pill pill-mute text-[11px]">PDF wkrótce</span>
             <span className="text-[11px] text-text-faint">·</span>
-            <a href="mailto:hello@kickback.pl" className="text-[13px] text-text-soft hover:text-text">
-              Zapytaj o aktywację
+            <a href="mailto:hello@kickback.pl?subject=Aktywacja%20fulfillment" className="text-[13px] text-blue hover:underline">
+              Zapytaj o aktywację →
             </a>
           </div>
         </div>
@@ -89,7 +105,9 @@ export default async function FulfillmentPage() {
         <h2 className="font-semibold text-xl tracking-[-0.025em] mb-4">Historia zamówień</h2>
         {orders.length === 0 ? (
           <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center text-[14px] text-text-soft">
-            Nie masz jeszcze zamówień w modelu fulfillment. Skontaktuj się z opiekunem żeby aktywować ten model.
+            {tableMissing
+              ? "Pojawi się tutaj po uruchomieniu migracji 010 i aktywacji modelu fulfillment u Twojego opiekuna."
+              : "Nie masz jeszcze zamówień w modelu fulfillment. Skontaktuj się z opiekunem żeby aktywować ten model."}
           </div>
         ) : (
           <div className="card table-scroll">
