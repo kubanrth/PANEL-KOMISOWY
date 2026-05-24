@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { signOut } from "@/app/panel/actions";
+import { getTheme } from "@/lib/theme";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { AdminMobileNav } from "./AdminMobileNav";
 
 export type AdminShellProps = {
   user: { email: string };
@@ -25,21 +28,27 @@ export type AdminShellProps = {
   cta?: React.ReactNode;
 };
 
-export function AdminShell({ user, profile, active, breadcrumb, children, cta }: AdminShellProps) {
+export async function AdminShell({ user, profile, active, breadcrumb, children, cta }: AdminShellProps) {
   const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials = (profile.first_name?.[0] ?? "") + (profile.last_name?.[0] ?? user.email[0]?.toUpperCase());
+  const theme = await getTheme();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen lg:flex">
+      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} />
+
       <aside className="hidden lg:flex flex-col w-[260px] xl:w-[280px] border-r border-border-soft bg-bg-soft/40 sticky top-0 h-screen">
-        <div className="px-6 pt-6 pb-5 border-b border-border-soft">
-          <div className="flex items-baseline gap-2">
-            <span className="font-bold text-[22px] tracking-[-0.04em] text-text">Kickback</span>
-            <span className="label text-purple">/admin</span>
+        <div className="px-6 pt-6 pb-5 border-b border-border-soft flex items-start justify-between">
+          <div>
+            <div className="flex items-baseline gap-2">
+              <Logo showSuffix={false} />
+              <span className="label text-purple">/admin</span>
+            </div>
+            <div className="text-[12px] text-text-mute mt-1.5">
+              {profile.role === "super_admin" ? "Super-admin" : "Admin operacyjny"}
+            </div>
           </div>
-          <div className="text-[12px] text-text-mute mt-1.5">
-            {profile.role === "super_admin" ? "Super-admin" : "Admin operacyjny"}
-          </div>
+          <ThemeToggle current={theme} />
         </div>
 
         <nav className="px-6 py-6 flex-1 overflow-y-auto">
@@ -100,8 +109,8 @@ export function AdminShell({ user, profile, active, breadcrumb, children, cta }:
       </aside>
 
       <div className="flex-1 min-w-0">
-        <header className="sticky top-0 z-20 backdrop-blur-md bg-bg/80 border-b border-border-soft">
-          <div className="px-6 lg:px-10 h-[64px] flex items-center justify-between gap-4">
+        <header className="hidden lg:flex sticky top-0 z-20 backdrop-blur-md bg-bg/80 border-b border-border-soft">
+          <div className="w-full px-6 lg:px-10 h-[64px] flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-[13px] text-text-soft">
               <Link href="/admin" className="hover:text-text">Admin</Link>
               {breadcrumb?.map((b, i) => (
@@ -122,7 +131,25 @@ export function AdminShell({ user, profile, active, breadcrumb, children, cta }:
           </div>
         </header>
 
-        <main className="px-6 lg:px-10 py-8 lg:py-12">{children}</main>
+        {breadcrumb && breadcrumb.length > 0 && (
+          <div className="lg:hidden px-4 py-3 border-b border-border-soft">
+            <div className="flex items-center gap-2 text-[12px] text-text-soft overflow-x-auto no-scrollbar">
+              <Link href="/admin" className="hover:text-text whitespace-nowrap">Admin</Link>
+              {breadcrumb.map((b, i) => (
+                <span key={i} className="flex items-center gap-2 whitespace-nowrap">
+                  <span className="text-text-faint">/</span>
+                  {b.href ? (
+                    <Link href={b.href} className="hover:text-text">{b.label}</Link>
+                  ) : (
+                    <span className="text-text">{b.label}</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <main className="px-4 py-5 lg:px-10 lg:py-12">{children}</main>
       </div>
     </div>
   );

@@ -62,7 +62,7 @@ export default async function AdminZapotrzebowaniePage() {
             Brak aktywnych ogłoszeń.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             <div className="hidden md:grid grid-cols-[120px_minmax(200px,2fr)_100px_120px_140px_120px_100px] gap-3 px-4 py-3 label border-b border-border-soft">
               <div>Rodzaj</div>
               <div>Pozycja</div>

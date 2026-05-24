@@ -78,7 +78,7 @@ export default async function PrzyjeciaPage() {
           </section>
 
           <section className="mt-8">
-            <div className="card overflow-hidden">
+            <div className="card table-scroll">
               <div className="hidden md:grid grid-cols-[160px_120px_140px_80px_140px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
                 <div>Numer PZ</div>
                 <div>Data przyjęcia</div>

@@ -286,6 +286,27 @@ html { scroll-behavior: smooth; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
+/* Tables — desktop renders the full grid, mobile gets horizontal scroll
+   with thin scrollbar so user knows they can swipe. */
+.table-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.table-scroll::-webkit-scrollbar { height: 4px; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
+.table-scroll > * { min-width: 720px; }
+@media (min-width: 1024px) {
+  .table-scroll { overflow-x: visible; overflow-y: visible; }
+  .table-scroll > * { min-width: 0; }
+}
+
+/* Tap-targets: w mobile zwiększamy min wysokość kontrolnych elementów do 44px (Apple HIG) */
+@media (max-width: 1023px) {
+  .input { padding-top: 12px; padding-bottom: 12px; font-size: 16px; }
+  .btn-primary, .btn-ghost, .btn-soft { min-height: 44px; }
+}
+
 /* line-clamp utility */
 .line-clamp-2 {
   display: -webkit-box;

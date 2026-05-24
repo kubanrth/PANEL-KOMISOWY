@@ -213,7 +213,7 @@ export default async function PlanyPage() {
       {plans.length > 0 && (
         <section className="mt-10">
           <h2 className="font-semibold text-xl tracking-[-0.025em] mb-4">Historia planów</h2>
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             <div className="hidden md:grid grid-cols-[140px_140px_minmax(280px,3fr)_140px_140px] gap-3 px-4 py-3 label border-b border-border-soft">
               <div>Data</div>
               <div>Budżet</div>

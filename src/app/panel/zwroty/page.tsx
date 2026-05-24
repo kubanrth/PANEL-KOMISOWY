@@ -62,7 +62,7 @@ export default async function ZwrotyPage() {
           </section>
 
           <section className="mt-8">
-            <div className="card overflow-hidden">
+            <div className="card table-scroll">
               <div className="hidden md:grid grid-cols-[minmax(240px,3fr)_60px_140px_180px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
                 <div>Produkt</div>
                 <div>Rozm.</div>

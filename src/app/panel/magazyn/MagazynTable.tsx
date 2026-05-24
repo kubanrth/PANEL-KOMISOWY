@@ -157,7 +157,7 @@ export function MagazynTable({ rows }: Props) {
       )}
 
       {/* Table */}
-      <div className="card overflow-hidden">
+      <div className="card table-scroll">
         <div className="hidden md:grid grid-cols-[28px_minmax(220px,3fr)_44px_60px_140px_64px_94px_94px_120px_120px_140px_140px] gap-3 px-4 py-3 label border-b border-border-soft items-center">
           <input type="checkbox" checked={selected.size === rows.length && rows.length > 0} onChange={toggleAll} className="cursor-pointer" />
           <div>Produkt</div>
@@ -191,7 +191,89 @@ export function MagazynTable({ rows }: Props) {
           return (
             <div
               key={r.id}
-              className={`grid grid-cols-[28px_minmax(220px,3fr)_44px_60px_140px_64px_94px_94px_120px_120px_140px_140px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/30 transition-colors ${checked ? "bg-blue/5" : ""}`}
+              className={`border-b border-border-soft last:border-0 ${checked ? "bg-blue/5" : ""}`}
+            >
+            {/* Mobile card (< md) — kompakt, podstawowe info, akcje pod spodem */}
+            <div className="md:hidden p-3">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleRow(r.id)}
+                  className="cursor-pointer mt-1"
+                />
+                <div className="relative h-12 w-12 rounded-[8px] overflow-hidden bg-surface-2 flex-shrink-0">
+                  {r.photo_url && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={r.photo_url} alt={r.brand} className="absolute inset-0 w-full h-full object-cover" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <Link href={`/panel/products/${r.id}`} className="block hover:text-blue">
+                    <div className="text-[14px] font-medium truncate">{r.brand} · {r.model}</div>
+                  </Link>
+                  <div className="mt-0.5 text-[11px] text-text-mute num truncate">
+                    {[r.size, vatLabel(r.vat_rate), `${r.days_in_commission} d`].filter(Boolean).join(" · ")}
+                  </div>
+                  <div className="mt-2 flex items-center gap-2 flex-wrap">
+                    <span className={`pill ${statusCls}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${
+                        variant === "mint" ? "bg-mint" : variant === "blue" ? "bg-blue-soft" : variant === "amber" ? "bg-amber" : "bg-text-mute"
+                      }`} />
+                      {DERIVED_STATUS_LABEL[r.derived_status]}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-semibold text-[15px] num">
+                    {formatPLN(r.listing_price_cents, { decimals: false })}
+                  </div>
+                  <div className={`text-[11px] num ${arrowColor}`} title={r.recommended_price_cents ? `Rekomendowana: ${formatPLN(r.recommended_price_cents, { decimals: false })}` : ""}>
+                    {arrowGlyph} {r.recommended_price_cents ? "rec." : ""}
+                  </div>
+                </div>
+              </div>
+
+              {inEdit && (
+                <div className="mt-3 pl-9 flex items-center gap-2">
+                  <input
+                    className="input !h-9 !text-[13px] flex-1"
+                    placeholder="Nowa cena"
+                    value={priceEdits[r.id]}
+                    onChange={(e) => setPriceEdits({ ...priceEdits, [r.id]: e.target.value })}
+                  />
+                  <button onClick={() => submitPrice(r.id)} disabled={busy} className="btn-primary !h-9 px-3 text-[12px]">
+                    Wyślij
+                  </button>
+                  <button
+                    onClick={() => {
+                      const next = { ...priceEdits };
+                      delete next[r.id];
+                      setPriceEdits(next);
+                    }}
+                    className="text-text-mute hover:text-coral text-[18px] px-2"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+
+              {!inEdit && (
+                <div className="mt-2 pl-9">
+                  <button
+                    type="button"
+                    onClick={() => setPriceEdits({ ...priceEdits, [r.id]: "" })}
+                    className="text-[12px] text-blue hover:underline"
+                  >
+                    Zmień cenę
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop row (md+) — pełen grid 12 kolumn */}
+            <div
+              className={`hidden md:grid grid-cols-[28px_minmax(220px,3fr)_44px_60px_140px_64px_94px_94px_120px_120px_140px_140px] gap-3 px-4 py-3 items-center hover:bg-surface-2/30 transition-colors`}
             >
               <input type="checkbox" checked={checked} onChange={() => toggleRow(r.id)} className="cursor-pointer" />
 
@@ -276,6 +358,7 @@ export function MagazynTable({ rows }: Props) {
                   </button>
                 )}
               </div>
+            </div>
             </div>
           );
         })}

@@ -110,7 +110,7 @@ export default async function AdminPayoutsPage() {
             Brak historycznych wypłat.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {done.slice(0, 20).map((p, i) => {
               const name = [p.profiles?.first_name, p.profiles?.last_name].filter(Boolean).join(" ") || "—";
               return (

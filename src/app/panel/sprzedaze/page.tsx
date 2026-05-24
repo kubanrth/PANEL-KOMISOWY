@@ -135,7 +135,7 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
 
           {/* List */}
           <section className="mt-6">
-            <div className="card overflow-hidden">
+            <div className="card table-scroll">
               <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_44px_60px_120px_70px_110px_110px_120px_140px] gap-3 px-4 py-3 label border-b border-border-soft items-center">
                 <div>Produkt</div>
                 <div>Il.</div>

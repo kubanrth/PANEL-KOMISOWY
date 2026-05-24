@@ -124,7 +124,7 @@ export default async function WyplatyPage() {
             Brak sprzedaży — wypłaty pojawią się tu po pierwszej transakcji.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {[...ready, ...pending].map((p) => {
               const rate = subById.get(p.submission_id)?.commission_rate ?? 0.2;
               const takeHome = takeHomeCents(p.listing_price_cents ?? 0, rate) ?? 0;

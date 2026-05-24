@@ -81,7 +81,7 @@ export default async function FakturyPage() {
             Brak wgranych dokumentów. Po pierwszej weryfikowanej fakturze odblokujesz Funds w Wallet.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             <div className="hidden md:grid grid-cols-[140px_140px_180px_140px_140px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
               <div>Typ</div>
               <div>Numer</div>

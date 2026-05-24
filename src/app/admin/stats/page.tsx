@@ -131,7 +131,7 @@ export default async function AdminStatsPage() {
       {topKlienci.length > 0 && (
         <section className="mt-12">
           <div className="label mb-5">Top klienci · po GMV</div>
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {topKlienci.map(([id, data], i) => (
               <div
                 key={id}

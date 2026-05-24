@@ -104,7 +104,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
       </section>
 
       <section className="mt-6">
-        <div className="card overflow-hidden">
+        <div className="card table-scroll">
           <div className="hidden md:grid grid-cols-[minmax(200px,2fr)_120px_100px_100px_140px_140px_60px] gap-3 px-4 py-3 label border-b border-border-soft">
             <div>Klient</div>
             <div>Typ konta</div>

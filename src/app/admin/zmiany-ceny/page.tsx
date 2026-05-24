@@ -82,7 +82,7 @@ function RequestsTable({
   showActions?: boolean;
 }) {
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       <div className={`hidden md:grid gap-3 px-4 py-3 label border-b border-border-soft ${
         showActions
           ? "grid-cols-[minmax(220px,3fr)_140px_120px_120px_120px_140px_160px]"

@@ -46,7 +46,7 @@ export default async function AdminAuditLogPage() {
             Brak akcji w logu.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {logs.map((l, i) => {
               const actorName = [l.profiles?.first_name, l.profiles?.last_name].filter(Boolean).join(" ") || "system";
               return (

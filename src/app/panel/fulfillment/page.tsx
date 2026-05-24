@@ -92,7 +92,7 @@ export default async function FulfillmentPage() {
             Nie masz jeszcze zamówień w modelu fulfillment. Skontaktuj się z opiekunem żeby aktywować ten model.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             <div className="hidden md:grid grid-cols-[140px_minmax(180px,2fr)_120px_140px_120px_140px] gap-3 px-4 py-3 label border-b border-border-soft">
               <div>Numer LP</div>
               <div>Kupujący</div>

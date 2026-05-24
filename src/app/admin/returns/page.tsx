@@ -112,7 +112,7 @@ export default async function AdminReturnsPage() {
       {resolved.length > 0 && (
         <section className="mt-12">
           <div className="label mb-5">Rozwiązane · {resolved.length}</div>
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {resolved.slice(0, 10).map((r, i) => {
               const reasonInfo = RETURN_REASON_LABEL[r.reason];
               return (

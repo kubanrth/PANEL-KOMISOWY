@@ -134,7 +134,7 @@ export default async function WalletPage() {
             Brak transakcji. Środki pojawią się tu po pierwszej sprzedaży.
           </div>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             {transactions.map((tx, i) => (
               <TxRow key={tx.id} tx={tx} isLast={i === transactions.length - 1} />
             ))}

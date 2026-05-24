@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { PanelSidebar } from "./PanelSidebar";
+import { PanelMobileNav } from "./PanelMobileNav";
 import { getTheme } from "@/lib/theme";
 
 export type PanelShellProps = {
@@ -11,11 +11,9 @@ export type PanelShellProps = {
     last_name: string | null;
     account_type: "individual" | "business" | null;
   };
-  walletBalance?: number; // in cents
-  walletAvailable?: number; // unlocked amount in cents
-  /** Stable key from nav-config (e.g. "magazyn", "wallet"). Legacy values
-   * like "dashboard"/"submissions"/"my-sales"/"inventory"/"stats"/"settings"
-   * are auto-mapped via LEGACY_ACTIVE_ALIASES so existing pages keep working. */
+  walletBalance?: number;
+  walletAvailable?: number;
+  /** Stable nav-config key. Legacy values (dashboard/submissions/my-sales/inventory/stats/settings) auto-mapped. */
   active?: string;
   pageTitle?: string;
   breadcrumb?: Array<{ label: string; href?: string }>;
@@ -24,20 +22,27 @@ export type PanelShellProps = {
 };
 
 export async function PanelShell({
-  user,
-  profile,
+  user, profile,
   walletBalance = 0,
   walletAvailable = 0,
-  active,
-  pageTitle,
-  breadcrumb,
-  children,
-  cta,
+  active, pageTitle, breadcrumb,
+  children, cta,
 }: PanelShellProps) {
   const theme = await getTheme();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen lg:flex">
+      {/* Mobile top bar + slide-in drawer (visible only under lg) */}
+      <PanelMobileNav
+        user={user}
+        profile={profile}
+        walletBalance={walletBalance}
+        walletAvailable={walletAvailable}
+        active={active}
+        theme={theme}
+      />
+
+      {/* Desktop sidebar (visible from lg up) */}
       <PanelSidebar
         user={user}
         profile={profile}
@@ -49,14 +54,11 @@ export async function PanelShell({
 
       {/* MAIN */}
       <div className="flex-1 min-w-0">
-        <header className="sticky top-0 z-20 backdrop-blur-md bg-bg/80 border-b border-border-soft">
-          <div className="px-6 lg:px-10 h-[60px] flex items-center justify-between gap-4">
+        {/* Desktop-only secondary header (mobile gets its own bar from PanelMobileNav) */}
+        <header className="hidden lg:flex sticky top-0 z-20 backdrop-blur-md bg-bg/80 border-b border-border-soft">
+          <div className="w-full px-6 lg:px-10 h-[60px] flex items-center justify-between gap-4">
             <Breadcrumb breadcrumb={breadcrumb} pageTitle={pageTitle} />
             <div className="flex items-center gap-3">
-              {/* Mobile-visible theme toggle (sidebar hidden under lg) */}
-              <div className="lg:hidden">
-                <ThemeToggle current={theme} />
-              </div>
               {cta ?? (
                 <ButtonLink href="/start" size="md">
                   Nowa Oferta
@@ -67,27 +69,43 @@ export async function PanelShell({
           </div>
         </header>
 
-        <main className="px-6 lg:px-10 py-7 lg:py-10">{children}</main>
+        {/* Mobile-only breadcrumb under the top bar (compact) */}
+        {breadcrumb && breadcrumb.length > 0 && (
+          <div className="lg:hidden px-4 py-3 border-b border-border-soft">
+            <Breadcrumb breadcrumb={breadcrumb} pageTitle={pageTitle} />
+          </div>
+        )}
+
+        <main className="px-4 py-5 lg:px-10 lg:py-10">{children}</main>
+
+        {/* Mobile-only sticky CTA at the bottom of the page (optional Nowa Oferta) */}
+        {!cta && (
+          <div className="lg:hidden sticky bottom-0 z-10 px-4 py-3 border-t border-border-soft bg-bg/85 backdrop-blur-md">
+            <ButtonLink href="/start" size="md" className="w-full">
+              Nowa Oferta
+              <ArrowRight size={14} />
+            </ButtonLink>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 function Breadcrumb({
-  breadcrumb,
-  pageTitle,
+  breadcrumb, pageTitle,
 }: {
   breadcrumb?: Array<{ label: string; href?: string }>;
   pageTitle?: string;
 }) {
   if (!breadcrumb && !pageTitle) return null;
   return (
-    <div className="flex items-center gap-2 text-[13px] text-text-soft">
-      <Link href="/panel" className="hover:text-text">
+    <div className="flex items-center gap-2 text-[12px] lg:text-[13px] text-text-soft overflow-x-auto no-scrollbar">
+      <Link href="/panel" className="hover:text-text whitespace-nowrap">
         Panel
       </Link>
       {breadcrumb?.map((b, i) => (
-        <span key={i} className="flex items-center gap-2">
+        <span key={i} className="flex items-center gap-2 whitespace-nowrap">
           <span className="text-text-faint">/</span>
           {b.href ? (
             <Link href={b.href} className="hover:text-text">
@@ -101,7 +119,7 @@ function Breadcrumb({
       {pageTitle && breadcrumb === undefined && (
         <>
           <span className="text-text-faint">/</span>
-          <span className="text-text">{pageTitle}</span>
+          <span className="text-text whitespace-nowrap">{pageTitle}</span>
         </>
       )}
     </div>

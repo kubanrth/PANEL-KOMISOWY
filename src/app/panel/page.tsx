@@ -138,7 +138,7 @@ export default async function PanelPage() {
             </Link>
           </div>
 
-          <div className="card overflow-hidden">
+          <div className="card table-scroll">
             <div className="grid grid-cols-12 gap-4 px-6 py-3 label border-b border-border-soft">
               <div className="col-span-3">Oferta</div>
               <div className="col-span-3">Status</div>

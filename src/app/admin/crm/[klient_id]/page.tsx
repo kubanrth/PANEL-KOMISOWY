@@ -140,7 +140,7 @@ function Stat({ label, value, accent = "" }: { label: string; value: string; acc
 function SubmissionsTab({ submissions }: { submissions: Submission[] }) {
   if (!submissions.length) return <Empty msg="Brak submission'ów." />;
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       <div className="hidden md:grid grid-cols-[160px_140px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
         <div>SUB-Numer</div>
         <div>Data</div>
@@ -166,7 +166,7 @@ function SubmissionsTab({ submissions }: { submissions: Submission[] }) {
 function ProductsTab({ products, title, showSold = false }: { products: Product[]; title: string; showSold?: boolean }) {
   if (!products.length) return <Empty msg={`Brak pozycji w "${title}".`} />;
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_120px_120px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
         <div>Produkt</div>
         <div>Cena</div>
@@ -206,7 +206,7 @@ function ProductsTab({ products, title, showSold = false }: { products: Product[
 function WalletTab({ transactions }: { transactions: WalletTransaction[] }) {
   if (!transactions.length) return <Empty msg="Brak transakcji w Wallet." />;
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       <div className="hidden md:grid grid-cols-[140px_180px_minmax(180px,2fr)_140px] gap-3 px-4 py-3 label border-b border-border-soft">
         <div>Data</div>
         <div>Typ</div>
@@ -233,7 +233,7 @@ function WalletTab({ transactions }: { transactions: WalletTransaction[] }) {
 function DocsTab({ documents }: { documents: AppDocument[] }) {
   if (!documents.length) return <Empty msg="Brak dokumentów." />;
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       {documents.map((d) => (
         <div key={d.id} className="px-4 py-3 border-b border-border-soft last:border-0 flex items-center justify-between">
           <div className="min-w-0">
@@ -254,7 +254,7 @@ function DocsTab({ documents }: { documents: AppDocument[] }) {
 function NotifsTab({ notifs }: { notifs: AppNotification[] }) {
   if (!notifs.length) return <Empty msg="Brak zdarzeń." />;
   return (
-    <div className="card overflow-hidden">
+    <div className="card table-scroll">
       {notifs.map((n) => (
         <div key={n.id} className="px-4 py-3 border-b border-border-soft last:border-0">
           <div className="flex items-center justify-between">
