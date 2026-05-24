@@ -33,7 +33,7 @@ export default async function UmowaPage() {
     >
       <section>
         <div className="label">Dokument główny</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Umowa Komisowa.
         </h1>
         <p className="mt-4 text-[16px] text-text-soft max-w-[60ch]">

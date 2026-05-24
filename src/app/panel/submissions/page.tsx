@@ -52,7 +52,7 @@ export default async function SubmissionsListPage() {
     >
       <section>
         <div className="label">{submissions.length} aktywnych</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Submissions <span className="text-text-soft">/ pakunki.</span>
         </h1>
         <p className="mt-4 text-[16px] text-text-soft max-w-[60ch]">

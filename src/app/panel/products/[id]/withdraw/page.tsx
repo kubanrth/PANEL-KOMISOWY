@@ -53,7 +53,7 @@ export default async function ProductWithdrawPage(props: { params: Promise<{ id:
         <div className="col-span-12 lg:col-span-7 flex items-center gap-5">
           <ProductThumb photos={p.photos} brand={p.brand} size="lg" />
           <div>
-            <h1 className="font-bold text-[36px] tracking-[-0.04em]">Wycofaj produkt</h1>
+            <h1 className="font-bold text-[26px] tracking-[-0.03em]">Wycofaj produkt</h1>
             <p className="text-[16px] text-text-soft mt-1">{p.brand} · {p.model}</p>
             <p className="text-[12px] text-text-mute mt-1 num">W magazynie {ageDays} dni</p>
           </div>

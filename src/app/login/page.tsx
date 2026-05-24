@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
 
       <main className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-[420px]">
-          <h1 className="font-bold text-[44px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+          <h1 className="font-bold text-[30px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
             Zaloguj się.
           </h1>
           <p className="mt-3 text-[15px] text-text-soft">

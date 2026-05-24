@@ -68,7 +68,7 @@ export default async function PanelPage() {
       {/* Hero */}
       <section>
         <div className="label">Panel klienta · {formatDate(new Date())}</div>
-        <h1 className="mt-4 font-bold text-[44px] lg:text-[64px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[32px] lg:text-[44px] leading-[1.02] tracking-[-0.04em]">
           Cześć, <span className="text-blue">{profile.first_name}</span>.
         </h1>
         {totalSubmissions === 0 && (
@@ -108,7 +108,7 @@ export default async function PanelPage() {
               <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">
                 Pierwsza sprzedaż
               </div>
-              <h2 className="mt-3 font-bold text-[40px] lg:text-[52px] leading-[1.02] tracking-[-0.04em] text-white">
+              <h2 className="mt-3 font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em] text-white">
                 Powierz pierwszą rzecz.
               </h2>
               <p className="mt-4 text-white/85 text-[16px] leading-[1.6]">

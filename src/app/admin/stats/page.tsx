@@ -86,7 +86,7 @@ export default async function AdminStatsPage() {
     <AdminShell user={user} profile={profile} active="stats" breadcrumb={[{ label: "Statystyki" }]}>
       <section>
         <div className="label">Cała platforma</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Metryki Kickback
         </h1>
       </section>

@@ -9,6 +9,7 @@ export type AdminShellProps = {
     | "queue"
     | "submissions"
     | "klienci"
+    | "crm"
     | "aqc"
     | "offers"
     | "returns"
@@ -16,7 +17,9 @@ export type AdminShellProps = {
     | "payouts"
     | "inbox"
     | "stats"
-    | "audit";
+    | "audit"
+    | "zapotrzebowanie"
+    | "zmiany-ceny";
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
   cta?: React.ReactNode;
@@ -43,12 +46,19 @@ export function AdminShell({ user, profile, active, breadcrumb, children, cta }:
           <div className="label">Operacje</div>
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <Item label="Queue" href="/admin" active={active === "queue"} />
+            <Item label="CRM (master/detail)" href="/admin/crm" active={active === "crm"} />
             <Item label="Submissions" href="/admin/submissions" active={active === "submissions"} />
             <Item label="Klienci" href="/admin/klienci" active={active === "klienci"} />
             <Item label="A&QC" href="/admin/aqc" active={active === "aqc"} />
             <Item label="Offers (Zerr)" href="/admin/offers" active={active === "offers"} />
             <Item label="Returns" href="/admin/returns" active={active === "returns"} />
             <Item label="Generator QR" href="/admin/qr" active={active === "qr"} />
+          </ul>
+
+          <div className="label mt-9">Workflow</div>
+          <ul className="mt-3 space-y-1.5 text-[14px]">
+            <Item label="Zapotrzebowanie" href="/admin/zapotrzebowanie" active={active === "zapotrzebowanie"} />
+            <Item label="Zmiany ceny" href="/admin/zmiany-ceny" active={active === "zmiany-ceny"} />
           </ul>
 
           <div className="label mt-9">Finanse</div>

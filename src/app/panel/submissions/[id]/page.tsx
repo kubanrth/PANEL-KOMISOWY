@@ -71,7 +71,7 @@ export default async function SubmissionDetailPage(props: {
               </span>
             )}
           </div>
-          <h1 className="font-bold text-[40px] lg:text-[60px] leading-[1.02] tracking-[-0.04em] num">
+          <h1 className="font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em] num">
             {submission.id}
           </h1>
           <p className="mt-3 text-[15px] text-text-soft num">

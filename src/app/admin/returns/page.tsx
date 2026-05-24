@@ -46,7 +46,7 @@ export default async function AdminReturnsPage() {
     <AdminShell user={user} profile={profile} active="returns" breadcrumb={[{ label: "Returns" }]}>
       <section>
         <div className="label">{pending.length} czeka · {resolved.length} rozwiązanych</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Zwroty <span className="text-text-soft">/ polityka.</span>
         </h1>
       </section>

@@ -65,7 +65,7 @@ export default async function ProductDetailPage(props: {
           )}
           {submission && <SubmissionStatusPill status={submission.status} />}
         </div>
-        <h1 className="font-bold text-[40px] lg:text-[60px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
           {product.brand}
         </h1>
         <p className="mt-2 text-[20px] lg:text-[24px] text-text-soft tracking-[-0.025em]">

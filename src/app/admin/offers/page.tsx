@@ -55,7 +55,7 @@ export default async function AdminOffersPage() {
     <AdminShell user={user} profile={profile} active="offers" breadcrumb={[{ label: "Offers (Zerr)" }]}>
       <section>
         <div className="label">{active.length} aktywnych negocjacji</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Zerr <span className="text-text-soft">/ targowanie.</span>
         </h1>
       </section>

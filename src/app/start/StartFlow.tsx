@@ -229,7 +229,7 @@ function Step1({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Co <span className="text-text-soft">wysyłasz w tej paczce?</span>
         </h1>
         <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">
@@ -475,7 +475,7 @@ function Step2({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Sprawdź <span className="text-text-soft">i zatwierdź.</span>
         </h1>
         <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">

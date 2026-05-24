@@ -37,7 +37,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
     <AdminShell user={user} profile={profile} active="klienci" breadcrumb={[{ label: "Klienci" }]}>
       <section>
         <div className="label">{klienci.length} klientów · {admins.length} adminów</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Klienci
         </h1>
       </section>

@@ -33,7 +33,7 @@ export default async function AdminQrListPage() {
     <AdminShell user={user} profile={profile} active="qr" breadcrumb={[{ label: "Generator QR" }]}>
       <section>
         <div className="label">{products.length} produktów listed</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Generator QR <span className="text-text-soft">/ metki.</span>
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">

@@ -48,7 +48,7 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
     <AdminShell user={user} profile={profile} active="inbox" breadcrumb={[{ label: "Inbox" }]}>
       <section>
         <div className="label">{list.length} powiadomień (max 100)</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Inbox <span className="text-text-soft">/ wszyscy klienci.</span>
         </h1>
       </section>

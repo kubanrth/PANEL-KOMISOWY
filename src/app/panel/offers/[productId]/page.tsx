@@ -56,7 +56,7 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
         <div className="col-span-12 lg:col-span-7 flex items-center gap-5">
           <ProductThumb photos={subData.photos} brand={subData.brand} size="lg" />
           <div>
-            <h1 className="font-bold text-[36px] tracking-[-0.04em]">{subData.brand}</h1>
+            <h1 className="font-bold text-[26px] tracking-[-0.03em]">{subData.brand}</h1>
             <p className="text-text-soft text-[16px]">{subData.model}</p>
           </div>
         </div>

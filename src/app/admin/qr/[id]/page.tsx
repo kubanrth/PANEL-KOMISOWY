@@ -54,7 +54,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
             <span className="pill pill-blue">stan {p.condition ?? "?"}/10</span>
             <span className="pill pill-mute">{p.status}</span>
           </div>
-          <h1 className="font-bold text-[40px] lg:text-[52px] leading-[1.02] tracking-[-0.04em]">
+          <h1 className="font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
             {p.brand} <span className="text-text-soft">·</span> {p.model}
           </h1>
 

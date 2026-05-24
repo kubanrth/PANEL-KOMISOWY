@@ -44,7 +44,7 @@ export default async function AdminQueuePage() {
     <AdminShell user={user} profile={profile} active="queue">
       <section>
         <div className="label">Operacje · {formatDate(new Date())}</div>
-        <h1 className="mt-4 font-bold text-[44px] lg:text-[64px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[32px] lg:text-[44px] leading-[1.02] tracking-[-0.04em]">
           Queue · <span className="text-text-soft">{(pendingAqc ?? 0) + (pendingPayouts ?? 0) + (openOffers ?? 0) + (openReturns ?? 0)} sprawy.</span>
         </h1>
       </section>

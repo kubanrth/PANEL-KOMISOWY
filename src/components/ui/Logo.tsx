@@ -14,8 +14,7 @@ export function Logo({
       <img
         src="/brand_assets/kickback_logo.svg"
         alt="Kickback"
-        className="h-5 w-auto select-none"
-        style={{ filter: "brightness(0) invert(1)" }}
+        className="logo-img h-5 w-auto select-none"
       />
       {showSuffix && (
         <span className="hidden sm:inline label text-text-faint">/ panel</span>

@@ -49,7 +49,7 @@ export default async function NotificationsPage() {
     >
       <section>
         <div className="label">{unread.length > 0 ? `${unread.length} nieprzeczytanych` : "Wszystko przeczytane"}</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Inbox <span className="text-text-soft">/ Twoje sprawy.</span>
         </h1>
       </section>

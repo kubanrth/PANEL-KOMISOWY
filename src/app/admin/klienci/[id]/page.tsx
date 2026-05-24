@@ -44,7 +44,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
             <span className="pill pill-mute">{target.account_type === "business" ? "Biznesowe" : "Indywidualne"}</span>
             <span className="pill pill-blue">{target.role === "klient" ? "Klient" : target.role}</span>
           </div>
-          <h1 className="font-bold text-[44px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">{fullName}</h1>
+          <h1 className="font-bold text-[30px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">{fullName}</h1>
           <p className="mt-3 text-text-mute text-[14px] num">
             ID: {target.id.slice(0, 8)}… · konto od {formatDate(target.created_at)}
           </p>

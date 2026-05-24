@@ -45,7 +45,7 @@ export default async function AdminPayoutsPage() {
     <AdminShell user={user} profile={profile} active="payouts" breadcrumb={[{ label: "Wypłaty" }]}>
       <section>
         <div className="label">{pending.length} oczekuje · {done.length} zakończonych</div>
-        <h1 className="mt-4 font-bold text-[40px] lg:text-[56px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
           Wypłaty <span className="text-text-soft">/ autoryzacja.</span>
         </h1>
       </section>

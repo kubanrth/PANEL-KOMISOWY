@@ -103,7 +103,7 @@ export default async function PublicQrLandingPage(props: { params: Promise<{ slu
                   <span className="pill pill-mute">Niedostępne</span>
                 )}
               </div>
-              <h1 className="font-bold text-[40px] lg:text-[52px] leading-[1.02] tracking-[-0.04em]">
+              <h1 className="font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
                 {product.brand}
               </h1>
               <p className="text-[20px] text-text-soft mt-1">{product.model}</p>

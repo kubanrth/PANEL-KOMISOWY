@@ -187,7 +187,7 @@ function Process() {
         <div className="grid grid-cols-12 gap-10 mb-16">
           <div className="col-span-12 lg:col-span-5">
             <div className="label">Proces</div>
-            <h2 className="mt-4 font-bold text-[40px] lg:text-[60px] leading-[1.02] tracking-[-0.04em]">
+            <h2 className="mt-4 font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
               Cztery kroki<br />
               <span className="text-text-soft">do wypłaty.</span>
             </h2>
@@ -267,7 +267,7 @@ function Authentication() {
 
         <div className="col-span-12 lg:col-span-6 lg:pl-6">
           <div className="label">Authentication & Quality Control</div>
-          <h2 className="mt-4 font-bold text-[40px] lg:text-[58px] leading-[1.02] tracking-[-0.04em]">
+          <h2 className="mt-4 font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
             Każda rzecz<br />
             przechodzi <span className="text-blue">przez nasze ręce.</span>
           </h2>
@@ -305,7 +305,7 @@ function PanelPreview() {
         <div className="grid grid-cols-12 gap-10 mb-12 items-end">
           <div className="col-span-12 lg:col-span-7">
             <div className="label">Twój panel</div>
-            <h2 className="mt-4 font-bold text-[40px] lg:text-[60px] leading-[1.02] tracking-[-0.04em]">
+            <h2 className="mt-4 font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
               Pełna kontrola<br />
               <span className="text-text-soft">w jednym widoku.</span>
             </h2>
@@ -475,7 +475,7 @@ function Wallet() {
 
         <div className="col-span-12 lg:col-span-5">
           <div className="label">Wallet</div>
-          <h2 className="mt-4 font-bold text-[40px] lg:text-[58px] leading-[1.02] tracking-[-0.04em]">
+          <h2 className="mt-4 font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
             Twoje środki<br />
             <span className="text-mint">na Twoich warunkach.</span>
           </h2>
@@ -626,7 +626,7 @@ function Faq() {
 
         <div className="col-span-12 lg:col-span-4">
           <div className="label">FAQ</div>
-          <h2 className="mt-4 font-bold text-[40px] lg:text-[52px] leading-[1.02] tracking-[-0.04em]">
+          <h2 className="mt-4 font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
             Najczęściej<br />
             <span className="text-text-soft">pytane.</span>
           </h2>

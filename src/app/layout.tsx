@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
+import { getTheme } from "@/lib/theme";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,12 +24,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://panel.kickback.pl"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const theme = await getTheme();
   return (
     <html
       lang="pl"
+      data-theme={theme}
+      style={{ colorScheme: theme }}
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-text">

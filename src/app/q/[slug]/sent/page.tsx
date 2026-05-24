@@ -18,7 +18,7 @@ export default async function OfferSentPage(props: { params: Promise<{ slug: str
               <path d="m9 12 2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
           </div>
-          <h1 className="mt-6 font-bold text-[36px] tracking-[-0.04em]">Oferta wysłana.</h1>
+          <h1 className="mt-6 font-bold text-[26px] tracking-[-0.03em]">Oferta wysłana.</h1>
           <p className="mt-3 text-text-soft text-[15px] leading-[1.6]">
             Sprzedający dostał powiadomienie. Może zaakceptować, kontrować lub odrzucić Twoją ofertę. Powiadomimy Cię e-mailem, jeśli go podałeś.
           </p>

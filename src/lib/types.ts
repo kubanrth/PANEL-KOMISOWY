@@ -88,8 +88,30 @@ export type Product = {
   pricing_mode: PricingMode;
   /** migration 007: required when pricing_mode === 'payout' */
   payout_price_cents: number | null;
+  /** migration 008 */
+  vat_rate: number;            // 0.000 (zw), 0.050, 0.080, 0.230
+  published_at: string | null;
+  sold_at: string | null;
+  settlement_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+/** Derived "operational" status shown in Magazyn — mapped from raw ProductStatus
+ * + submissions.status + aqc decisions. UI-only; not a DB enum. */
+export type DerivedStatus =
+  | "w_trakcie_dostawy"
+  | "przyjeto"
+  | "zdjecia"
+  | "oczekuje_publikacji"
+  | "aktywny";
+
+export const DERIVED_STATUS_LABEL: Record<DerivedStatus, string> = {
+  w_trakcie_dostawy: "W trakcie dostawy",
+  przyjeto: "Przyjęto na magazyn",
+  zdjecia: "Robione zdjęcia",
+  oczekuje_publikacji: "Oczekuje na publikację",
+  aktywny: "Aktywny w sprzedaży",
 };
 
 export const PRICING_MODE_LABEL: Record<PricingMode, { title: string; sub: string }> = {
@@ -313,3 +335,122 @@ export type QrCode = {
   last_scanned_at: string | null;
   created_at: string;
 };
+
+/* =========================================================== */
+/* Migration 008/009/010/011 — Phase 2-5 additions             */
+/* =========================================================== */
+
+export type PriceChangeStatus = "pending" | "accepted" | "rejected" | "cancelled";
+
+export type PriceChangeRequest = {
+  id: string;
+  product_id: string;
+  requested_by: string;
+  current_price_cents: number | null;
+  suggested_price_cents: number;
+  status: PriceChangeStatus;
+  decided_by: string | null;
+  decided_at: string | null;
+  notes: string | null;
+  created_at: string;
+};
+
+export type InvoiceType = "faktura_vat" | "uks" | "inne";
+export type InvoiceStatus = "uploaded" | "verified" | "rejected";
+
+export type Invoice = {
+  id: string;
+  klient_id: string;
+  type: InvoiceType;
+  file_url: string;
+  invoice_number: string | null;
+  issued_at: string | null;
+  amount_cents: number | null;
+  sale_product_ids: string[];
+  status: InvoiceStatus;
+  uploaded_at: string;
+  verified_at: string | null;
+  verified_by: string | null;
+  rejection_reason: string | null;
+};
+
+export type Club = {
+  id: string;
+  name: string;
+  country: string | null;
+  league: string | null;
+  crest_url: string | null;
+};
+
+export type NationalTeam = {
+  id: string;
+  name: string;
+  region: string | null;
+  flag_url: string | null;
+};
+
+export type Player = {
+  id: string;
+  full_name: string;
+  club_id: string | null;
+  position: string | null;
+  is_legendary: boolean;
+};
+
+export type DemandKind = "club" | "national_team" | "player";
+
+export type DemandListing = {
+  id: string;
+  kind: DemandKind;
+  club_id: string | null;
+  national_team_id: string | null;
+  player_id: string | null;
+  raw_label: string | null;
+  retro: boolean;
+  season: string | null;
+  target_price_cents: number | null;
+  notes: string | null;
+  published_by: string | null;
+  published_at: string;
+  expires_at: string | null;
+  active: boolean;
+};
+
+export type FulfillmentOrder = {
+  id: string;
+  klient_id: string;
+  product_id: string | null;
+  buyer_name: string | null;
+  tracking_number: string | null;
+  carrier: string | null;
+  shipping_cost_cents: number | null;
+  status: string;
+  shipped_at: string | null;
+  delivered_at: string | null;
+  created_at: string;
+};
+
+export type InventorySnapshot = {
+  klient_id: string;
+  day: string;
+  total_value_cents: number;
+  item_count: number;
+};
+
+export type SalesPlan = {
+  id: string;
+  klient_id: string;
+  marketing_budget_cents: number;
+  planned_items_text: string | null;
+  expected_value_cents: number | null;
+  submitted_at: string;
+  status: string;
+  admin_notes: string | null;
+};
+
+/** Map VAT rate (0.230, 0.080, 0.050, 0.000) to label. */
+export function vatLabel(rate: number | null | undefined): string {
+  if (rate == null) return "—";
+  if (rate === 0) return "zw";
+  return `${Math.round(rate * 100)}%`;
+}
