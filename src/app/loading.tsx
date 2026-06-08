@@ -1,79 +1,160 @@
 /**
- * Root loading skeleton. Shown by the Next.js router during navigation
- * (e.g. clicking "Sprzedaj z nami" from the landing). Mimics the header +
- * a content shimmer so the user sees motion immediately, not a black void.
+ * Root loading screen. Renderowane przez Next.js router podczas nawigacji
+ * (np. po kliknięciu "Sprzedaj z nami" albo przejściu z /panel do /admin).
+ *
+ * Branding-focused — duże Kickback logo wycentrowane na ekranie, delikatny
+ * gradient glow w tle, miękki pulse + top progress bar. Bez placeholderów
+ * (shimmer cards rozpraszały). Respektuje theme via --logo-filter.
  */
 export default function Loading() {
   return (
     <>
-      <div className="top-progress" aria-hidden />
+      <div className="kb-top-progress" aria-hidden />
 
-      <div className="min-h-screen flex flex-col">
-        <header className="border-b border-border-soft">
-          <div className="mx-auto max-w-[1240px] px-6 lg:px-10 h-[68px] flex items-center justify-between">
-            <div className="shimmer h-5 w-28 rounded-md" />
-            <div className="shimmer h-4 w-40 rounded-md hidden sm:block" />
+      <div className="kb-loader">
+        <div className="kb-glow" aria-hidden />
+
+        <div className="kb-content">
+          <div className="kb-logo-wrap">
+            <img
+              src="/brand_assets/kickback_logo.svg"
+              alt="Kickback"
+              className="logo-img kb-logo"
+            />
           </div>
-        </header>
 
-        <main className="flex-1 px-6 py-16 lg:py-24">
-          <div className="mx-auto max-w-[1240px]">
-            <div className="flex flex-col items-center text-center gap-5">
-              <div className="h-10 w-10 rounded-full border-2 border-blue/25 border-t-blue animate-[spin_0.9s_linear_infinite]" />
-              <div className="shimmer h-8 w-64 rounded-md" />
-              <div className="shimmer h-4 w-80 rounded-md" />
-              <p className="text-[13px] text-text-mute mt-2">Ładujemy formularz…</p>
-            </div>
-
-            <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[920px] mx-auto">
-              <div className="card p-7 space-y-4">
-                <div className="shimmer h-3 w-16 rounded" />
-                <div className="shimmer h-12 w-full rounded-[12px]" />
-                <div className="shimmer h-12 w-full rounded-[12px]" />
-                <div className="shimmer h-12 w-2/3 rounded-[12px]" />
-              </div>
-              <div className="card p-7 space-y-4">
-                <div className="shimmer h-3 w-20 rounded" />
-                <div className="shimmer h-12 w-full rounded-[12px]" />
-                <div className="shimmer h-12 w-full rounded-[12px]" />
-                <div className="shimmer h-12 w-1/2 rounded-[12px]" />
-              </div>
-            </div>
+          <div className="kb-dots" aria-hidden>
+            <span />
+            <span />
+            <span />
           </div>
-        </main>
+
+          <p className="kb-label">Ładowanie</p>
+        </div>
       </div>
 
       <style>{`
-        .top-progress {
+        /* Top progress bar — thin, indeterminate */
+        .kb-top-progress {
           position: fixed; top: 0; left: 0; right: 0;
           height: 2px; z-index: 100; overflow: hidden;
-          background: rgba(0,102,255,0.15);
+          background: color-mix(in oklab, var(--color-blue) 12%, transparent);
         }
-        .top-progress::after {
+        .kb-top-progress::after {
           content: ""; position: absolute; inset: 0;
-          background: var(--color-blue);
-          transform: translateX(-100%);
-          animation: top-progress 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        @keyframes top-progress {
-          0%   { transform: translateX(-100%); }
-          50%  { transform: translateX(20%); }
-          100% { transform: translateX(120%); }
-        }
-        .shimmer {
-          background: linear-gradient(
-            90deg,
-            var(--color-surface) 0%,
-            var(--color-surface-2) 40%,
-            var(--color-surface-2) 60%,
-            var(--color-surface) 100%
+          background: linear-gradient(90deg,
+            transparent,
+            var(--color-blue) 30%,
+            var(--color-purple) 50%,
+            var(--color-pink) 70%,
+            transparent
           );
-          background-size: 200% 100%;
-          animation: shimmer 1.4s ease-in-out infinite;
+          transform: translateX(-100%);
+          animation: kb-progress 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-        @keyframes shimmer {
-          0%   { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
+        @keyframes kb-progress {
+          0%   { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+
+        /* Full-viewport loader container */
+        .kb-loader {
+          position: relative;
+          min-height: 100svh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--color-bg);
+          overflow: hidden;
+        }
+
+        /* Soft brand gradient glow behind the logo */
+        .kb-glow {
+          position: absolute;
+          left: 50%; top: 50%;
+          transform: translate(-50%, -50%);
+          width: 480px; height: 480px;
+          pointer-events: none;
+          background:
+            radial-gradient(closest-side,
+              color-mix(in oklab, var(--color-blue)   22%, transparent),
+              transparent 70%
+            ),
+            radial-gradient(closest-side at 70% 30%,
+              color-mix(in oklab, var(--color-purple) 18%, transparent),
+              transparent 70%
+            ),
+            radial-gradient(closest-side at 30% 70%,
+              color-mix(in oklab, var(--color-pink)   14%, transparent),
+              transparent 70%
+            );
+          filter: blur(40px);
+          animation: kb-glow-drift 6s ease-in-out infinite alternate;
+        }
+        @keyframes kb-glow-drift {
+          0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.85; }
+          100% { transform: translate(-48%, -52%) scale(1.08); opacity: 1; }
+        }
+
+        /* Content stack */
+        .kb-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 28px;
+          padding: 24px;
+        }
+
+        /* Logo wrapper — keeps SVG inside a soft rounded chip,
+           softly breathes via scale animation */
+        .kb-logo-wrap {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 14px 28px;
+          animation: kb-breathe 2.4s ease-in-out infinite;
+        }
+        @keyframes kb-breathe {
+          0%, 100% { transform: scale(1);     opacity: 1; }
+          50%      { transform: scale(1.04);  opacity: 0.92; }
+        }
+        .kb-logo {
+          height: 36px;
+          width: auto;
+          user-select: none;
+        }
+        @media (min-width: 768px) {
+          .kb-logo { height: 48px; }
+        }
+
+        /* Three pulsing dots — Apple/Linear-style */
+        .kb-dots {
+          display: inline-flex;
+          gap: 8px;
+        }
+        .kb-dots span {
+          display: inline-block;
+          width: 7px; height: 7px;
+          border-radius: 999px;
+          background: var(--color-text-mute);
+          animation: kb-dot 1.2s ease-in-out infinite;
+        }
+        .kb-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .kb-dots span:nth-child(3) { animation-delay: 0.30s; }
+        @keyframes kb-dot {
+          0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+          40%           { opacity: 1;    transform: translateY(-3px); background: var(--color-blue); }
+        }
+
+        .kb-label {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: var(--color-text-mute);
+          margin: 0;
         }
       `}</style>
     </>
