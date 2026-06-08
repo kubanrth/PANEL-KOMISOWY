@@ -26,13 +26,29 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
     .maybeSingle();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  const { data: productsRaw } = await supabase
-    .from("products")
-    .select("*")
-    .eq("status", "sold")
-    .order("sold_at", { ascending: false, nullsFirst: false });
-
-  const sales = (productsRaw ?? []) as Product[];
+  // Defensive: order by sold_at (added in migration 008). If migration not
+  // applied — fall back to created_at + log missing migration banner.
+  let productsRaw: Product[] | null = null;
+  let missingMigration = false;
+  {
+    const primary = await supabase
+      .from("products")
+      .select("*")
+      .eq("status", "sold")
+      .order("sold_at", { ascending: false, nullsFirst: false });
+    if (primary.error?.code === "42703" /* column does not exist */) {
+      missingMigration = true;
+      const fallback = await supabase
+        .from("products")
+        .select("*")
+        .eq("status", "sold")
+        .order("created_at", { ascending: false });
+      productsRaw = (fallback.data ?? []) as Product[];
+    } else {
+      productsRaw = (primary.data ?? []) as Product[];
+    }
+  }
+  const sales = productsRaw ?? [];
 
   // Pull related submissions for context + invoices to determine settled status
   const subIds = Array.from(new Set(sales.map((p) => p.submission_id)));
@@ -44,11 +60,19 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
     : { data: [] as Array<Pick<Submission, "id" | "commission_rate">> };
   const subById = new Map((subs ?? []).map((s) => [s.id, s]));
 
-  const { data: invoicesRaw } = await supabase
-    .from("invoices")
-    .select("id, invoice_number, sale_product_ids, status")
-    .eq("klient_id", user.id);
-  const invoices = (invoicesRaw ?? []) as Pick<Invoice, "id" | "invoice_number" | "sale_product_ids" | "status">[];
+  // Invoices table from migration 009 — może nie istnieć przy partial migration.
+  let invoices: Pick<Invoice, "id" | "invoice_number" | "sale_product_ids" | "status">[] = [];
+  {
+    const inv = await supabase
+      .from("invoices")
+      .select("id, invoice_number, sale_product_ids, status")
+      .eq("klient_id", user.id);
+    if (inv.error?.code === "42P01" /* relation does not exist */) {
+      missingMigration = true;
+    } else {
+      invoices = (inv.data ?? []) as typeof invoices;
+    }
+  }
   const invoiceByProduct = new Map<string, Pick<Invoice, "id" | "invoice_number" | "status">>();
   for (const inv of invoices) {
     for (const pid of inv.sale_product_ids ?? []) {
@@ -80,6 +104,21 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
       active="sprzedaze"
       breadcrumb={[{ label: "Sprzedaże" }]}
     >
+      {missingMigration && (
+        <div className="mb-6 card-bare bg-amber/5 border border-amber/30 rounded-[14px] p-4 flex items-start gap-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber mt-0.5 flex-shrink-0">
+            <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
+          </svg>
+          <div className="text-[12px]">
+            <div className="font-semibold text-amber">Brakuje migracji 008 lub 009</div>
+            <p className="mt-1 text-text-soft">
+              Strona działa w trybie ograniczonym (brak VAT / dat rozliczeń / statusu faktur).
+              Uruchom migracje 008_product_enrichment + 009_invoices w Supabase SQL Editor.
+            </p>
+          </div>
+        </div>
+      )}
+
       <section>
         <div className="label">{sales.length} sprzedaży</div>
         <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">

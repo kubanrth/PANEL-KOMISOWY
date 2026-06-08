@@ -50,7 +50,7 @@ export default async function ProductDetailPage(props: {
       profile={profile}
       active="my-sales"
       breadcrumb={[
-        { label: "My Sales", href: "/panel/my-sales" },
+        { label: "Sprzedaże", href: "/panel/sprzedaze" },
         { label: `${product.brand} · ${product.model}` },
       ]}
     >

@@ -138,7 +138,6 @@ export default async function SubmissionDetailPage(props: {
             <button
               type="button"
               className="btn-ghost h-11 px-5 text-[13px] inline-flex items-center gap-2 print:hidden"
-              onClick={() => undefined}
               data-print-trigger
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

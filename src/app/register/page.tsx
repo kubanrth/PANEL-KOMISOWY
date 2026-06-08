@@ -50,7 +50,7 @@ export default function RegisterPage() {
               <div className="label">Co dostaniesz</div>
               <ul className="mt-4 space-y-3 text-[14px]">
                 {[
-                  "Panel klienta z My Sales",
+                  "Panel klienta ze Sprzedażami",
                   "Wallet z subkontem Santander",
                   "Powiadomienia w czasie rzeczywistym",
                   "Negocjacje z kupującymi (Zerr)",

@@ -44,7 +44,7 @@ export default async function ProductWithdrawPage(props: { params: Promise<{ id:
       profile={profile}
       active="my-sales"
       breadcrumb={[
-        { label: "My Sales", href: "/panel/my-sales" },
+        { label: "Sprzedaże", href: "/panel/sprzedaze" },
         { label: `${p.brand} · ${p.model}`, href: `/panel/products/${id}` },
         { label: "Wycofaj" },
       ]}

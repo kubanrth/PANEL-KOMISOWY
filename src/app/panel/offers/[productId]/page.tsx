@@ -47,7 +47,7 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
       profile={profile}
       active="my-sales"
       breadcrumb={[
-        { label: "My Sales", href: "/panel/my-sales" },
+        { label: "Sprzedaże", href: "/panel/sprzedaze" },
         { label: subData.brand + " · " + subData.model, href: `/panel/products/${productId}` },
         { label: "Oferty" },
       ]}
