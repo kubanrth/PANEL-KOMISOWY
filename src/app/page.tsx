@@ -2,35 +2,44 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Root route — to NIE jest publiczny landing. Tymczasowo (do czasu aż landing
- * stanie się produktowy) `/` przekierowuje na panel logowania albo bezpośrednio
- * do panelu klienta jeśli sesja istnieje.
+ * Root route — to NIE jest publiczny landing. `/` przekierowuje na panel
+ * logowania albo bezpośrednio do panelu klienta jeśli sesja istnieje.
  *
- * Stara marketingowa strona została przeniesiona do `/landing` (dostępna gdy
- * potrzeba, ale nie jest punktem wejścia).
+ * Wszystko owinięte w try/catch z fallbackiem do /login — żeby crash na
+ * profile lookup nie wywalał całego sajtu (widzieliśmy 500 na produkcji
+ * gdy Daniel logował się jako admin bez pełnych pól w profiles).
+ *
+ * Stara marketingowa strona została przeniesiona do `/landing`.
  */
 export default async function RootPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  let target = "/login";
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
+    if (user) {
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("onboarded_at, role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("[/] profile lookup failed", error);
+        // Profil nie istnieje albo RLS blokuje — wyloguj i wyślij do
+        // logowania (zamiast crashować na .role).
+        target = "/login";
+      } else if (!profile?.onboarded_at) {
+        target = "/onboarding";
+      } else if (profile.role === "admin" || profile.role === "super_admin") {
+        target = "/admin";
+      } else {
+        target = "/panel";
+      }
+    }
+  } catch (e) {
+    console.error("[/] root redirect error", e);
+    target = "/login";
   }
-
-  // Logged in — sprawdź czy onboarding zrobiony
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("onboarded_at, role")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (!profile?.onboarded_at) {
-    redirect("/onboarding");
-  }
-
-  // Admin → /admin, klient → /panel
-  if (profile.role === "admin" || profile.role === "super_admin") {
-    redirect("/admin");
-  }
-  redirect("/panel");
+  redirect(target);
 }
