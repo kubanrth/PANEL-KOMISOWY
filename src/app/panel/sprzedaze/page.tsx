@@ -211,6 +211,7 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
                       <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
                       <div className="min-w-0">
                         <div className="text-[13px] font-medium truncate">{p.brand} · {p.model}</div>
+                        <div className="text-[10px] num text-text-faint truncate">{p.sku}</div>
                         <div className="text-[11px] text-text-mute num truncate">
                           Twój udział: {formatPLN(takeHome, { decimals: false })}
                         </div>

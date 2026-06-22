@@ -11,6 +11,7 @@ export type MagazynRow = {
   id: string;
   brand: string;
   model: string;
+  sku: string;
   size: string | null;
   vat_rate: number;
   photo_url: string | null;
@@ -212,6 +213,7 @@ export function MagazynTable({ rows }: Props) {
                   <Link href={`/panel/products/${r.id}`} className="block hover:text-blue">
                     <div className="text-[14px] font-medium truncate">{r.brand} · {r.model}</div>
                   </Link>
+                  <div className="mt-0.5 text-[10px] num text-text-faint truncate">{r.sku}</div>
                   <div className="mt-0.5 text-[11px] text-text-mute num truncate">
                     {[r.size, vatLabel(r.vat_rate), `${r.days_in_commission} d`].filter(Boolean).join(" · ")}
                   </div>
@@ -284,8 +286,9 @@ export function MagazynTable({ rows }: Props) {
                     <img src={r.photo_url} alt={r.brand} className="absolute inset-0 w-full h-full object-cover" />
                   )}
                 </div>
-                <Link href={`/panel/products/${r.id}`} className="min-w-0 hover:text-blue transition-colors">
+                <Link href={`/panel/products/${r.id}`} className="min-w-0 hover:text-blue transition-colors block">
                   <div className="text-[13px] font-medium truncate">{r.brand} · {r.model}</div>
+                  <div className="text-[10px] num text-text-faint truncate">{r.sku}</div>
                 </Link>
               </div>
 

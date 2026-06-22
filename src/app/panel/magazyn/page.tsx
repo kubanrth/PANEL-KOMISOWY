@@ -74,6 +74,7 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
       id: p.id,
       brand: p.brand,
       model: p.model,
+      sku: p.sku,
       size: p.size,
       vat_rate: p.vat_rate ?? 0.23,
       photo_url: photo,

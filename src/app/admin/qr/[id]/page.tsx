@@ -12,7 +12,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
   const { data: product } = await supabase
     .from("products")
     .select(`
-      id, brand, model, listing_price_cents, photos, condition, status,
+      id, brand, model, sku, listing_price_cents, photos, condition, status,
       qr_codes ( slug, scans_count, last_scanned_at, created_at )
     `)
     .eq("id", id)
@@ -20,7 +20,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
   if (!product) notFound();
 
   type Row = {
-    id: string; brand: string; model: string; listing_price_cents: number | null;
+    id: string; brand: string; model: string; sku: string; listing_price_cents: number | null;
     photos: Array<{ url: string; name: string }> | null; condition: number | null; status: string;
     qr_codes: Array<{ slug: string; scans_count: number; last_scanned_at: string | null; created_at: string }> | null;
   };
@@ -57,6 +57,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
           <h1 className="font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
             {p.brand} <span className="text-text-soft">·</span> {p.model}
           </h1>
+          <div className="mt-2 text-[12px] num text-text-mute">SKU: {p.sku}</div>
 
           <div className="mt-8 card p-6">
             <div className="label mb-3">Statystyki QR</div>

@@ -93,6 +93,10 @@ export type Product = {
   published_at: string | null;
   sold_at: string | null;
   settlement_at: string | null;
+  /** migration 012 — Fakturownia integration */
+  sku: string;                 // KCB-{YY}-{6hex}
+  fakturownia_product_id: number | null;
+  fakturownia_pushed_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -454,3 +458,41 @@ export function vatLabel(rate: number | null | undefined): string {
   if (rate === 0) return "zw";
   return `${Math.round(rate * 100)}%`;
 }
+
+/* =========================================================== */
+/* Migration 012 — Fakturownia integration                     */
+/* =========================================================== */
+
+export type FakturowniaEventStatus = "processed" | "failed" | "skipped" | "replayed";
+
+export type FakturowniaEvent = {
+  id: string;
+  fakturownia_event_id: string;
+  event_kind: string;
+  payload: Record<string, unknown>;
+  signature_valid: boolean;
+  status: FakturowniaEventStatus;
+  error_message: string | null;
+  processed_at: string | null;
+  received_at: string;
+};
+
+export type FakturowniaWarehouseMap = {
+  klient_id: string;
+  fakturownia_warehouse_id: number;
+  warehouse_name: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type FakturowniaPushQueueStatus = "pending" | "done" | "failed";
+
+export type FakturowniaPushQueueItem = {
+  id: string;
+  product_id: string;
+  attempts: number;
+  last_error: string | null;
+  status: FakturowniaPushQueueStatus;
+  next_attempt_at: string;
+  created_at: string;
+};

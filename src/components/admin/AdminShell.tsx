@@ -22,7 +22,8 @@ export type AdminShellProps = {
     | "stats"
     | "audit"
     | "zapotrzebowanie"
-    | "zmiany-ceny";
+    | "zmiany-ceny"
+    | "integrations";
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
   cta?: React.ReactNode;
@@ -73,6 +74,11 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
           <div className="label mt-9">Finanse</div>
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <Item label="Wypłaty" href="/admin/payouts" active={active === "payouts"} />
+          </ul>
+
+          <div className="label mt-9">Integracje</div>
+          <ul className="mt-3 space-y-1.5 text-[14px]">
+            <Item label="Fakturownia" href="/admin/integrations/fakturownia" active={active === "integrations"} />
           </ul>
 
           <div className="label mt-9">Komunikacja</div>

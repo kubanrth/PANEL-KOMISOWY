@@ -43,6 +43,12 @@ const ADMIN_NAV: NavGroup[] = [
     ],
   },
   {
+    label: "Integracje",
+    items: [
+      { key: "integrations", label: "Fakturownia", href: "/admin/integrations/fakturownia" },
+    ],
+  },
+  {
     label: "Finanse",
     items: [{ key: "payouts", label: "Wypłaty", href: "/admin/payouts" }],
   },

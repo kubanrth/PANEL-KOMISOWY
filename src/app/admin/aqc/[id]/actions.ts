@@ -86,6 +86,20 @@ export async function saveAqc(input: SaveAqcInput): Promise<{ ok: boolean; error
       channel: "kickback",
       current_price_cents: input.recommendedPriceCents,
     });
+
+    // Push do Fakturownia (migracja 012). Best-effort: jeśli failuje,
+    // pushProductToFakturownia automatycznie enqueueuje do fakturownia_push_queue
+    // i admin może replay z /admin/integrations/fakturownia. NIE blokujemy
+    // głównego flow A&QC.
+    try {
+      const { pushProductToFakturownia } = await import("@/lib/integrations/fakturownia/push");
+      const result = await pushProductToFakturownia(input.productId);
+      if (!result.ok) {
+        console.warn("[saveAqc] Fakturownia push failed:", result.error.message);
+      }
+    } catch (e) {
+      console.error("[saveAqc] Fakturownia push threw:", e);
+    }
   }
 
   // Notify klient
