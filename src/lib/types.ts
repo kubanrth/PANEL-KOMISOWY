@@ -414,10 +414,31 @@ export type DemandListing = {
   season: string | null;
   target_price_cents: number | null;
   notes: string | null;
+  /** migration 013 */
+  sizes: string[];
+  notes_admin: string | null;
   published_by: string | null;
   published_at: string;
   expires_at: string | null;
   active: boolean;
+};
+
+/** migration 013 — manualnie kurowana lista "Co warto dodać do komisu" */
+export type KickbackPick = {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  priority: number;
+  image_url: string | null;
+  cta_label: string | null;
+  cta_href: string | null;
+  active: boolean;
+  published_at: string;
+  expires_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 export type FulfillmentOrder = {

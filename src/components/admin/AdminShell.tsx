@@ -23,6 +23,7 @@ export type AdminShellProps = {
     | "audit"
     | "zapotrzebowanie"
     | "zmiany-ceny"
+    | "co-warto-dodac"
     | "integrations";
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
@@ -68,6 +69,7 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
           <div className="label mt-9">Workflow</div>
           <ul className="mt-3 space-y-1.5 text-[14px]">
             <Item label="Zapotrzebowanie" href="/admin/zapotrzebowanie" active={active === "zapotrzebowanie"} />
+            <Item label="Co warto dodać" href="/admin/co-warto-dodac" active={active === "co-warto-dodac"} />
             <Item label="Zmiany ceny" href="/admin/zmiany-ceny" active={active === "zmiany-ceny"} />
           </ul>
 

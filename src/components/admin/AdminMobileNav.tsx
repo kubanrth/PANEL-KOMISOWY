@@ -39,6 +39,7 @@ const ADMIN_NAV: NavGroup[] = [
     label: "Workflow",
     items: [
       { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/admin/zapotrzebowanie" },
+      { key: "co-warto-dodac", label: "Co warto dodać", href: "/admin/co-warto-dodac" },
       { key: "zmiany-ceny", label: "Zmiany ceny", href: "/admin/zmiany-ceny" },
     ],
   },

@@ -3,7 +3,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { formatPLN, formatDate } from "@/lib/format";
-import type { Product, SalesPlan, DemandListing, Club, Player, NationalTeam } from "@/lib/types";
+import type {
+  Product, SalesPlan, DemandListing, Club, Player, NationalTeam, KickbackPick,
+} from "@/lib/types";
 import { PlanForm } from "./PlanForm";
 
 /**
@@ -90,6 +92,19 @@ export default async function PlanyPage() {
     .limit(10);
   const plans = (plansRaw ?? []) as SalesPlan[];
 
+  // 5. Kickback picks — manualnie kurowana lista (migracja 013).
+  //    Pokazujemy aktywne + jeszcze nie wygasłe.
+  const { data: picksRaw } = await supabase
+    .from("kickback_picks")
+    .select("*")
+    .eq("active", true)
+    .order("priority", { ascending: false })
+    .order("published_at", { ascending: false })
+    .limit(12);
+  const picks = ((picksRaw ?? []) as KickbackPick[]).filter(
+    (p) => !p.expires_at || new Date(p.expires_at) > new Date(),
+  );
+
   return (
     <PanelShell
       user={{ email: user.email! }}
@@ -108,9 +123,48 @@ export default async function PlanyPage() {
         </p>
       </section>
 
-      {/* Sugestie Kickback */}
-      <section className="mt-8 card-elev p-6">
-        <div className="label">Sugestie Kickback</div>
+      {/* Co warto dodać — manualnie kurowana lista (migracja 013) */}
+      {picks.length > 0 && (
+        <section className="mt-8">
+          <div className="flex items-baseline justify-between gap-3 mb-4">
+            <div>
+              <div className="label">Co warto dodać do komisu</div>
+              <h2 className="mt-1 font-semibold text-xl tracking-[-0.025em]">
+                Sugestie Kickback
+              </h2>
+            </div>
+            <span className="text-[11px] text-text-mute">{picks.length} {picks.length === 1 ? "rekomendacja" : "rekomendacji"}</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {picks.map((p) => (
+              <article key={p.id} className="card-elev p-5 flex flex-col">
+                {p.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.image_url} alt="" className="w-full h-32 object-cover rounded-[12px] mb-4" />
+                )}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="font-semibold text-[15px] tracking-[-0.015em] flex-1">{p.title}</div>
+                  {p.category && <span className="pill pill-mute text-[10px] flex-shrink-0">{p.category}</span>}
+                </div>
+                {p.description && (
+                  <p className="mt-2 text-[13px] text-text-soft leading-[1.5] flex-1">{p.description}</p>
+                )}
+                {p.cta_label && p.cta_href && (
+                  <div className="mt-4 pt-4 border-t border-border-soft">
+                    <Link href={p.cta_href} className="text-[13px] text-blue hover:underline">
+                      {p.cta_label} →
+                    </Link>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Sugestie Kickback — heurystyki */}
+      <section className={`${picks.length > 0 ? "mt-6" : "mt-8"} card-elev p-6`}>
+        <div className="label">Sugestie automatyczne</div>
         <div className="mt-1 font-semibold text-xl tracking-[-0.025em]">
           Co dorzucić, żeby rotacja przyspieszyła
         </div>

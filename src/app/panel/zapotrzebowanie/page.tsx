@@ -133,6 +133,15 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
                   {d.retro && <span className="pill pill-amber text-[10px]">retro</span>}
                 </div>
 
+                {d.sizes && d.sizes.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span className="text-[10px] text-text-mute uppercase tracking-wider mr-1 self-center">Rozmiary:</span>
+                    {d.sizes.map((s) => (
+                      <span key={s} className="pill pill-blue text-[10px] px-1.5">{s}</span>
+                    ))}
+                  </div>
+                )}
+
                 {d.target_price_cents && (
                   <div className="mt-4 pt-4 border-t border-border-soft flex items-center justify-between">
                     <div className="text-[11px] text-text-mute">Możliwa cena</div>

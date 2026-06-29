@@ -11,14 +11,21 @@ type Props = {
   players: CatalogItem[];
 };
 
+const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size", "Boys M", "Boys L"];
+
 export function DemandForm({ clubs, nationalTeams, players }: Props) {
   const ref = useRef<HTMLFormElement>(null);
   const [pending, start] = useTransition();
   const [kind, setKind] = useState<"club" | "national_team" | "player">("club");
+  const [sizes, setSizes] = useState<string[]>([]);
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
 
   const options =
     kind === "club" ? clubs : kind === "national_team" ? nationalTeams : players;
+
+  function toggleSize(s: string) {
+    setSizes((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
+  }
 
   return (
     <form
@@ -27,10 +34,12 @@ export function DemandForm({ clubs, nationalTeams, players }: Props) {
         start(async () => {
           setMsg(null);
           formData.set("kind", kind);
+          formData.set("sizes", sizes.join(","));
           const res = await createDemandListing(formData);
           if (res.ok) {
             setMsg({ kind: "ok", text: "Ogłoszenie opublikowane." });
             ref.current?.reset();
+            setSizes([]);
           } else {
             setMsg({ kind: "err", text: res.error });
           }
@@ -84,8 +93,38 @@ export function DemandForm({ clubs, nationalTeams, players }: Props) {
       </div>
 
       <div>
-        <label className="input-label">Notatki</label>
-        <textarea name="notes" rows={2} className="input min-h-[60px] resize-y" />
+        <label className="input-label">Rozmiary (opcjonalne — pusty = każdy rozmiar)</label>
+        <div className="flex flex-wrap gap-2">
+          {SIZE_OPTIONS.map((s) => {
+            const active = sizes.includes(s);
+            return (
+              <button
+                key={s}
+                type="button"
+                onClick={() => toggleSize(s)}
+                className={`px-3 py-1.5 rounded-[8px] text-[12px] font-medium transition-colors ${
+                  active ? "bg-blue text-white" : "bg-surface text-text-soft hover:text-text border border-border"
+                }`}
+              >
+                {s}
+              </button>
+            );
+          })}
+        </div>
+        <div className="mt-1.5 text-[10px] text-text-mute">
+          {sizes.length === 0 ? "Brak filtra — szukamy wszystkich rozmiarów" : `Wybrano: ${sizes.join(", ")}`}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label className="input-label">Notatki publiczne (widoczne klientom)</label>
+          <textarea name="notes" rows={2} className="input min-h-[60px] resize-y" />
+        </div>
+        <div>
+          <label className="input-label">Notatki wewnętrzne (tylko admin)</label>
+          <textarea name="notes_admin" rows={2} className="input min-h-[60px] resize-y" placeholder="np. kontakt do sprzedawcy" />
+        </div>
       </div>
 
       {msg && (
