@@ -10,7 +10,13 @@ import { createClient } from "@/lib/supabase/server";
  * gdy Daniel logował się jako admin bez pełnych pól w profiles).
  *
  * Stara marketingowa strona została przeniesiona do `/landing`.
+ *
+ * `force-dynamic` — strona zawsze renderuje się per-request (czyta cookies
+ * via Supabase). Bez tego Next próbuje prerenderować przy build i logi
+ * pokazują "Dynamic server usage" błąd, choć funkcjonalnie wszystko działa.
  */
+export const dynamic = "force-dynamic";
+
 export default async function RootPage() {
   let target = "/login";
   try {
