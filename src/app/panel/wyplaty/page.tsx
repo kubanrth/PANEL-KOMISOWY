@@ -1,11 +1,19 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { ProductThumb } from "@/components/panel/ProductThumb";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Pill } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate, takeHomeCents } from "@/lib/format";
 import type { Product, Submission } from "@/lib/types";
+
+/* Nadchodzące wypłaty — redesign: sticky KPI „Łącznie w tym roku", 2 KPI
+   (gotowe / karencja), tabela z label-headerem i pigułkami mint/yellow.
+   ponytail: brak tabeli payoutów w tym widoku (query nietknięte) — statusy
+   ZLECONA/W REALIZACJI dojdą, gdy widok dostanie dane z `payouts`. */
 
 export default async function WyplatyPage() {
   const supabase = await createClient();
@@ -52,6 +60,14 @@ export default async function WyplatyPage() {
     return a + (takeHomeCents(p.listing_price_cents ?? 0, rate) ?? 0);
   }, 0);
 
+  // Sticky KPI: Twój udział ze sprzedaży w bieżącym roku (prezentacyjna agregacja).
+  const thisYear = new Date().getFullYear();
+  const soldThisYear = solds.filter((p) => p.sold_at && new Date(p.sold_at).getFullYear() === thisYear);
+  const yearTakeHome = soldThisYear.reduce((a, p) => {
+    const rate = subById.get(p.submission_id)?.commission_rate ?? 0.2;
+    return a + (takeHomeCents(p.listing_price_cents ?? 0, rate) ?? 0);
+  }, 0);
+
   return (
     <PanelShell
       user={{ email: user.email! }}
@@ -59,60 +75,49 @@ export default async function WyplatyPage() {
       active="wyplaty"
       breadcrumb={[{ label: "Nadchodzące wypłaty" }]}
     >
-      <section>
-        <div className="label">Twoje pieniądze</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Nadchodzące wypłaty.
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Po sprzedaży obowiązuje 14-dniowa karencja. Po jej upływie Funds są gotowe do rozliczenia
-          fakturą / UKS, a następnie wypłaty na konto.
-        </p>
-      </section>
+      <PageHeader
+        label="Panel · Twoje pieniądze"
+        title="Nadchodzące wypłaty"
+        sub="Po sprzedaży obowiązuje 14-dniowa karencja. Po jej upływie środki są gotowe do rozliczenia fakturą / UKS, a następnie wypłaty na konto."
+      />
 
-      {/* Dwa kafelki */}
-      <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="card-gradient-blue p-6 lg:p-8 rounded-[20px]">
-          <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">
-            Gotowe do rozliczenia
-          </div>
-          <div className="mt-2 font-bold text-4xl lg:text-5xl tracking-[-0.04em] num text-white">
-            {formatPLN(readyValue, { decimals: false })}
-          </div>
-          <div className="mt-2 text-white/80 text-[13px] num">
-            Twój udział po prowizji: {formatPLN(readyPayoutForKlient, { decimals: false })}
-          </div>
-          <div className="mt-1 text-white/70 text-[12px] num">{ready.length} pozycji</div>
+      {/* Sticky KPI — łącznie w tym roku */}
+      <div className="sticky top-0 lg:top-[60px] z-10 mt-8 -mx-4 lg:-mx-10 px-4 lg:px-10 py-3 bg-bg/85 backdrop-blur-md border-b border-border-soft flex items-baseline justify-between gap-3">
+        <span className="label">Łącznie w tym roku</span>
+        <span className="num text-[18px] font-light tracking-[-0.02em]">
+          {formatPLN(yearTakeHome, { decimals: false })}
+          <span className="ml-2 text-[11px] text-text-mute">{soldThisYear.length} sprzedaży</span>
+        </span>
+      </div>
+
+      {/* KPI: gotowe / karencja */}
+      <section className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <KpiCard
+          label="Gotowe do rozliczenia"
+          value={<span className="text-mint">{formatPLN(readyValue, { decimals: false })}</span>}
+          mono
+          sub={`Twój udział po prowizji: ${formatPLN(readyPayoutForKlient, { decimals: false })} · ${ready.length} pozycji`}
+        >
           {ready.length > 0 && (
-            <div className="mt-5">
-              <Link
-                href="/panel/faktury"
-                className="inline-flex items-center gap-2 bg-white text-bg px-4 py-2 text-[13px] font-semibold rounded-[10px] hover:bg-white/90 transition-colors"
-              >
-                Wgraj fakturę / UKS <ArrowRight size={14} />
-              </Link>
-            </div>
+            <ButtonLink href="/panel/faktury" variant="ghost" size="sm">
+              Wgraj fakturę / UKS <ArrowRight size={14} />
+            </ButtonLink>
           )}
-        </div>
-
-        <div className="card-elev p-6 lg:p-8 rounded-[20px]">
-          <div className="label">Oczekuje na zamknięcie · 14d</div>
-          <div className="mt-2 font-bold text-4xl lg:text-5xl tracking-[-0.04em] num">
-            {formatPLN(pendingValue, { decimals: false })}
-          </div>
-          <div className="mt-2 text-text-soft text-[13px] num">
-            Twój udział po prowizji: <span className="text-mint">{formatPLN(pendingPayoutForKlient, { decimals: false })}</span>
-          </div>
-          <div className="mt-1 text-text-mute text-[12px] num">{pending.length} pozycji</div>
-        </div>
+        </KpiCard>
+        <KpiCard
+          label="Oczekuje na zamknięcie · 14 dni"
+          value={<span className="text-yellow">{formatPLN(pendingValue, { decimals: false })}</span>}
+          mono
+          sub={`Twój udział po prowizji: ${formatPLN(pendingPayoutForKlient, { decimals: false })} · ${pending.length} pozycji`}
+        />
       </section>
 
-      {/* Lista (sprzedaże skopiowane) */}
+      {/* Lista sprzedaży oczekujących i gotowych */}
       <section className="mt-10">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-end justify-between gap-3 mb-4">
           <div>
             <div className="label">Lista</div>
-            <h2 className="mt-1 font-semibold text-xl tracking-[-0.025em]">Sprzedaże oczekujące i gotowe</h2>
+            <h2 className="mt-2 font-light text-[22px] tracking-[-0.02em]">Sprzedaże oczekujące i gotowe</h2>
           </div>
           <ButtonLink href="/panel/sprzedaze" variant="ghost" size="sm">
             Pełna historia sprzedaży
@@ -120,11 +125,20 @@ export default async function WyplatyPage() {
         </div>
 
         {solds.length === 0 ? (
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center text-text-soft text-[14px]">
-            Brak sprzedaży — wypłaty pojawią się tu po pierwszej transakcji.
-          </div>
+          <EmptyState
+            title="Brak sprzedaży"
+            sub="Wypłaty pojawią się tu po pierwszej transakcji."
+          />
         ) : (
           <div className="card table-scroll">
+            <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_110px_120px_120px_110px_150px] gap-3 px-4 h-11 label border-b border-border items-center">
+              <div>Koszulka</div>
+              <div>Sprzedano</div>
+              <div>Kwota</div>
+              <div>Twój udział</div>
+              <div>Rozliczenie</div>
+              <div>Status</div>
+            </div>
             {[...ready, ...pending].map((p) => {
               const rate = subById.get(p.submission_id)?.commission_rate ?? 0.2;
               const takeHome = takeHomeCents(p.listing_price_cents ?? 0, rate) ?? 0;
@@ -132,29 +146,34 @@ export default async function WyplatyPage() {
               return (
                 <div
                   key={p.id}
-                  className="grid grid-cols-[minmax(220px,3fr)_120px_120px_120px_140px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0"
+                  className="grid grid-cols-1 md:grid-cols-[minmax(220px,3fr)_110px_120px_120px_110px_150px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
                     <div className="min-w-0">
-                      <div className="text-[13px] font-medium truncate">{p.brand} · {p.model}</div>
-                      <div className="text-[11px] text-text-mute num">
+                      <div className="text-[13.5px] font-medium truncate">{p.brand} {p.model}</div>
+                      <div className="text-[11px] num text-text-mute truncate">
                         Sprzedano: {formatDate(p.sold_at)}
+                      </div>
+                      <div className="md:hidden text-[11px] num text-text-mute truncate">
+                        Twój udział: <span className="text-mint">{formatPLN(takeHome, { decimals: false })}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-[13px] font-semibold num">
+                  <div className="hidden md:block text-[12px] num text-text-soft">{formatDate(p.sold_at)}</div>
+                  <div className="hidden md:block text-[13px] num">
                     {formatPLN(p.listing_price_cents ?? 0, { decimals: false })}
                   </div>
-                  <div className="text-[13px] num text-mint">
+                  <div className="hidden md:block text-[13px] num text-mint">
                     {formatPLN(takeHome, { decimals: false })}
                   </div>
-                  <div className="text-[12px] num text-text-soft">{formatDate(p.settlement_at)}</div>
-                  <div>
-                    <span className={`pill ${isReady ? "pill-mint" : "pill-amber"}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${isReady ? "bg-mint" : "bg-amber"}`} />
+                  <div className={`hidden md:block text-[12px] num ${p.settlement_at ? "text-text-soft" : "text-text-faint"}`}>
+                    {formatDate(p.settlement_at)}
+                  </div>
+                  <div className="flex md:block items-center">
+                    <Pill variant={isReady ? "mint" : "yellow"}>
                       {isReady ? "Gotowe" : "Karencja 14d"}
-                    </span>
+                    </Pill>
                   </div>
                 </div>
               );

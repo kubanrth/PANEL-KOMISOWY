@@ -59,7 +59,7 @@ export function WithdrawForm({ available, accounts }: { available: number; accou
   const noAccounts = accounts.length === 0;
 
   return (
-    <form onSubmit={handleSubmit} className="card p-6 space-y-5">
+    <form id="wyplata" onSubmit={handleSubmit} className="card p-6 space-y-5">
       <div className="flex items-center justify-between">
         <div className="label">Wypłać na konto</div>
         <span className="text-[11px] text-text-mute num">
@@ -69,13 +69,13 @@ export function WithdrawForm({ available, accounts }: { available: number; accou
 
       <div>
         <label className="input-label" htmlFor="amount">Kwota</label>
-        <div className="flex items-baseline gap-2 border-b border-border focus-within:border-blue transition-colors py-3">
+        <div className="flex items-baseline gap-2 border-b border-border focus-within:border-lime transition-colors py-3">
           <input
             id="amount"
             value={amountInput}
             onChange={(e) => setAmountInput(e.target.value.replace(/[^\d, .]/g, ""))}
             placeholder="0"
-            className="bg-transparent flex-1 outline-none font-bold text-3xl tracking-[-0.04em] num"
+            className="bg-transparent flex-1 outline-none font-light text-[32px] tracking-[-0.02em] num"
             disabled={noFunds || noAccounts}
           />
           <span className="text-text-mute text-sm">zł</span>
@@ -87,7 +87,7 @@ export function WithdrawForm({ available, accounts }: { available: number; accou
               type="button"
               onClick={() => setPercent(pct)}
               disabled={noFunds || noAccounts}
-              className="text-[11px] px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border text-text-soft hover:text-text hover:border-blue transition-colors disabled:opacity-50"
+              className="text-[11px] px-3 py-1.5 rounded-[9px] bg-surface-2 border border-border text-text-soft hover:text-text hover:bg-surface-3 transition-colors disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime"
             >
               {pct === 100 ? "Cała dostępna" : `${pct}%`}
             </button>

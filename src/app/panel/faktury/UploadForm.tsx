@@ -58,7 +58,7 @@ export function UploadForm() {
           }
         }}
         className={`block cursor-pointer border-2 border-dashed rounded-[16px] py-10 px-6 text-center transition-colors ${
-          dragOver ? "border-blue bg-blue/5" : "border-border hover:border-text-mute bg-surface"
+          dragOver ? "border-lime bg-lime/5" : "border-border hover:border-text-mute bg-surface"
         }`}
       >
         <input

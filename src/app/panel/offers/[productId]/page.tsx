@@ -1,13 +1,18 @@
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { OfferThread } from "@/components/offers/OfferThread";
 import { OfferComposer } from "@/components/offers/OfferComposer";
 import { ProductThumb } from "@/components/panel/ProductThumb";
-import { formatPLN } from "@/lib/format";
+import { formatPLN, daysFromNow } from "@/lib/format";
 import type { Offer, Product } from "@/lib/types";
 import { acceptOffer, rejectOffer, sellerCounterOffer } from "../actions";
+
+/* Kontr-oferta — redesign: split 50/50 (Twoja propozycja przekreślona /
+   kontr-oferta na gradiencie lime→mint), countdown ważności, 2 CTA.
+   Akcje acceptOffer/rejectOffer/sellerCounterOffer bez zmian. */
 
 export default async function ClientOfferThreadPage(props: { params: Promise<{ productId: string }> }) {
   const { productId } = await props.params;
@@ -41,6 +46,9 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
   const offers = (offersRaw ?? []) as Offer[];
   const lastBuyer = [...offers].reverse().find((o) => !o.is_seller_message && o.status === "pending");
 
+  const listingCents = subData.listing_price_cents ?? 0;
+  const daysLeft = lastBuyer ? daysFromNow(lastBuyer.expires_at) : null;
+
   return (
     <PanelShell
       user={{ email: user.email! }}
@@ -52,74 +60,113 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
         { label: "Oferty" },
       ]}
     >
-      <section className="grid grid-cols-12 gap-6 items-start">
-        <div className="col-span-12 lg:col-span-7 flex items-center gap-5">
+      <section className="flex items-start gap-5">
+        <div className="hidden sm:block flex-shrink-0">
           <ProductThumb photos={subData.photos} brand={subData.brand} size="lg" />
-          <div>
-            <h1 className="font-bold text-[26px] tracking-[-0.03em]">{subData.brand}</h1>
-            <p className="text-text-soft text-[16px]">{subData.model}</p>
-          </div>
         </div>
-        <div className="col-span-12 lg:col-span-5">
-          <div className="card-gradient-blue p-6 rounded-[20px] text-white">
-            <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">Twój listing</div>
-            <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(subData.listing_price_cents ?? 0, { decimals: false })}</div>
-            {lastBuyer && (
-              <>
-                <div className="mt-4 text-white/70 text-[11px]">Oferta kupującego</div>
-                <div className="font-semibold text-xl mt-0.5 num">{formatPLN(lastBuyer.amount_cents, { decimals: false })}</div>
-              </>
-            )}
-          </div>
-        </div>
+        <PageHeader
+          label={subData.sku ?? "Negocjacja ceny"}
+          title={`${subData.brand} ${subData.model}`}
+          sub="Otrzymaliśmy propozycję zakupu. Zdecyduj: zaakceptuj kontr-ofertę albo zaproponuj inną cenę."
+        />
       </section>
 
-      <section className="mt-10">
-        <OfferThread offers={offers} />
-      </section>
+      {lastBuyer ? (
+        <>
+          {/* Split 50/50 — decyzja */}
+          <section className="mt-8 grid grid-cols-12 gap-4">
+            <div className="col-span-12 lg:col-span-6">
+              <div className="card p-7 h-full">
+                <div className="label">Twoja propozycja</div>
+                <div className="mt-3 font-light text-[34px] lg:text-[42px] leading-none tracking-[-0.02em] num line-through text-text-mute">
+                  {formatPLN(listingCents, { decimals: false })}
+                </div>
+                <p className="mt-4 text-[13px] leading-[1.6] text-text-soft">
+                  Aktualna cena listingu. Rynek zareagował ofertą poniżej — po prawej nasza
+                  rekomendowana kontr-oferta.
+                </p>
+              </div>
+            </div>
+            <div className="col-span-12 lg:col-span-6">
+              {/* card-gradient-purple = var(--gradient-cta): linear-gradient(135deg,#6ECC1F,#22DD99), tekst #05140B */}
+              <div className="card-gradient-purple p-7 h-full">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-on-accent/70">
+                  Nasza kontr-oferta
+                </div>
+                <div className="mt-3 font-medium text-[38px] lg:text-[48px] leading-none tracking-[-0.02em] num">
+                  {formatPLN(lastBuyer.amount_cents, { decimals: false })}
+                </div>
+                <p className="mt-4 text-[13px] leading-[1.6] text-on-accent/80">
+                  {lastBuyer.message?.trim() ||
+                    "Kwota oparta o aktualne transakcje porównywalnych egzemplarzy — realna do zamknięcia sprzedaży teraz."}
+                </p>
+              </div>
+            </div>
+          </section>
 
-      {lastBuyer && (
-        <section className="mt-8 grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-6">
-            <div className="card p-6">
-              <div className="label mb-3">Akceptuj ofertę</div>
-              <p className="text-[13px] text-text-soft mb-4">
-                Po akceptacji {formatPLN(lastBuyer.amount_cents, { decimals: false })} produkt zostanie sprzedany. Środki w Wallet po 14d karencji.
+          {/* Countdown + CTA */}
+          <section className="mt-6">
+            {daysLeft != null && daysLeft >= 0 && (
+              <p className="text-[13px] text-text-soft">
+                Oferta ważna jeszcze{" "}
+                <span className="num font-medium text-yellow">
+                  {daysLeft === 0 ? "mniej niż 1 dzień" : daysLeft === 1 ? "1 dzień" : `${daysLeft} dni`}
+                </span>
+                .
               </p>
+            )}
+            <div className="mt-4 flex items-center gap-3 flex-wrap">
               <form action={acceptOffer}>
                 <input type="hidden" name="offer_id" value={lastBuyer.id} />
-                <button className="btn-primary h-11 px-5 text-[13px] inline-flex items-center gap-2 bg-mint text-bg hover:bg-mint">
-                  Akceptuj {formatPLN(lastBuyer.amount_cents, { decimals: false })}
+                <button className="btn-primary h-12 px-7 text-[14px] inline-flex items-center gap-2">
+                  Akceptuję {formatPLN(lastBuyer.amount_cents, { decimals: false })}
                 </button>
               </form>
+              <a href="#kontr" className="btn-ghost h-12 px-7 text-[14px] inline-flex items-center">
+                Proponuję inną cenę
+              </a>
             </div>
-          </div>
-          <div className="col-span-12 lg:col-span-6">
-            <div className="card p-6">
-              <div className="label mb-3">Kontruj</div>
+            <p className="mt-3 text-[12px] text-text-mute">
+              Po akceptacji produkt zostaje sprzedany — środki trafią do Wallet po 14 dniach karencji.
+            </p>
+          </section>
+
+          {/* Kontrpropozycja */}
+          <section id="kontr" className="mt-8 scroll-mt-24">
+            <div className="card p-6 lg:p-7">
+              <div className="label mb-4">Zaproponuj inną cenę</div>
               <OfferComposer
                 productId={productId}
                 action={sellerCounterOffer}
                 actionName="sellerCounterOffer"
-                currentPriceCents={subData.listing_price_cents ?? 0}
+                currentPriceCents={listingCents}
                 buyerOfferCents={lastBuyer.amount_cents}
               />
             </div>
-          </div>
-          <div className="col-span-12">
-            <form action={rejectOffer}>
+            <form action={rejectOffer} className="mt-4">
               <input type="hidden" name="offer_id" value={lastBuyer.id} />
               <button className="text-[12px] text-coral hover:underline">Odrzuć ofertę</button>
             </form>
-          </div>
+          </section>
+        </>
+      ) : (
+        <section className="mt-8">
+          <EmptyState
+            title="Brak ofert do decyzji"
+            sub={
+              offers.length > 0
+                ? "Żadna oferta nie czeka na Twoją odpowiedź. Historia negocjacji poniżej."
+                : "Gdy pojawi się propozycja zakupu tego produktu, zobaczysz ją tutaj."
+            }
+          />
         </section>
       )}
 
-      {!lastBuyer && offers.length > 0 && (
-        <section className="mt-8">
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-6 text-center text-text-soft">
-            Brak ofert oczekujących na Twoją odpowiedź.
-          </div>
+      {/* Historia negocjacji */}
+      {offers.length > 0 && (
+        <section className="mt-10">
+          <div className="label mb-4">Historia negocjacji</div>
+          <OfferThread offers={offers} />
         </section>
       )}
     </PanelShell>
