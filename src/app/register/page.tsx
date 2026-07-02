@@ -34,13 +34,13 @@ export default function RegisterPage() {
         {/* showcase side */}
         <aside className="hidden lg:flex col-span-5 border-l border-border-soft bg-bg-soft/40 items-center justify-center p-10">
           <div className="max-w-[420px] w-full">
-            <div className="card-gradient-purple rounded-[24px] p-7 mb-5">
+            <div className="card-gradient-dark rounded-[24px] p-7 mb-5">
               <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wide">Średnia wycena</div>
               <div className="mt-2 font-bold text-5xl tracking-[-0.04em] text-white num">3 dni</div>
               <div className="mt-2 text-white/80 text-[13px]">12-punktowy audyt A&amp;QC</div>
             </div>
 
-            <div className="card-gradient-blue rounded-[24px] p-7 mb-5">
+            <div className="card-gradient-dark rounded-[24px] p-7 mb-5">
               <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wide">Wypłata po sprzedaży</div>
               <div className="mt-2 font-bold text-5xl tracking-[-0.04em] text-white num">14 dni</div>
               <div className="mt-2 text-white/80 text-[13px]">Karencja zgodna z Umową K-S</div>

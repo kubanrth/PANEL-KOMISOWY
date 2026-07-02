@@ -255,7 +255,7 @@ function Step1({
       <button
         type="button"
         onClick={addProduct}
-        className="w-full border border-dashed border-border hover:border-blue hover:text-blue transition-colors rounded-[16px] py-5 flex items-center justify-center gap-2 text-text-soft"
+        className="w-full border border-dashed border-border hover:border-lime hover:text-lime transition-colors rounded-[16px] py-5 flex items-center justify-center gap-2 text-text-soft"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M12 5v14M5 12h14" />
@@ -302,13 +302,13 @@ function PricingToggle({
             key={o.v}
             onClick={() => onChange(o.v)}
             className={`text-left p-4 rounded-[14px] border-2 transition-colors ${
-              active ? "border-blue bg-blue/5" : "border-border hover:border-text-mute bg-surface"
+              active ? "border-lime/60 bg-lime/5" : "border-border hover:border-text-mute bg-surface"
             }`}
           >
             <div className="flex items-center justify-between gap-3">
               <div className="font-semibold text-[15px] tracking-[-0.015em]">{o.title}</div>
               <span className={`h-4 w-4 rounded-full border-2 flex items-center justify-center ${
-                active ? "border-blue bg-blue" : "border-border"
+                active ? "border-lime bg-lime" : "border-border"
               }`}>
                 {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
               </span>
@@ -523,7 +523,7 @@ function Step2({
       </div>
 
       {/* Totals */}
-      <div className="card-gradient-blue p-7 rounded-[24px]">
+      <div className="card-gradient-dark p-7 rounded-[24px]">
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 text-white">
           <div>
             <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Wartość paczki</div>

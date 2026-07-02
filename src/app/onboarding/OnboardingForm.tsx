@@ -93,16 +93,16 @@ function TypeCard({ letter, title, desc, active, onClick }: { letter: string; ti
     <button
       type="button"
       onClick={onClick}
-      className={`text-left p-6 rounded-[16px] border-2 transition-all ${
+      className={`text-left p-6 rounded-[16px] border-2 transition-colors ${
         active
-          ? "border-blue bg-blue/5"
+          ? "border-lime/60 bg-lime/5"
           : "border-border hover:border-text-mute bg-surface"
       }`}
     >
       <div className="flex items-start justify-between">
-        <span className="font-bold text-2xl tracking-[-0.04em] text-blue">{letter}</span>
-        <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-blue bg-blue" : "border-border"} flex items-center justify-center transition-colors`}>
-          {active && <span className="h-2 w-2 rounded-full bg-white" />}
+        <span className="font-bold text-2xl tracking-[-0.04em] text-lime">{letter}</span>
+        <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-lime bg-lime" : "border-border"} flex items-center justify-center transition-colors`}>
+          {active && <span className="h-2 w-2 rounded-full bg-[#05140B]" />}
         </span>
       </div>
       <div className="mt-5 font-semibold text-xl tracking-[-0.025em]">{title}</div>

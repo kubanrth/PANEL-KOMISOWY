@@ -86,7 +86,7 @@ function Stat({ value, unit, label }: { value: string; unit: string; label: stri
 
 function HeroCard() {
   return (
-    <div className="card-gradient-purple rounded-[24px] p-7 lg:p-8 relative overflow-hidden flex flex-col w-full">
+    <div className="card-gradient-dark rounded-[24px] p-7 lg:p-8 relative overflow-hidden flex flex-col w-full">
       <div className="flex items-center justify-between">
         <span className="pill bg-white/15 text-white">
           <span className="h-1.5 w-1.5 rounded-full bg-white" />
