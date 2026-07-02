@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDateTime } from "@/lib/format";
 import type { AppNotification } from "@/lib/types";
 import Link from "next/link";
@@ -46,14 +47,9 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
 
   return (
     <AdminShell user={user} profile={profile} active="inbox" breadcrumb={[{ label: "Inbox" }]}>
-      <section>
-        <div className="label">{list.length} powiadomień (max 100)</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Inbox <span className="text-text-soft">/ wszyscy klienci.</span>
-        </h1>
-      </section>
+      <PageHeader label={`${list.length} powiadomień (max 100)`} title="Inbox" sub="Powiadomienia wszystkich klientów — sprzedaże, oferty, wypłaty, wyceny, zwroty." />
 
-      <section className="mt-10">
+      <section className="mt-8">
         <div className="flex items-center gap-2 flex-wrap text-[13px]">
           {TYPE_FILTERS.map((f) => {
             const active = (filter ?? "") === f.key;
@@ -62,11 +58,11 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
               <Link
                 key={f.key}
                 href={f.key ? `/admin/inbox?filter=${f.key}` : "/admin/inbox"}
-                className={`px-3 py-1.5 rounded-[10px] transition-colors ${
-                  active ? "bg-text text-bg font-semibold" : "bg-surface text-text-soft hover:bg-surface-2"
+                className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+                  active ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
                 }`}
               >
-                {f.label} <span className={`num ml-1 ${active ? "text-bg/70" : "text-text-mute"}`}>· {count}</span>
+                {f.label} <span className={`num ml-1 ${active ? "text-lime/70" : "text-text-mute"}`}>· {count}</span>
               </Link>
             );
           })}
@@ -84,14 +80,14 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
             return (
               <div key={n.id} className="card p-4 grid grid-cols-12 gap-4 items-center">
                 <div className="col-span-2 text-[12px] text-text-mute">
-                  <div className="font-mono">{n.type}</div>
+                  <div className="num text-[11px]">{n.type}</div>
                   <div className="num">{formatDateTime(n.created_at)}</div>
                 </div>
                 <div className="col-span-3 text-[13px]">{recipient}</div>
                 <div className="col-span-7">
                   <div className="text-[14px] font-medium">{n.title}</div>
                   {n.body && <div className="text-[12px] text-text-soft mt-0.5">{n.body}</div>}
-                  {n.ref_id && <div className="text-[11px] text-text-mute mt-1 font-mono">{n.ref_id}</div>}
+                  {n.ref_id && <div className="text-[11px] text-text-mute mt-1 num">{n.ref_id}</div>}
                 </div>
               </div>
             );

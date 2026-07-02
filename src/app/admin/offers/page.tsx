@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate } from "@/lib/format";
 import { createBuyerOffer } from "./actions";
@@ -14,6 +15,14 @@ type Row = {
   buyer_name: string | null;
   is_seller_message: boolean;
   products: { id: string; brand: string; model: string; photos: Array<{ url: string; name: string }> | null; listing_price_cents: number | null; status: string; submission_id: string } | null;
+};
+
+const OFFER_STATUS: Record<string, { v: string; l: string }> = {
+  pending: { v: "pill-yellow", l: "Oczekuje" },
+  countered: { v: "pill-blue", l: "Kontr-oferta" },
+  accepted: { v: "pill-mint", l: "Zaakceptowana" },
+  rejected: { v: "pill-coral", l: "Odrzucona" },
+  expired: { v: "pill-mute", l: "Wygasła" },
 };
 
 export default async function AdminOffersPage() {
@@ -53,14 +62,9 @@ export default async function AdminOffersPage() {
 
   return (
     <AdminShell user={user} profile={profile} active="offers" breadcrumb={[{ label: "Offers (Zerr)" }]}>
-      <section>
-        <div className="label">{active.length} aktywnych negocjacji</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Zerr <span className="text-text-soft">/ targowanie.</span>
-        </h1>
-      </section>
+      <PageHeader label={`${active.length} aktywnych negocjacji`} title="Offers (Zerr)" sub="Negocjacje cen z kupującymi — oferty, kontr-oferty, akceptacje." />
 
-      <section className="mt-12">
+      <section className="mt-8">
         <div className="label mb-5">Aktywne</div>
         {active.length === 0 ? (
           <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-8 text-center text-text-soft">
@@ -72,7 +76,7 @@ export default async function AdminOffersPage() {
               <Link
                 key={o.product_id}
                 href={`/admin/offers/${o.product_id}`}
-                className="card p-5 grid grid-cols-12 gap-4 items-center hover:border-purple/40 transition-colors"
+                className="card p-5 grid grid-cols-12 gap-4 items-center hover:border-lime/30 transition-colors"
               >
                 <div className="col-span-12 md:col-span-5 flex items-center gap-4">
                   {o.products && (
@@ -96,7 +100,7 @@ export default async function AdminOffersPage() {
                   <div className="font-semibold num text-amber">{formatPLN(o.amount_cents, { decimals: false })}</div>
                 </div>
                 <div className="col-span-6 md:col-span-2">
-                  <span className="pill pill-amber">{o.status}</span>
+                  <span className={`pill ${(OFFER_STATUS[o.status] ?? { v: "pill-mute" }).v}`}>{(OFFER_STATUS[o.status] ?? { l: o.status }).l}</span>
                 </div>
                 <div className="col-span-6 md:col-span-1 text-right text-[12px] text-text-mute num">
                   {formatDate(o.created_at)}

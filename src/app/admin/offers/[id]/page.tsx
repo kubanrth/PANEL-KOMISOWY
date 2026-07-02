@@ -49,7 +49,7 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
           <ProductThumb photos={productData.photos} brand={productData.brand} size="lg" />
           <div>
             <div className="text-text-mute text-[12px] num">{productData.submissions?.id ?? "—"} · klient: {klientName}</div>
-            <h1 className="font-bold text-[26px] tracking-[-0.03em] mt-1">{productData.brand}</h1>
+            <h1 className="font-light text-[26px] tracking-[-0.02em] mt-1">{productData.brand}</h1>
             <p className="text-text-soft text-[16px]">{productData.model}</p>
           </div>
         </div>
@@ -57,7 +57,7 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
         <div className="col-span-12 lg:col-span-5">
           <div className="card-gradient-blue p-6 rounded-[20px] text-white">
             <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">Listing</div>
-            <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(productData.listing_price_cents ?? 0, { decimals: false })}</div>
+            <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(productData.listing_price_cents ?? 0, { decimals: false })}</div>
             {lastBuyerOffer && (
               <>
                 <div className="mt-4 text-white/70 text-[11px]">Ostatnia oferta kupującego</div>

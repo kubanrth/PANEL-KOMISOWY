@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate, daysFromNow } from "@/lib/format";
 
@@ -47,33 +49,26 @@ export default async function AdminAqcQueuePage() {
 
   return (
     <AdminShell user={user} profile={profile} active="aqc" breadcrumb={[{ label: "A&QC" }]}>
-      <section>
-        <div className="label">{products.length} produktów do audytu</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Authentication & QC <span className="text-text-soft">/ kolejka.</span>
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          12-punktowy audyt każdego produktu. SLA: 5 dni roboczych od dostarczenia.
-        </p>
-      </section>
+      <PageHeader
+        label={`${products.length} produktów do audytu`}
+        title="A&QC"
+        sub="12-punktowy audyt każdego produktu. SLA: 5 dni roboczych od dostarczenia."
+      />
 
-      <section className="mt-12">
+      <section className="mt-8">
         {products.length === 0 ? (
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-12 text-center">
-            <div className="font-semibold text-2xl">Pusta kolejka</div>
-            <p className="mt-2 text-text-soft">Wszystkie produkty zaudytowane.</p>
-          </div>
+          <EmptyState title="Kolejka pusta. Kawa?" sub="Wszystkie produkty zaudytowane." />
         ) : (
           <div className="space-y-3">
             {products.map((p) => {
               const sla = daysFromNow(new Date(new Date(p.created_at).getTime() + 5 * 86_400_000).toISOString());
-              const slaCls = sla == null ? "pill-mute" : sla < 1 ? "pill-pink" : sla < 2 ? "pill-amber" : "pill-mute";
+              const slaCls = sla == null ? "pill-mute" : sla < 1 ? "pill-coral" : sla < 2 ? "pill-amber" : "pill-mute";
               const klientName = [p.submissions?.profiles?.first_name, p.submissions?.profiles?.last_name].filter(Boolean).join(" ") || "—";
               return (
                 <Link
                   key={p.id}
                   href={`/admin/aqc/${p.id}`}
-                  className="card p-5 flex items-center gap-4 hover:border-purple/40 transition-colors"
+                  className="card p-5 flex items-center gap-4 hover:border-lime/30 transition-colors"
                 >
                   <ProductThumb photos={p.photos as never} brand={p.brand} size="md" />
                   <div className="flex-1 min-w-0">
