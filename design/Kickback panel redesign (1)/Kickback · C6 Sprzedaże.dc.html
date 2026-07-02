@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="C6 · Sprzedaże" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="of-sprz" expanded="oferty" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Sprzedaże</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · historia sprzedaży</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.06;letter-spacing:-0.03em">Sprzedaże<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <sc-if value="{{ showContent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px"><div style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Sprzedane łącznie</span><span style="display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 7px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(34,221,153,0.14);color:#22DD99"><i class="ph ph-trend-up" style="font-size:12px"></i>+3</span></div><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px"><span style="font:300 32px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">12</span><svg viewBox="0 0 88 30" width="88" height="30" style="display:block"><polyline points="0,24 15,20 29,22 44,14 59,17 73,8 88,11" fill="none" stroke="#66FF33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px"><div style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">W tym miesiącu</span><span style="display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 7px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(34,221,153,0.14);color:#22DD99"><i class="ph ph-trend-up" style="font-size:12px"></i>+12%</span></div><div style="display:flex;flex-direction:column;gap:2px"><span style="font:300 32px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">3</span><span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">8 400 zł</span></div></div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Suma prowizji</span><div style="display:flex;flex-direction:column;gap:2px"><span style="font:300 32px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">4 280 zł</span><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">śr. 19% od sztuki</span></div></div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Średnia cena</span><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px"><span style="font:300 32px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">1 780 zł</span><svg viewBox="0 0 88 30" width="88" height="30" style="display:block"><polyline points="0,20 15,22 29,16 44,18 59,10 73,14 88,7" fill="none" stroke="#66FF33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:104px minmax(200px,1.7fr) 100px 84px 84px 150px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">SKU</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Koszulka</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Cena finalna</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Prowizja</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Data</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status wypłaty</span>
+          </div>
+          <sc-for list="{{ items }}" as="it" hint-placeholder-count="10">
+            <div>
+              <sc-if value="{{ it.isGroup }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;background:#0A0D0B;border-bottom:1px solid rgba(255,255,255,0.06)">
+                  <span style="font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#BDBFBD">{{ it.month }}</span>
+                  <span style="font:500 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ it.summary }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ it.isRow }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:104px minmax(200px,1.7fr) 100px 84px 84px 150px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+                  <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ it.sku }}</span>
+                  <span style="display:flex;align-items:center;gap:11px;min-width:0"><span style="width:38px;height:38px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 32%, {{ it.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px">{{ it.cl }}</span><span style="min-width:0"><span style="display:block;font-weight:500;font-size:14px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.club }}</span><span style="display:block;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ it.season }} · rozm. {{ it.size }}</span></span></span>
+                  <span style="font:500 14px 'IBM Plex Mono',monospace;justify-self:end">{{ it.price }}</span>
+                  <span style="font:400 13px 'IBM Plex Mono',monospace;color:#7B7F7B;justify-self:end">{{ it.comm }}</span>
+                  <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ it.date }}</span>
+                  <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ it.pBg }};color:{{ it.pColor }};border:1px solid {{ it.pBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ it.pColor }}"></span>{{ it.payout }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px">
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">12 sprzedaży · od kwietnia 2026</span>
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#4A4E4B">suma: 19 700 zł · prowizje: 4 280 zł</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-hand-coins" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Jeszcze nic nie sprzedałeś</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Wystaw pierwszą koszulkę — my zajmiemy się resztą.</p></div>
+          <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.4)"><i class="ph ph-plus" style="font-size:16px"></i>Nowa oferta</button>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;pustyStan&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  renderVals(){
+    const P={
+      settling:{label:'W rozliczeniu', c:'#FFCC00', bg:'rgba(255,204,0,0.13)', bd:'rgba(255,204,0,0.3)'},
+      ready:{label:'Do wypłaty', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      paid:{label:'Wypłacone', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+    };
+    const raw=[
+      {g:'Czerwiec 2026', summary:'3 szt · 8 400 zł'},
+      {sku:'KCB-26-E5A144', club:'AC Milan', season:'2006/07', size:'S', price:'3 200 zł', comm:'480 zł', date:'28 cze', p:'settling', crest:'#2A0F14', cl:'M'},
+      {sku:'KCB-26-D2C831', club:'Real Madryt', season:'2013/14', size:'M', price:'2 900 zł', comm:'522 zł', date:'19 cze', p:'ready', crest:'#3A1D24', cl:'R'},
+      {sku:'KCB-26-G9B412', club:'Juventus', season:'2014/15', size:'L', price:'2 300 zł', comm:'414 zł', date:'8 cze', p:'ready', crest:'#22242A', cl:'J'},
+      {g:'Maj 2026', summary:'2 szt · 2 890 zł'},
+      {sku:'KCB-26-C0D107', club:'Legia Warszawa', season:'2018/19', size:'XL', price:'640 zł', comm:'141 zł', date:'24 maj', p:'paid', crest:'#0F2A16', cl:'L'},
+      {sku:'KCB-26-B7D593', club:'FC Barcelona', season:'2010/11', size:'M', price:'2 250 zł', comm:'383 zł', date:'11 maj', p:'paid', crest:'#1D2A3A', cl:'B'},
+      {g:'Kwiecień 2026', summary:'2 szt · 3 010 zł'},
+      {sku:'KCB-26-F8C266', club:'Polska', season:'EURO 2016', size:'M', price:'760 zł', comm:'190 zł', date:'29 kwi', p:'paid', crest:'#2A2410', cl:'P'},
+      {sku:'KCB-26-L3D948', club:'AC Milan', season:'2010/11', size:'M', price:'2 250 zł', comm:'428 zł', date:'12 kwi', p:'paid', crest:'#2A0F14', cl:'M'},
+    ];
+    const items=raw.map((r,i)=>{
+      if(r.g) return {key:'g'+i, isGroup:true, isRow:false, month:r.g, summary:r.summary};
+      const pm=P[r.p];
+      return {key:r.sku, isGroup:false, isRow:true, ...r, payout:pm.label, pColor:pm.c, pBg:pm.bg, pBorder:pm.bd};
+    });
+    const empty = this.props.pustyStan ?? false;
+    return { items, showContent:!empty, showEmpty:empty };
+  }
+}
+</script>
+</body>
+</html>

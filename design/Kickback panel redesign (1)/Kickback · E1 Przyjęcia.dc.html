@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="E1 · Przyjęcia" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="przyjecia" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Przyjęcia</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1100px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · operacje · paczki do Kickback</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Przyjęcia<span style="color:#66FF33">.</span></h1>
+        <p style="margin:8px 0 0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:#BDBFBD;max-width:62ch">Śledzisz tu drogę swoich paczek od kuriera do magazynu i A&amp;QC.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="2">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
+              <div style="display:flex;align-items:center;gap:11px"><div style="width:40px;height:40px;border-radius:11px;background:rgba(74,107,255,0.1);border:1px solid rgba(74,107,255,0.2);display:flex;align-items:center;justify-content:center"><i class="ph ph-package" style="font-size:20px;color:#4A6BFF"></i></div><div><div style="font:500 14px 'IBM Plex Mono',monospace">{{ c.num }}</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">{{ c.desc }}</div></div></div>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ c.sBg }};color:{{ c.sColor }};border:1px solid {{ c.sBorder }};flex-shrink:0"><span style="width:6px;height:6px;border-radius:9px;background:{{ c.sColor }}"></span>{{ c.status }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ c.steps }}" as="st" hint-placeholder-count="4">
+                <div style="display:flex;gap:12px">
+                  <div style="display:flex;flex-direction:column;align-items:center;width:16px">
+                    <span style="width:12px;height:12px;border-radius:50%;background:{{ st.dotBg }};border:2px solid {{ st.dotBorder }};box-shadow:{{ st.glow }};flex-shrink:0;margin-top:2px"></span>
+                    <sc-if value="{{ st.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;flex:1;min-height:20px;background:{{ st.lineBg }};margin:3px 0"></span></sc-if>
+                  </div>
+                  <div style="padding-bottom:{{ st.pb }}px">
+                    <div style="font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ st.weight }};letter-spacing:-0.01em;color:{{ st.color }}">{{ st.label }}</div>
+                    <div style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:2px">{{ st.date }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const mk=(steps)=>steps.map((s,i)=>({
+      key:s.label, label:s.label, date:s.date,
+      dotBg:s.done?'#66FF33': s.cur?'rgba(102,255,51,0.15)':'transparent',
+      dotBorder:(s.done||s.cur)?'#66FF33':'rgba(255,255,255,0.25)',
+      glow:s.cur?'0 0 12px 2px rgba(102,255,51,0.35)':'none',
+      color:(s.done||s.cur)?'#F5F5F3':'#7B7F7B',
+      weight:s.cur?600:500,
+      lineBg: steps[i+1]&&steps[i+1].done?'rgba(102,255,51,0.5)':'rgba(255,255,255,0.09)',
+      hasLine:i<steps.length-1, pb:i<steps.length-1?16:0,
+    }));
+    const P={
+      aqc:{label:'W A&QC', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      done:{label:'Przyjęta', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+    };
+    const cards=[
+      {num:'KCB-26-C1D8', desc:'3 pozycje · InPost', p:'aqc', steps:mk([
+        {label:'Kurier odebrał paczkę', date:'26 cze, 14:10', done:true},
+        {label:'W drodze do magazynu', date:'27 cze, 08:30', done:true},
+        {label:'Przyjęta do magazynu', date:'29 cze, 09:32', done:true},
+        {label:'A&QC w toku', date:'rozpoczęte 30 cze', cur:true},
+      ])},
+      {num:'KCB-26-B9F2', desc:'1 pozycja · DPD', p:'done', steps:mk([
+        {label:'Kurier odebrał paczkę', date:'24 cze, 11:05', done:true},
+        {label:'W drodze do magazynu', date:'25 cze, 07:44', done:true},
+        {label:'Przyjęta do magazynu', date:'26 cze, 10:15', done:true},
+        {label:'A&QC — pass', date:'30 cze, 13:20', done:true},
+      ])},
+    ];
+    return { cards: cards.map(c=>({ ...c, status:P[c.p].label, sColor:P[c.p].c, sBg:P[c.p].bg, sBorder:P[c.p].bd })) };
+  }
+}
+</script>
+</body>
+</html>

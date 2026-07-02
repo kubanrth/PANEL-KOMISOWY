@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+@keyframes kb-modal{from{transform:scale(.96) translateY(10px)}to{transform:none}}
+@keyframes kb-fade{from{opacity:1}to{opacity:1}}
+</style>
+</helmet>
+<div data-screen-label="D1 · Portfel" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="portfel" expanded="portfel" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Portfel</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · finanse</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.06;letter-spacing:-0.03em">Portfel<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:stretch">
+        <div style="position:relative;overflow:hidden;border-radius:22px;padding:28px 30px;background:linear-gradient(140deg,#134F31 0%,#0C2C1D 54%,#0A1611 100%);border:1px solid rgba(102,255,51,0.18);box-shadow:0 24px 60px -28px rgba(34,221,153,0.4)">
+          <div style="position:absolute;inset:-30px -30px auto auto;width:340px;height:260px;pointer-events:none;background:radial-gradient(circle at 80% 10%,rgba(102,255,51,0.18) 0%,transparent 60%)"></div>
+          <div style="position:relative">
+            <div style="display:flex;align-items:center;gap:8px;font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#8FE7B4;margin-bottom:16px"><i class="ph ph-wallet" style="font-size:15px"></i>Dostępne do wypłaty</div>
+            <div style="font-weight:300;font-size:54px;line-height:1;letter-spacing:-0.035em;margin-bottom:22px">8 240 zł</div>
+            <div style="display:flex;align-items:center;gap:12px"><button onClick="{{ openModal }}" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#7CFF3D,#22DD99);box-shadow:0 12px 30px -8px rgba(34,221,153,0.5)" style-hover="transform:translateY(-2px)"><i class="ph ph-arrow-up-right" style="font-size:16px"></i>Wypłać teraz</button><a href="Kickback · D3 Wypłaty.dc.html" style="display:inline-flex;align-items:center;height:46px;padding:0 20px;border:1px solid rgba(255,255,255,0.16);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:rgba(255,255,255,0.04);cursor:pointer;text-decoration:none" style-hover="background:rgba(255,255,255,0.1)">Historia</a></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="flex:1;background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px"><div style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">W rozliczeniu</span><span style="display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(255,204,0,0.13);color:#FFCC00;border:1px solid rgba(255,204,0,0.3)"><span style="width:5px;height:5px;border-radius:9px;background:#FFCC00"></span>1 sprzedaż</span></div><div style="display:flex;align-items:baseline;gap:8px"><span style="font:300 30px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">2 340 zł</span><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">rozliczenie do 5 lip</span></div></div>
+          <div style="flex:1;background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Wypłacone łącznie</span><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px"><span style="font:300 30px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">14 800 zł</span><svg viewBox="0 0 88 30" width="88" height="30" style="display:block"><polyline points="0,24 15,21 29,23 44,15 59,18 73,9 88,12" fill="none" stroke="#66FF33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Transakcje</h2><span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">ostatnie 30 dni</span></div>
+          <div style="display:grid;grid-template-columns:64px 116px minmax(150px,1.5fr) 96px 88px;gap:12px;align-items:center;height:42px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Data</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Typ</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Pozycja</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Kwota</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Saldo po</span>
+          </div>
+          <sc-for list="{{ txs }}" as="t" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:64px 116px minmax(150px,1.5fr) 96px 88px;gap:12px;align-items:center;min-height:52px;padding:4px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ t.date }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ t.tBg }};color:{{ t.tColor }};border:1px solid {{ t.tBorder }};width:fit-content"><span style="width:5px;height:5px;border-radius:9px;background:{{ t.tColor }}"></span>{{ t.typ }}</span>
+              <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.label }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:{{ t.amtColor }};justify-self:end">{{ t.amount }}</span>
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B;justify-self:end">{{ t.saldo }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">6 z 42 transakcji</span><button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#1D2120">Pokaż wszystkie<i class="ph ph-arrow-right" style="font-size:13px"></i></button></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:14px">Metoda wypłaty</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <div style="width:42px;height:42px;border-radius:11px;background:rgba(102,255,51,0.08);border:1px solid rgba(102,255,51,0.2);display:flex;align-items:center;justify-content:center"><i class="ph ph-bank" style="font-size:21px;color:#66FF33"></i></div>
+              <div style="flex:1;min-width:0"><div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">PKO BP · konto osobiste</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B;margin-top:2px">PL •• •••• •••• 4921</div></div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)"><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Przelew standardowy · 1–2 dni</span><button style="height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#1D2120">Edytuj</button></div>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:14px">Faktura do wypłaty</div>
+            <div style="display:inline-flex;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:999px;padding:3px;gap:3px;margin-bottom:12px">
+              <button onClick="{{ setVat }}" style="height:30px;padding:0 16px;border:0;border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;background:{{ vatBg }};color:{{ vatColor }};transition:.15s">Faktura VAT</button>
+              <button onClick="{{ setNoVat }}" style="height:30px;padding:0 16px;border:0;border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;background:{{ noVatBg }};color:{{ noVatColor }};transition:.15s">Bez VAT</button>
+            </div>
+            <p style="margin:0;font:400 12px/1.6 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ vatNote }}</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:82;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:kb-fade .2s ease">
+      <div onClick="{{ stop }}" style="width:520px;max-width:100%;background:#1D2120;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:30px;box-shadow:0 30px 80px -24px rgba(0,0,0,0.8);animation:kb-modal .26s cubic-bezier(.32,.72,0,1)">
+        <div style="width:52px;height:52px;border-radius:15px;background:rgba(102,255,51,0.1);border:1px solid rgba(102,255,51,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:18px"><i class="ph ph-arrow-up-right" style="font-size:26px;color:#66FF33"></i></div>
+        <h3 style="margin:0 0 6px;font-weight:500;font-size:22px;letter-spacing:-0.02em">Wypłać środki</h3>
+        <p style="margin:0 0 22px;font:400 14px/1.55 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Środki dotrą na konto w 1–2 dni robocze. Bez opłat.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+          <label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Kwota</label>
+          <input defaultValue="8 240 zł" style="height:46px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:500 17px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" />
+          <span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B">Maks. 8 240 zł · <span style="color:#66FF33;cursor:pointer">Wypłać wszystko</span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:11px;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 14px;margin-bottom:18px"><i class="ph ph-bank" style="font-size:19px;color:#66FF33"></i><span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">PKO BP · PL •• 4921</span><span style="font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;cursor:pointer">Zmień</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:rgba(34,221,153,0.06);border:1px solid rgba(34,221,153,0.18);border-radius:14px;margin-bottom:22px">
+          <div style="display:flex;justify-content:space-between;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span>Kwota wypłaty</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">8 240 zł</span></div>
+          <div style="display:flex;justify-content:space-between;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span>Opłata</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">0 zł</span></div>
+          <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(34,221,153,0.15);font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif"><span>Otrzymasz</span><span style="font:600 15px 'IBM Plex Mono',monospace;color:#22DD99">8 240 zł</span></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px">
+          <button onClick="{{ closeModal }}" style="height:44px;padding:0 20px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Anuluj</button>
+          <button onClick="{{ closeModal }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 24px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.4)"><i class="ph ph-check" style="font-size:16px"></i>Wypłać 8 240 zł</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;modalWyplaty&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;fakturaVat&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { modal:null, vat:null };
+  renderVals(){
+    const T={
+      sale:{label:'Sprzedaż', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      payout:{label:'Wypłata', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      adj:{label:'Korekta', c:'#F5A623', bg:'rgba(245,166,35,0.13)', bd:'rgba(245,166,35,0.3)'},
+    };
+    const rows=[
+      {date:'28 cze', t:'sale', label:'AC Milan 2006/07 · KCB-26-E5A144', amt:'+2 720 zł', neg:false, saldo:'10 580 zł'},
+      {date:'19 cze', t:'sale', label:'Real Madryt 2013/14 · KCB-26-D2C831', amt:'+2 378 zł', neg:false, saldo:'7 860 zł'},
+      {date:'15 cze', t:'payout', label:'Wypłata na konto •• 4921', amt:'−3 000 zł', neg:true, saldo:'5 482 zł'},
+      {date:'8 cze', t:'sale', label:'Juventus 2014/15 · KCB-26-G9B412', amt:'+1 886 zł', neg:false, saldo:'8 482 zł'},
+      {date:'2 cze', t:'adj', label:'Korekta prowizji · KCB-26-B7D593', amt:'+45 zł', neg:false, saldo:'6 596 zł'},
+      {date:'24 maj', t:'sale', label:'Legia Warszawa 2018/19 · KCB-26-C0D107', amt:'+499 zł', neg:false, saldo:'6 551 zł'},
+    ];
+    const vat = this.state.vat ?? (this.props.fakturaVat ?? false);
+    const modalOpen = this.state.modal ?? (this.props.modalWyplaty ?? false);
+    return {
+      txs: rows.map(r=>({ ...r, typ:T[r.t].label, tColor:T[r.t].c, tBg:T[r.t].bg, tBorder:T[r.t].bd,
+        amount:r.amt, amtColor: r.neg?'#FF5A47':'#22DD99' })),
+      modalOpen,
+      openModal:()=>this.setState({modal:true}),
+      closeModal:()=>this.setState({modal:false}),
+      stop:(e)=>{ e.stopPropagation(); },
+      vatBg: vat?'#F5F5F3':'transparent', vatColor: vat?'#0F1210':'#7B7F7B',
+      noVatBg: !vat?'#F5F5F3':'transparent', noVatColor: !vat?'#0F1210':'#7B7F7B',
+      setVat:()=>this.setState({vat:true}), setNoVat:()=>this.setState({vat:false}),
+      vatNote: vat ? 'Wystawimy fakturę VAT do każdej wypłaty. Dane firmowe pobieramy z sekcji Dane → B2B.' : 'Rozliczenie bez VAT — rachunek do wypłaty wygenerujemy automatycznie.',
+    };
+  }
+}
+</script>
+</body>
+</html>

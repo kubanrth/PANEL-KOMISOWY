@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="E3 · Fulfillment" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="fulfillment" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Fulfillment</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1100px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · operacje · sprzedana koszulka w drodze</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Fulfillment<span style="color:#66FF33">.</span></h1>
+        <p style="margin:8px 0 0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:#BDBFBD;max-width:62ch">AC Milan 2006/07 — sprzedana 28 cze za 3 200 zł. Śledzisz jej drogę do kupującego na żywo.</p>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px 30px">
+        <div style="display:flex;align-items:flex-start">
+          <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;position:relative">
+              <sc-if value="{{ st.hasLine }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;top:23px;left:calc(50% + 30px);right:calc(-50% + 30px);height:2px;background:{{ st.lineBg }}"></div></sc-if>
+              <span style="width:46px;height:46px;border-radius:14px;background:{{ st.tileBg }};border:1px solid {{ st.tileBorder }};box-shadow:{{ st.glow }};display:flex;align-items:center;justify-content:center;position:relative;z-index:1"><i class="ph {{ st.icon }}" style="font-size:22px;color:{{ st.iconColor }}"></i></span>
+              <span style="margin-top:12px;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ st.weight }};letter-spacing:-0.01em;color:{{ st.color }}">{{ st.label }}</span>
+              <span style="margin-top:2px;font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ st.date }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Kurier</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,204,0,0.1);border:1px solid rgba(255,204,0,0.22);display:flex;align-items:center;justify-content:center"><i class="ph ph-truck" style="font-size:22px;color:#FFCC00"></i></div>
+            <div style="flex:1;min-width:0"><div style="font:500 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">InPost Kurier</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B;margin-top:2px">IP-4429-8817-22</div></div>
+            <button onClick="{{ copyTrack }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ copyColor }};cursor:pointer" style-hover="background:#1D2120"><i class="ph {{ copyIcon }}" style="font-size:14px"></i>{{ copyLabel }}</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
+            <span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Przewidywana dostawa</span>
+            <span style="font:600 13px 'IBM Plex Mono',monospace;color:#22DD99">4 lip 2026</span>
+          </div>
+          <div style="border:1px dashed rgba(255,255,255,0.12);border-radius:12px;padding:22px;display:flex;align-items:center;justify-content:center;gap:9px;color:#4A4E4B"><i class="ph ph-map-trifold" style="font-size:19px"></i><span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:0.06em">podgląd trasy kuriera · iframe</span></div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:6px">Szczegóły przesyłki</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Produkt</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">AC Milan 2006/07 · rozm. S</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">SKU</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">KCB-26-E5A144</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Kupujący</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">anonimowy · Warszawa</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Nadano</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">1 lip 2026, 16:40</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Ubezpieczenie</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#22DD99">do 3 500 zł</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;krok&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Pakowanie&quot;,&quot;Wysyłka&quot;,&quot;Tranzyt&quot;,&quot;Dostawa&quot;],&quot;default&quot;:&quot;Tranzyt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { copied:false };
+  renderVals(){
+    const stages=['Pakowanie','Wysyłka','Tranzyt','Dostawa'];
+    const icons=['ph-package','ph-paper-plane-tilt','ph-truck','ph-house'];
+    const dates=['30 cze, 12:10','1 lip, 16:40','w drodze','szac. 4 lip'];
+    const GRAD='linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%)';
+    const cur=stages.indexOf(this.props.krok ?? 'Tranzyt');
+    return {
+      steps: stages.map((label,i)=>({
+        key:label, label, date:dates[i], icon:icons[i], hasLine:i<stages.length-1,
+        tileBg: i<cur?'rgba(102,255,51,0.1)': i===cur?GRAD:'#16191A',
+        tileBorder: i<cur?'rgba(102,255,51,0.3)': i===cur?'rgba(255,255,255,0)':'rgba(255,255,255,0.08)',
+        iconColor: i<cur?'#66FF33': i===cur?'#FFFFFF':'#7B7F7B',
+        glow: i===cur?'0 10px 26px -8px rgba(34,221,153,0.55)':'none',
+        lineBg: i<cur?'rgba(102,255,51,0.5)':'rgba(255,255,255,0.09)',
+        color: i<=cur?'#F5F5F3':'#7B7F7B', weight: i===cur?600:500,
+      })),
+      copyTrack:()=>{ try{ navigator.clipboard && navigator.clipboard.writeText('IP-4429-8817-22'); }catch(e){}
+        this.setState({copied:true}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({copied:false}),1800); },
+      copyIcon: this.state.copied?'ph-check':'ph-copy',
+      copyColor: this.state.copied?'#22DD99':'#F5F5F3',
+      copyLabel: this.state.copied?'Skopiowano':'Kopiuj',
+    };
+  }
+}
+</script>
+</body>
+</html>

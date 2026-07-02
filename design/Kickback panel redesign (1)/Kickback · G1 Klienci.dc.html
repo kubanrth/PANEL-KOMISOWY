@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="G1 · Klienci" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="klienci" expanded="klienci" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Klienci</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · komisanci</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Klienci<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="3">
+          <button onClick="{{ c.onClick }}" style="height:34px;padding:0 15px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ c.label }}</button>
+        </sc-for>
+        <div style="flex:1"></div>
+        <button onClick="{{ toggleSort }}" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:#16191A;color:#BDBFBD;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer" style-hover="background:#1D2120">LTV<i class="ph {{ sortIcon }}" style="font-size:14px;color:#66FF33"></i></button>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:minmax(170px,1.4fr) 80px 90px 100px 110px 130px 90px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Klient</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Typ</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Aktywne</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Sprzedane</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">LTV</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Aktywność</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Akcje</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+          <a href="Kickback · G2 Profil klienta.dc.html" style="text-decoration:none;color:inherit;display:grid;grid-template-columns:minmax(170px,1.4fr) 80px 90px 100px 110px 130px 90px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;cursor:pointer" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:34px;height:34px;flex-shrink:0;border-radius:50%;background:{{ r.aBg }};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:{{ r.aColor }}">{{ r.init }}</span><span style="min-width:0"><span style="display:block;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ r.name }}</span><span style="display:block;font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ r.email }}</span></span></span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.tBg }};color:{{ r.tColor }};border:1px solid {{ r.tBorder }};width:fit-content">{{ r.typ }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;justify-self:end">{{ r.active }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;justify-self:end">{{ r.sold }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;justify-self:end">{{ r.ltv }}</span>
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ r.last }}</span>
+            <span style="display:flex;gap:6px;justify-self:end">
+              <span style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:#BDBFBD"><i class="ph ph-envelope-simple" style="font-size:15px"></i></span>
+              <span style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:#BDBFBD"><i class="ph ph-caret-right" style="font-size:15px"></i></span>
+            </span>
+          </a>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ countLabel }}</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">1 / 25</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { typ:'all', desc:true };
+  renderVals(){
+    const T={
+      b2c:{label:'B2C', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+      b2b:{label:'B2B', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+    };
+    const all=[
+      {name:'Marcin K.', init:'MK', email:'marcin.k@gmail.com', t:'b2c', active:'34', sold:'12', ltvN:34500, ltv:'34 500 zł', last:'dziś', top:true},
+      {name:'Anna W.', init:'AW', email:'anna@wkolekcje.pl', t:'b2b', active:'21', sold:'9', ltvN:28100, ltv:'28 100 zł', last:'dziś'},
+      {name:'Tomek R.', init:'TR', email:'tomek.r@o2.pl', t:'b2c', active:'12', sold:'7', ltvN:19400, ltv:'19 400 zł', last:'wczoraj'},
+      {name:'Paweł B.', init:'PB', email:'pb@interia.pl', t:'b2c', active:'8', sold:'5', ltvN:12850, ltv:'12 850 zł', last:'29 cze'},
+      {name:'Kasia S.', init:'KS', email:'kasia.s@gmail.com', t:'b2c', active:'6', sold:'4', ltvN:9210, ltv:'9 210 zł', last:'27 cze'},
+      {name:'Vintage11 sp. z o.o.', init:'V11', email:'biuro@vintage11.pl', t:'b2b', active:'44', sold:'2', ltvN:6400, ltv:'6 400 zł', last:'24 cze'},
+    ];
+    const s=this.state;
+    const chipDefs=[{k:'all',label:'Wszyscy · 148'},{k:'b2c',label:'B2C · 117'},{k:'b2b',label:'B2B · 31'}];
+    const filtered=all.filter(r=>s.typ==='all'||r.t===s.typ).sort((a,b)=> s.desc? b.ltvN-a.ltvN : a.ltvN-b.ltvN);
+    return {
+      chips: chipDefs.map(c=>({ ...c,
+        bg: s.typ===c.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: s.typ===c.k?'#66FF33':'#BDBFBD',
+        border: s.typ===c.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({typ:c.k}) })),
+      sortIcon: s.desc?'ph-arrow-down':'ph-arrow-up',
+      toggleSort:()=>this.setState(st=>({desc:!st.desc})),
+      rows: filtered.map(r=>({ ...r, typ:T[r.t].label, tColor:T[r.t].c, tBg:T[r.t].bg, tBorder:T[r.t].bd,
+        aBg: r.top?'linear-gradient(135deg,#6ECC1F,#22DD99)':'#1B1F1D',
+        aColor: r.top?'#05140B':'#BDBFBD' })),
+      countLabel: filtered.length+' z 148 klientów',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F7F8F5;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="L2 · Light Magazyn (próbka)" style="min-height:100vh;background:#F7F8F5;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#0F1210;padding:28px 32px 44px">
+  <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A;margin-bottom:8px">Panel · produkty w komisie · light</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Magazyn<span style="color:#0D9F55">.</span></h1>
+      </div>
+      <button style="display:inline-flex;align-items:center;gap:7px;height:42px;padding:0 20px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -10px rgba(13,159,85,0.45)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="height:34px;display:inline-flex;align-items:center;padding:0 15px;border-radius:999px;background:rgba(13,159,85,0.1);color:#0D9F55;border:1px solid rgba(13,159,85,0.3);font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Wszystkie · 34</span>
+      <span style="height:34px;display:inline-flex;align-items:center;padding:0 15px;border-radius:999px;background:#FFFFFF;color:#3A3E3B;border:1px solid rgba(15,18,16,0.1);font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer">W sprzedaży</span>
+      <span style="height:34px;display:inline-flex;align-items:center;padding:0 15px;border-radius:999px;background:#FFFFFF;color:#3A3E3B;border:1px solid rgba(15,18,16,0.1);font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer">Zarezerwowane</span>
+      <span style="height:34px;display:inline-flex;align-items:center;padding:0 15px;border-radius:999px;background:#FFFFFF;color:#3A3E3B;border:1px solid rgba(15,18,16,0.1);font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer">Wstrzymane</span>
+    </div>
+
+    <div style="background:#FFFFFF;border:1px solid rgba(15,18,16,0.09);border-radius:20px;overflow:hidden;box-shadow:0 4px 20px -8px rgba(15,18,16,0.08)">
+      <div style="display:grid;grid-template-columns:110px minmax(200px,1.7fr) 90px 76px 150px 90px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(15,18,16,0.08)">
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A">SKU</span>
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A">Koszulka</span>
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A;justify-self:end">Cena</span>
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A;justify-self:end">Prowizja</span>
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A">Status</span>
+        <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#6B6F6A">Dni</span>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:110px minmax(200px,1.7fr) 90px 76px 150px 90px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(15,18,16,0.05);transition:background .15s" style-hover="background:rgba(15,18,16,0.025)">
+          <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6B6F6A">{{ r.sku }}</span>
+          <span style="display:flex;align-items:center;gap:11px;min-width:0"><span style="width:38px;height:38px;flex-shrink:0;border-radius:10px;background:{{ r.crest }};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#FFFFFF">{{ r.cl }}</span><span style="min-width:0"><span style="display:block;font-weight:500;font-size:14px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.club }}</span><span style="display:block;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#6B6F6A">{{ r.meta }}</span></span></span>
+          <span style="font:500 14px 'IBM Plex Mono',monospace;justify-self:end">{{ r.price }}</span>
+          <span style="font:400 13px 'IBM Plex Mono',monospace;color:#6B6F6A;justify-self:end">{{ r.comm }}</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+          <span style="font:400 12px 'IBM Plex Mono',monospace;color:#6B6F6A">{{ r.days }}</span>
+        </div>
+      </sc-for>
+      <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#6B6F6A">5 z 34 pozycji · light: statusy ciemnieją dla kontrastu (WCAG AA), lime tylko na ciemnych elementach</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const S={
+      listed:{label:'W sprzedaży', c:'#0D7A42', bg:'rgba(13,159,85,0.1)', bd:'rgba(13,159,85,0.3)'},
+      reserved:{label:'Zarezerwowane', c:'#2E4FD6', bg:'rgba(74,107,255,0.1)', bd:'rgba(74,107,255,0.3)'},
+      held:{label:'Wstrzymane', c:'#8A6400', bg:'rgba(180,130,0,0.1)', bd:'rgba(180,130,0,0.3)'},
+    };
+    const rows=[
+      {sku:'KCB-26-A9F4', club:'Real Madryt', meta:'2011/12 · L · stan A', price:'2 400 zł', comm:'20%', s:'listed', days:'14 dni', crest:'#5A2D38', cl:'R'},
+      {sku:'KCB-26-B7D2', club:'FC Barcelona', meta:'2014/15 · M · stan A', price:'1 890 zł', comm:'18%', s:'reserved', days:'3 dni', crest:'#2D4460', cl:'B'},
+      {sku:'KCB-26-E5A1', club:'AC Milan', meta:'2006/07 · S · stan A', price:'3 200 zł', comm:'15%', s:'listed', days:'6 dni', crest:'#4A1D26', cl:'M'},
+      {sku:'KCB-26-F8C2', club:'Polska', meta:'EURO 2016 · M · stan C', price:'420 zł', comm:'25%', s:'held', days:'7 dni', crest:'#5A4D1D', cl:'P'},
+      {sku:'KCB-26-G2B9', club:'Juventus', meta:'2011/12 · L · stan B', price:'1 450 zł', comm:'20%', s:'listed', days:'19 dni', crest:'#3A3E48', cl:'J'},
+    ];
+    return { rows: rows.map(r=>({ ...r, status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd })) };
+  }
+}
+</script>
+</body>
+</html>

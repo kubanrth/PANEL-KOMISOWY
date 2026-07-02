@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="E2 · Wydania" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="wydania" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Wydania</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · operacje · wysyłki do kupujących</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Wydania<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:120px minmax(190px,1.5fr) 90px 200px 150px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">SKU</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Produkt</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Kurier</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Tracking</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:120px minmax(190px,1.5fr) 90px 200px 150px;gap:12px;align-items:center;min-height:56px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ r.sku }}</span>
+            <span style="display:flex;align-items:center;gap:11px;min-width:0"><span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%, {{ r.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ r.cl }}</span><span style="min-width:0"><span style="display:block;font-weight:500;font-size:14px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.club }}</span><span style="display:block;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ r.season }}</span></span></span>
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ r.courier }}</span>
+            <span style="display:flex;align-items:center;gap:7px;min-width:0">
+              <span style="font:500 12px 'IBM Plex Mono',monospace;color:{{ r.trackColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.tracking }}</span>
+              <sc-if value="{{ r.canCopy }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ r.onCopy }}" style="width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:transparent;color:{{ r.copyColor }};cursor:pointer" style-hover="background:#1D2120"><i class="ph {{ r.copyIcon }}" style="font-size:13px"></i></button>
+              </sc-if>
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">5 wysyłek · ostatnie 60 dni</span><span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">doręczalność 96%</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { copied:null };
+  renderVals(){
+    const S={
+      prep:{label:'Przygotowane', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+      sent:{label:'Wysłane', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      delivered:{label:'Doręczone', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      returned:{label:'Zwrot', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+    };
+    const rows=[
+      {sku:'KCB-26-E5A144', club:'AC Milan', season:'2006/07 · rozm. S', courier:'InPost', tracking:'IP-4429-8817-22', s:'sent', crest:'#2A0F14', cl:'M'},
+      {sku:'KCB-26-D2C831', club:'Real Madryt', season:'2013/14 · rozm. M', courier:'DPD', tracking:'DPD-99-38271', s:'delivered', crest:'#3A1D24', cl:'R'},
+      {sku:'KCB-26-G9B412', club:'Juventus', season:'2014/15 · rozm. L', courier:'InPost', tracking:'IP-1120-4451-90', s:'delivered', crest:'#22242A', cl:'J'},
+      {sku:'KCB-26-B7D593', club:'FC Barcelona', season:'2010/11 · rozm. M', courier:'DHL', tracking:'DHL-556-201', s:'returned', crest:'#1D2A3A', cl:'B'},
+      {sku:'KCB-26-L3D948', club:'AC Milan', season:'2010/11 · rozm. M', courier:'—', tracking:'oczekuje na nadanie', s:'prep', crest:'#2A0F14', cl:'M'},
+    ];
+    return {
+      rows: rows.map(r=>({ ...r,
+        status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        canCopy: r.s!=='prep',
+        trackColor: r.s==='prep'?'#4A4E4B':'#BDBFBD',
+        copyIcon: this.state.copied===r.sku?'ph-check':'ph-copy',
+        copyColor: this.state.copied===r.sku?'#22DD99':'#7B7F7B',
+        onCopy:()=>{ try{ navigator.clipboard && navigator.clipboard.writeText(r.tracking); }catch(e){}
+          this.setState({copied:r.sku}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({copied:null}),1800); },
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

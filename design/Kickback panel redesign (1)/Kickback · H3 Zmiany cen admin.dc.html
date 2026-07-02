@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="H3 · Zmiany cen (admin)" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="zmiany" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Zmiany cen</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · globalny audit cen</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Zmiany cen<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ c.onClick }}" style="height:34px;padding:0 15px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ c.label }}</button>
+        </sc-for>
+        <div style="flex:1"></div>
+        <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ countLabel }}</span>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:130px 130px minmax(170px,1.3fr) 190px minmax(150px,1.1fr) 100px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Timestamp</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Kto</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Produkt</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Z → Na</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Powód</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Kanał</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:130px 130px minmax(170px,1.3fr) 190px minmax(150px,1.1fr) 100px;gap:12px;align-items:center;min-height:56px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ r.ts }}</span>
+            <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:26px;height:26px;flex-shrink:0;border-radius:8px;background:{{ r.wBg }};border:1px solid {{ r.wBorder }};display:flex;align-items:center;justify-content:center"><i class="ph {{ r.wIcon }}" style="font-size:13px;color:{{ r.wColor }}"></i></span><span style="font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;color:{{ r.wColor }}">{{ r.who }}</span></span>
+            <span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.product }}</span>
+            <span style="display:flex;align-items:center;gap:7px;font:500 13px 'IBM Plex Mono',monospace"><span style="color:#7B7F7B">{{ r.from }}</span><i class="ph {{ r.arrow }}" style="font-size:14px;color:{{ r.dColor }}"></i><span style="color:{{ r.dColor }}">{{ r.to }}</span></span>
+            <span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.reason }}</span>
+            <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:#16191A;color:#7B7F7B;border:1px solid rgba(255,255,255,0.08);width:fit-content">{{ r.channel }}</span>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">6 z 214 zmian · pełny audit trail od marca 2026</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { who:'all' };
+  renderVals(){
+    const W={
+      klient:{who:'Klient', wColor:'#66FF33', wBg:'rgba(102,255,51,0.1)', wBorder:'rgba(102,255,51,0.25)', wIcon:'ph-user'},
+      admin:{who:'Admin', wColor:'#4A6BFF', wBg:'rgba(74,107,255,0.1)', wBorder:'rgba(74,107,255,0.25)', wIcon:'ph-shield-check'},
+      system:{who:'System', wColor:'#F5A623', wBg:'rgba(245,166,35,0.1)', wBorder:'rgba(245,166,35,0.25)', wIcon:'ph-gear-six'},
+    };
+    const rows=[
+      {ts:'2 lip, 08:14', w:'system', product:'Real Madryt 2011/12 · MK', from:'2 600 zł', to:'2 400 zł', up:false, reason:'Promocja tygodnia', channel:'Promo'},
+      {ts:'1 lip, 21:02', w:'klient', product:'AC Milan 2010/11 · KS', from:'1 900 zł', to:'1 800 zł', up:false, reason:'Korekta właściciela', channel:'Manual'},
+      {ts:'30 cze, 11:40', w:'admin', product:'Juventus 2011/12 · MK', from:'1 600 zł', to:'1 450 zł', up:false, reason:'Dostosowanie po A&QC', channel:'Manual'},
+      {ts:'29 cze, 16:25', w:'klient', product:'AC Milan 2006/07 · MK', from:'3 000 zł', to:'3 200 zł', up:true, reason:'Wzrost popytu retro', channel:'Manual'},
+      {ts:'28 cze, 09:00', w:'system', product:'Legia Warszawa 2016/17 · PB', from:'640 zł', to:'520 zł', up:false, reason:'Rotacja >21 dni', channel:'Sale'},
+      {ts:'26 cze, 14:50', w:'admin', product:'FC Barcelona 2008/09 · AW', from:'2 750 zł', to:'2 900 zł', up:true, reason:'Wycena rynkowa po A&QC', channel:'Manual'},
+    ];
+    const s=this.state;
+    const chipDefs=[{k:'all',label:'Wszyscy'},{k:'klient',label:'Klient'},{k:'admin',label:'Admin'},{k:'system',label:'System'}];
+    const filtered=rows.filter(r=>s.who==='all'||r.w===s.who);
+    return {
+      chips: chipDefs.map(c=>({ ...c,
+        bg: s.who===c.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: s.who===c.k?'#66FF33':'#BDBFBD',
+        border: s.who===c.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({who:c.k}) })),
+      rows: filtered.map((r,i)=>({ key:'r'+i, ...r, ...W[r.w],
+        arrow: r.up?'ph-arrow-up-right':'ph-arrow-down-right',
+        dColor: r.up?'#22DD99':'#FF5A47' })),
+      countLabel: filtered.length+' z 214 zmian',
+    };
+  }
+}
+</script>
+</body>
+</html>

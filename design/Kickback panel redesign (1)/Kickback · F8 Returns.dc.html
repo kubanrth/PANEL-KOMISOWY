@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="F8 · Returns" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="returns" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Returns</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FF5A47;border:1.5px solid #16191A"></span></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · zwroty od kupujących</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Returns<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:visible">
+        <div style="display:grid;grid-template-columns:100px minmax(160px,1.3fr) 110px 110px minmax(150px,1.2fr) 150px 110px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Zwrot</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Koszulka</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Komisant</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Kupujący</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Powód</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Akcja</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="3">
+          <div style="position:relative;display:grid;grid-template-columns:100px minmax(160px,1.3fr) 110px 110px minmax(150px,1.2fr) 150px 110px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ r.num }}</span>
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ r.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ r.cl }}</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.item }}</span></span>
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ r.owner }}</span>
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ r.buyer }}</span>
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.reason }}</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+            <span style="justify-self:end;position:relative">
+              <button onClick="{{ r.onMenu }}" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#1D2120">Akcja<i class="ph ph-caret-down" style="font-size:12px;color:#7B7F7B"></i></button>
+              <sc-if value="{{ r.menuOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;right:0;top:40px;z-index:30;min-width:190px;background:#1D2120;border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:6px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.8);animation:kb-in .16s ease">
+                  <button onClick="{{ r.onMenu }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:9px;padding:9px 12px;border:0;background:transparent;border-radius:9px;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#16191A"><i class="ph ph-check" style="font-size:15px;color:#22DD99"></i>Przyjmij zwrot</button>
+                  <button onClick="{{ r.onMenu }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:9px;padding:9px 12px;border:0;background:transparent;border-radius:9px;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#16191A"><i class="ph ph-x" style="font-size:15px;color:#FF5A47"></i>Odrzuć</button>
+                  <button onClick="{{ r.onMenu }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:9px;padding:9px 12px;border:0;background:transparent;border-radius:9px;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#16191A"><i class="ph ph-arrow-counter-clockwise" style="font-size:15px;color:#66FF33"></i>Wystaw ponownie</button>
+                </div>
+              </sc-if>
+            </span>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">3 zwroty · wskaźnik globalny 3,4%</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { menu:null };
+  renderVals(){
+    const S={
+      new:{label:'Nowy', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      handling:{label:'W obsłudze', c:'#FFCC00', bg:'rgba(255,204,0,0.13)', bd:'rgba(255,204,0,0.3)'},
+      relisted:{label:'Wystawiony ponownie', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+    };
+    const rows=[
+      {num:'ZW-26-0014', item:'FC Barcelona 2010/11 · M', owner:'Marcin K.', buyer:'K-8841', reason:'Rozmiar niezgodny z oczekiwaniem', s:'new', crest:'#1D2A3A', cl:'B'},
+      {num:'ZW-26-0013', item:'Juventus 2014/15 · L', owner:'Anna W.', buyer:'K-7702', reason:'Uszkodzenie w transporcie', s:'handling', crest:'#22242A', cl:'J'},
+      {num:'ZW-26-0012', item:'Legia Warszawa 2018/19 · XL', owner:'Marcin K.', buyer:'K-9155', reason:'Nieodebrana paczka', s:'relisted', crest:'#0F2A16', cl:'L'},
+    ];
+    return {
+      rows: rows.map(r=>({ ...r, status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        menuOpen: this.state.menu===r.num,
+        onMenu:()=>this.setState(st=>({menu: st.menu===r.num?null:r.num})) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

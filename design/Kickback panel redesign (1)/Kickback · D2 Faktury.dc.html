@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="D2 · Faktury" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="pf-fakt" expanded="portfel" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Portfel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Faktury</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · finanse · dokumenty</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.06;letter-spacing:-0.03em">Faktury<span style="color:#66FF33">.</span></h1>
+        </div>
+        <button style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer;flex-shrink:0" style-hover="background:#1D2120"><i class="ph ph-download-simple" style="font-size:16px;color:#66FF33"></i>Pobierz zbiorczo za rok</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ yearChips }}" as="y" hint-placeholder-count="3">
+          <button onClick="{{ y.onClick }}" style="height:34px;padding:0 16px;border-radius:999px;border:1px solid {{ y.border }};background:{{ y.bg }};color:{{ y.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ y.label }}</button>
+        </sc-for>
+        <div style="width:1px;height:22px;background:rgba(255,255,255,0.08);margin:0 4px"></div>
+        <sc-for list="{{ monthChips }}" as="m" hint-placeholder-count="4">
+          <button onClick="{{ m.onClick }}" style="height:34px;padding:0 14px;border-radius:999px;border:1px solid {{ m.border }};background:{{ m.bg }};color:{{ m.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ m.label }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:170px minmax(140px,1.2fr) 130px 110px 110px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Numer</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Okres</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Typ</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Kwota</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Dokument</span>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:170px minmax(140px,1.2fr) 130px 110px 110px;gap:12px;align-items:center;min-height:54px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">{{ r.num }}</span>
+              <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ r.period }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.tBg }};color:{{ r.tColor }};border:1px solid {{ r.tBorder }};width:fit-content"><span style="width:5px;height:5px;border-radius:9px;background:{{ r.tColor }}"></span>{{ r.typ }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;justify-self:end">{{ r.amount }}</span>
+              <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer;justify-self:end" style-hover="background:#1D2120;color:#F5F5F3"><i class="ph ph-file-pdf" style="font-size:15px"></i>PDF</button>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ countLabel }}</span><span style="font:500 12px 'IBM Plex Mono',monospace;color:#4A4E4B">suma: {{ sumLabel }}</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:56px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-file-text" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Brak faktur w tym okresie</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Zmień filtr roku lub miesiąca, albo wróć po pierwszej sprzedaży.</p></div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { year:'Wszystkie', month:'Wszystkie' };
+  renderVals(){
+    const T={
+      comm:{label:'Prowizja', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+      payout:{label:'Wypłata', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+    };
+    const all=[
+      {num:'FV/2026/06/012', period:'Czerwiec 2026', month:'Czerwiec', year:'2026', t:'comm', amount:'1 416 zł', val:1416},
+      {num:'FV/2026/06/004', period:'Czerwiec 2026', month:'Czerwiec', year:'2026', t:'payout', amount:'3 000 zł', val:3000},
+      {num:'FV/2026/05/009', period:'Maj 2026', month:'Maj', year:'2026', t:'comm', amount:'524 zł', val:524},
+      {num:'FV/2026/05/002', period:'Maj 2026', month:'Maj', year:'2026', t:'payout', amount:'2 400 zł', val:2400},
+      {num:'FV/2026/04/007', period:'Kwiecień 2026', month:'Kwiecień', year:'2026', t:'comm', amount:'618 zł', val:618},
+      {num:'FV/2026/04/001', period:'Kwiecień 2026', month:'Kwiecień', year:'2026', t:'payout', amount:'4 100 zł', val:4100},
+      {num:'FV/2025/12/015', period:'Grudzień 2025', month:'Grudzień', year:'2025', t:'comm', amount:'892 zł', val:892},
+      {num:'FV/2025/11/008', period:'Listopad 2025', month:'Listopad', year:'2025', t:'payout', amount:'1 850 zł', val:1850},
+    ];
+    const s=this.state;
+    const filtered=all.filter(r=>(s.year==='Wszystkie'||r.year===s.year)&&(s.month==='Wszystkie'||r.month===s.month));
+    const mk=(list,key,onPick)=>list.map(l=>({ label:l,
+      bg: s[key]===l?'rgba(102,255,51,0.13)':'#16191A',
+      color: s[key]===l?'#66FF33':'#BDBFBD',
+      border: s[key]===l?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+      onClick:()=>onPick(l) }));
+    const sum=filtered.reduce((a,r)=>a+r.val,0);
+    return {
+      yearChips: mk(['Wszystkie','2026','2025'],'year',(l)=>this.setState({year:l})),
+      monthChips: mk(['Wszystkie','Czerwiec','Maj','Kwiecień'],'month',(l)=>this.setState({month:l})),
+      rows: filtered.map(r=>({ ...r, typ:T[r.t].label, tColor:T[r.t].c, tBg:T[r.t].bg, tBorder:T[r.t].bd })),
+      hasRows: filtered.length>0, noRows: filtered.length===0,
+      countLabel: filtered.length+' dokumentów',
+      sumLabel: sum.toLocaleString('pl-PL').replace(/,/g,' ')+' zł',
+    };
+  }
+}
+</script>
+</body>
+</html>

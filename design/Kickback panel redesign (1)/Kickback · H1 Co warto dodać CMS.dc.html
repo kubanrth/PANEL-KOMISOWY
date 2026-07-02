@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="H1 · Co warto dodać CMS" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="cwd" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Co warto dodać</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · CMS rekomendacji</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Co warto dodać<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Nowa karta</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Tytuł</label><input onChange="{{ setTitle }}" defaultValue="Real Madryt away 2016/17" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+              <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Wygasa</label><div style="position:relative"><input defaultValue="14 lip 2026" style="width:100%;height:44px;padding:0 42px 0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /><i class="ph ph-calendar-blank" style="position:absolute;right:14px;top:13px;font-size:18px;color:#7B7F7B"></i></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Opis · 1 zdanie</label><input onChange="{{ setDesc }}" defaultValue="Brakuje w Twojej kolekcji — domknąłbyś komplet Realu z dekady." style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Priorytet</label>
+                <div style="display:flex;gap:8px">
+                  <sc-for list="{{ prios }}" as="p" hint-placeholder-count="3">
+                    <button onClick="{{ p.onClick }}" style="height:32px;padding:0 15px;border-radius:999px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.color }};font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ p.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Aktywna</label>
+                <button onClick="{{ toggleActive }}" style="width:38px;height:22px;border:0;border-radius:999px;background:{{ actTrack }};position:relative;cursor:pointer;transition:background .2s"><span style="position:absolute;top:2px;left:{{ actKnob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></button>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)">
+              <button style="height:42px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Anuluj</button>
+              <button style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 22px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-check" style="font-size:15px"></i>Zapisz kartę</button>
+            </div>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Istniejące karty · 6</h2></div>
+            <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;min-height:54px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);opacity:{{ c.op }};transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+                <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ c.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ c.cl }}</span>
+                <span style="flex:1;min-width:0;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.title }}</span>
+                <span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:{{ c.pBg }};color:{{ c.pColor }};border:1px solid {{ c.pBorder }}">{{ c.prio }}</span>
+                <button onClick="{{ c.onToggle }}" style="width:38px;height:22px;flex-shrink:0;border:0;border-radius:999px;background:{{ c.track }};position:relative;cursor:pointer;transition:background .2s"><span style="position:absolute;top:2px;left:{{ c.knob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="position:sticky;top:88px;display:flex;flex-direction:column;gap:12px">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Live preview — tak zobaczy klient</div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px -28px rgba(0,0,0,0.8)">
+            <div style="aspect-ratio:4/3;position:relative;background:radial-gradient(circle at 50% 32%, #3A1D24 0%, #0C0F0D 78%),repeating-linear-gradient(135deg,#0F1210 0 11px,#12160f 11px 22px);display:flex;align-items:center;justify-content:center">
+              <span style="font:500 10px 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:#4A4E4B">koszulka · 4:3</span>
+              <span style="position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:{{ pvBg }};color:{{ pvColor }};border:1px solid {{ pvBorder }}"><span style="width:5px;height:5px;border-radius:9px;background:{{ pvColor }}"></span>{{ pvPrio }}</span>
+              <span style="position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:rgba(5,8,7,0.6);color:#7B7F7B;border:1px solid rgba(255,255,255,0.08)">Kurator</span>
+            </div>
+            <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%, #3A1D24 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">R</span><div style="min-width:0"><div style="font-weight:500;font-size:14px;letter-spacing:-0.01em">{{ pvTitle }}</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">2016/17</div></div></div>
+              <p style="margin:0;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ pvDesc }}</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05)">
+                <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">wygasa za 12 dni</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#66FF33"><i class="ph ph-plus" style="font-size:14px"></i>Dodaj do oferty</span>
+              </div>
+            </div>
+          </div>
+          <sc-if value="{{ inactive }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.22)"><i class="ph ph-eye-slash" style="font-size:16px;color:#FFCC00"></i><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Karta nieaktywna — klienci jej nie zobaczą.</span></div>
+          </sc-if>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { prio:'high', active:true, title:null, desc:null, toggles:{c1:true,c2:true,c3:false} };
+  renderVals(){
+    const P={
+      high:{label:'Wysoki', c:'#66FF33', bg:'rgba(102,255,51,0.14)', bd:'rgba(102,255,51,0.3)'},
+      mid:{label:'Średni', c:'#7FA0FF', bg:'rgba(74,107,255,0.14)', bd:'rgba(74,107,255,0.3)'},
+      low:{label:'Niski', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.1)'},
+    };
+    const s=this.state;
+    const cards=[
+      {id:'c1', title:'Juventus home 2011/12', p:'mid', crest:'#22242A', cl:'J'},
+      {id:'c2', title:'Polska EURO 2016', p:'high', crest:'#2A2410', cl:'P'},
+      {id:'c3', title:'AC Milan home 2010/11', p:'low', crest:'#2A0F14', cl:'M'},
+    ];
+    return {
+      prios: Object.keys(P).map(k=>({ label:P[k].label,
+        bg: s.prio===k?P[k].bg:'#16191A', color: s.prio===k?P[k].c:'#BDBFBD',
+        border: s.prio===k?P[k].bd:'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({prio:k}) })),
+      actTrack: s.active?'#22DD99':'#2A2E2C', actKnob: s.active?'18px':'2px',
+      toggleActive:()=>this.setState(st=>({active:!st.active})),
+      inactive: !s.active,
+      setTitle:(e)=>this.setState({title:e.target.value}),
+      setDesc:(e)=>this.setState({desc:e.target.value}),
+      pvTitle: s.title ?? 'Real Madryt away 2016/17',
+      pvDesc: s.desc ?? 'Brakuje w Twojej kolekcji — domknąłbyś komplet Realu z dekady.',
+      pvPrio: P[s.prio].label, pvColor: P[s.prio].c, pvBg: P[s.prio].bg, pvBorder: P[s.prio].bd,
+      cards: cards.map(c=>{
+        const on=!!s.toggles[c.id];
+        return { ...c, prio:P[c.p].label, pColor:P[c.p].c, pBg:P[c.p].bg, pBorder:P[c.p].bd,
+          op: on?1:0.55, track: on?'#22DD99':'#2A2E2C', knob: on?'18px':'2px',
+          onToggle:()=>this.setState(st=>({toggles:{...st.toggles,[c.id]:!st.toggles[c.id]}})) };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

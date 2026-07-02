@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#08100B;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div style="font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;padding:44px 48px 100px">
+
+  <section id="t1" style="scroll-margin-top:20px">
+    <div style="display:flex;align-items:baseline;gap:11px;margin:0 0 8px">
+      <a href="#t1" style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:0.04em;padding:4px 9px;background:#66FF33;color:#05140B;border-radius:6px;text-decoration:none">1</a>
+      <span style="font-weight:600;font-size:15px;letter-spacing:-0.01em">Sidebary — klient + admin (FocusFlow)</span>
+      <span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">pełna struktura tras · 4 stany każdy · klikalne (expand/collapse z pamięcią)</span>
+    </div>
+    <p style="margin:0 0 30px;font:400 12px/1.6 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;max-width:880px">Jeden komponent, dwa warianty. Mikroelementy ze stylu bazowego: kafelek ikony 40×40, chevron w ramce, gradientowy kafelek aktywnej pozycji, kolorowe kropki subpozycji, okrągłe badge. Admin: coral tint w headerze + pill ADMIN + czerwona kropka.</p>
+
+    <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#22DD99;margin:0 0 16px">Klient — panel komisanta</div>
+    <div style="display:flex;gap:44px;align-items:flex-start;flex-wrap:wrap;margin-bottom:52px">
+
+      <div id="1a" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1a" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1a</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Default 260 · Oferty expanded · pamięć localStorage</span></div>
+        <div data-screen-label="Sidebar klient · default" style="border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="klient" mode="default" persist="{{ true }}" hint-size="260px,1460px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1b" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px;width:240px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1b" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1b</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Collapsed 72 · tooltip</span></div>
+        <div data-screen-label="Sidebar klient · collapsed" style="width:74px;border:1px solid rgba(255,255,255,0.08);border-radius:16px;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="klient" mode="collapsed" show-tooltip="{{ true }}" hint-size="72px,1000px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1c" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1c" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1c</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Mobile sheet 390 · sticky header + bottom, body scroll</span></div>
+        <div data-screen-label="Sidebar klient · mobile" style="width:390px;height:820px;border:1px solid rgba(255,255,255,0.1);border-radius:28px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="klient" mode="mobile" style="display:block;width:100%;height:100%" hint-size="390px,820px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1d" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1d" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1d</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Aktywny subitem · Portfel → Historia wypłat (parent nieaktywny)</span></div>
+        <div data-screen-label="Sidebar klient · subitem aktywny" style="border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="pf-hist" expanded="portfel" hint-size="260px,1240px"></dc-import>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:#FF5A47;margin:0 0 16px">Admin — back-office</div>
+    <div style="display:flex;gap:44px;align-items:flex-start;flex-wrap:wrap;margin-bottom:52px">
+
+      <div id="1e" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1e" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1e</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Default 260 · A&amp;QC expanded · coral alerty (&gt;10, &gt;20)</span></div>
+        <div data-screen-label="Sidebar admin · default" style="border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="admin" mode="default" persist="{{ true }}" hint-size="260px,1560px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1f" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px;width:240px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1f" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1f</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Collapsed 72 · tooltip A&amp;QC</span></div>
+        <div data-screen-label="Sidebar admin · collapsed" style="width:74px;border:1px solid rgba(255,255,255,0.08);border-radius:16px;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="admin" mode="collapsed" show-tooltip="{{ true }}" hint-size="72px,1140px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1g" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1g" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1g</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Mobile sheet 390</span></div>
+        <div data-screen-label="Sidebar admin · mobile" style="width:390px;height:820px;border:1px solid rgba(255,255,255,0.1);border-radius:28px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="admin" mode="mobile" style="display:block;width:100%;height:100%" hint-size="390px,820px"></dc-import>
+        </div>
+      </div>
+
+      <div id="1h" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;gap:8px"><a href="#1h" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1h</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Alert state · Wypłaty 23 (coral) → Do zrealizowania aktywny</span></div>
+        <div data-screen-label="Sidebar admin · alert" style="border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;background:#0A0D0B;box-shadow:0 30px 80px -40px rgba(0,0,0,0.8)">
+          <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="none" active-sub="po-todo" expanded="payouts" hint-size="260px,1400px"></dc-import>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="1i" style="scroll-margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:1150px">
+      <div style="display:flex;align-items:baseline;gap:8px"><a href="#1i" style="font:600 11px 'IBM Plex Mono',monospace;padding:3px 8px;background:rgba(255,255,255,0.09);color:#F5F5F3;border-radius:6px;text-decoration:none">1i</a><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#9A9E9A">Component sheet — anatomia + Tailwind handoff</span></div>
+      <div data-screen-label="Sidebar · component sheet" style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:4px">
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:40px;height:40px;border-radius:10px;background:#1B1F1D;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center"><i class="ph ph-package" style="font-size:19px;color:#D8DAD6"></i></span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;flex:1">Item</span><span style="min-width:22px;height:22px;border-radius:999px;padding:0 6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);display:flex;align-items:center;justify-content:center;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">34</span></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Sidebar Item</span> — row: h-11 gap-2.5 rounded-xl hover:bg-white/[.03] · tile: size-10 rounded-[10px] bg-[#1B1F1D] border-white/[.07] · label: text-sm font-medium text-[#E9EBE7] · badge: min-w-[22px] h-[22px] rounded-full bg-white/5 border-white/[.09] text-[11px]</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:40px;height:40px;border-radius:10px;background:linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%);box-shadow:0 8px 20px -6px rgba(34,221,153,0.55),inset 0 1px 0 rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center"><i class="ph ph-squares-four" style="font-size:19px;color:#fff"></i></span><span style="font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:#fff">Item — active</span></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Active</span> — tile: bg-[linear-gradient(140deg,#9BFF57,#37D663_45%,#0C9B52)] shadow-[0_8px_20px_-6px_rgba(34,221,153,.55),inset_0_1px_0_rgba(255,255,255,.35)] · icon: text-white · label: font-semibold text-white — kafelek jest wskaźnikiem, bez tła rzędu</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="border-radius:14px;background:#131716;border:1px solid rgba(255,255,255,0.05);padding:6px"><div style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:#101413;display:flex;align-items:center;justify-content:center"><i class="ph ph-caret-up" style="font-size:13px;color:#BDBFBD"></i></span><span style="width:40px;height:40px;border-radius:10px;background:#1B1F1D;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center"><i class="ph ph-tray" style="font-size:19px;color:#D8DAD6"></i></span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;flex:1">Oferty</span><span style="min-width:22px;height:22px;border-radius:999px;padding:0 6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);display:flex;align-items:center;justify-content:center;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;margin-right:2px">21</span></div></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Item Expandable</span> — chevron: w-7 h-10 rounded-[10px] bg-[#101413] border-white/[.08] (rotacja caret up/down) · container expanded: rounded-[14px] bg-[#131716] border-white/5 p-1.5 · stan zapisywany per user: localStorage kb-sb-{variant}-{id}</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;flex-direction:column"><div style="display:flex;align-items:center;gap:10px;min-height:32px"><span style="width:8px;height:8px;border-radius:50%;background:#4A6BFF;opacity:0.6"></span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;flex:1">W obiegu</span><span style="min-width:20px;height:20px;border-radius:999px;padding:0 5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">9</span></div><div style="display:flex;align-items:center;gap:10px;min-height:32px;background:rgba(255,255,255,0.04);border-radius:10px;padding:0 6px"><span style="width:8px;height:8px;border-radius:50%;background:#22DD99"></span><span style="font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#fff;flex:1">Sprzedane — active</span></div></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Subitem</span> — h-9 pl-[46px] text-[13px] text-[#BDBFBD] · dot: size-2 rounded-full opacity-60 · active: text-white font-semibold opacity-100 bg-white/[.04] rounded-[10px] · hover: text-white, dot 100%</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;flex-direction:column;gap:6px"><span style="font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Operacje</span><div style="display:flex;gap:12px;align-items:center"><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#22DD99"></span>done</span><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#66FF33"></span>nowe</span><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#4A6BFF"></span>w toku</span><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#FFCC00"></span>uwaga</span><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#FF5A47"></span>problem</span><span style="display:flex;align-items:center;gap:5px;font:400 11px 'IBM Plex Mono',monospace;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:50%;background:#7B7F7B"></span>archiwum</span></div></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Section header + dot semantics</span> — text-[11px] uppercase tracking-[.08em] text-[#7B7F7B] pt-4 pb-2 · identyczne mapowanie kolorów klient/admin: mint=zakończone · lime=nowe/rekomendacja · blue=w toku · yellow=wymaga działania · coral=problem · mute=archiwum</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;align-items:center;gap:10px"><span style="min-width:22px;height:22px;border-radius:999px;padding:0 6px;background:rgba(255,90,71,0.15);border:1px solid rgba(255,90,71,0.3);display:flex;align-items:center;justify-content:center;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#FF5A47">14</span><span style="width:22px;height:22px;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:#FFCC00"></span></span><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">alert count · dot signal</span></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Badge rules</span> — liczba gdy user ma coś do zrobienia · alert (&gt;threshold): bg-[#FF5A47]/15 text-[#FF5A47] border-[#FF5A47]/25 · dot 8×8 gdy sygnał bez liczby · nic dla stron bez stanu (Analityka, Ustawienia)</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;padding:14px 0">
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid rgba(255,90,71,0.16);border-radius:14px;background:linear-gradient(180deg,rgba(255,90,71,0.06),rgba(255,255,255,0.02))"><span style="width:28px;height:28px;border-radius:9px;background:linear-gradient(140deg,#9BFF57,#37D663 45%,#0C9B52);display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:7px solid #05140B;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px"></span></span><span style="font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Kickback</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase">Admin</span><span style="display:flex;align-items:center;gap:4px;font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B"><span style="width:6px;height:6px;border-radius:50%;background:#FF5A47"></span>Admin operacyjny</span></div>
+          <div style="font:400 11px/1.7 'IBM Plex Mono',monospace;color:#7B7F7B"><span style="color:#22DD99">Header (branding) + admin differentiator</span> — karta: rounded-2xl border-white/[.09] bg-white/[.02] · admin: border-[#FF5A47]/15 bg-gradient-to-b from-[#FF5A47]/[.06] + pill ADMIN + kropka 6×6 przy subtitle · collapse btn: size-8 rounded-[10px] bg-[#16191A]</div>
+        </div>
+
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);font:400 11px/1.8 'IBM Plex Mono',monospace;color:#4A4E4B">a11y: Tab/Enter/Space natywnie (button), fokus ring lime · default: jedna sekcja rozwinięta (klient: Oferty, admin: A&amp;QC) · Logout tylko w avatar dropdown · mobile: sheet-from-left, body scroll, sticky header+bottom</div>
+      </div>
+    </div>
+
+    <p style="margin:32px 0 0;font:400 13px/1.7 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;max-width:960px">Dalej: „wstaw ten sidebar do B1 (wariant <a href="#1a" style="font:600 11px 'IBM Plex Mono',monospace;padding:2px 7px;background:rgba(255,255,255,0.08);color:#F5F5F3;border-radius:5px;text-decoration:none">1a</a>)" · „zmień kolejność sekcji / przenieś pozycję" · „pokaż stan hover i focus ring" · „dodaj wariant z searchem tylko w topbarze"</p>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

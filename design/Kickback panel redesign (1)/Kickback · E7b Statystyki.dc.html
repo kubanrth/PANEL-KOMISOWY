@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="E7b · Statystyki" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="an-dash" expanded="analityka" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Statystyki</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · szybki przegląd</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Statystyki<span style="color:#66FF33">.</span></h1>
+        </div>
+        <a href="Kickback · E7a Analityka.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none;flex-shrink:0" style-hover="background:#1D2120">Deep dive<i class="ph ph-arrow-right" style="font-size:14px;color:#66FF33"></i></a>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="6">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:transform .18s" style-hover="transform:translateY(-2px)">
+            <span style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">{{ k.label }}</span>
+            <span style="font:300 24px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">{{ k.value }}</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;color:{{ k.dColor }}">{{ k.delta }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:stretch">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Wartość sprzedaży · 6 miesięcy</div><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">zł / mies</span></div>
+          <svg viewBox="0 0 620 200" width="100%" height="auto" style="display:block" preserveAspectRatio="none"><line x1="0" y1="178" x2="620" y2="178" stroke="rgba(255,255,255,0.08)"/><rect x="30" y="118" width="48" height="60" rx="6" fill="#1D2120"/><rect x="130" y="98" width="48" height="80" rx="6" fill="#1D2120"/><rect x="230" y="128" width="48" height="50" rx="6" fill="#1D2120"/><rect x="330" y="70" width="48" height="108" rx="6" fill="url(#sb)"/><rect x="430" y="90" width="48" height="88" rx="6" fill="#1D2120"/><rect x="530" y="40" width="48" height="138" rx="6" fill="url(#sb)"/><defs><linearGradient id="sb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#66FF33"/><stop offset="1" stop-color="#0D9F55"/></linearGradient></defs></svg>
+          <div style="display:flex;justify-content:space-around;margin-top:10px;font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B"><span>sty</span><span>lut</span><span>mar</span><span>kwi</span><span>maj</span><span>cze</span></div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08);font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Ostatnie sprzedaże</div>
+          <sc-for list="{{ recent }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:11px;min-height:52px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ r.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ r.cl }}</span>
+              <span style="flex:1;min-width:0"><span style="display:block;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="display:block;font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ r.date }}</span></span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#22DD99">{{ r.price }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const kpis=[
+      {label:'Sprzedane', value:'12', delta:'+3 vs Q1', up:true},
+      {label:'Przychód', value:'19,7 tys.', delta:'+34%', up:true},
+      {label:'Śr. cena', value:'1 780 zł', delta:'+9%', up:true},
+      {label:'Śr. czas sprzedaży', value:'16 dni', delta:'−4 dni', up:true},
+      {label:'Prowizje', value:'4 280 zł', delta:'śr. 19%', up:null},
+      {label:'Zwroty', value:'0%', delta:'12 sprzedaży', up:null},
+    ];
+    const recent=[
+      {name:'AC Milan 2006/07', date:'28 cze', price:'3 200 zł', crest:'#2A0F14', cl:'M'},
+      {name:'Real Madryt 2013/14', date:'19 cze', price:'2 900 zł', crest:'#3A1D24', cl:'R'},
+      {name:'Juventus 2014/15', date:'8 cze', price:'2 300 zł', crest:'#22242A', cl:'J'},
+      {name:'Legia Warszawa 2018/19', date:'24 maj', price:'640 zł', crest:'#0F2A16', cl:'L'},
+    ];
+    return {
+      kpis: kpis.map(k=>({ ...k, dColor: k.up===true?'#22DD99': k.up===false?'#FF5A47':'#7B7F7B' })),
+      recent,
+    };
+  }
+}
+</script>
+</body>
+</html>

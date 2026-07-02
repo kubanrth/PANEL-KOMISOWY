@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="G4 · CRM detal" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="crm" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">CRM</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Vintage11</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <a href="Kickback · G3 CRM.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 16px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120"><i class="ph ph-arrow-left" style="font-size:15px"></i>Kanban</a>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1140px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">CRM · relacja</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="margin:0;font-weight:300;font-size:34px;line-height:1.16;letter-spacing:-0.03em">Vintage11 sp. z o.o<span style="color:#66FF33">.</span></h1><span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(255,204,0,0.13);color:#FFCC00;border:1px solid rgba(255,204,0,0.3)"><span style="width:5px;height:5px;border-radius:9px;background:#FFCC00"></span>Ofertowanie</span></div>
+        </div>
+        <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.45);flex-shrink:0" style-hover="transform:translateY(-2px)"><i class="ph ph-plus" style="font-size:16px"></i>Dodaj aktywność</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:16px">Touchpointy</div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ points }}" as="p" hint-placeholder-count="4">
+              <div style="display:flex;gap:13px">
+                <div style="display:flex;flex-direction:column;align-items:center;width:34px">
+                  <span style="width:34px;height:34px;flex-shrink:0;border-radius:10px;background:{{ p.iBg }};border:1px solid {{ p.iBorder }};display:flex;align-items:center;justify-content:center"><i class="ph {{ p.icon }}" style="font-size:16px;color:{{ p.iColor }}"></i></span>
+                  <sc-if value="{{ p.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;flex:1;min-height:16px;background:rgba(255,255,255,0.07);margin:4px 0"></span></sc-if>
+                </div>
+                <div style="padding-bottom:{{ p.pb }}px;flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ p.title }}</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B;flex-shrink:0">{{ p.date }}</span></div>
+                  <div style="font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:3px">{{ p.desc }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Tagi</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(74,107,255,0.12);color:#7FA0FF;border:1px solid rgba(74,107,255,0.25)">B2B</span>
+              <span style="display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(245,166,35,0.12);color:#F5A623;border:1px solid rgba(245,166,35,0.25)">Retro dealer</span>
+              <span style="display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:#16191A;color:#BDBFBD;border:1px solid rgba(255,255,255,0.08)">Warszawa</span>
+            </div>
+          </div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:11px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Zadania</div>
+            <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="2">
+              <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:10px;background:transparent;border:0;cursor:pointer;padding:0;text-align:left">
+                <span style="width:18px;height:18px;flex-shrink:0;border-radius:6px;border:1px solid {{ t.border }};background:{{ t.bg }};display:flex;align-items:center;justify-content:center;transition:.15s"><sc-if value="{{ t.done }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></span>
+                <span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ t.color }};text-decoration:{{ t.deco }}">{{ t.label }}</span>
+                <span style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ t.due }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Notatki</div>
+            <textarea placeholder="Notatka z ostatniej rozmowy…" style="min-height:76px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)">Zależy im na dedykowanej prowizji 12% przy wolumenie 40+ szt./mies. Decyzja po stronie zarządu do 10 lip.</textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { tasks:{t1:false,t2:true} };
+  renderVals(){
+    const points=[
+      {icon:'ph-phone', iColor:'#66FF33', iBg:'rgba(102,255,51,0.08)', iBorder:'rgba(102,255,51,0.2)', title:'Telefon — negocjacja prowizji', date:'28 cze', desc:'Proponują 12% przy 40+ szt./mies. Ustalono follow-up po decyzji zarządu.'},
+      {icon:'ph-envelope-simple', iColor:'#4A6BFF', iBg:'rgba(74,107,255,0.08)', iBorder:'rgba(74,107,255,0.2)', title:'E-mail — wysłano ofertę B2B', date:'24 cze', desc:'Cennik komisu + warunki magazynowania dla dealerów.'},
+      {icon:'ph-users', iColor:'#F5A623', iBg:'rgba(245,166,35,0.08)', iBorder:'rgba(245,166,35,0.2)', title:'Spotkanie — showroom Warszawa', date:'18 cze', desc:'Obejrzeliśmy kolekcję ~60 szt., głównie Serie A lata 90.'},
+      {icon:'ph-plus-circle', iColor:'#7B7F7B', iBg:'#16191A', iBorder:'rgba(255,255,255,0.07)', title:'Lead utworzony', date:'12 cze', desc:'Polecenie od Anny W.'},
+    ];
+    const taskDefs=[
+      {id:'t1', label:'Przygotować aneks prowizyjny 12%', due:'do 8 lip'},
+      {id:'t2', label:'Wysłać katalog zapotrzebowania', due:'zrobione'},
+    ];
+    return {
+      points: points.map((p,i)=>({ ...p, hasLine:i<points.length-1, pb:i<points.length-1?18:0 })),
+      tasks: taskDefs.map(t=>{
+        const done=!!this.state.tasks[t.id];
+        return { ...t, done,
+          bg: done?'#66FF33':'transparent', border: done?'#66FF33':'rgba(255,255,255,0.22)',
+          color: done?'#7B7F7B':'#F5F5F3', deco: done?'line-through':'none',
+          onClick:()=>this.setState(s=>({tasks:{...s.tasks,[t.id]:!s.tasks[t.id]}})) };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

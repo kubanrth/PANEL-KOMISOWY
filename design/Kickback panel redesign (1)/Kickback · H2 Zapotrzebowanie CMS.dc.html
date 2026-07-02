@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="H2 · Zapotrzebowanie CMS" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="wtb" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Zapotrzebowanie</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · CMS ogłoszeń WTB</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Zapotrzebowanie<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Nowe ogłoszenie</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <sc-for list="{{ kinds }}" as="k" hint-placeholder-count="3">
+            <button onClick="{{ k.onClick }}" style="height:34px;padding:0 16px;border-radius:999px;border:1px solid {{ k.border }};background:{{ k.bg }};color:{{ k.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ k.label }}</button>
+          </sc-for>
+          <div style="flex:1"></div>
+          <button onClick="{{ toggleRetro }}" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:999px;border:1px solid {{ retroBorder }};background:{{ retroBg }};color:{{ retroColor }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s"><i class="ph ph-star" style="font-size:14px"></i>Retro</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">{{ kindLabel }}</label><input placeholder="Zacznij pisać — typeahead z katalogu…" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Sezon</label><input placeholder="np. 2008/09" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Cena docelowa</label><input placeholder="do 2 500 zł" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Rozmiary</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ sizes }}" as="sz" hint-placeholder-count="6">
+              <button onClick="{{ sz.onClick }}" style="height:34px;min-width:46px;padding:0 14px;border-radius:10px;border:1px solid {{ sz.border }};background:{{ sz.bg }};color:{{ sz.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ sz.k }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Notatka publiczna</label><textarea placeholder="Widoczna dla klientów w panelu…" style="min-height:64px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)"></textarea></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Notatka wewnętrzna</label><textarea placeholder="Tylko dla zespołu…" style="min-height:64px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)"></textarea></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)">
+          <button style="height:42px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Zapisz szkic</button>
+          <button style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 22px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-megaphone" style="font-size:15px"></i>Opublikuj ogłoszenie</button>
+        </div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden">
+        <button onClick="{{ toggleCsv }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:16px 20px;border:0;background:transparent;cursor:pointer;text-align:left" style-hover="background:#16191A">
+          <i class="ph ph-file-csv" style="font-size:20px;color:#66FF33"></i>
+          <span style="flex:1;font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:#F5F5F3">Bulk import z CSV</span>
+          <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">rodzaj;nazwa;sezon;retro;rozmiary;cena</span>
+          <i class="ph ph-caret-down" style="font-size:15px;color:#7B7F7B;display:inline-block;transform:{{ csvCaret }};transition:transform .22s"></i>
+        </button>
+        <div style="overflow:hidden;max-height:{{ csvMaxH }};opacity:{{ csvOp }};transition:max-height .26s cubic-bezier(.4,0,.2,1),opacity .2s">
+          <div style="padding:4px 20px 18px;display:flex;flex-direction:column;gap:12px">
+            <textarea placeholder="klub;FC Barcelona;2008/09;tak;S,M,L;2500&#10;reprezentacja;Polska;2016;nie;M,L;1200" style="min-height:86px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 12px/1.6 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)"></textarea>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Parser pokaże podgląd przed importem.</span><button style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-upload-simple" style="font-size:15px"></i>Importuj</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Aktywne ogłoszenia · 8</h2><a href="Kickback · B3 Zapotrzebowanie.dc.html" style="font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#66FF33;text-decoration:none">Podgląd u klienta →</a></div>
+        <sc-for list="{{ active }}" as="a" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;min-height:54px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ a.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ a.cl }}</span>
+            <span style="flex:1;min-width:0;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</span>
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ a.meta }}</span>
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#22DD99">{{ a.price }}</span>
+            <button style="height:30px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#F5F5F3">Edytuj</button>
+            <button style="height:30px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer" style-hover="background:rgba(255,90,71,0.1);color:#FF5A47">Wyłącz</button>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px;border-top:1px solid rgba(255,255,255,0.06)">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:10px">Archiwum · 12</div>
+          <div style="display:flex;align-items:center;gap:12px;opacity:.55">
+            <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:#16191A;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">R</span>
+            <span style="flex:1;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Real Madryt · 2013/14 · wygasło 24 cze</span>
+            <button style="height:30px;padding:0 12px;border:1px solid rgba(255,255,255,0.12);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer">Aktywuj</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { kind:'klub', retro:true, sizes:{S:true,M:true,L:true}, csv:false };
+  renderVals(){
+    const s=this.state;
+    const kinds=[{k:'klub',label:'Klub'},{k:'repr',label:'Reprezentacja'},{k:'nazw',label:'Nazwisko'}].map(k=>({ ...k,
+      bg: s.kind===k.k?'rgba(102,255,51,0.13)':'#16191A',
+      color: s.kind===k.k?'#66FF33':'#BDBFBD',
+      border: s.kind===k.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+      onClick:()=>this.setState({kind:k.k}) }));
+    const sizes=['XS','S','M','L','XL','XXL'].map(k=>({ k, on:!!s.sizes[k],
+      bg: s.sizes[k]?'#66FF33':'#16191A', color: s.sizes[k]?'#050807':'#BDBFBD',
+      border: s.sizes[k]?'#66FF33':'rgba(255,255,255,0.08)',
+      onClick:()=>this.setState(st=>({sizes:{...st.sizes,[k]:!st.sizes[k]}})) }));
+    const active=[
+      {name:'FC Barcelona', cl:'B', crest:'#1D2A3A', meta:'klub · retro · 2008/09 · S M L', price:'do 2 500 zł'},
+      {name:'Reprezentacja Polski', cl:'P', crest:'#2A2410', meta:'reprezentacja · EURO 2016 · M L', price:'do 1 200 zł'},
+      {name:'AC Milan', cl:'M', crest:'#2A0F14', meta:'klub · retro · 2006/07 · S M', price:'do 3 000 zł'},
+    ];
+    return {
+      kinds, sizes,
+      kindLabel: s.kind==='klub'?'Klub':s.kind==='repr'?'Reprezentacja':'Nazwisko zawodnika',
+      retroBg: s.retro?'rgba(245,166,35,0.14)':'#16191A', retroColor: s.retro?'#F5A623':'#BDBFBD',
+      retroBorder: s.retro?'rgba(245,166,35,0.4)':'rgba(255,255,255,0.08)',
+      toggleRetro:()=>this.setState(st=>({retro:!st.retro})),
+      csvCaret: s.csv?'rotate(180deg)':'rotate(0deg)',
+      csvMaxH: s.csv?'220px':'0px', csvOp: s.csv?1:0,
+      toggleCsv:()=>this.setState(st=>({csv:!st.csv})),
+      active,
+    };
+  }
+}
+</script>
+</body>
+</html>

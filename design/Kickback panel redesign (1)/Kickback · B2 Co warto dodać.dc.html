@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="B2 · Co warto dodać" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="plany" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Co warto dodać</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · rekomendacje</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Co warto dodać<span style="color:#66FF33">.</span></h1>
+        </div>
+        <div style="display:inline-flex;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:999px;padding:4px;gap:4px">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="height:32px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:.15s">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+            <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px -16px rgba(0,0,0,0.7)">
+              <div style="aspect-ratio:4/3;position:relative;background:radial-gradient(circle at 50% 32%, {{ c.crest }} 0%, #0C0F0D 78%),repeating-linear-gradient(135deg,#0F1210 0 11px,#12160f 11px 22px);display:flex;align-items:center;justify-content:center">
+                <span style="font:500 10px 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:#4A4E4B">koszulka · 4:3</span>
+                <span style="position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:{{ c.pBg }};color:{{ c.pColor }};border:1px solid {{ c.pBorder }}"><span style="width:5px;height:5px;border-radius:9px;background:{{ c.pColor }}"></span>{{ c.prio }}</span>
+                <span style="position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:rgba(5,8,7,0.6);color:#7B7F7B;border:1px solid rgba(255,255,255,0.08)">{{ c.src }}</span>
+              </div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%, {{ c.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ c.cl }}</span>
+                  <div style="min-width:0"><div style="font-weight:500;font-size:14px;letter-spacing:-0.01em">{{ c.title }}</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ c.season }}</div></div>
+                </div>
+                <p style="margin:0;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;flex:1">{{ c.desc }}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05)">
+                  <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ c.expires }}</span>
+                  <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#66FF33;cursor:pointer" style-hover="background:rgba(102,255,51,0.08)"><i class="ph ph-plus" style="font-size:14px"></i>Dodaj do oferty</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noCards }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-sparkle" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Wszystko już masz</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Wróć po nowe rekomendacje jutro — odświeżamy je codziennie rano.</p></div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;pustyStan&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  state = { tab:'all' };
+  renderVals(){
+    const P={
+      high:{label:'Wysoki', c:'#66FF33', bg:'rgba(102,255,51,0.14)', bd:'rgba(102,255,51,0.3)'},
+      mid:{label:'Średni', c:'#7FA0FF', bg:'rgba(74,107,255,0.14)', bd:'rgba(74,107,255,0.3)'},
+      low:{label:'Niski', c:'#7B7F7B', bg:'rgba(5,8,7,0.6)', bd:'rgba(255,255,255,0.1)'},
+    };
+    const all=[
+      {title:'Real Madryt away', season:'2016/17', p:'high', src:'kur', desc:'Brakuje w Twojej kolekcji — domknąłbyś komplet Realu z dekady.', expires:'wygasa za 12 dni', crest:'#3A1D24', cl:'R'},
+      {title:'Juventus home', season:'2011/12', p:'mid', src:'ai', desc:'Wysoki popyt retro w tym miesiącu, średnio 21 dni do sprzedaży.', expires:'wygasa za 9 dni', crest:'#22242A', cl:'J'},
+      {title:'Polska EURO', season:'2016', p:'high', src:'kur', desc:'Szukana przez 3 kupujących w tym tygodniu. Rozmiar M i L.', expires:'wygasa za 5 dni', crest:'#2A2410', cl:'P'},
+      {title:'AC Milan home', season:'2010/11', p:'low', src:'ai', desc:'Stabilny popyt, dobra cena wejścia dla stanu B.', expires:'wygasa za 20 dni', crest:'#2A0F14', cl:'M'},
+      {title:'Legia Warszawa', season:'2016/17', p:'mid', src:'kur', desc:'Lokalny klasyk — najszybsza rotacja w kategorii Ekstraklasa.', expires:'wygasa za 14 dni', crest:'#0F2A16', cl:'L'},
+      {title:'FC Barcelona home', season:'2008/09', p:'high', src:'ai', desc:'Sezon treble zawsze w cenie. Retro premium przy stanie A.', expires:'wygasa za 7 dni', crest:'#1D2A3A', cl:'B'},
+    ];
+    const t=this.state.tab;
+    const forceEmpty=this.props.pustyStan ?? false;
+    const filtered= forceEmpty?[]: all.filter(c=> t==='all' || c.src===t);
+    const tabDefs=[{k:'all',label:'Wszystkie'},{k:'kur',label:'Kuratorowane'},{k:'ai',label:'Sugestie'}];
+    return {
+      tabs: tabDefs.map(d=>({ ...d,
+        bg: t===d.k?'#F5F5F3':'transparent', color: t===d.k?'#0F1210':'#BDBFBD',
+        onClick:()=>this.setState({tab:d.k}) })),
+      cards: filtered.map(c=>({ ...c, prio:P[c.p].label, pColor:P[c.p].c, pBg:P[c.p].bg, pBorder:P[c.p].bd,
+        src: c.src==='kur'?'Kurator':'Sugestia' })),
+      hasCards: filtered.length>0, noCards: filtered.length===0,
+    };
+  }
+}
+</script>
+</body>
+</html>

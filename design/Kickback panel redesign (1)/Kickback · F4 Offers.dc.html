@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-drawer{from{transform:translateX(34px)}to{transform:none}}
+@keyframes kb-fade{from{opacity:1}to{opacity:1}}
+</style>
+</helmet>
+<div data-screen-label="F4 · Offers (Zerr)" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="offers" expanded="offers" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Offers (Zerr)</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FF5A47;border:1.5px solid #16191A"></span></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · negocjacje cen</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Offers<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:minmax(140px,1.1fr) minmax(170px,1.4fr) 100px 100px 150px 90px 90px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Klient</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Pozycja</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Klient chce</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Nasza kontra</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Wysłano</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Akcje</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:minmax(140px,1.1fr) minmax(170px,1.4fr) 100px 100px 150px 90px 90px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#1B1F1D;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;color:#BDBFBD">{{ r.init }}</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.client }}</span></span>
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ r.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ r.cl }}</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.item }}</span></span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#7B7F7B;justify-self:end;text-decoration:line-through;text-decoration-color:rgba(255,90,71,0.5)">{{ r.ask }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#22DD99;justify-self:end">{{ r.counter }}</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ r.sent }}</span>
+            <button onClick="{{ r.onOpen }}" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer;justify-self:end" style-hover="background:#1D2120">Detal</button>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">6 negocjacji · 4 czekają na klienta</span></div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ drawer }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;z-index:80;background:rgba(0,0,0,0.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)"></div>
+    <div style="position:fixed;top:0;right:0;bottom:0;z-index:81;width:480px;max-width:92vw;background:#1D2120;border-left:1px solid rgba(255,255,255,0.08);box-shadow:-34px 0 90px -30px rgba(0,0,0,0.8);display:flex;flex-direction:column;animation:kb-drawer .26s cubic-bezier(.32,.72,0,1)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:11px;background:radial-gradient(circle at 50% 35%, #22242A 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px">J</div><div><div style="font-weight:500;font-size:16px;letter-spacing:-0.015em">Juventus 2011/12 · Marcin K.</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">historia negocjacji · KCB-26-C1D8</div></div></div>
+        <button onClick="{{ closeDrawer }}" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:11px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#0F1210;color:#F5F5F3"><i class="ph ph-x" style="font-size:18px"></i></button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:9px;align-items:flex-end"><span style="width:26px;height:26px;flex-shrink:0;border-radius:50%;background:#1B1F1D;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">MK</span><div style="max-width:80%;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:12px 12px 12px 4px;padding:10px 13px"><div style="font:500 15px 'IBM Plex Mono',monospace">3 500 zł</div><div style="font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:2px">propozycja klienta · 26 cze</div></div></div>
+        <div style="display:flex;justify-content:flex-end"><div style="max-width:80%;background:linear-gradient(140deg,#134F31,#0C2C1D);border:1px solid rgba(102,255,51,0.2);border-radius:12px 12px 4px 12px;padding:10px 13px"><div style="font:500 15px 'IBM Plex Mono',monospace;color:#8BFF66">3 100 zł</div><div style="font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#8FE7B4;margin-top:2px">nasza kontra · po A&amp;QC · 30 cze</div></div></div>
+        <div style="display:flex;align-items:center;gap:8px;justify-content:center;padding:6px 0"><span style="width:6px;height:6px;border-radius:9px;background:#FFCC00"></span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#7B7F7B">czeka na decyzję klienta · ważna do 8 lip</span></div>
+        <div style="margin-top:8px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:10px">
+          <label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Nowa kontr-oferta</label>
+          <div style="display:flex;gap:10px">
+            <input defaultValue="3 100 zł" style="flex:1;height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:500 15px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" />
+            <button onClick="{{ closeDrawer }}" style="display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-paper-plane-right" style="font-size:15px"></i>Wyślij</button>
+          </div>
+          <textarea placeholder="Uzasadnienie dla klienta…" style="min-height:70px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)"></textarea>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;otwartyDetal&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { drawer:false };
+  renderVals(){
+    const S={
+      waiting:{label:'Czeka na klienta', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      accepted:{label:'Zaakceptowana', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      rejected:{label:'Odrzucona', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+      countered:{label:'Kontra klienta', c:'#FFCC00', bg:'rgba(255,204,0,0.13)', bd:'rgba(255,204,0,0.3)'},
+    };
+    const rows=[
+      {client:'Marcin K.', init:'MK', item:'Juventus 2011/12 · L', ask:'3 500 zł', counter:'3 100 zł', s:'waiting', sent:'30 cze', crest:'#22242A', cl:'J'},
+      {client:'Anna W.', init:'AW', item:'FC Barcelona 2008/09 · S', ask:'2 900 zł', counter:'2 500 zł', s:'countered', sent:'29 cze', crest:'#1D2A3A', cl:'B'},
+      {client:'Tomek R.', init:'TR', item:'Polska EURO 2016 · M', ask:'950 zł', counter:'760 zł', s:'accepted', sent:'27 cze', crest:'#2A2410', cl:'P'},
+      {client:'Kasia S.', init:'KS', item:'AC Milan 2010/11 · M', ask:'2 100 zł', counter:'1 800 zł', s:'waiting', sent:'26 cze', crest:'#2A0F14', cl:'M'},
+      {client:'Paweł B.', init:'PB', item:'Legia Warszawa 2016/17 · L', ask:'800 zł', counter:'560 zł', s:'rejected', sent:'22 cze', crest:'#0F2A16', cl:'L'},
+    ];
+    return {
+      rows: rows.map(r=>({ ...r, status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        onOpen:()=>this.setState({drawer:true}) })),
+      drawer: this.state.drawer || (this.props.otwartyDetal ?? false),
+      closeDrawer:()=>this.setState({drawer:false}),
+    };
+  }
+}
+</script>
+</body>
+</html>

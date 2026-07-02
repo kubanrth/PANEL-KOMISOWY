@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="B5 · Powiadomienia" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="notif" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Powiadomienia</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#1D2120;color:#F5F5F3;cursor:pointer"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #1D2120"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:980px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · aktywność konta</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Powiadomienia<span style="color:#66FF33">.</span></h1>
+        </div>
+        <button onClick="{{ markAll }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer;flex-shrink:0" style-hover="background:#16191A;color:#F5F5F3"><i class="ph ph-checks" style="font-size:15px"></i>Oznacz wszystkie jako przeczytane</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onClick }}" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 15px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ c.label }}<sc-if value="{{ c.hasCount }}" hint-placeholder-val="{{ false }}"><span style="font:500 11px 'IBM Plex Mono',monospace;opacity:.75">{{ c.count }}</span></sc-if></button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ rows }}" as="n" hint-placeholder-count="7">
+            <button onClick="{{ n.onRead }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:{{ n.bg }};border:1px solid {{ n.border }};border-radius:16px;padding:14px 16px;cursor:pointer;transition:background .16s,transform .16s" style-hover="background:#16191A;transform:translateY(-1px)">
+              <span style="position:relative;width:42px;height:42px;flex-shrink:0;border-radius:11px;background:{{ n.iBg }};border:1px solid {{ n.iBorder }};display:flex;align-items:center;justify-content:center"><i class="ph {{ n.icon }}" style="font-size:20px;color:{{ n.iColor }}"></i></span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ n.weight }};letter-spacing:-0.01em;color:{{ n.titleColor }}">{{ n.title }}</span>
+                <span style="display:block;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.body }}</span>
+              </span>
+              <span style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+                <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ n.time }}</span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:50%;background:#66FF33;box-shadow:0 0 10px 1px rgba(102,255,51,0.4)"></span></sc-if>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-bell-slash" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Brak powiadomień</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Cicho jak na Old Trafford po 3:0. Wróć za chwilę.</p></div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;pustyStan&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  state = { cat:'all', read:{} };
+  renderVals(){
+    const defs=[
+      {id:'n1', cat:'sale', icon:'ph-hand-coins', c:'#22DD99', title:'AC Milan 2006/07 sprzedana za 3 200 zł', body:'Środki trafią do rozliczenia w ciągu 3 dni roboczych.', time:'dziś, 09:14', unread:true},
+      {id:'n2', cat:'sale', icon:'ph-handshake', c:'#FFCC00', title:'Kontr-oferta dla Juventus 2011/12 czeka na decyzję', body:'3 100 zł zamiast 3 500 zł — oferta ważna 6 dni.', time:'wczoraj, 14:12', unread:true},
+      {id:'n3', cat:'payout', icon:'ph-bank', c:'#4A6BFF', title:'Wypłata 3 000 zł zrealizowana', body:'Przelew na konto PKO BP •• 4921 zaksięgowany.', time:'16 cze, 10:02', unread:false},
+      {id:'n4', cat:'sale', icon:'ph-shield-check', c:'#22DD99', title:'Real Madryt away przeszedł A&QC', body:'Autentykacja pozytywna, stan A. Wystawimy w 24h.', time:'15 cze, 12:40', unread:false},
+      {id:'n5', cat:'system', icon:'ph-target', c:'#66FF33', title:'Nowe zapotrzebowanie: 5 ogłoszeń', body:'Szukamy m.in. FC Barcelona 2008/09 i Polski EURO 2016.', time:'12 cze, 08:00', unread:true},
+      {id:'n6', cat:'system', icon:'ph-file-text', c:'#7B7F7B', title:'Aneks do umowy gotowy do podpisu', body:'Zaktualizowane stawki prowizji od lipca 2026.', time:'10 cze, 16:20', unread:false},
+      {id:'n7', cat:'system', icon:'ph-tag', c:'#7B7F7B', title:'Cena Legii Warszawa obniżona 2 400 → 2 100 zł', body:'Zmiana w ramach promocji tygodnia.', time:'8 cze, 11:05', unread:false},
+    ];
+    const s=this.state;
+    const isUnread=(d)=> d.unread && !s.read[d.id];
+    const forceEmpty=this.props.pustyStan ?? false;
+    const filtered= forceEmpty?[]: defs.filter(d=>{
+      if(s.cat==='all') return true;
+      if(s.cat==='unread') return isUnread(d);
+      return d.cat===s.cat;
+    });
+    const unreadCount=defs.filter(isUnread).length;
+    const chipDefs=[
+      {k:'all', label:'Wszystkie'},
+      {k:'unread', label:'Nieprzeczytane', count:String(unreadCount), hasCount:unreadCount>0},
+      {k:'sale', label:'Sprzedaże'},
+      {k:'payout', label:'Wypłaty'},
+      {k:'system', label:'System'},
+    ];
+    return {
+      chips: chipDefs.map(c=>({ hasCount:false, count:'', ...c,
+        bg: s.cat===c.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: s.cat===c.k?'#66FF33':'#BDBFBD',
+        border: s.cat===c.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({cat:c.k}) })),
+      rows: filtered.map(d=>{
+        const un=isUnread(d);
+        return { ...d, unread:un,
+          bg: un?'rgba(22,25,26,0.75)':'#0F1210',
+          border: un?'rgba(102,255,51,0.14)':'rgba(255,255,255,0.06)',
+          weight: un?600:500,
+          titleColor: un?'#F5F5F3':'#BDBFBD',
+          iColor:d.c, iBg:'rgba(255,255,255,0.03)', iBorder:'rgba(255,255,255,0.07)',
+          onRead:()=>this.setState(st=>({read:{...st.read,[d.id]:true}})),
+        };
+      }),
+      hasRows: filtered.length>0, noRows: filtered.length===0,
+      markAll:()=>{ const r={}; defs.forEach(d=>r[d.id]=true); this.setState({read:r}); },
+    };
+  }
+}
+</script>
+</body>
+</html>
