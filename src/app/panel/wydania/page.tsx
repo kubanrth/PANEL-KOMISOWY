@@ -2,6 +2,11 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { Pill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { Product, AppReturn } from "@/lib/types";
 
@@ -82,62 +87,76 @@ export default async function WydaniaPage() {
       active="wydania"
       breadcrumb={[{ label: "Wydania magazynowe" }]}
     >
-      <section>
-        <div className="label">Dokumenty WZ</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Wydania magazynowe.
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Każdy ruch towaru z magazynu — sprzedaż albo wycofanie — to oddzielny dokument WZ.
-        </p>
-      </section>
+      <PageHeader
+        label="Dokumenty WZ"
+        title="Wydania magazynowe"
+        sub="Każdy ruch towaru z magazynu — sprzedaż albo wycofanie — to oddzielny dokument WZ."
+      />
 
       {rows.length === 0 ? (
-        <div className="mt-10 card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center text-text-soft text-[14px]">
-          Brak ruchów towaru do tej pory.
-        </div>
+        <section className="mt-8">
+          <EmptyState
+            title="Brak wydań magazynowych"
+            sub="Nie było jeszcze żadnego ruchu towaru z magazynu. Pierwsza sprzedaż albo wycofanie wygeneruje tu dokument WZ."
+            action={
+              <ButtonLink href="/panel/magazyn" size="md">
+                Sprawdź magazyn <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
+        </section>
       ) : (
         <>
           <section className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-3">
-            <Kpi label="Wydań łącznie" value={rows.length.toString()} />
-            <Kpi label="Sprzedaże" value={rows.filter((r) => r.kind === "sprzedaz").length.toString()} />
-            <Kpi label="Wartość ruchu" value={formatPLN(totalValue, { decimals: false })} />
+            <KpiCard label="Wydań łącznie" value={rows.length} />
+            <KpiCard label="Sprzedaże" value={rows.filter((r) => r.kind === "sprzedaz").length} />
+            <KpiCard label="Wartość ruchu" value={formatPLN(totalValue, { decimals: false })} mono />
           </section>
 
-          <section className="mt-8">
+          <section className="mt-6">
             <div className="card table-scroll">
-              <div className="hidden md:grid grid-cols-[160px_minmax(220px,3fr)_60px_120px_140px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+              <div className="hidden md:grid grid-cols-[130px_minmax(200px,3fr)_90px_130px_110px_150px_100px] gap-3 px-4 h-11 label border-b border-border items-center">
                 <div>Numer WZ</div>
                 <div>Produkt</div>
-                <div>Rozm.</div>
+                <div>Kurier</div>
+                <div>Tracking</div>
                 <div>Wartość</div>
-                <div>Rodzaj</div>
+                <div>Status</div>
                 <div>Data</div>
               </div>
               {rows.map((r) => (
                 <div
                   key={`${r.kind}-${r.id}`}
-                  className="grid grid-cols-[160px_minmax(220px,3fr)_60px_120px_140px_120px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0"
+                  className="grid grid-cols-1 md:grid-cols-[130px_minmax(200px,3fr)_90px_130px_110px_150px_100px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
                   <div className="text-[13px] num font-medium">
                     WZ-{r.id.slice(0, 8).toUpperCase()}
                   </div>
                   <div className="min-w-0">
                     {r.product ? (
-                      <Link href={`/panel/products/${r.product.id}`} className="text-[13px] truncate block hover:text-blue">
-                        {r.product.brand} · {r.product.model}
+                      <Link href={`/panel/products/${r.product.id}`} className="block min-w-0 hover:text-lime transition-colors">
+                        <span className="block text-[13.5px] font-medium truncate">
+                          {r.product.brand} {r.product.model}
+                        </span>
+                        {r.product.size && (
+                          <span className="block text-[11px] num text-text-mute truncate">
+                            Rozm. {r.product.size}
+                          </span>
+                        )}
                       </Link>
                     ) : (
                       <span className="text-[13px] text-text-mute">Produkt usunięty</span>
                     )}
                   </div>
-                  <div className="text-[12px] num text-text-soft">{r.product?.size ?? "—"}</div>
-                  <div className="text-[13px] font-semibold num">{formatPLN(r.value_cents, { decimals: false })}</div>
+                  <div className="hidden md:block text-[12px] text-text-faint">—</div>
+                  <div className="hidden md:block text-[12px] num text-text-faint">—</div>
+                  <div className="hidden md:block text-[13px] num">{formatPLN(r.value_cents, { decimals: false })}</div>
                   <div>
-                    <span className={`pill ${r.kind === "sprzedaz" ? "pill-mint" : "pill-amber"}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${r.kind === "sprzedaz" ? "bg-mint" : "bg-amber"}`} />
-                      {r.kind === "sprzedaz" ? "Sprzedaż" : "Wycofanie"}
-                    </span>
+                    {r.kind === "sprzedaz" ? (
+                      <Pill variant="blue">Wysłane</Pill>
+                    ) : (
+                      <Pill variant="coral">Zwrot</Pill>
+                    )}
                   </div>
                   <div className="text-[12px] num text-text-soft">{formatDate(r.date)}</div>
                 </div>
@@ -147,14 +166,5 @@ export default async function WydaniaPage() {
         </>
       )}
     </PanelShell>
-  );
-}
-
-function Kpi({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="card p-4">
-      <div className="label">{label}</div>
-      <div className="mt-2 font-bold text-2xl tracking-[-0.035em] num">{value}</div>
-    </div>
   );
 }

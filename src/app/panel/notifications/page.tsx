@@ -1,11 +1,14 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
-import { formatDateTime } from "@/lib/format";
-import type { AppNotification, NotificationType } from "@/lib/types";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
+import type { AppNotification } from "@/lib/types";
 import { markAllRead } from "./actions";
 import { NotificationItem } from "./NotificationItem";
+
+/* Powiadomienia — redesign: PageHeader, lista chronologiczna grupowana
+   po dacie, nieprzeczytane = lime dot + jaśniejsze tło (NotificationItem). */
 
 export default async function NotificationsPage() {
   const supabase = await createClient();
@@ -47,31 +50,28 @@ export default async function NotificationsPage() {
         ) : undefined
       }
     >
-      <section>
-        <div className="label">{unread.length > 0 ? `${unread.length} nieprzeczytanych` : "Wszystko przeczytane"}</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Inbox <span className="text-text-soft">/ Twoje sprawy.</span>
-        </h1>
-      </section>
+      <PageHeader
+        label={unread.length > 0 ? `${unread.length} nieprzeczytanych` : "Wszystko przeczytane"}
+        title="Powiadomienia"
+        sub="Każdy event w cyklu Twojej sprzedaży trafia tutaj — wycena, oferta, sprzedaż, wypłata, zwrot."
+      />
 
       {notifications.length === 0 ? (
-        <section className="mt-12">
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[24px] p-12 text-center">
-            <div className="font-bold text-2xl tracking-[-0.025em]">Brak powiadomień</div>
-            <p className="mt-3 text-text-soft max-w-[44ch] mx-auto">
-              Każdy event w cyklu Twojej sprzedaży trafi tutaj — wycena, oferta, sprzedaż, wypłata, zwrot.
-            </p>
-          </div>
+        <section className="mt-8">
+          <EmptyState
+            title="Brak powiadomień"
+            sub="Każdy event w cyklu Twojej sprzedaży trafi tutaj — wycena, oferta, sprzedaż, wypłata, zwrot."
+          />
         </section>
       ) : (
-        <section className="mt-12 space-y-12">
+        <section className="mt-8 space-y-8">
           {groups.map(([dateLabel, items]) => (
             <div key={dateLabel}>
               <div className="label flex items-center gap-3">
-                <span className="inline-block h-px w-8 bg-border" />
+                <span className="inline-block h-px w-8 bg-border" aria-hidden />
                 {dateLabel}
               </div>
-              <div className="mt-4 space-y-3">
+              <div className="mt-3 space-y-2">
                 {items.map((n) => (
                   <NotificationItem key={n.id} notification={n} />
                 ))}

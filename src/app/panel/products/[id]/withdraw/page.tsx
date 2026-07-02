@@ -1,9 +1,8 @@
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
-import { formatPLN } from "@/lib/format";
 import { RETURN_REASON_LABEL, type Product } from "@/lib/types";
 import { WithdrawForm } from "./WithdrawForm";
 
@@ -49,30 +48,52 @@ export default async function ProductWithdrawPage(props: { params: Promise<{ id:
         { label: "Wycofaj" },
       ]}
     >
-      <section className="grid grid-cols-12 gap-6 items-start">
-        <div className="col-span-12 lg:col-span-7 flex items-center gap-5">
-          <ProductThumb photos={p.photos} brand={p.brand} size="lg" />
-          <div>
-            <h1 className="font-bold text-[26px] tracking-[-0.03em]">Wycofaj produkt</h1>
-            <p className="text-[16px] text-text-soft mt-1">{p.brand} · {p.model}</p>
-            <p className="text-[12px] text-text-mute mt-1 num">W magazynie {ageDays} dni</p>
+      <PageHeader
+        label="Wycofanie z komisu"
+        title="Wycofaj produkt"
+        sub="Zdejmiemy pozycję z listingu i przygotujemy ją do odbioru z magazynu. Sprawdź warunki i opłatę zanim potwierdzisz."
+      />
+
+      {/* Żółty baner ostrzegawczy o opłacie */}
+      <div className="mt-6 rounded-[14px] bg-yellow/8 border border-yellow/25 p-4 flex items-start gap-3">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
+          <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
+        </svg>
+        <div className="text-[12px]">
+          <div className="font-medium text-yellow">Wycofanie może wiązać się z opłatą</div>
+          <p className="mt-1 text-text-soft">
+            Wysokość opłaty zależy od powodu i czasu magazynowania. Dokładna kwota jest widoczna
+            przy wyborze powodu poniżej — zanim cokolwiek potwierdzisz.
+          </p>
+        </div>
+      </div>
+
+      <section className="mt-6 grid grid-cols-12 gap-4 items-start">
+        <div className="col-span-12 lg:col-span-7">
+          <div className="card p-5 flex items-center gap-4">
+            <ProductThumb photos={p.photos} brand={p.brand} size="lg" />
+            <div className="min-w-0">
+              <div className="text-[15px] font-medium truncate">{p.brand} {p.model}</div>
+              {p.sku && <div className="mt-0.5 text-[11px] num text-text-mute">{p.sku}</div>}
+              <div className="mt-0.5 text-[12px] num text-text-mute">W magazynie {ageDays} dni</div>
+            </div>
           </div>
         </div>
 
         <div className="col-span-12 lg:col-span-5">
           <div className="card p-5">
             <div className="label">Co się stanie po wycofaniu?</div>
-            <ul className="mt-3 space-y-2 text-[13px] text-text-soft">
-              <li className="flex gap-2"><span className="text-blue-soft">·</span> Produkt zostanie zdjęty z listingu</li>
-              <li className="flex gap-2"><span className="text-blue-soft">·</span> Środki ze sprzedaży nie zostaną już naliczone</li>
-              <li className="flex gap-2"><span className="text-blue-soft">·</span> Można odebrać z magazynu (płatne) lub poddać utylizacji</li>
-              <li className="flex gap-2"><span className="text-blue-soft">·</span> Decyzja jest odwracalna do momentu finalizacji</li>
+            <ul className="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-text-soft">
+              <Bullet>Produkt zostanie zdjęty z listingu</Bullet>
+              <Bullet>Środki ze sprzedaży nie zostaną już naliczone</Bullet>
+              <Bullet>Można odebrać z magazynu (płatne) lub poddać utylizacji</Bullet>
+              <Bullet>Decyzja jest odwracalna do momentu finalizacji</Bullet>
             </ul>
           </div>
         </div>
       </section>
 
-      <section className="mt-12">
+      <section className="mt-10">
         <WithdrawForm
           productId={id}
           availableReasons={availableReasons}
@@ -80,5 +101,14 @@ export default async function ProductWithdrawPage(props: { params: Promise<{ id:
         />
       </section>
     </PanelShell>
+  );
+}
+
+function Bullet({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="relative pl-5">
+      <span className="absolute left-0 top-[6px] h-[7px] w-[7px] rounded-full bg-lime/60" aria-hidden />
+      {children}
+    </li>
   );
 }

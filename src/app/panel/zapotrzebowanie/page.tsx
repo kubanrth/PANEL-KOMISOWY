@@ -2,9 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { DemandListing, Club, NationalTeam, Player } from "@/lib/types";
+
+/* Zapotrzebowanie — redesign: PageHeader, chip-filtry (wzór FilterChips
+   ze Sprzedaży), grid 3-kol kart z avatar-badge 40px (herb/litera),
+   pigułki rozmiarów, „do X zł" w mint, CTA-karta na dole. */
 
 type Filter = { kind?: "club" | "national_team" | "player"; retro?: "1" };
 
@@ -64,21 +70,15 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
       active="zapotrzebowanie"
       breadcrumb={[{ label: "Zapotrzebowanie" }]}
     >
-      <section>
-        <div className="label">Bieżące poszukiwania Kickback</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Zapotrzebowanie.
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Aktywne ogłoszenia — koszulki, których aktualnie poszukujemy. Masz pasującą pozycję? Dodaj ją do
-          najbliższej Oferty.
-        </p>
-      </section>
+      <PageHeader
+        label={`${demands.length} aktywnych ogłoszeń · bieżące poszukiwania Kickback`}
+        title="Zapotrzebowanie"
+        sub="Aktywne ogłoszenia — koszulki, których aktualnie poszukujemy. Masz pasującą pozycję? Dodaj ją do najbliższej Oferty."
+      />
 
-      {/* Filters */}
-      <section className="mt-8 flex flex-wrap items-center gap-3">
-        <FilterPills
-          label="Rodzaj"
+      {/* Chip-filtry: rodzaj + retro */}
+      <section className="mt-7 flex flex-wrap items-center gap-2">
+        <FilterChips
           current={sp.kind ?? ""}
           options={[
             { v: "", l: "Wszystkie" },
@@ -89,74 +89,66 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
           param="kind"
           existing={sp}
         />
-        <FilterPills
-          label="Retro"
+        <span className="mx-1 h-5 w-px bg-border" aria-hidden />
+        <FilterChips
           current={sp.retro === "1" ? "1" : ""}
-          options={[
-            { v: "", l: "Wszystkie" },
-            { v: "1", l: "Tylko retro" },
-          ]}
+          options={[{ v: "1", l: "Tylko retro" }]}
           param="retro"
           existing={sp}
         />
       </section>
 
-      {/* List */}
-      <section className="mt-8">
+      {/* Grid kart */}
+      <section className="mt-6">
         {enriched.length === 0 ? (
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center text-text-soft text-[14px]">
-            Brak aktywnych ogłoszeń pasujących do filtrów.
-          </div>
+          <EmptyState
+            title="Brak aktywnych ogłoszeń"
+            sub="Żadne ogłoszenie nie pasuje do wybranych filtrów. Zmień filtry albo zajrzyj tu później."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {enriched.map(({ d, label, crest }) => (
-              <article key={d.id} className="card p-5">
-                <div className="flex items-start gap-4">
-                  <div className="h-12 w-12 rounded-[10px] bg-surface-2 border border-border flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <article key={d.id} className="card p-4 flex flex-col">
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-[10px] bg-surface-2 border border-border-soft flex items-center justify-center flex-shrink-0 overflow-hidden text-[15px] font-medium text-text-soft">
                     {crest ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={crest} alt={label} className="w-full h-full object-cover" />
+                      <img src={crest} alt={label} width={40} height={40} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-text-mute text-[10px] uppercase">
-                        {d.kind === "club" ? "Klub" : d.kind === "national_team" ? "Repr." : "Nazw."}
-                      </span>
+                      label[0]?.toUpperCase() ?? "?"
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-[15px] truncate">{label}</div>
-                    <div className="mt-1 text-[12px] text-text-mute">
+                    <div className="text-[14px] font-medium truncate">{label}</div>
+                    <div className="mt-0.5 text-[11px] text-text-mute truncate">
                       {d.kind === "club" ? "Klub" : d.kind === "national_team" ? "Reprezentacja" : "Nazwisko"}
-                      {d.season && ` · sezon ${d.season}`}
-                      {d.retro && " · retro"}
+                      {d.season && <span className="num"> · sezon {d.season}</span>}
                     </div>
                   </div>
-                  {d.retro && <span className="pill pill-amber text-[10px]">retro</span>}
+                  {d.retro && <span className="pill pill-amber flex-shrink-0">Retro</span>}
                 </div>
 
                 {d.sizes && d.sizes.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    <span className="text-[10px] text-text-mute uppercase tracking-wider mr-1 self-center">Rozmiary:</span>
+                  <div className="mt-3 flex flex-wrap gap-1">
                     {d.sizes.map((s) => (
-                      <span key={s} className="pill pill-blue text-[10px] px-1.5">{s}</span>
+                      <span key={s} className="px-1.5 py-0.5 rounded-[6px] bg-blue/12 text-blue-soft text-[10px] font-medium">
+                        {s}
+                      </span>
                     ))}
                   </div>
                 )}
 
-                {d.target_price_cents && (
-                  <div className="mt-4 pt-4 border-t border-border-soft flex items-center justify-between">
-                    <div className="text-[11px] text-text-mute">Możliwa cena</div>
-                    <div className="font-bold text-lg num text-mint">
-                      {formatPLN(d.target_price_cents, { decimals: false })}
-                    </div>
-                  </div>
-                )}
-
                 {d.notes && (
-                  <p className="mt-3 text-[12px] text-text-soft line-clamp-2">{d.notes}</p>
+                  <p className="mt-3 text-[12px] text-text-soft leading-[1.5] line-clamp-2">{d.notes}</p>
                 )}
 
-                <div className="mt-4 text-[10px] text-text-faint">
-                  Opublikowano: {formatDate(d.published_at)}
+                <div className="mt-4 pt-3 border-t border-border-soft flex items-center justify-between gap-3">
+                  <div className="text-[11px] num text-text-faint">{formatDate(d.published_at)}</div>
+                  {d.target_price_cents && (
+                    <div className="text-[14px] num text-mint whitespace-nowrap">
+                      do {formatPLN(d.target_price_cents, { decimals: false })}
+                    </div>
+                  )}
                 </div>
               </article>
             ))}
@@ -164,45 +156,52 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
         )}
       </section>
 
-      <section className="mt-10 card p-6 flex items-center justify-between gap-4 flex-wrap">
-        <div>
-          <div className="label">Masz pasujące pozycje?</div>
-          <div className="mt-1 font-semibold text-lg tracking-[-0.025em]">Dodaj je do Oferty.</div>
+      {/* CTA-karta */}
+      <section className="mt-8">
+        <div className="card p-6 flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <div className="label">Masz pasującą koszulkę?</div>
+            <div className="mt-1.5 font-light text-[20px] tracking-[-0.02em]">
+              Dodaj ją do najbliższej Oferty.
+            </div>
+          </div>
+          <ButtonLink href="/start" size="md">
+            Nowa oferta <ArrowRight size={16} />
+          </ButtonLink>
         </div>
-        <ButtonLink href="/start" size="md">
-          Nowa Oferta <ArrowRight size={14} />
-        </ButtonLink>
       </section>
     </PanelShell>
   );
 }
 
-function FilterPills({
-  label, current, options, param, existing,
+function FilterChips({
+  current, options, param, existing,
 }: {
-  label: string;
   current: string;
   options: Array<{ v: string; l: string }>;
   param: keyof Filter;
   existing: Filter;
 }) {
   return (
-    <div className="flex items-center gap-2 flex-wrap text-[12px]">
-      <span className="label">{label}:</span>
+    <div className="flex items-center gap-1.5 flex-wrap">
       {options.map((o) => {
-        const active = current === o.v;
+        const active = current === o.v && o.v !== "";
+        const isAll = o.v === "";
+        const activeAll = isAll && current === "";
         const next: Record<string, string> = { ...existing };
-        if (o.v) next[param as string] = o.v;
+        // Toggle: klik w aktywny chip zdejmuje filtr (parametry URL bez zmian).
+        if (o.v && current !== o.v) next[param as string] = o.v;
         else delete next[param as string];
         const query = new URLSearchParams(next).toString();
-        const cls = active
-          ? "bg-text text-bg font-semibold"
-          : "bg-surface text-text-soft hover:bg-surface-2 hover:text-text";
         return (
           <Link
             key={o.v || "any"}
             href={`/panel/zapotrzebowanie${query ? "?" + query : ""}`}
-            className={`px-2.5 py-1 rounded-[8px] transition-colors ${cls}`}
+            className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+              active || activeAll
+                ? "border-lime/40 bg-lime/10 text-lime"
+                : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
+            }`}
           >
             {o.l}
           </Link>
@@ -211,6 +210,3 @@ function FilterPills({
     </div>
   );
 }
-
-// Reference imports to avoid TS unused-export errors in dev:
-void Link;

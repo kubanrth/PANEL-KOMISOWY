@@ -2,13 +2,18 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
-import { SUBMISSION_STATUS_LABEL, type Submission, type Product } from "@/lib/types";
+import type { Submission, Product } from "@/lib/types";
 
 /**
  * Przyjęcia magazynowe = lista submissions w stanie podpisanym/dostarczonym.
  * Każda paczka generuje "PZ-{submission_id}" dokument przyjęcia z agregatami.
+ * Prezentacja: pionowy timeline per paczka (gramatyka E1/C8 z karty produktu).
  */
 export default async function PrzyjeciaPage() {
   const supabase = await createClient();
@@ -56,63 +61,62 @@ export default async function PrzyjeciaPage() {
       active="przyjecia"
       breadcrumb={[{ label: "Przyjęcia magazynowe" }]}
     >
-      <section>
-        <div className="label">Dokumenty PZ</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Przyjęcia magazynowe.
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Każda Twoja paczka wysłana do Kickback generuje dokument PZ (Przyjęcie Magazynowe).
-          Sprawdź historię, wartości i kliknij PZ żeby zobaczyć pozycje.
-        </p>
-      </section>
+      <PageHeader
+        label="Dokumenty PZ"
+        title="Przyjęcia magazynowe"
+        sub="Każda Twoja paczka wysłana do Kickback generuje dokument PZ (Przyjęcie Magazynowe). Sprawdź historię, wartości i kliknij PZ żeby zobaczyć pozycje."
+      />
 
       {subs.length === 0 ? (
-        <Empty />
+        <section className="mt-8">
+          <EmptyState
+            title="Brak przyjęć"
+            sub="Wyślij pierwszą Ofertę — po przyjęciu paczki do magazynu zobaczysz tu dokument PZ."
+            action={
+              <ButtonLink href="/start" size="md">
+                Nowa Oferta <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
+        </section>
       ) : (
         <>
           <section className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-3">
-            <Kpi label="Dokumentów PZ" value={subs.length.toString()} />
-            <Kpi label="Pozycji łącznie" value={totalCount.toString()} />
-            <Kpi label="Łączna wartość" value={formatPLN(totalValue, { decimals: false })} />
+            <KpiCard label="Dokumentów PZ" value={subs.length} />
+            <KpiCard label="Pozycji łącznie" value={totalCount} />
+            <KpiCard label="Łączna wartość" value={formatPLN(totalValue, { decimals: false })} mono />
           </section>
 
-          <section className="mt-8">
-            <div className="card table-scroll">
-              <div className="hidden md:grid grid-cols-[160px_120px_140px_80px_140px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
-                <div>Numer PZ</div>
-                <div>Data przyjęcia</div>
-                <div>Wartość</div>
-                <div>Pozycji</div>
-                <div>Status</div>
-                <div className="text-right">Akcje</div>
-              </div>
-              {subs.map((s) => {
-                const agg = aggBySubmission.get(s.id) ?? { count: 0, value: 0 };
-                return (
-                  <div
-                    key={s.id}
-                    className="grid grid-cols-[160px_120px_140px_80px_140px_120px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/30"
-                  >
-                    <div className="text-[13px] num font-medium">PZ-{s.id.replace("SUB-", "")}</div>
-                    <div className="text-[12px] num text-text-soft">{formatDate(s.signed_at ?? s.created_at)}</div>
-                    <div className="text-[13px] font-semibold num">{formatPLN(agg.value, { decimals: false })}</div>
-                    <div className="text-[12px] num text-text-soft">{agg.count}</div>
-                    <div>
-                      <span className="pill pill-mute">{SUBMISSION_STATUS_LABEL[s.status]}</span>
+          <section className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {subs.map((s) => {
+              const agg = aggBySubmission.get(s.id) ?? { count: 0, value: 0 };
+              return (
+                <div key={s.id} className="card p-6">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="min-w-0">
+                      <div className="text-[14px] font-medium num">PZ-{s.id.replace("SUB-", "")}</div>
+                      <div className="mt-1 text-[11px] num text-text-mute">
+                        {formatDate(s.signed_at ?? s.created_at)} · {agg.count} poz. · {formatPLN(agg.value, { decimals: false })}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <Link
-                        href={`/panel/submissions/${s.id}`}
-                        className="text-[12px] text-blue hover:underline"
-                      >
-                        Sprawdź dokument →
-                      </Link>
-                    </div>
+                    <SubmissionStatusPill status={s.status} />
                   </div>
-                );
-              })}
-            </div>
+
+                  <div className="mt-5">
+                    <PzTimeline status={s.status} signedAt={s.signed_at ?? s.created_at} />
+                  </div>
+
+                  <div className="mt-5 pt-4 border-t border-border-soft">
+                    <Link
+                      href={`/panel/submissions/${s.id}`}
+                      className="inline-flex items-center gap-1.5 text-[13px] text-text-soft hover:text-lime transition-colors"
+                    >
+                      Sprawdź dokument <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </section>
         </>
       )}
@@ -120,29 +124,40 @@ export default async function PrzyjeciaPage() {
   );
 }
 
-function Kpi({ label, value }: { label: string; value: string }) {
+/* Pionowy timeline PZ: lime dot 11px done, hollow pending, linia bg-border.
+   Jedyny znany timestamp = signed_at (krok 1); kolejne kroki bez dat. */
+function PzTimeline({ status, signedAt }: { status: Submission["status"]; signedAt: string }) {
+  const doneCount =
+    status === "signed" ? 1 : status === "in_transit" ? 2 : status === "aqc" ? 3 : 4;
+  const steps: Array<{ label: string; at: string | null }> = [
+    { label: "Oferta podpisana", at: signedAt },
+    { label: "Paczka w transporcie", at: null },
+    { label: "Przyjęta do magazynu — A&QC", at: null },
+    { label: "Wystawiona w sprzedaży", at: null },
+  ];
   return (
-    <div className="card p-4">
-      <div className="label">{label}</div>
-      <div className="mt-2 font-bold text-2xl tracking-[-0.035em] num">{value}</div>
-    </div>
-  );
-}
-
-function Empty() {
-  return (
-    <section className="mt-10">
-      <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center">
-        <div className="font-bold text-xl tracking-[-0.025em]">Brak przyjęć</div>
-        <p className="mt-2 text-text-soft text-[14px]">
-          Wyślij pierwszą Ofertę — po przyjęciu paczki do magazynu zobaczysz tu dokument PZ.
-        </p>
-        <div className="mt-6">
-          <ButtonLink href="/start" size="md">
-            Nowa Oferta <ArrowRight size={16} />
-          </ButtonLink>
-        </div>
-      </div>
-    </section>
+    <ol className="space-y-0">
+      {steps.map((s, i) => {
+        const done = i < doneCount;
+        const last = i === steps.length - 1;
+        return (
+          <li key={s.label} className="relative pl-6 pb-4 last:pb-0">
+            {!last && (
+              <span className="absolute left-[5px] top-4 bottom-0 w-px bg-border" aria-hidden />
+            )}
+            <span
+              className={`absolute left-0 top-1 h-[11px] w-[11px] rounded-full ${
+                done ? "bg-lime" : "border border-border bg-transparent"
+              }`}
+              aria-hidden
+            />
+            <div className={`text-[13px] ${done ? "" : "text-text-mute"}`}>{s.label}</div>
+            {done && s.at && (
+              <div className="text-[11px] num text-text-mute mt-0.5">{formatDate(s.at)}</div>
+            )}
+          </li>
+        );
+      })}
+    </ol>
   );
 }

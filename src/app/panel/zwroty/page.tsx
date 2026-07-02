@@ -1,10 +1,14 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/panel/ProductThumb";
+import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
-import { RETURN_REASON_LABEL, type AppReturn, type Product } from "@/lib/types";
+import { RETURN_REASON_LABEL, type AppReturn, type Product, type ReturnResolution } from "@/lib/types";
 
 export default async function ZwrotyPage() {
   const supabase = await createClient();
@@ -41,64 +45,82 @@ export default async function ZwrotyPage() {
       active="zwroty"
       breadcrumb={[{ label: "Zwroty" }]}
     >
-      <section>
-        <div className="label">{returns.length} zwrotów łącznie</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Zwroty <span className="text-text-soft">/ wycofane pozycje.</span>
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Produkty wycofane z komisu lub odrzucone w A&amp;QC. Każdy zwrot ma powód, datę i ewentualną opłatę administracyjną.
-        </p>
-      </section>
+      <PageHeader
+        label={`${returns.length} zwrotów łącznie`}
+        title="Zwroty"
+        sub="Produkty wycofane z komisu lub odrzucone w A&QC. Każdy zwrot ma powód, datę i ewentualną opłatę administracyjną."
+      />
 
       {returns.length === 0 ? (
-        <Empty />
+        <section className="mt-8">
+          <EmptyState
+            title="Nic. Twoje koszulki nie wracają."
+            sub="Wszystkie Twoje rzeczy są w sprzedaży albo już sprzedane — dokładnie tak, jak ma być."
+            action={
+              <ButtonLink href="/panel/magazyn" size="md">
+                Sprawdź magazyn <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
+        </section>
       ) : (
         <>
           <section className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-3">
-            <Kpi label="Zwroty łącznie" value={returns.length.toString()} />
-            <Kpi label="Oczekuje decyzji" value={returns.filter((r) => r.resolution === "pending").length.toString()} />
-            <Kpi label="Opłaty" value={formatPLN(totalFee, { decimals: false })} accent="text-amber" />
+            <KpiCard label="Zwroty łącznie" value={returns.length} />
+            <KpiCard
+              label="Oczekuje decyzji"
+              value={returns.filter((r) => r.resolution === "pending").length}
+            />
+            <KpiCard
+              label="Opłaty"
+              value={<span className={totalFee > 0 ? "text-yellow" : ""}>{formatPLN(totalFee, { decimals: false })}</span>}
+              mono
+            />
           </section>
 
-          <section className="mt-8">
+          <section className="mt-6">
             <div className="card table-scroll">
-              <div className="hidden md:grid grid-cols-[minmax(240px,3fr)_60px_140px_180px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+              <div className="hidden md:grid grid-cols-[minmax(240px,3fr)_60px_120px_170px_100px_140px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
                 <div>Produkt</div>
                 <div>Rozm.</div>
                 <div>Cena</div>
                 <div>Powód</div>
                 <div>Opłata</div>
+                <div>Status</div>
                 <div>Zwrócono</div>
               </div>
               {returns.map((r) => {
                 const p = productById.get(r.product_id);
                 const reasonInfo = RETURN_REASON_LABEL[r.reason];
+                const res = resolutionPill(r.resolution);
                 return (
                   <div
                     key={r.id}
-                    className="grid grid-cols-[minmax(240px,3fr)_60px_140px_180px_120px_120px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0"
+                    className="grid grid-cols-1 md:grid-cols-[minmax(240px,3fr)_60px_120px_170px_100px_140px_110px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {p && <ProductThumb photos={p.photos} brand={p.brand} size="sm" />}
                       <div className="min-w-0">
-                        <div className="text-[13px] font-medium truncate">
-                          {p ? `${p.brand} · ${p.model}` : "Produkt niedostępny"}
+                        <div className="text-[13.5px] font-medium truncate">
+                          {p ? `${p.brand} ${p.model}` : "Produkt niedostępny"}
                         </div>
-                        <div className="text-[11px] text-text-mute num">
-                          {p?.category ?? ""}
-                        </div>
+                        {p?.category && (
+                          <div className="text-[11px] text-text-mute truncate">{p.category}</div>
+                        )}
                       </div>
                     </div>
-                    <div className="text-[12px] num text-text-soft">{p?.size ?? "—"}</div>
-                    <div className="text-[13px] font-semibold num">
+                    <div className="hidden md:block text-[12px] num text-text-soft">{p?.size ?? "—"}</div>
+                    <div className="hidden md:block text-[13px] num">
                       {p ? formatPLN(p.listing_price_cents ?? p.expected_price_cents ?? 0, { decimals: false }) : "—"}
                     </div>
-                    <div className="text-[12px] text-text-soft" title={reasonInfo.description}>
+                    <div className="hidden md:block text-[12px] text-text-soft truncate" title={reasonInfo.description}>
                       {reasonInfo.title}
                     </div>
-                    <div className={`text-[13px] num ${r.fee_cents > 0 ? "text-amber" : "text-text-mute"}`}>
+                    <div className={`hidden md:block text-[13px] num ${r.fee_cents > 0 ? "text-yellow" : "text-text-faint"}`}>
                       {r.fee_cents > 0 ? formatPLN(r.fee_cents, { decimals: false }) : "—"}
+                    </div>
+                    <div>
+                      <Pill variant={res.variant}>{res.label}</Pill>
                     </div>
                     <div className="text-[12px] num text-text-soft">{formatDate(r.created_at)}</div>
                   </div>
@@ -112,27 +134,18 @@ export default async function ZwrotyPage() {
   );
 }
 
-function Kpi({ label, value, accent = "" }: { label: string; value: string; accent?: string }) {
-  return (
-    <div className="card p-4">
-      <div className="label">{label}</div>
-      <div className={`mt-2 font-bold text-2xl tracking-[-0.035em] num ${accent}`}>{value}</div>
-    </div>
-  );
-}
-
-function Empty() {
-  return (
-    <section className="mt-10">
-      <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center">
-        <div className="font-bold text-xl tracking-[-0.025em]">Brak zwrotów</div>
-        <p className="mt-2 text-text-soft text-[14px]">Świetnie — wszystkie Twoje rzeczy są w sprzedaży lub sprzedane.</p>
-        <div className="mt-6">
-          <ButtonLink href="/panel/magazyn" size="md">
-            Sprawdź magazyn <ArrowRight size={16} />
-          </ButtonLink>
-        </div>
-      </div>
-    </section>
-  );
+/* Vocab pigułek: yellow = oczekuje, blue = w toku, mint = ok, mute = archiwum. */
+function resolutionPill(res: ReturnResolution): { variant: PillVariant; label: string } {
+  switch (res) {
+    case "pending":
+      return { variant: "yellow", label: "Do decyzji" };
+    case "pickup_paid":
+      return { variant: "blue", label: "Do odbioru" };
+    case "returned":
+      return { variant: "mint", label: "Odebrane" };
+    case "disposal_free":
+      return { variant: "mute", label: "Utylizacja" };
+    case "cancelled":
+      return { variant: "mute", label: "Anulowany" };
+  }
 }
