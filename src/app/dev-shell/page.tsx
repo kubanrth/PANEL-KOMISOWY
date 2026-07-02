@@ -6,6 +6,14 @@ import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
+import { MagazynTable, type MagazynRow } from "@/app/panel/magazyn/MagazynTable";
+
+const MOCK_ROWS: MagazynRow[] = [
+  { id: "1", brand: "Real Madryt", model: "2011/12", sku: "KCB-26-A9F421", size: "L", vat_rate: 0.23, photo_url: null, listing_price_cents: 240000, recommended_price_cents: 235000, published_at: "2026-06-18", sold_at: null, settlement_at: null, derived_status: "aktywny", days_in_commission: 14 },
+  { id: "2", brand: "FC Barcelona", model: "2014/15", sku: "KCB-26-B7D210", size: "M", vat_rate: 0.23, photo_url: null, listing_price_cents: 189000, recommended_price_cents: 140000, published_at: "2026-06-29", sold_at: null, settlement_at: null, derived_status: "oczekuje_publikacji", days_in_commission: 3 },
+  { id: "3", brand: "Legia Warszawa", model: "2019/20", sku: "KCB-26-C0D388", size: "XL", vat_rate: 0.08, photo_url: null, listing_price_cents: 64000, recommended_price_cents: null, published_at: "2026-05-22", sold_at: null, settlement_at: null, derived_status: "aktywny", days_in_commission: 41 },
+  { id: "4", brand: "Polska", model: "EURO 2016", sku: "KCB-26-F8C202", size: "M", vat_rate: 0, photo_url: null, listing_price_cents: 42000, recommended_price_cents: 60000, published_at: null, sold_at: null, settlement_at: null, derived_status: "zdjecia", days_in_commission: 7 },
+];
 
 export const dynamic = "force-dynamic";
 
@@ -67,6 +75,9 @@ function Demo() {
         <Pill variant="coral">Zwrot</Pill>
         <Pill variant="amber">Retro</Pill>
         <Pill variant="mute">Draft</Pill>
+      </section>
+      <section className="mt-8">
+        <MagazynTable rows={MOCK_ROWS} />
       </section>
       <section className="mt-8">
         <EmptyState

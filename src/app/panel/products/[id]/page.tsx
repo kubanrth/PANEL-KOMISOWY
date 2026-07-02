@@ -8,6 +8,9 @@ import { ButtonLink } from "@/components/ui/Button";
 import { formatPLN, formatDate, takeHomeCents, commissionCents } from "@/lib/format";
 import type { Product, Submission, Profile } from "@/lib/types";
 
+/* Karta produktu — design C8: galeria 60/40, spec lista, karta ceny
+   z podziałem prowizji, pionowy timeline statusów, akcje. */
+
 export default async function ProductDetailPage(props: {
   params: Promise<{ id: string }>;
 }) {
@@ -44,65 +47,77 @@ export default async function ProductDetailPage(props: {
   const commissionAmount = commissionCents(price, commission) ?? 0;
   const takeHome = takeHomeCents(price, commission) ?? 0;
 
+  const canWithdraw = product.status === "listed" || product.status === "aqc" || product.status === "offer";
+
   return (
     <PanelShell
       user={{ email: user.email! }}
       profile={profile}
-      active="my-sales"
+      active="magazyn"
       breadcrumb={[
-        { label: "Sprzedaże", href: "/panel/sprzedaze" },
-        { label: `${product.brand} · ${product.model}` },
+        { label: "Magazyn", href: "/panel/magazyn" },
+        { label: product.sku ?? `${product.brand} ${product.model}` },
       ]}
     >
       {/* Hero */}
       <section>
-        <div className="flex items-center gap-3 mb-4 flex-wrap">
+        <div className="flex items-center gap-2.5 mb-4 flex-wrap">
           <ProductStatusPill status={product.status} />
           {submission && (
-            <Link href={`/panel/submissions/${submission.id}`} className="pill pill-mute hover:bg-surface-2 transition-colors num">
+            <Link href={`/panel/submissions/${submission.id}`} className="pill pill-mute hover:bg-surface-2 transition-colors num normal-case !tracking-normal">
               {submission.id}
             </Link>
           )}
           {submission && <SubmissionStatusPill status={submission.status} />}
         </div>
-        <h1 className="font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em]">
-          {product.brand}
+        <div className="label">{product.sku}</div>
+        <h1 className="mt-2 font-light text-[28px] lg:text-[40px] leading-[1.05] tracking-[-0.02em]">
+          {product.brand} {product.model}.
         </h1>
-        <p className="mt-2 text-[20px] lg:text-[24px] text-text-soft tracking-[-0.025em]">
-          {product.model}
-        </p>
       </section>
 
       {/* Photos + sidebar */}
-      <section className="mt-12 grid grid-cols-12 gap-8">
-
+      <section className="mt-10 grid grid-cols-12 gap-6 items-start">
         {/* Photos */}
         <div className="col-span-12 lg:col-span-7">
           <Gallery product={product} />
+
+          {/* Opis pod galerią */}
+          {product.description && (
+            <div className="mt-6">
+              <div className="label mb-3">Opis</div>
+              <div className="card p-6 text-[14px] leading-[1.7] text-text-soft whitespace-pre-wrap">
+                {product.description}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Pricing card */}
-        <aside className="col-span-12 lg:col-span-5 space-y-5">
-          <div className="card-gradient-blue p-7 rounded-[20px] text-white">
-            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">
-              Cena listing
-            </div>
-            <div className="mt-2 font-bold text-4xl tracking-[-0.04em] num">
-              {formatPLN(price, { decimals: false })}
-            </div>
-            {product.expected_price_cents != null && product.expected_price_cents !== price && (
-              <div className="mt-1 text-white/70 text-[13px] num">
-                Oczekiwana: {formatPLN(product.expected_price_cents, { decimals: false })}
+        {/* Sidebar: cena → spec → timeline → akcje */}
+        <aside className="col-span-12 lg:col-span-5 space-y-4">
+          <div className="card-gradient-dark p-7 relative overflow-hidden">
+            <div className="glow-blob" aria-hidden />
+            <div className="relative">
+              <div className="label !text-mint/80">Cena listing</div>
+              <div className="mt-2 font-light text-[38px] leading-none tracking-[-0.02em] num text-mint">
+                {formatPLN(price, { decimals: false })}
               </div>
-            )}
-            <div className="mt-6 pt-5 border-t border-white/20 space-y-2 text-[13px]">
-              <div className="flex justify-between">
-                <span className="text-white/85">Prowizja Kickback ({Math.round(commission * 100)}%)</span>
-                <span className="font-semibold num">−{formatPLN(commissionAmount, { decimals: false })}</span>
-              </div>
-              <div className="flex justify-between text-base pt-2 border-t border-white/15">
-                <span className="text-white/85">Twój udział</span>
-                <span className="font-bold tracking-[-0.025em] num">{formatPLN(takeHome, { decimals: false })}</span>
+              {product.expected_price_cents != null && product.expected_price_cents !== price && (
+                <div className="mt-2 text-text-soft text-[12px] num">
+                  Oczekiwana: {formatPLN(product.expected_price_cents, { decimals: false })}
+                </div>
+              )}
+              <div className="mt-6 pt-5 border-t border-white/10 space-y-2.5 text-[13px]">
+                <div className="flex justify-between">
+                  <span className="text-text-soft">Prowizja Kickback ({Math.round(commission * 100)}%)</span>
+                  <span className="num text-coral">−{formatPLN(commissionAmount, { decimals: false })}</span>
+                </div>
+                <div className="flex justify-between items-baseline pt-2.5 border-t border-white/8">
+                  <span className="text-text-soft">Twój udział</span>
+                  <span className="font-medium text-[18px] tracking-[-0.02em] num text-mint">
+                    {formatPLN(takeHome, { decimals: false })}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -113,22 +128,30 @@ export default async function ProductDetailPage(props: {
             <SpecRow label="Rozmiar" value={product.size} />
             <SpecRow label="Stan" value={product.condition ? `${product.condition}/10` : null} />
             <SpecRow label="Cena minimalna" value={product.min_price_cents != null ? formatPLN(product.min_price_cents, { decimals: false }) : null} />
-            <SpecRow label="ID produktu" value={product.id.slice(0, 8) + "…"} />
+            <SpecRow label="SKU" value={product.sku} mono />
+          </div>
+
+          {/* Timeline statusów */}
+          <div className="card p-6">
+            <div className="label mb-4">Historia</div>
+            <Timeline product={product} />
+          </div>
+
+          {/* Akcje */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <ButtonLink href="/panel/magazyn" variant="ghost" size="md">
+              Zmień cenę
+            </ButtonLink>
+            {canWithdraw && (
+              <ButtonLink href={`/panel/products/${product.id}/withdraw`} variant="danger" size="md">
+                Wycofaj z komisu
+              </ButtonLink>
+            )}
           </div>
         </aside>
       </section>
 
-      {/* Description */}
-      {product.description && (
-        <section className="mt-10">
-          <div className="label mb-3">Opis</div>
-          <div className="card p-6 text-[15px] leading-[1.7] text-text-soft whitespace-pre-wrap">
-            {product.description}
-          </div>
-        </section>
-      )}
-
-      {/* A&QC placeholder (Sesja 6) */}
+      {/* A&QC */}
       <section className="mt-10">
         <div className="label mb-3">Authentication & Quality Control</div>
         <div className="card p-6">
@@ -143,23 +166,49 @@ export default async function ProductDetailPage(props: {
           )}
         </div>
       </section>
-
-      {/* Actions */}
-      <section className="mt-12 flex items-center gap-4 flex-wrap">
-        <ButtonLink href={submission ? `/panel/submissions/${submission.id}` : "/panel/submissions"} variant="ghost" size="md">
-          ← Wróć do Submission
-        </ButtonLink>
-      </section>
     </PanelShell>
   );
 }
 
-function SpecRow({ label, value }: { label: string; value: string | null }) {
+function SpecRow({ label, value, mono = false }: { label: string; value: string | null; mono?: boolean }) {
   return (
     <div className="flex items-baseline justify-between py-2.5 border-b border-border-soft last:border-0">
       <span className="text-[13px] text-text-soft">{label}</span>
-      <span className="text-[14px] font-medium num">{value ?? "—"}</span>
+      <span className={`text-[13px] ${mono ? "num text-text-mute" : "font-medium"}`}>{value ?? "—"}</span>
     </div>
+  );
+}
+
+/* Pionowy timeline: lime dot done, hollow pending (wzór E1/C8). */
+function Timeline({ product }: { product: Product }) {
+  const steps: Array<{ label: string; at: string | null }> = [
+    { label: "Przyjęta do komisu", at: product.created_at },
+    { label: "Wystawiona w sklepie", at: product.published_at },
+    { label: "Sprzedana", at: product.sold_at },
+    { label: "Rozliczona", at: product.settlement_at },
+  ];
+  return (
+    <ol className="space-y-0">
+      {steps.map((s, i) => {
+        const done = Boolean(s.at);
+        const last = i === steps.length - 1;
+        return (
+          <li key={s.label} className="relative pl-6 pb-4 last:pb-0">
+            {!last && (
+              <span className="absolute left-[5px] top-4 bottom-0 w-px bg-border" aria-hidden />
+            )}
+            <span
+              className={`absolute left-0 top-1 h-[11px] w-[11px] rounded-full ${
+                done ? "bg-lime" : "border border-border bg-transparent"
+              }`}
+              aria-hidden
+            />
+            <div className={`text-[13px] ${done ? "" : "text-text-mute"}`}>{s.label}</div>
+            {s.at && <div className="text-[11px] num text-text-mute mt-0.5">{formatDate(s.at)}</div>}
+          </li>
+        );
+      })}
+    </ol>
   );
 }
 
@@ -168,17 +217,13 @@ function Gallery({ product }: { product: Product }) {
 
   if (photos.length === 0) {
     return (
-      <div
-        className="aspect-[4/3] rounded-[20px] flex flex-col items-center justify-center text-white"
-        style={{ background: "linear-gradient(135deg,#13141A 0%, #0A0B10 100%)" }}
-      >
+      <div className="aspect-[4/3] rounded-[20px] flex flex-col items-center justify-center bg-surface border border-border">
         <ProductThumb photos={[]} brand={product.brand} size="lg" />
-        <div className="mt-4 text-[14px] text-text-mute">Brak zdjęć</div>
+        <div className="mt-4 text-[13px] text-text-mute">Brak zdjęć</div>
       </div>
     );
   }
 
-  // Layout: hero + grid of thumbs
   const [hero, ...rest] = photos;
   return (
     <div>
@@ -189,7 +234,7 @@ function Gallery({ product }: { product: Product }) {
       {rest.length > 0 && (
         <div className="mt-3 grid grid-cols-5 gap-3">
           {rest.slice(0, 5).map((p, i) => (
-            <div key={p.url + i} className="aspect-square rounded-[10px] overflow-hidden border border-border bg-surface relative">
+            <div key={p.url + i} className="aspect-square rounded-[12px] overflow-hidden border border-border bg-surface relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.url} alt={`${product.brand} ${i + 2}`} className="absolute inset-0 w-full h-full object-cover" />
             </div>

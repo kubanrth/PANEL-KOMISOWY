@@ -2,13 +2,24 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import { vatLabel } from "@/lib/types";
 import type { Product, Submission, Invoice } from "@/lib/types";
 
+/* Sprzedaże — design C6: KPI row, tabela grupowana nagłówkami miesięcy
+   („Czerwiec 2026 — 3 szt · 8 400 zł"), pigułki W ROZLICZENIU/ROZLICZONE. */
+
 type Filters = { status?: "all" | "pending" | "settled"; range?: "7" | "30" | "90" | "all" };
+
+const MONTHS_PL = [
+  "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+  "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień",
+];
 
 export default async function SprzedazePage(props: { searchParams: Promise<Filters> }) {
   const sp = await props.searchParams;
@@ -97,6 +108,23 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
   const totalValue = visible.reduce((acc, p) => acc + (p.listing_price_cents ?? 0), 0);
   const settledCount = sales.filter((p) => invoiceByProduct.get(p.id)?.status === "verified").length;
 
+  // Grupowanie po miesiącu sprzedaży (bez sold_at → grupa „Bez daty").
+  const groups = new Map<string, Product[]>();
+  for (const p of visible) {
+    const key = p.sold_at
+      ? `${new Date(p.sold_at).getFullYear()}-${String(new Date(p.sold_at).getMonth()).padStart(2, "0")}`
+      : "none";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(p);
+  }
+  const groupKeys = Array.from(groups.keys()).sort((a, b) => (a === "none" ? 1 : b === "none" ? -1 : b.localeCompare(a)));
+
+  function groupLabel(key: string): string {
+    if (key === "none") return "Bez daty sprzedaży";
+    const [y, m] = key.split("-").map(Number);
+    return `${MONTHS_PL[m]} ${y}`;
+  }
+
   return (
     <PanelShell
       user={{ email: user.email! }}
@@ -105,12 +133,12 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
       breadcrumb={[{ label: "Sprzedaże" }]}
     >
       {missingMigration && (
-        <div className="mb-6 card-bare bg-amber/5 border border-amber/30 rounded-[14px] p-4 flex items-start gap-3">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber mt-0.5 flex-shrink-0">
+        <div className="mb-6 rounded-[14px] bg-yellow/8 border border-yellow/25 p-4 flex items-start gap-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
             <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
           </svg>
           <div className="text-[12px]">
-            <div className="font-semibold text-amber">Brakuje migracji 008 lub 009</div>
+            <div className="font-medium text-yellow">Brakuje migracji 008 lub 009</div>
             <p className="mt-1 text-text-soft">
               Strona działa w trybie ograniczonym (brak VAT / dat rozliczeń / statusu faktur).
               Uruchom migracje 008_product_enrichment + 009_invoices w Supabase SQL Editor.
@@ -119,36 +147,41 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
         </div>
       )}
 
-      <section>
-        <div className="label">{sales.length} sprzedaży</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Sprzedaże <span className="text-text-soft">/ historia transakcji.</span>
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Pełna historia sprzedaży z datą, ceną, VAT, terminem rozliczenia oraz statusem
-          (rozliczone / oczekujące). Po 14 dniach od sprzedaży środki są gotowe do wypłaty.
-        </p>
-      </section>
+      <PageHeader
+        label={`${sales.length} sprzedaży · historia transakcji`}
+        title="Sprzedaże"
+        sub="Pełna historia sprzedaży z datą, ceną, VAT i statusem rozliczenia. Po 14 dniach od sprzedaży środki są gotowe do wypłaty."
+      />
 
       {sales.length === 0 ? (
-        <EmptyState />
+        <section className="mt-8">
+          <EmptyState
+            title="Jeszcze nic nie sprzedałeś"
+            sub="Wystaw pierwszą koszulkę — po pierwszej sprzedaży zobaczysz tu pełną historię."
+            action={
+              <ButtonLink href="/start" size="md">
+                Nowa oferta <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
+        </section>
       ) : (
         <>
           <section className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <Kpi label="Sprzedanych" value={sales.length.toString()} />
-            <Kpi label="Rozliczonych" value={settledCount.toString()} sub={`z ${sales.length}`} />
-            <Kpi label="Oczekujące" value={(sales.length - settledCount).toString()} sub="bez faktury / UKS" />
-            <Kpi
+            <KpiCard label="Sprzedanych" value={sales.length} />
+            <KpiCard label="Rozliczonych" value={settledCount} sub={`z ${sales.length}`} />
+            <KpiCard label="W rozliczeniu" value={sales.length - settledCount} sub="bez faktury / UKS" />
+            <KpiCard
               label="Wartość brutto"
               value={formatPLN(totalValue, { decimals: false })}
+              mono
               sub={range === "all" ? "łącznie" : `ostatnie ${range} dni`}
             />
           </section>
 
           {/* Filters */}
-          <section className="mt-8 flex flex-wrap items-center gap-3">
-            <FilterPills
-              label="Zakres"
+          <section className="mt-7 flex flex-wrap items-center gap-2">
+            <FilterChips
               current={range}
               options={[
                 { v: "all", l: "Wszystkie" },
@@ -159,90 +192,108 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
               param="range"
               existing={sp}
             />
-            <FilterPills
-              label="Status"
+            <span className="mx-1 h-5 w-px bg-border" aria-hidden />
+            <FilterChips
               current={statusFilter}
               options={[
                 { v: "all", l: "Wszystkie" },
                 { v: "settled", l: "Rozliczone" },
-                { v: "pending", l: "Oczekujące" },
+                { v: "pending", l: "W rozliczeniu" },
               ]}
               param="status"
               existing={sp}
             />
           </section>
 
-          {/* List */}
+          {/* Lista grupowana po miesiącach */}
           <section className="mt-6">
             <div className="card table-scroll">
-              <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_44px_60px_120px_70px_110px_110px_120px_140px] gap-3 px-4 py-3 label border-b border-border-soft items-center">
-                <div>Produkt</div>
-                <div>Il.</div>
+              <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_60px_130px_56px_100px_70px_110px_170px] gap-3 px-4 h-11 label border-b border-border items-center">
+                <div>Koszulka</div>
                 <div>Rozm.</div>
                 <div>Cena</div>
                 <div>VAT</div>
-                <div>Data sprz.</div>
+                <div>Data</div>
                 <div>Dni</div>
                 <div>Rozliczenie</div>
                 <div>Status</div>
               </div>
-              {visible.map((p) => {
-                const sub = subById.get(p.submission_id);
-                const commission = sub?.commission_rate ?? 0.2;
-                const takeHome = Math.round((p.listing_price_cents ?? 0) * (1 - commission));
-                const inv = invoiceByProduct.get(p.id);
-                const settled = inv?.status === "verified";
-                const daysToSold = p.sold_at && p.published_at
-                  ? Math.max(
-                      0,
-                      Math.floor(
-                        (new Date(p.sold_at).getTime() - new Date(p.published_at).getTime()) /
-                          86_400_000,
-                      ),
-                    )
-                  : null;
 
+              {groupKeys.map((key) => {
+                const items = groups.get(key)!;
+                const sum = items.reduce((a, p) => a + (p.listing_price_cents ?? 0), 0);
                 return (
-                  <div
-                    key={p.id}
-                    className="grid grid-cols-[minmax(220px,3fr)_44px_60px_120px_70px_110px_110px_120px_140px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/30"
-                  >
-                    <Link href={`/panel/products/${p.id}`} className="flex items-center gap-3 min-w-0 hover:text-blue transition-colors">
-                      <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
-                      <div className="min-w-0">
-                        <div className="text-[13px] font-medium truncate">{p.brand} · {p.model}</div>
-                        <div className="text-[10px] num text-text-faint truncate">{p.sku}</div>
-                        <div className="text-[11px] text-text-mute num truncate">
-                          Twój udział: {formatPLN(takeHome, { decimals: false })}
-                        </div>
+                  <div key={key}>
+                    {/* Month header */}
+                    <div className="px-4 py-2.5 bg-surface-2/50 border-b border-border-soft flex items-baseline justify-between gap-3">
+                      <div className="text-[12px] font-medium tracking-[-0.01em]">{groupLabel(key)}</div>
+                      <div className="text-[11px] num text-text-mute">
+                        {items.length} szt · {formatPLN(sum, { decimals: false })}
                       </div>
-                    </Link>
-                    <div className="text-[13px] num text-text-soft">1</div>
-                    <div className="text-[12px] num text-text-soft">{p.size ?? "—"}</div>
-                    <div className="text-[13px] font-semibold num">{formatPLN(p.listing_price_cents ?? 0, { decimals: false })}</div>
-                    <div className="text-[12px] num text-text-soft">{vatLabel(p.vat_rate)}</div>
-                    <div className="text-[12px] num text-text-soft">{formatDate(p.sold_at)}</div>
-                    <div className="text-[12px] num text-text-soft">{daysToSold != null ? `${daysToSold} d` : "—"}</div>
-                    <div className={`text-[12px] num ${p.settlement_at ? "text-text-soft" : "text-text-faint"}`}>
-                      {p.settlement_at ? formatDate(p.settlement_at) : "—"}
                     </div>
-                    <div>
-                      {settled ? (
-                        <span className="pill pill-mint">
-                          <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-                          Rozliczone
-                          {inv?.invoice_number && <span className="ml-1 text-text-faint num">· {inv.invoice_number}</span>}
-                        </span>
-                      ) : (
-                        <span className="pill pill-amber">
-                          <span className="h-1.5 w-1.5 rounded-full bg-amber" />
-                          Oczekujące
-                        </span>
-                      )}
-                    </div>
+
+                    {items.map((p) => {
+                      const sub = subById.get(p.submission_id);
+                      const commission = sub?.commission_rate ?? 0.2;
+                      const takeHome = Math.round((p.listing_price_cents ?? 0) * (1 - commission));
+                      const inv = invoiceByProduct.get(p.id);
+                      const settled = inv?.status === "verified";
+                      const daysToSold = p.sold_at && p.published_at
+                        ? Math.max(
+                            0,
+                            Math.floor(
+                              (new Date(p.sold_at).getTime() - new Date(p.published_at).getTime()) /
+                                86_400_000,
+                            ),
+                          )
+                        : null;
+
+                      return (
+                        <div
+                          key={p.id}
+                          className="grid grid-cols-1 md:grid-cols-[minmax(220px,3fr)_60px_130px_56px_100px_70px_110px_170px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
+                        >
+                          <Link href={`/panel/products/${p.id}`} className="flex items-center gap-3 min-w-0 hover:text-lime transition-colors">
+                            <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
+                            <div className="min-w-0">
+                              <div className="text-[13.5px] font-medium truncate">{p.brand} {p.model}</div>
+                              <div className="text-[11px] num text-text-mute truncate">{p.sku}</div>
+                              <div className="text-[11px] text-text-mute num truncate">
+                                Twój udział: <span className="text-mint">{formatPLN(takeHome, { decimals: false })}</span>
+                              </div>
+                            </div>
+                          </Link>
+                          <div className="hidden md:block text-[12px] num text-text-soft">{p.size ?? "—"}</div>
+                          <div className="hidden md:block text-[13px] num">{formatPLN(p.listing_price_cents ?? 0, { decimals: false })}</div>
+                          <div className="hidden md:block text-[12px] num text-text-soft">{vatLabel(p.vat_rate)}</div>
+                          <div className="hidden md:block text-[12px] num text-text-soft">{formatDate(p.sold_at)}</div>
+                          <div className="hidden md:block text-[12px] num text-text-soft">{daysToSold != null ? `${daysToSold} d` : "—"}</div>
+                          <div className={`hidden md:block text-[12px] num ${p.settlement_at ? "text-text-soft" : "text-text-faint"}`}>
+                            {p.settlement_at ? formatDate(p.settlement_at) : "—"}
+                          </div>
+                          <div className="flex md:block items-center gap-2">
+                            {settled ? (
+                              <span className="pill pill-mint">
+                                <span className="h-1.5 w-1.5 rounded-full bg-mint" />
+                                Rozliczone
+                              </span>
+                            ) : (
+                              <span className="pill pill-yellow">
+                                <span className="h-1.5 w-1.5 rounded-full bg-yellow" />
+                                W rozliczeniu
+                              </span>
+                            )}
+                            {settled && inv?.invoice_number && (
+                              <span className="md:mt-1 block text-[10px] num text-text-faint">{inv.invoice_number}</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}
+
               {visible.length === 0 && (
                 <div className="px-6 py-12 text-center text-[13px] text-text-soft">
                   Brak sprzedaży w tym zakresie.
@@ -256,59 +307,36 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
   );
 }
 
-function FilterPills({
-  label, current, options, param, existing,
+function FilterChips({
+  current, options, param, existing,
 }: {
-  label: string;
   current: string;
   options: Array<{ v: string; l: string }>;
   param: keyof Filters;
   existing: Filters;
 }) {
   return (
-    <div className="flex items-center gap-2 flex-wrap text-[12px]">
-      <span className="label">{label}:</span>
+    <div className="flex items-center gap-1.5 flex-wrap">
       {options.map((o) => {
         const active = current === o.v;
         const next: Record<string, string> = { ...existing };
         if (o.v && o.v !== "all") next[param as string] = o.v;
         else delete next[param as string];
         const query = new URLSearchParams(next).toString();
-        const cls = active
-          ? "bg-text text-bg font-semibold"
-          : "bg-surface text-text-soft hover:bg-surface-2 hover:text-text";
         return (
-          <Link key={o.v} href={`/panel/sprzedaze${query ? "?" + query : ""}`} className={`px-2.5 py-1 rounded-[8px] transition-colors ${cls}`}>
+          <Link
+            key={o.v}
+            href={`/panel/sprzedaze${query ? "?" + query : ""}`}
+            className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+              active
+                ? "border-lime/40 bg-lime/10 text-lime"
+                : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
+            }`}
+          >
             {o.l}
           </Link>
         );
       })}
     </div>
-  );
-}
-
-function Kpi({ label, value, sub }: { label: string; value: string; sub?: string }) {
-  return (
-    <div className="card p-4">
-      <div className="label">{label}</div>
-      <div className="mt-2 font-bold text-2xl tracking-[-0.035em] num">{value}</div>
-      {sub && <div className="mt-1.5 text-[12px] text-text-mute">{sub}</div>}
-    </div>
-  );
-}
-
-function EmptyState() {
-  return (
-    <section className="mt-10">
-      <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center">
-        <div className="font-bold text-xl tracking-[-0.025em]">Brak sprzedaży</div>
-        <p className="mt-2 text-text-soft text-[14px]">Po pierwszej sprzedaży zobaczysz tu pełną historię.</p>
-        <div className="mt-6">
-          <ButtonLink href="/start" size="md">
-            Nowa Oferta <ArrowRight size={16} />
-          </ButtonLink>
-        </div>
-      </div>
-    </section>
   );
 }
