@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0A0D0B;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0A0D0B;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+  <div data-screen-label="M3 · Mobile Kontr-oferta 390" style="position:relative;width:390px;height:844px;background:#050807;border:1px solid rgba(255,255,255,0.1);border-radius:32px;overflow:hidden;box-shadow:0 40px 100px -40px rgba(0,0,0,0.9);display:flex;flex-direction:column">
+
+    <header style="flex-shrink:0;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;background:rgba(5,8,7,0.9);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <button style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:11px;background:#16191A;color:#BDBFBD;cursor:pointer"><i class="ph ph-arrow-left" style="font-size:18px"></i></button>
+      <div style="flex:1;text-align:center;font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Kontr-oferta</div>
+      <span style="width:38px"></span>
+    </header>
+
+    <main style="flex:1;overflow-y:auto;padding:20px 16px 120px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:11px;background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 13px">
+        <span style="width:38px;height:38px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%,#22242A,#0C0F0D);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">J</span>
+        <div style="flex:1;min-width:0"><div style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Juventus 2011/12 · L</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:1px">KCB-26-C1D8 · poz. 1/3</div></div>
+        <span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;font:600 8px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:rgba(245,166,35,0.14);color:#F5A623;border:1px solid rgba(245,166,35,0.3)">Retro</span>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px">
+        <div style="display:flex;align-items:center;gap:7px;font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:10px"><i class="ph ph-user" style="font-size:13px"></i>Twoja propozycja</div>
+        <div style="font-weight:300;font-size:30px;line-height:1;letter-spacing:-0.025em;color:#7B7F7B;text-decoration:line-through;text-decoration-color:rgba(255,90,71,0.6);text-decoration-thickness:2px">3 500 zł</div>
+        <div style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:8px">wysłana 26 cze 2026</div>
+      </div>
+
+      <div style="position:relative;overflow:hidden;border-radius:18px;padding:20px;background:radial-gradient(130% 130% at 100% 0%, #86FF41 0%, #22B85F 44%, #0B5A2C 100%);box-shadow:0 20px 50px -20px rgba(34,221,153,0.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:7px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#052610"><i class="ph ph-shield-check" style="font-size:13px"></i>Nasza kontr-oferta</div>
+          <sc-if value="{{ accepted }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 9px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:#052610;color:#8BFF66"><i class="ph ph-check-circle" style="font-size:11px"></i>OK</span></sc-if>
+        </div>
+        <div style="font-weight:300;font-size:42px;line-height:1;letter-spacing:-0.03em;color:#05140B">3 100 zł</div>
+        <p style="margin:12px 0 0;font:400 12px/1.55 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#062012">Drobne przetarcia sitodruku obniżają stan do B. Przy tej cenie sprzedaż w 2–3 tygodnie.</p>
+        <div style="font:500 10px 'IBM Plex Mono',monospace;color:rgba(5,38,16,0.65);margin-top:10px">audytor #A12 · 30 cze 2026</div>
+      </div>
+
+      <sc-if value="{{ notAccepted }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:8px;font:500 11px 'IBM Plex Mono',monospace;color:#FFCC00;justify-content:center"><i class="ph ph-clock-countdown" style="font-size:15px"></i>ważna jeszcze 6 dni · do 8 lip, 23:59</div>
+      </sc-if>
+      <sc-if value="{{ accepted }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:14px;background:rgba(34,221,153,0.08);border:1px solid rgba(34,221,153,0.22);border-left:3px solid #22DD99">
+          <i class="ph ph-check-circle" style="font-size:18px;color:#22DD99;flex-shrink:0"></i>
+          <span style="font:400 12px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Zaakceptowano. Koszulka trafi do sklepu w cenie <span style="font-weight:600">3 100 zł</span>.</span>
+        </div>
+      </sc-if>
+    </main>
+
+    <sc-if value="{{ notAccepted }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;bottom:0;left:0;right:0;z-index:20;display:flex;flex-direction:column;gap:9px;padding:14px 16px 20px;background:rgba(5,8,7,0.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,0.07)">
+        <button onClick="{{ accept }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border:0;border-radius:999px;font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 14px 32px -10px rgba(34,221,153,0.5)"><i class="ph ph-check" style="font-size:17px"></i>Akceptuję 3 100 zł</button>
+        <button style="display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer"><i class="ph ph-arrows-left-right" style="font-size:16px"></i>Proponuję inną cenę</button>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:924},
+ &quot;zaakceptowana&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}}">
+class Component extends DCLogic {
+  state = { accepted:null };
+  renderVals(){
+    const accepted = this.state.accepted ?? (this.props.zaakceptowana ?? false);
+    return { accepted, notAccepted:!accepted, accept:()=>this.setState({accepted:true}) };
+  }
+}
+</script>
+</body>
+</html>

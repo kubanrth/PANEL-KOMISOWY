@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="F1 · Admin Queue" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="queue" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Queue</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FF5A47;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · queue operacyjne</div>
+        <h1 style="margin:0;font-weight:300;font-size:36px;line-height:1.16;letter-spacing:-0.03em">Poranek. 12 nowych ofert w kolejce<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <a href="Kickback · F5 AQC kolejka.dc.html" style="text-decoration:none;color:inherit;background:#0F1210;border:1px solid rgba(255,90,71,0.35);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 1px rgba(255,90,71,0.12),0 14px 34px -18px rgba(255,90,71,0.35);transition:transform .18s;cursor:pointer" style-hover="transform:translateY(-2px)"><div style="display:flex;align-items:flex-start;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">A&amp;QC do zrobienia</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(255,90,71,0.15);color:#FF5A47;border:1px solid rgba(255,90,71,0.3)">&gt;10</span></div><span style="font:300 34px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1;color:#FF5A47">14</span><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">najstarsza czeka 4 dni</span></a>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Sprzedaże dziś</span><span style="font:300 34px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">5</span><span style="font:400 12px 'IBM Plex Mono',monospace;color:#22DD99">11 300 zł GMV</span></div>
+        <a href="Kickback · H4 Payouts.dc.html" style="text-decoration:none;color:inherit;background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:transform .18s;cursor:pointer" style-hover="transform:translateY(-2px)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Wypłaty do realizacji</span><span style="font:300 34px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">8</span><span style="font:400 12px 'IBM Plex Mono',monospace;color:#BDBFBD">17 240 zł</span></a>
+        <div style="background:#0F1210;border:1px solid rgba(255,90,71,0.35);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 1px rgba(255,90,71,0.12)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Alerty</span><span style="font:300 34px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1;color:#FF5A47">2</span><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Fakturownia · webhook failed</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:20px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Kolejka A&amp;QC — najstarsze</h2><a href="Kickback · F5 AQC kolejka.dc.html" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120">Idź do kolejki<i class="ph ph-arrow-right" style="font-size:13px;color:#66FF33"></i></a></div>
+            <sc-for list="{{ queue }}" as="q" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+                <span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%, {{ q.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ q.cl }}</span>
+                <span style="flex:1;min-width:0"><span style="display:block;font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.name }}</span><span style="display:block;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ q.client }} · {{ q.sku }}</span></span>
+                <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ q.aBg }};color:{{ q.aColor }};border:1px solid {{ q.aBorder }};flex-shrink:0"><i class="ph ph-clock" style="font-size:12px"></i>{{ q.age }}</span>
+                <a href="Kickback · F6 AQC inspekcja.dc.html" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none;flex-shrink:0" style-hover="background:#1D2120">Rozpocznij</a>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Ostatnie ruchy systemu</h2></div>
+            <sc-for list="{{ moves }}" as="m" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;min-height:52px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <span style="width:34px;height:34px;flex-shrink:0;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center"><i class="ph {{ m.icon }}" style="font-size:17px;color:{{ m.c }}"></i></span>
+                <span style="flex:1;min-width:0;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.text }}</span>
+                <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B;flex-shrink:0">{{ m.time }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Aktywni klienci</h2><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">LTV · top 5</span></div>
+          <sc-for list="{{ leaders }}" as="l" hint-placeholder-count="5">
+            <a href="Kickback · G2 Profil klienta.dc.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;min-height:56px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;cursor:pointer" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="width:20px;font:500 12px 'IBM Plex Mono',monospace;color:{{ l.posColor }}">{{ l.pos }}</span>
+              <span style="width:34px;height:34px;flex-shrink:0;border-radius:50%;background:{{ l.aBg }};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:{{ l.aColor }}">{{ l.init }}</span>
+              <span style="flex:1;min-width:0"><span style="display:block;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ l.name }}</span><span style="display:block;font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ l.meta }}</span></span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace">{{ l.ltv }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const age=(d)=> d>3 ? {aColor:'#FF5A47',aBg:'rgba(255,90,71,0.13)',aBorder:'rgba(255,90,71,0.3)'} : {aColor:'#FFCC00',aBg:'rgba(255,204,0,0.13)',aBorder:'rgba(255,204,0,0.3)'};
+    const queue=[
+      {name:'Juventus 2011/12 · L', client:'Marcin K.', sku:'KCB-26-C1D8', d:4, age:'4 dni', crest:'#22242A', cl:'J'},
+      {name:'Real Madryt away 2016/17 · M', client:'Marcin K.', sku:'KCB-26-C1D8', d:4, age:'4 dni', crest:'#3A1D24', cl:'R'},
+      {name:'FC Barcelona 2008/09 · S', client:'Anna W.', sku:'KCB-26-H2E441', d:3, age:'3 dni', crest:'#1D2A3A', cl:'B'},
+      {name:'Polska EURO 2016 · M', client:'Tomek R.', sku:'KCB-26-J8A105', d:2, age:'2 dni', crest:'#2A2410', cl:'P'},
+      {name:'AC Milan 2010/11 · M', client:'Anna W.', sku:'KCB-26-K1C773', d:1, age:'1 dzień', crest:'#2A0F14', cl:'M'},
+    ];
+    const moves=[
+      {icon:'ph-hand-coins', c:'#22DD99', text:'Sprzedaż: AC Milan 2006/07 za 3 200 zł (Marcin K.)', time:'09:14'},
+      {icon:'ph-shield-check', c:'#4A6BFF', text:'A&QC pass: Real Madryt away 2016/17 — stan A', time:'08:50'},
+      {icon:'ph-handshake', c:'#FFCC00', text:'Kontr-oferta wysłana: Juventus 2011/12 → 3 100 zł', time:'08:22'},
+      {icon:'ph-warning', c:'#FF5A47', text:'Fakturownia: webhook FAILED — payout #P-2604', time:'07:41'},
+    ];
+    const leaders=[
+      {pos:'01', init:'MK', name:'Marcin K.', meta:'12 sprzedanych · 34 aktywne', ltv:'34 500 zł'},
+      {pos:'02', init:'AW', name:'Anna W.', meta:'9 sprzedanych · 21 aktywnych', ltv:'28 100 zł'},
+      {pos:'03', init:'TR', name:'Tomek R.', meta:'7 sprzedanych · 12 aktywnych', ltv:'19 400 zł'},
+      {pos:'04', init:'PB', name:'Paweł B.', meta:'5 sprzedanych · 8 aktywnych', ltv:'12 850 zł'},
+      {pos:'05', init:'KS', name:'Kasia S.', meta:'4 sprzedane · 6 aktywnych', ltv:'9 210 zł'},
+    ];
+    return {
+      queue: queue.map(q=>({ ...q, ...age(q.d) })),
+      moves,
+      leaders: leaders.map((l,i)=>({ ...l,
+        posColor: i===0?'#66FF33':'#4A4E4B',
+        aBg: i===0?'linear-gradient(135deg,#6ECC1F,#22DD99)':'#1B1F1D',
+        aColor: i===0?'#05140B':'#BDBFBD' })),
+    };
+  }
+}
+</script>
+</body>
+</html>

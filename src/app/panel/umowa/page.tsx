@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDateTime } from "@/lib/format";
 import { UmowaSign } from "./UmowaSign";
 
@@ -31,16 +32,11 @@ export default async function UmowaPage() {
       active="umowa"
       breadcrumb={[{ label: "Umowa Komisowa" }]}
     >
-      <section>
-        <div className="label">Dokument główny</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Umowa Komisowa.
-        </h1>
-        <p className="mt-4 text-[16px] text-text-soft max-w-[60ch]">
-          Podpisujesz raz. Obowiązuje dla wszystkich Twoich kolejnych Ofert (paczek) —
-          nie podpisujesz nowej umowy przy każdej dostawie towaru.
-        </p>
-      </section>
+      <PageHeader
+        label="Dokument główny"
+        title="Umowa Komisowa"
+        sub="Podpisujesz raz. Obowiązuje dla wszystkich Twoich kolejnych Ofert (paczek) — nie podpisujesz nowej umowy przy każdej dostawie towaru."
+      />
 
       {signed ? (
         <section className="mt-12">
@@ -85,7 +81,7 @@ export default async function UmowaPage() {
 
             <div className="mt-6 text-[12px] text-text-mute">
               Potrzebujesz aneksu lub chcesz odnowić wersję umowy?{" "}
-              <Link href="mailto:hello@kickback.pl" className="text-text underline decoration-text-faint underline-offset-4 hover:decoration-blue">
+              <Link href="mailto:hello@kickback.pl" className="text-text underline decoration-text-faint underline-offset-4 hover:decoration-lime">
                 Napisz do nas
               </Link>
               .
@@ -94,8 +90,8 @@ export default async function UmowaPage() {
         </section>
       ) : (
         <section className="mt-12">
-          <div className="card-bare bg-amber/5 border border-amber/30 rounded-[16px] p-5 mb-8 flex gap-3 items-start">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-amber mt-0.5 flex-shrink-0">
+          <div className="card-bare bg-yellow/8 border border-yellow/25 rounded-[16px] p-5 mb-8 flex gap-3 items-start">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0">
               <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
             </svg>
             <div>

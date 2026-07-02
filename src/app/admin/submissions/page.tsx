@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { Submission, SubmissionStatus } from "@/lib/types";
@@ -56,14 +57,9 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
 
   return (
     <AdminShell user={user} profile={profile} active="submissions" breadcrumb={[{ label: "Submissions" }]}>
-      <section>
-        <div className="label">{all.length} łącznie</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Wszystkie Submissions
-        </h1>
-      </section>
+      <PageHeader label={`${all.length} łącznie`} title="Submissions" />
 
-      <section className="mt-10">
+      <section className="mt-8">
         <form action="/admin/submissions" method="get" className="flex items-center gap-3 max-w-md mb-6">
           <input
             name="q"
@@ -86,11 +82,11 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
               <Link
                 key={f.key}
                 href={href}
-                className={`px-3 py-1.5 rounded-[10px] transition-colors ${
-                  active ? "bg-text text-bg font-semibold" : "bg-surface text-text-soft hover:bg-surface-2"
+                className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
+                  active ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
                 }`}
               >
-                {f.label} <span className={`num ml-1 ${active ? "text-bg/70" : "text-text-mute"}`}>· {counts[f.key]}</span>
+                {f.label} <span className={`num ml-1 ${active ? "text-lime/70" : "text-text-mute"}`}>· {counts[f.key]}</span>
               </Link>
             );
           })}
@@ -104,7 +100,7 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
           </div>
         ) : (
           <div className="card table-scroll">
-            <div className="grid grid-cols-12 gap-4 px-6 py-3 label border-b border-border-soft">
+            <div className="grid grid-cols-12 gap-4 px-6 h-11 items-center label border-b border-border">
               <div className="col-span-2">Submission</div>
               <div className="col-span-3">Klient</div>
               <div className="col-span-2">Status</div>
@@ -120,7 +116,7 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
                   href={`/panel/submissions/${s.id}`}
                   className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
-                  <div className="col-span-2 font-mono text-[13px]">{s.id}</div>
+                  <div className="col-span-2 num text-[12px] text-text-mute">{s.id}</div>
                   <div className="col-span-3">
                     <div className="text-[14px]">{name}</div>
                     <div className="text-[11px] text-text-mute">{s.profiles?.account_type === "business" ? "Biznesowe" : "Indywidualne"}</div>

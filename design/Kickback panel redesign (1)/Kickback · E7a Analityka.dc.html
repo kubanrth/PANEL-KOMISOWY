@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="E7a · Analityka" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="an-deep" expanded="analityka" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Analityka</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · deep dive</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Analityka<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:stretch">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+            <div><div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B;margin-bottom:5px">Sprzedaż · 12 miesięcy</div><div style="font-weight:300;font-size:28px;letter-spacing:-0.02em">19 700 zł</div></div>
+            <span style="display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(34,221,153,0.14);color:#22DD99"><i class="ph ph-trend-up" style="font-size:14px"></i>+34%</span>
+          </div>
+          <svg viewBox="0 0 640 220" width="100%" height="auto" style="display:block;overflow:visible" preserveAspectRatio="none"><defs><linearGradient id="al" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#66FF33"/><stop offset="1" stop-color="#22DD99"/></linearGradient><linearGradient id="af" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(102,255,51,0.16)"/><stop offset="1" stop-color="rgba(102,255,51,0)"/></linearGradient></defs><line x1="0" y1="25" x2="640" y2="25" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="75" x2="640" y2="75" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="125" x2="640" y2="125" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="175" x2="640" y2="175" stroke="rgba(255,255,255,0.05)"/><path d="M0,170 L58,150 L116,158 L175,120 L233,134 L291,98 L349,112 L407,80 L465,94 L524,58 L582,72 L640,38 L640,220 L0,220 Z" fill="url(#af)"/><polyline points="0,170 58,150 116,158 175,120 233,134 291,98 349,112 407,80 465,94 524,58 582,72 640,38" fill="none" stroke="url(#al)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="524" cy="58" r="5" fill="#050807" stroke="#66FF33" stroke-width="3"/></svg>
+          <div style="display:flex;justify-content:space-between;margin-top:12px;font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B"><span>lip</span><span>sie</span><span>wrz</span><span>paź</span><span>lis</span><span>gru</span><span>sty</span><span>lut</span><span>mar</span><span>kwi</span><span>maj</span><span>cze</span></div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px;display:flex;flex-direction:column">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B;margin-bottom:14px">Rozkład rozmiarów</div>
+          <div style="display:flex;align-items:center;justify-content:center;flex:1">
+            <div style="position:relative;width:140px;height:140px">
+              <svg viewBox="0 0 140 140" width="140" height="140"><g transform="rotate(-90 70 70)"><circle cx="70" cy="70" r="54" fill="none" stroke="#16191A" stroke-width="16"/><circle cx="70" cy="70" r="54" fill="none" stroke="#66FF33" stroke-width="16" stroke-dasharray="128.5 210.79" stroke-dashoffset="0"/><circle cx="70" cy="70" r="54" fill="none" stroke="#22DD99" stroke-width="16" stroke-dasharray="102 237.29" stroke-dashoffset="-134.5"/><circle cx="70" cy="70" r="54" fill="none" stroke="#4A6BFF" stroke-width="16" stroke-dasharray="86.8 252.49" stroke-dashoffset="-242.5"/></g></svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-weight:300;font-size:28px;letter-spacing:-0.02em">46</span><span style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">sztuk</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+            <div style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:9px;background:#66FF33"></span>L<span style="margin-left:auto;font:500 12px 'IBM Plex Mono',monospace;color:#F5F5F3">38%</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:9px;background:#22DD99"></span>M<span style="margin-left:auto;font:500 12px 'IBM Plex Mono',monospace;color:#F5F5F3">30%</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:8px;height:8px;border-radius:9px;background:#4A6BFF"></span>S / XL<span style="margin-left:auto;font:500 12px 'IBM Plex Mono',monospace;color:#F5F5F3">32%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Prowizja wg klubu</div>
+            <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">12 mies · zł</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Real Madryt</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:88%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99)"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">1 244</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">AC Milan</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:74%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:.85"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">1 048</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Barcelona</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:55%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:.7"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">781</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Juventus</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:42%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:.6"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">594</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Legia</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:28%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:.5"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">396</span></div>
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:84px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Polska</span><div style="flex:1;height:22px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:16%;height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:.45"></div></div><span style="width:56px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">217</span></div>
+          </div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Top 5 sztuk</div><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">cena finalna</span></div>
+          <sc-for list="{{ top }}" as="t" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;min-height:52px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="width:22px;font:500 12px 'IBM Plex Mono',monospace;color:{{ t.numColor }}">{{ t.pos }}</span>
+              <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:radial-gradient(circle at 50% 35%, {{ t.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ t.cl }}</span>
+              <span style="flex:1;min-width:0;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.name }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace">{{ t.price }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const top=[
+      {pos:'01', name:'AC Milan 2006/07', price:'3 200 zł', crest:'#2A0F14', cl:'M'},
+      {pos:'02', name:'Real Madryt 2013/14', price:'2 900 zł', crest:'#3A1D24', cl:'R'},
+      {pos:'03', name:'Juventus 2014/15', price:'2 300 zł', crest:'#22242A', cl:'J'},
+      {pos:'04', name:'FC Barcelona 2010/11', price:'2 250 zł', crest:'#1D2A3A', cl:'B'},
+      {pos:'05', name:'AC Milan 2010/11', price:'2 250 zł', crest:'#2A0F14', cl:'M'},
+    ];
+    return { top: top.map((t,i)=>({ ...t, numColor: i===0?'#66FF33':'#4A4E4B' })) };
+  }
+}
+</script>
+</body>
+</html>

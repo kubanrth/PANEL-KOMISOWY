@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="A7 · Potwierdzenie" style="position:relative;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;display:flex;align-items:center;justify-content:center;padding:40px 24px;overflow:hidden">
+  <div style="position:absolute;inset:-25% auto auto -10%;width:800px;height:700px;pointer-events:none;background:radial-gradient(circle at 30% 30%, rgba(34,221,153,0.12) 0%, transparent 60%)"></div>
+
+  <div style="position:relative;width:520px;max-width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">
+    <div style="width:84px;height:84px;border-radius:50%;background:linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 24px 60px -18px rgba(34,221,153,0.6),inset 0 2px 0 rgba(255,255,255,0.35)"><i class="ph ph-check-bold" style="font-size:38px;color:#05140B"></i></div>
+
+    <div>
+      <h1 style="margin:0;font-weight:300;font-size:44px;line-height:1.1;letter-spacing:-0.03em">Odebrane<span style="color:#66FF33">.</span></h1>
+      <p style="margin:12px 0 0;font:400 15px/1.55 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:42ch">Odezwiemy się w ciągu 24h. Sprawdź maila — wysłaliśmy potwierdzenie i instrukcję nadania paczki.</p>
+    </div>
+
+    <button onClick="{{ copy }}" style="display:inline-flex;align-items:center;gap:12px;background:#0F1210;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:14px 20px;cursor:pointer;transition:.15s" style-hover="background:#16191A">
+      <span style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Numer zgłoszenia</span>
+      <span style="font:600 17px 'IBM Plex Mono',monospace;letter-spacing:0.02em;color:#F5F5F3">KCB-26-C1D8</span>
+      <i class="ph {{ copyIcon }}" style="font-size:17px;color:{{ copyColor }}"></i>
+    </button>
+
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="Kickback · A2 Login.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 20px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120">Śledź w panelu</a>
+      <a href="Kickback · A5 Start.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 18px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;text-decoration:none" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Wróć do strony głównej</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { copied:false };
+  renderVals(){
+    return {
+      copy:()=>{ try{ navigator.clipboard && navigator.clipboard.writeText('KCB-26-C1D8'); }catch(e){}
+        this.setState({copied:true}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({copied:false}),1800); },
+      copyIcon: this.state.copied?'ph-check':'ph-copy',
+      copyColor: this.state.copied?'#22DD99':'#7B7F7B',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="D6 · Twoje dane" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="st-dane" expanded="ustawienia" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Ustawienia</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Dane</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 100px;display:flex;flex-direction:column;gap:20px;max-width:900px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Ustawienia · konto</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Twoje dane<span style="color:#66FF33">.</span></h1>
+        </div>
+        <button onClick="{{ toggleB2B }}" style="display:inline-flex;align-items:center;gap:9px;height:38px;padding:0 8px 0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;cursor:pointer;flex-shrink:0" style-hover="background:#1D2120">
+          <span style="font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Konto firmowe B2B</span>
+          <span style="width:38px;height:22px;border-radius:999px;background:{{ b2bTrack }};position:relative;transition:background .2s"><span style="position:absolute;top:2px;left:{{ b2bKnob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></span>
+        </button>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Dane osobowe</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Imię</label><input onChange="{{ mark }}" defaultValue="Marcin" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Nazwisko</label><input onChange="{{ mark }}" defaultValue="Kowalski" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">E-mail</label><input onChange="{{ mark }}" defaultValue="marcin.k@gmail.com" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Telefon</label><input onChange="{{ mark }}" defaultValue="+48 601 220 418" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Adres</label><input onChange="{{ mark }}" defaultValue="ul. Złota 44/21, 00-120 Warszawa" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+      </div>
+
+      <sc-if value="{{ b2b }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px;animation:kb-in .18s ease">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Dane firmowe · B2B</span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(74,107,255,0.13);color:#4A6BFF;border:1px solid rgba(74,107,255,0.3)"><span style="width:5px;height:5px;border-radius:9px;background:#4A6BFF"></span>B2B</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Nazwa firmy</label><input onChange="{{ mark }}" defaultValue="Kolekcje MK sp. z o.o." style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">NIP</label><input onChange="{{ mark }}" defaultValue="521-30-44-182" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Adres siedziby</label><input onChange="{{ mark }}" defaultValue="ul. Prosta 20, 00-850 Warszawa" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <sc-if value="{{ changed }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(calc(-50% + 130px));z-index:60;display:flex;align-items:center;gap:14px;background:#1D2120;border:1px solid rgba(255,255,255,0.09);border-radius:999px;padding:10px 12px 10px 20px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.8)">
+      <span style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:7px;height:7px;border-radius:50%;background:#FFCC00"></span>Masz niezapisane zmiany</span>
+      <button onClick="{{ discard }}" style="height:36px;padding:0 14px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Odrzuć</button>
+      <button onClick="{{ save }}" style="display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-check" style="font-size:15px"></i>Zapisz zmiany</button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;kontoB2B&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { b2b:null, changed:false };
+  renderVals(){
+    const b2b = this.state.b2b ?? (this.props.kontoB2B ?? false);
+    return {
+      b2b,
+      b2bTrack: b2b?'#22DD99':'#2A2E2C',
+      b2bKnob: b2b?'18px':'2px',
+      toggleB2B:()=>this.setState(s=>({b2b: !(s.b2b ?? (this.props.kontoB2B ?? false)), changed:true})),
+      changed: this.state.changed,
+      mark:()=>this.setState({changed:true}),
+      save:()=>this.setState({changed:false}),
+      discard:()=>this.setState({changed:false}),
+    };
+  }
+}
+</script>
+</body>
+</html>

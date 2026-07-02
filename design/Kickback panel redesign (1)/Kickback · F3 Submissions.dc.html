@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="F3 · Admin Submissions" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="submissions" expanded="submissions" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Submissions</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FF5A47;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 100px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · oferty przychodzące</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Submissions<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s"><span style="width:6px;height:6px;border-radius:9px;background:{{ t.dot }}"></span>{{ t.label }}<span style="font:500 11px 'IBM Plex Mono',monospace;opacity:.75">{{ t.count }}</span></button>
+        </sc-for>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:40px minmax(150px,1.2fr) 120px 70px 110px 110px 150px 90px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <button onClick="{{ toggleAll }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ allBorder }};background:{{ allBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ allChecked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Klient</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Oferta</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Pozycje</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Wartość</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Wiek</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Akcje</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:40px minmax(150px,1.2fr) 120px 70px 110px 110px 150px 90px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);background:{{ r.rowBg }};transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <button onClick="{{ r.onCheck }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ r.cbBorder }};background:{{ r.cbBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ r.checked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:32px;height:32px;flex-shrink:0;border-radius:50%;background:#1B1F1D;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;color:#BDBFBD">{{ r.init }}</span><span style="min-width:0"><span style="display:block;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.client }}</span><span style="display:block;font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ r.typ }}</span></span></span>
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ r.num }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;justify-self:end">{{ r.items }}</span>
+            <span style="font:500 13px 'IBM Plex Mono',monospace;justify-self:end">{{ r.value }}</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.aBg }};color:{{ r.aColor }};border:1px solid {{ r.aBorder }};width:fit-content"><i class="ph ph-clock" style="font-size:12px"></i>{{ r.age }}</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+            <span style="display:flex;gap:6px;justify-self:end">
+              <button title="Podgląd" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;background:transparent;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#F5F5F3"><i class="ph ph-eye" style="font-size:15px"></i></button>
+              <button title="Do A&QC" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;background:transparent;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#66FF33"><i class="ph ph-shield-check" style="font-size:15px"></i></button>
+              <button title="Odrzuć" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;background:transparent;color:#BDBFBD;cursor:pointer" style-hover="background:rgba(255,90,71,0.1);color:#FF5A47"><i class="ph ph-x" style="font-size:15px"></i></button>
+            </span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ countLabel }}</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">1 / 2</span></div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ bulkVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(calc(-50% + 130px));z-index:60;display:flex;align-items:center;gap:14px;background:#1D2120;border:1px solid rgba(255,255,255,0.09);border-radius:999px;padding:10px 12px 10px 20px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.8)">
+      <span style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:7px;height:7px;border-radius:50%;background:#66FF33"></span>{{ bulkLabel }}</span>
+      <button onClick="{{ clearSel }}" style="height:36px;padding:0 14px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Wyczyść</button>
+      <button onClick="{{ clearSel }}" style="display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 16px;border:1px solid rgba(255,90,71,0.3);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#FF5A47;background:rgba(255,90,71,0.1);cursor:pointer" style-hover="background:rgba(255,90,71,0.18)">Odrzuć</button>
+      <button onClick="{{ clearSel }}" style="display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-check" style="font-size:15px"></i>Zaakceptuj</button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { tab:'new', sel:{} };
+  renderVals(){
+    const S={
+      new:{label:'Nowa', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      progress:{label:'W obiegu', c:'#FFCC00', bg:'rgba(255,204,0,0.13)', bd:'rgba(255,204,0,0.3)'},
+      accepted:{label:'Zaakceptowana', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      rejected:{label:'Odrzucona', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+    };
+    const all=[
+      {id:'s1', client:'Marcin K.', init:'MK', typ:'B2C · aktywny', num:'KCB-26-C1D8', items:'3', value:'~4 700 zł', h:26, age:'26 h', s:'new'},
+      {id:'s2', client:'Anna W.', init:'AW', typ:'B2B · aktywna', num:'KCB-26-H2E441', items:'2', value:'~3 800 zł', h:9, age:'9 h', s:'new'},
+      {id:'s3', client:'Tomek R.', init:'TR', typ:'B2C', num:'KCB-26-J8A105', items:'1', value:'~760 zł', h:4, age:'4 h', s:'new'},
+      {id:'s4', client:'Kasia S.', init:'KS', typ:'B2C · nowa', num:'KCB-26-M4B092', items:'4', value:'~5 300 zł', h:31, age:'31 h', s:'progress'},
+      {id:'s5', client:'Paweł B.', init:'PB', typ:'B2C', num:'KCB-26-N7F518', items:'1', value:'~1 450 zł', h:2, age:'2 h', s:'accepted'},
+      {id:'s6', client:'Anna W.', init:'AW', typ:'B2B', num:'KCB-26-P3C664', items:'2', value:'~980 zł', h:52, age:'52 h', s:'rejected'},
+    ];
+    const tabDefs=[
+      {k:'new', label:'Nowe', count:'4', dot:'#4A6BFF'},
+      {k:'progress', label:'W obiegu', count:'6', dot:'#FFCC00'},
+      {k:'accepted', label:'Zaakceptowane', count:'—', dot:'#22DD99'},
+      {k:'rejected', label:'Odrzucone', count:'2', dot:'#FF5A47'},
+    ];
+    const t=this.state.tab;
+    const filtered= all.filter(r=> r.s===t || (t==='new'&&r.s==='new'));
+    const sel=this.state.sel;
+    const selCount=filtered.filter(r=>sel[r.id]).length;
+    const allChecked = filtered.length>0 && selCount===filtered.length;
+    return {
+      tabs: tabDefs.map(d=>({ ...d,
+        bg: t===d.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: t===d.k?'#66FF33':'#BDBFBD',
+        border: t===d.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        dot: t===d.k?'#66FF33':d.dot,
+        onClick:()=>this.setState({tab:d.k, sel:{}}) })),
+      rows: filtered.map(r=>({ ...r,
+        status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        aColor: r.h>24?'#FF5A47':'#7B7F7B',
+        aBg: r.h>24?'rgba(255,90,71,0.13)':'#16191A',
+        aBorder: r.h>24?'rgba(255,90,71,0.3)':'rgba(255,255,255,0.08)',
+        checked: !!sel[r.id],
+        cbBg: sel[r.id]?'#66FF33':'transparent',
+        cbBorder: sel[r.id]?'#66FF33':'rgba(255,255,255,0.22)',
+        rowBg: sel[r.id]?'rgba(102,255,51,0.04)':'transparent',
+        onCheck:()=>this.setState(st=>({sel:{...st.sel,[r.id]:!st.sel[r.id]}})),
+      })),
+      allChecked,
+      allBg: allChecked?'#66FF33':'transparent',
+      allBorder: allChecked?'#66FF33':'rgba(255,255,255,0.22)',
+      toggleAll:()=>{ const n={}; if(!allChecked) filtered.forEach(r=>n[r.id]=true); this.setState({sel:n}); },
+      countLabel: filtered.length+' zgłoszeń w widoku',
+      bulkVisible: selCount>0,
+      bulkLabel: selCount+' zaznaczone — akcja zbiorcza',
+      clearSel:()=>this.setState({sel:{}}),
+    };
+  }
+}
+</script>
+</body>
+</html>

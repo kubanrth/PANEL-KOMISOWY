@@ -2,11 +2,16 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProductThumb } from "@/components/panel/ProductThumb";
-import { formatPLN, formatDate, formatDateTime, takeHomeCents } from "@/lib/format";
-import type { Submission, Product, Profile } from "@/lib/types";
+import { formatPLN, formatDateTime, takeHomeCents, plural } from "@/lib/format";
+import type { Submission, SubmissionStatus, Product, Profile } from "@/lib/types";
+
+/* Szczegół oferty — redesign: PageHeader z numerem, pozioma oś kroków
+   (Wysłana → Odebrana → A&QC → Wystawiona), pozycje jako accordion,
+   prawy panel (wartość, umowa PDF, notatki). Printable #ship-label bez zmian. */
 
 export default async function SubmissionDetailPage(props: {
   params: Promise<{ id: string }>;
@@ -61,77 +66,119 @@ export default async function SubmissionDetailPage(props: {
       breadcrumb={[{ label: "Submissions", href: "/panel/submissions" }, { label: submission.id }]}
     >
       {/* Hero */}
-      <section className="grid grid-cols-12 gap-8 items-start">
-        <div className="col-span-12 lg:col-span-7">
-          <div className="flex items-center gap-3 mb-4">
-            <SubmissionStatusPill status={submission.status} />
-            {submission.signed_method && (
-              <span className="pill pill-mute">
-                Podpis: {submission.signed_method === "autopay" ? "Autopay" : "Profil zaufany"}
-              </span>
-            )}
-          </div>
-          <h1 className="font-bold text-[28px] lg:text-[40px] leading-[1.02] tracking-[-0.04em] num">
-            {submission.id}
-          </h1>
-          <p className="mt-3 text-[15px] text-text-soft num">
-            Numer Submission = Numer Umowy Komisowej · {formatDateTime(submission.created_at)}
-          </p>
-
-          {isFresh && (
-            <div className="mt-6 rounded-[16px] bg-mint/10 border border-mint/30 px-5 py-4 text-mint flex items-start gap-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0 mt-0.5">
-                <path d="m9 12 2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              <div className="text-[14px] leading-[1.5]">
-                <div className="font-semibold">Submission złożona poprawnie.</div>
-                <div className="text-mint/80 mt-1">
-                  Wydrukuj etykietę nadania poniżej, naklej na pakunek i nadaj w punkcie InPost / DPD. Po dostarczeniu uruchamiamy A&QC — status zobaczysz tutaj.
-                </div>
-              </div>
-            </div>
+      <section>
+        <div className="flex items-center gap-2.5 mb-4 flex-wrap">
+          <SubmissionStatusPill status={submission.status} />
+          {submission.signed_method && (
+            <span className="pill pill-mute">
+              Podpis: {submission.signed_method === "autopay" ? "Autopay" : "Profil zaufany"}
+            </span>
           )}
         </div>
+        <PageHeader
+          label={`Umowa komisowa · ${formatDateTime(submission.created_at)}`}
+          title={`Oferta ${submission.id}`}
+          sub="Numer oferty = numer Umowy Komisowej. Postęp realizacji i pozycje poniżej."
+        />
+      </section>
 
-        {/* Totals */}
-        <div className="col-span-12 lg:col-span-5">
-          <div className="card-gradient-blue p-6 lg:p-7 rounded-[20px]">
-            <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">
-              Wartość Submission
-            </div>
-            <div className="mt-2 font-bold text-4xl tracking-[-0.04em] text-white num">
-              {formatPLN(totalGross, { decimals: false })}
-            </div>
-            <div className="mt-1 text-white/70 text-[13px]">
-              Brutto · {products.length} {products.length === 1 ? "produkt" : products.length < 5 ? "produkty" : "produktów"}
-            </div>
-            <div className="mt-5 pt-5 border-t border-white/20 flex items-baseline justify-between">
-              <span className="text-white/85 text-[13px]">Twój udział (po prowizji {Math.round(submission.commission_rate * 100)}%)</span>
-              <span className="font-bold text-2xl tracking-[-0.035em] text-white num">
-                {formatPLN(totalTakeHome, { decimals: false })}
-              </span>
+      {isFresh && (
+        <section className="mt-6">
+          <div className="rounded-[16px] bg-mint/10 border border-mint/30 px-5 py-4 text-mint flex items-start gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0 mt-0.5" aria-hidden>
+              <path d="m9 12 2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <div className="text-[13.5px] leading-[1.55]">
+              <div className="font-medium">Oferta złożona poprawnie.</div>
+              <div className="text-mint/80 mt-1">
+                Wydrukuj etykietę nadania poniżej, naklej na pakunek i nadaj w punkcie InPost / DPD.
+                Po dostarczeniu uruchamiamy A&QC — status zobaczysz tutaj.
+              </div>
             </div>
           </div>
+        </section>
+      )}
+
+      {/* Pozioma oś kroków */}
+      <section className="mt-8">
+        <div className="card px-6 py-5">
+          <StepAxis status={submission.status} />
         </div>
       </section>
 
-      {/* Products */}
-      <section className="mt-12">
-        <div className="label mb-5">Produkty</div>
-        <div className="space-y-4">
-          {products.map((p) => (
-            <ProductRow key={p.id} product={p} commissionRate={submission.commission_rate} />
-          ))}
+      <section className="mt-8 grid grid-cols-12 gap-6 items-start">
+        {/* Pozycje — accordion */}
+        <div className="col-span-12 lg:col-span-8">
+          <div className="label mb-3">Pozycje · {products.length}</div>
+          <div className="space-y-3">
+            {products.map((p) => (
+              <ProductAccordion key={p.id} product={p} commissionRate={submission.commission_rate} />
+            ))}
+            {products.length === 0 && (
+              <div className="card px-6 py-10 text-center text-[13px] text-text-soft">
+                Brak pozycji w tej ofercie.
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Prawy panel */}
+        <aside className="col-span-12 lg:col-span-4 space-y-4">
+          <div className="card-gradient-dark p-6 relative overflow-hidden">
+            <div className="glow-blob" aria-hidden />
+            <div className="relative">
+              <div className="label !text-mint/80">Wartość oferty</div>
+              <div className="mt-2 font-light text-[32px] leading-none tracking-[-0.02em] num text-mint">
+                {formatPLN(totalGross, { decimals: false })}
+              </div>
+              <div className="mt-1.5 text-[12px] text-text-soft">
+                Brutto · {products.length} {plural(products.length, ["pozycja", "pozycje", "pozycji"])}
+              </div>
+              <div className="mt-5 pt-4 border-t border-white/10 flex items-baseline justify-between text-[13px]">
+                <span className="text-text-soft">Twój udział (po prowizji {Math.round(submission.commission_rate * 100)}%)</span>
+                <span className="font-medium text-[17px] tracking-[-0.02em] num text-mint">
+                  {formatPLN(totalTakeHome, { decimals: false })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="card p-6">
+            <div className="label mb-3">Umowa komisowa</div>
+            {submission.contract_pdf_url ? (
+              <a
+                href={submission.contract_pdf_url}
+                download
+                className="btn-ghost h-11 px-5 text-[13px] inline-flex items-center gap-2"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                Pobierz PDF
+              </a>
+            ) : (
+              <p className="text-[13px] text-text-soft leading-[1.55]">
+                PDF umowy pojawi się tutaj po wygenerowaniu przez Kickback.
+              </p>
+            )}
+          </div>
+
+          <div className="card p-6">
+            <div className="label mb-3">Notatki</div>
+            <p className="text-[13px] text-text-soft leading-[1.55]">
+              Brak notatek do tej oferty. Uwagi z A&QC znajdziesz przy poszczególnych pozycjach.
+            </p>
+          </div>
+        </aside>
       </section>
 
-      {/* Shipping label (printable) */}
+      {/* Shipping label (printable — struktura #ship-label bez zmian) */}
       {isFresh && (
-        <section className="mt-12">
-          <div className="flex items-end justify-between mb-5">
+        <section className="mt-10">
+          <div className="flex items-end justify-between mb-4 gap-4">
             <div>
               <div className="label">Etykieta nadania</div>
-              <h2 className="mt-2 font-bold text-2xl lg:text-3xl tracking-[-0.025em]">
+              <h2 className="mt-2 font-light text-[22px] lg:text-[26px] leading-[1.1] tracking-[-0.02em]">
                 Ship to us
               </h2>
             </div>
@@ -140,7 +187,7 @@ export default async function SubmissionDetailPage(props: {
               className="btn-ghost h-11 px-5 text-[13px] inline-flex items-center gap-2 print:hidden"
               data-print-trigger
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                 <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z" />
               </svg>
               Drukuj
@@ -151,19 +198,7 @@ export default async function SubmissionDetailPage(props: {
         </section>
       )}
 
-      {/* Timeline */}
-      <section className="mt-12">
-        <div className="label mb-5">Postęp</div>
-        <ol className="card p-6 space-y-3">
-          <Step done date={submission.created_at} title="Powierzono" desc={`Umowa Komisowa podpisana przez ${submission.signed_method === "autopay" ? "Autopay" : "Profil zaufany"}.`} />
-          <Step done={["in_transit", "aqc", "listed", "sold", "payout"].includes(submission.status)} title="W transporcie" desc="Pakunek odebrany przez kuriera." />
-          <Step done={["aqc", "listed", "sold", "payout"].includes(submission.status)} title="Authentication & QC" desc="12-punktowy audyt każdego produktu." />
-          <Step done={["listed", "sold", "payout"].includes(submission.status)} title="Wystawione" desc="Listing aktywny w naszych kanałach." />
-          <Step done={submission.status === "payout"} last title="Wypłata" desc="Środki w Wallet po 14d karencji." />
-        </ol>
-      </section>
-
-      <div className="mt-12 flex items-center gap-4">
+      <div className="mt-10 flex items-center gap-3">
         <ButtonLink href="/panel/submissions" variant="ghost" size="md">
           ← Wróć do listy
         </ButtonLink>
@@ -174,7 +209,40 @@ export default async function SubmissionDetailPage(props: {
 
 /* ------------------------------ Components */
 
-function ProductRow({
+/* Pozioma oś: lime dot done / hollow pending, linia bg-border między. */
+function StepAxis({ status }: { status: SubmissionStatus }) {
+  const steps: Array<{ label: string; done: boolean }> = [
+    { label: "Wysłana", done: true },
+    { label: "Odebrana", done: ["aqc", "listed", "sold", "payout"].includes(status) },
+    { label: "A&QC", done: ["aqc", "listed", "sold", "payout"].includes(status) },
+    { label: "Wystawiona", done: ["listed", "sold", "payout"].includes(status) },
+  ];
+  return (
+    <ol className="flex items-start">
+      {steps.map((s, i) => (
+        <li key={s.label} className={`flex items-start ${i < steps.length - 1 ? "flex-1" : ""}`}>
+          <div className="flex flex-col items-center gap-2">
+            <span
+              className={`h-[11px] w-[11px] rounded-full flex-shrink-0 ${
+                s.done ? "bg-lime" : "border border-border bg-transparent"
+              }`}
+              aria-hidden
+            />
+            <span className={`text-[11px] lg:text-[12px] whitespace-nowrap ${s.done ? "font-medium" : "text-text-mute"}`}>
+              {s.label}
+            </span>
+          </div>
+          {i < steps.length - 1 && (
+            <span className="flex-1 h-px bg-border mt-[5px] mx-2 lg:mx-3" aria-hidden />
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/* Karta pozycji — natywny <details> accordion (zero JS). */
+function ProductAccordion({
   product, commissionRate,
 }: {
   product: Product;
@@ -183,70 +251,64 @@ function ProductRow({
   const price = product.listing_price_cents ?? product.expected_price_cents ?? 0;
   const takeHome = takeHomeCents(price, commissionRate) ?? 0;
   return (
-    <Link
-      href={`/panel/products/${product.id}`}
-      className="card p-5 lg:p-6 grid grid-cols-12 gap-5 items-center hover:border-blue/40 transition-colors group"
-    >
-      <div className="col-span-12 md:col-span-6 flex items-center gap-4">
-        <ProductThumb photos={product.photos} brand={product.brand} size="md" />
-        <div className="min-w-0">
-          <div className="font-semibold text-[15px] truncate">
-            {product.brand} <span className="text-text-soft">·</span> {product.model}
+    <details className="card group overflow-hidden">
+      <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-5 py-4 flex items-center gap-4 hover:bg-surface-2/40 transition-colors">
+        <ProductThumb photos={product.photos} brand={product.brand} size="sm" />
+        <div className="min-w-0 flex-1">
+          <div className="text-[13.5px] font-medium truncate">
+            {product.brand} {product.model}
           </div>
-          <div className="mt-1 text-[12px] text-text-mute num">
-            {[product.category, product.size, product.condition && `stan ${product.condition}/10`]
+          <div className="mt-0.5 text-[11px] num text-text-mute truncate">
+            {[product.sku, product.size, product.condition && `stan ${product.condition}/10`]
               .filter(Boolean)
               .join(" · ")}
           </div>
-          {product.description && (
-            <div className="mt-1.5 text-[12px] text-text-soft line-clamp-1">{product.description}</div>
-          )}
         </div>
-      </div>
-      <div className="col-span-6 md:col-span-2">
-        <ProductStatusPill status={product.status} />
-      </div>
-      <div className="col-span-3 md:col-span-2 text-right">
-        <div className="text-[11px] text-text-mute font-semibold uppercase">Cena</div>
-        <div className="font-bold text-lg tracking-[-0.025em] num">
-          {formatPLN(price, { decimals: false })}
+        <div className="hidden sm:block">
+          <ProductStatusPill status={product.status} />
         </div>
-      </div>
-      <div className="col-span-3 md:col-span-2 text-right">
-        <div className="text-[11px] text-text-mute font-semibold uppercase">Twój udział</div>
-        <div className="font-semibold text-[14px] num text-mint">
-          {formatPLN(takeHome, { decimals: false })}
-        </div>
-      </div>
-    </Link>
-  );
-}
+        <div className="text-[13px] num flex-shrink-0">{formatPLN(price, { decimals: false })}</div>
+        <svg
+          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round"
+          className="flex-shrink-0 text-text-faint transition-transform group-open:rotate-90"
+          aria-hidden
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </summary>
 
-function Step({
-  done, last, title, desc, date,
-}: {
-  done: boolean;
-  last?: boolean;
-  title: string;
-  desc: string;
-  date?: string;
-}) {
-  return (
-    <li className="flex items-start gap-4">
-      <div className="flex flex-col items-center">
-        <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold ${done ? "bg-mint text-bg" : "bg-surface-2 text-text-mute border border-border"}`}>
-          {done ? "✓" : ""}
+      <div className="px-5 pb-5 pt-4 border-t border-border-soft">
+        <div className="sm:hidden mb-3">
+          <ProductStatusPill status={product.status} />
         </div>
-        {!last && <div className={`w-px flex-1 mt-1 ${done ? "bg-mint/40" : "bg-border-soft"}`} style={{ minHeight: 24 }} />}
-      </div>
-      <div className="pb-3 flex-1">
-        <div className="flex items-center justify-between gap-3">
-          <span className={`font-semibold text-[14px] ${done ? "text-text" : "text-text-soft"}`}>{title}</span>
-          {date && <span className="text-[11px] text-text-mute num">{formatDate(date)}</span>}
+        {product.description && (
+          <p className="text-[13px] leading-[1.6] text-text-soft">{product.description}</p>
+        )}
+        <div className={`${product.description ? "mt-4" : ""} grid grid-cols-2 sm:grid-cols-3 gap-3 text-[12px]`}>
+          <div>
+            <div className="label !text-[10px]">Kategoria</div>
+            <div className="mt-1">{product.category ?? "—"}</div>
+          </div>
+          <div>
+            <div className="label !text-[10px]">Cena</div>
+            <div className="mt-1 num">{formatPLN(price, { decimals: false })}</div>
+          </div>
+          <div>
+            <div className="label !text-[10px]">Twój udział</div>
+            <div className="mt-1 num text-mint">{formatPLN(takeHome, { decimals: false })}</div>
+          </div>
         </div>
-        <div className="mt-0.5 text-[13px] text-text-soft">{desc}</div>
+        <div className="mt-4">
+          <Link
+            href={`/panel/products/${product.id}`}
+            className="text-[12px] font-medium text-lime hover:underline"
+          >
+            Karta produktu →
+          </Link>
+        </div>
       </div>
-    </li>
+    </details>
   );
 }
 
@@ -265,11 +327,11 @@ function ShippingLabel({
   const tracking = "DPD-" + submission.id.replace("SUB-", "62530000") + "-" + new Date(submission.created_at).getFullYear();
 
   return (
-    <div id="ship-label" className="bg-white text-black rounded-[16px] p-7 lg:p-8 print:rounded-none print:shadow-none print:p-6" style={{ fontFamily: "var(--font-geist-mono), monospace" }}>
+    <div id="ship-label" className="bg-white text-black rounded-[16px] p-7 lg:p-8 print:rounded-none print:shadow-none print:p-6" style={{ fontFamily: "var(--font-plex-mono), monospace" }}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">Kickback · Magazyn dostawcy</div>
-          <div className="font-bold text-3xl tracking-[-0.04em] mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="font-bold text-3xl tracking-[-0.04em] mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             Ship to us
           </div>
         </div>
@@ -282,7 +344,7 @@ function ShippingLabel({
       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-black/15 pt-5">
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Nadawca</div>
-          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {senderName}<br />
             {senderAddr || "— adres nieuzupełniony —"}<br />
             {profile.phone || ""}
@@ -290,7 +352,7 @@ function ShippingLabel({
         </div>
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Odbiorca</div>
-          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             Kickback sp. z o. o.<br />
             Magazyn — A&QC<br />
             ul. Postępu 14<br />
@@ -309,13 +371,13 @@ function ShippingLabel({
       <div className="mt-6 border-t border-black/15 pt-5 flex items-center justify-between">
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Zawartość</div>
-          <div className="text-[13px] mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[13px] mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {productCount} {productCount === 1 ? "produkt" : productCount < 5 ? "produkty" : "produktów"} · konsygnacja
           </div>
         </div>
         <div className="text-right">
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Zadeklarowana wartość</div>
-          <div className="font-bold text-2xl tracking-[-0.035em] num mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="font-bold text-2xl tracking-[-0.035em] num mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {formatPLN(totalGross, { decimals: false })}
           </div>
         </div>

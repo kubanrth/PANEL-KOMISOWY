@@ -3,7 +3,17 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { formatPLN, formatDate } from "@/lib/format";
-import { vatLabel, type DerivedStatus, DERIVED_STATUS_LABEL } from "@/lib/types";
+import { vatLabel, type DerivedStatus } from "@/lib/types";
+
+/* Krótkie etykiety statusów do pigułek w tabeli (jednoliniowe, wzór C4).
+   Pełne opisy zostają w DERIVED_STATUS_LABEL dla innych widoków. */
+const SHORT_STATUS: Record<DerivedStatus, string> = {
+  w_trakcie_dostawy: "W dostawie",
+  przyjeto: "Przyjęto",
+  zdjecia: "Zdjęcia",
+  oczekuje_publikacji: "Oczekuje",
+  aktywny: "W sprzedaży",
+};
 import { DERIVED_STATUS_VARIANT } from "@/lib/derived-status";
 import { requestPriceChange, bulkRequestWithdrawal } from "./actions";
 
@@ -18,8 +28,6 @@ export type MagazynRow = {
   listing_price_cents: number;
   recommended_price_cents: number | null;
   published_at: string | null;
-  sold_at: string | null;
-  settlement_at: string | null;
   derived_status: DerivedStatus;
   days_in_commission: number;
 };
@@ -157,19 +165,16 @@ export function MagazynTable({ rows }: Props) {
         </div>
       )}
 
-      {/* Table */}
+      {/* Table — kolumny wg C4: SKU · Koszulka · Cena · VAT · W sprzedaży · Status · Akcje.
+          (Sprzedano/Rozliczenie usunięte — stock nigdy ich nie ma; Publikacja w tooltipie Dni.) */}
       <div className="card table-scroll">
-        <div className="hidden md:grid grid-cols-[28px_minmax(220px,3fr)_44px_60px_140px_64px_94px_94px_120px_120px_140px_140px] gap-3 px-4 py-3 label border-b border-border-soft items-center">
-          <input type="checkbox" checked={selected.size === rows.length && rows.length > 0} onChange={toggleAll} className="cursor-pointer" />
-          <div>Produkt</div>
-          <div>Ilość</div>
-          <div>Rozm.</div>
+        <div className="hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
+          <input type="checkbox" checked={selected.size === rows.length && rows.length > 0} onChange={toggleAll} className="cursor-pointer" aria-label="Zaznacz wszystkie" />
+          <div>SKU</div>
+          <div>Koszulka</div>
           <div>Cena</div>
           <div>VAT</div>
-          <div>Publikacja</div>
-          <div>Dni</div>
-          <div>Sprzedano</div>
-          <div>Rozliczenie</div>
+          <div>W sprzedaży</div>
           <div>Status</div>
           <div className="text-right">Akcje</div>
         </div>
@@ -222,7 +227,7 @@ export function MagazynTable({ rows }: Props) {
                       <span className={`h-1.5 w-1.5 rounded-full ${
                         variant === "mint" ? "bg-mint" : variant === "blue" ? "bg-blue-soft" : variant === "amber" ? "bg-amber" : "bg-text-mute"
                       }`} />
-                      {DERIVED_STATUS_LABEL[r.derived_status]}
+                      {SHORT_STATUS[r.derived_status]}
                     </span>
                   </div>
                 </div>
@@ -273,27 +278,28 @@ export function MagazynTable({ rows }: Props) {
               )}
             </div>
 
-            {/* Desktop row (md+) — pełen grid 12 kolumn */}
+            {/* Desktop row (md+) — kolumny wg C4 */}
             <div
-              className={`hidden md:grid grid-cols-[28px_minmax(220px,3fr)_44px_60px_140px_64px_94px_94px_120px_120px_140px_140px] gap-3 px-4 py-3 items-center hover:bg-surface-2/30 transition-colors`}
+              className={`hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_110px] gap-3 px-4 py-3.5 items-center hover:bg-surface-2/40 transition-colors`}
             >
-              <input type="checkbox" checked={checked} onChange={() => toggleRow(r.id)} className="cursor-pointer" />
+              <input type="checkbox" checked={checked} onChange={() => toggleRow(r.id)} className="cursor-pointer" aria-label={`Zaznacz ${r.brand} ${r.model}`} />
+
+              <div className="text-[11px] num text-text-mute truncate">{r.sku}</div>
 
               <div className="min-w-0 flex items-center gap-3">
-                <div className="relative h-10 w-10 rounded-[8px] overflow-hidden bg-surface-2 flex-shrink-0">
-                  {r.photo_url && (
+                <div className="relative h-10 w-10 rounded-[10px] overflow-hidden bg-surface-2 border border-border-soft flex-shrink-0 flex items-center justify-center">
+                  {r.photo_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={r.photo_url} alt={r.brand} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[13px] font-medium text-text-soft">{r.brand[0]?.toUpperCase()}</span>
                   )}
                 </div>
-                <Link href={`/panel/products/${r.id}`} className="min-w-0 hover:text-blue transition-colors block">
-                  <div className="text-[13px] font-medium truncate">{r.brand} · {r.model}</div>
-                  <div className="text-[10px] num text-text-faint truncate">{r.sku}</div>
+                <Link href={`/panel/products/${r.id}`} className="min-w-0 hover:text-lime transition-colors block">
+                  <div className="text-[13.5px] font-medium truncate">{r.brand} {r.model}</div>
+                  <div className="text-[11px] text-text-mute truncate">{r.size ? `rozm. ${r.size}` : "—"}</div>
                 </Link>
               </div>
-
-              <div className="text-[13px] num text-text-soft">1</div>
-              <div className="text-[12px] num text-text-soft">{r.size ?? "—"}</div>
 
               <div>
                 {inEdit ? (
@@ -321,7 +327,7 @@ export function MagazynTable({ rows }: Props) {
                   </div>
                 ) : (
                   <div className="flex items-center gap-1.5">
-                    <span className="font-semibold text-[13px] num">
+                    <span className="text-[13px] num">
                       {formatPLN(r.listing_price_cents, { decimals: false })}
                     </span>
                     <span className={`${arrowColor} text-[12px] font-bold`} title={r.recommended_price_cents ? `Rekomendowana: ${formatPLN(r.recommended_price_cents, { decimals: false })}` : "Brak rekomendacji"}>
@@ -332,13 +338,11 @@ export function MagazynTable({ rows }: Props) {
               </div>
 
               <div className="text-[12px] num text-text-soft">{vatLabel(r.vat_rate)}</div>
-              <div className="text-[11px] num text-text-mute">{formatDate(r.published_at)}</div>
-              <div className="text-[12px] num text-text-soft">{r.days_in_commission}</div>
-              <div className={`text-[11px] num ${r.sold_at ? "text-text-soft" : "text-text-faint"}`}>
-                {r.sold_at ? formatDate(r.sold_at) : "—"}
-              </div>
-              <div className={`text-[11px] num ${r.settlement_at ? "text-text-soft" : "text-text-faint"}`}>
-                {r.settlement_at ? formatDate(r.settlement_at) : "—"}
+              <div
+                className="text-[12px] num text-text-soft"
+                title={r.published_at ? `Publikacja: ${formatDate(r.published_at)}` : "Jeszcze nie opublikowano"}
+              >
+                {r.days_in_commission} dni
               </div>
 
               <div>
@@ -346,18 +350,28 @@ export function MagazynTable({ rows }: Props) {
                   <span className={`h-1.5 w-1.5 rounded-full ${
                     variant === "mint" ? "bg-mint" : variant === "blue" ? "bg-blue-soft" : variant === "amber" ? "bg-amber" : "bg-text-mute"
                   }`} />
-                  {DERIVED_STATUS_LABEL[r.derived_status]}
+                  {SHORT_STATUS[r.derived_status]}
                 </span>
               </div>
 
-              <div className="text-right">
+              <div className="flex items-center justify-end gap-1.5">
+                <Link
+                  href={`/panel/products/${r.id}`}
+                  title="Podgląd produktu"
+                  aria-label={`Podgląd ${r.brand} ${r.model}`}
+                  className="h-8 w-8 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute hover:text-text transition-colors"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+                </Link>
                 {!inEdit && (
                   <button
                     type="button"
                     onClick={() => setPriceEdits({ ...priceEdits, [r.id]: "" })}
-                    className="text-[11px] text-text-mute hover:text-blue transition-colors"
+                    title="Zmień cenę"
+                    aria-label={`Zmień cenę ${r.brand} ${r.model}`}
+                    className="h-8 w-8 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute hover:text-lime transition-colors"
                   >
-                    Zmień cenę
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg>
                   </button>
                 )}
               </div>

@@ -50,12 +50,12 @@ export function OfferComposer({
       <div className="grid grid-cols-12 gap-3 items-end">
         <div className="col-span-12 md:col-span-4">
           <label className="input-label">Kwota kontroferty</label>
-          <div className="flex items-baseline gap-2 border-b border-border focus-within:border-blue py-2">
+          <div className="flex items-baseline gap-2 border-b border-border focus-within:border-lime py-2">
             <input
               value={amountInput}
               onChange={(e) => setAmountInput(e.target.value)}
               placeholder="0"
-              className="bg-transparent flex-1 outline-none font-bold text-2xl tracking-[-0.04em] num"
+              className="bg-transparent flex-1 outline-none font-light text-2xl tracking-[-0.02em] num"
             />
             <span className="text-text-mute text-sm">zł</span>
           </div>
@@ -73,17 +73,17 @@ export function OfferComposer({
 
       <div className="flex flex-wrap gap-2 text-[11px]">
         {currentPriceCents > 0 && (
-          <button type="button" onClick={() => setAmountInput(String(Math.round(currentPriceCents / 100)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-blue transition-colors">
+          <button type="button" onClick={() => setAmountInput(String(Math.round(currentPriceCents / 100)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-lime/40 transition-colors">
             = listing {formatPLN(currentPriceCents, { decimals: false })}
           </button>
         )}
         {currentPriceCents > 0 && (
-          <button type="button" onClick={() => setAmountInput(String(Math.round(currentPriceCents * 0.95 / 100)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-blue transition-colors">
+          <button type="button" onClick={() => setAmountInput(String(Math.round(currentPriceCents * 0.95 / 100)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-lime/40 transition-colors">
             -5%
           </button>
         )}
         {buyerOfferCents != null && currentPriceCents > 0 && (
-          <button type="button" onClick={() => setAmountInput(String(Math.round((currentPriceCents + buyerOfferCents) / 200)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-blue transition-colors">
+          <button type="button" onClick={() => setAmountInput(String(Math.round((currentPriceCents + buyerOfferCents) / 200)))} className="px-3 py-1.5 rounded-[8px] bg-surface-2 border border-border hover:border-lime/40 transition-colors">
             środek
           </button>
         )}

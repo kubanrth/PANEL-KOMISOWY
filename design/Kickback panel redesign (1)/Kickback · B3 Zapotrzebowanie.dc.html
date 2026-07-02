@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="B3 · Zapotrzebowanie" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="wtb" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Zapotrzebowanie</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · czego szukamy</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Zapotrzebowanie<span style="color:#66FF33">.</span></h1>
+        <p style="margin:8px 0 0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:#BDBFBD;max-width:62ch">Aktywne ogłoszenia Kickback. Masz coś z listy — wyślij ofertę, wycenimy priorytetowo.</p>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ c.onClick }}" style="height:34px;padding:0 16px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ c.label }}</button>
+        </sc-for>
+        <div style="width:1px;height:22px;background:rgba(255,255,255,0.08);margin:0 4px"></div>
+        <button onClick="{{ toggleRetro }}" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:999px;border:1px solid {{ retroBorder }};background:{{ retroBg }};color:{{ retroColor }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s"><i class="ph ph-star" style="font-size:14px"></i>Tylko retro</button>
+        <div style="flex:1"></div>
+        <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ countLabel }}</span>
+      </div>
+
+      <sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ cards }}" as="w" hint-placeholder-count="6">
+            <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px;transition:transform .18s,box-shadow .18s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px -16px rgba(0,0,0,0.7)">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="width:44px;height:44px;flex-shrink:0;border-radius:11px;background:radial-gradient(circle at 50% 35%, {{ w.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px">{{ w.cl }}</span>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:7px"><span style="font-weight:500;font-size:15px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ w.name }}</span><sc-if value="{{ w.retro }}" hint-placeholder-val="{{ false }}"><span style="flex-shrink:0;display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;background:rgba(245,166,35,0.14);color:#F5A623;border:1px solid rgba(245,166,35,0.3)">Retro</span></sc-if></div>
+                  <div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">{{ w.typ }} · {{ w.season }}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ w.sizes }}" as="sz" hint-placeholder-count="3">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;height:24px;min-width:30px;padding:0 8px;border-radius:8px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;background:rgba(74,107,255,0.12);color:#7FA0FF;border:1px solid rgba(74,107,255,0.25)">{{ sz.s }}</span>
+                </sc-for>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
+                <span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">opubl. {{ w.date }}</span>
+                <span style="font:600 14px 'IBM Plex Mono',monospace;color:#22DD99">{{ w.price }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noCards }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:56px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-target" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Nic w tej kategorii</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Zmień filtr — albo wróć jutro, ogłoszenia aktualizujemy na bieżąco.</p></div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px 22px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(102,255,51,0.1);border:1px solid rgba(102,255,51,0.22);display:flex;align-items:center;justify-content:center"><i class="ph ph-t-shirt" style="font-size:22px;color:#66FF33"></i></div>
+          <div><div style="font-weight:500;font-size:16px;letter-spacing:-0.015em">Masz pasującą koszulkę?</div><div style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">Oferty z listy zapotrzebowania wyceniamy w 24h.</div></div>
+        </div>
+        <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.4)" style-hover="transform:translateY(-2px)"><i class="ph ph-plus" style="font-size:16px"></i>Nowa oferta</button>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { typ:'all', retro:false };
+  renderVals(){
+    const all=[
+      {name:'FC Barcelona', typ:'Klub', k:'klub', season:'2008/09', sizes:['S','M','L'], price:'do 2 500 zł', date:'12 cze', retro:true, crest:'#1D2A3A', cl:'B'},
+      {name:'Reprezentacja Polski', typ:'Reprezentacja', k:'repr', season:'EURO 2016', sizes:['M','L'], price:'do 1 200 zł', date:'18 cze', retro:false, crest:'#2A2410', cl:'P'},
+      {name:'AC Milan', typ:'Klub', k:'klub', season:'2006/07', sizes:['S','M'], price:'do 3 000 zł', date:'24 cze', retro:true, crest:'#2A0F14', cl:'M'},
+      {name:'Real Madryt', typ:'Klub', k:'klub', season:'2016/17', sizes:['M','L','XL'], price:'do 2 100 zł', date:'26 cze', retro:false, crest:'#3A1D24', cl:'R'},
+      {name:'Lewandowski #9', typ:'Nazwisko', k:'nazw', season:'dowolny sezon', sizes:['M','L'], price:'do 1 800 zł', date:'28 cze', retro:false, crest:'#0F2A16', cl:'L9'},
+      {name:'Juventus', typ:'Klub', k:'klub', season:'2011/12', sizes:['L'], price:'do 2 400 zł', date:'30 cze', retro:true, crest:'#22242A', cl:'J'},
+    ];
+    const s=this.state;
+    const chipDefs=[{k:'all',label:'Wszystkie'},{k:'klub',label:'Kluby'},{k:'repr',label:'Reprezentacje'},{k:'nazw',label:'Nazwiska'}];
+    const filtered=all.filter(w=>(s.typ==='all'||w.k===s.typ)&&(!s.retro||w.retro));
+    return {
+      chips: chipDefs.map(c=>({ ...c,
+        bg: s.typ===c.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: s.typ===c.k?'#66FF33':'#BDBFBD',
+        border: s.typ===c.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({typ:c.k}) })),
+      retroBg: s.retro?'rgba(245,166,35,0.14)':'#16191A', retroColor: s.retro?'#F5A623':'#BDBFBD',
+      retroBorder: s.retro?'rgba(245,166,35,0.4)':'rgba(255,255,255,0.08)',
+      toggleRetro:()=>this.setState(st=>({retro:!st.retro})),
+      cards: filtered.map(w=>({ ...w, sizes:w.sizes.map(x=>({s:x})) })),
+      hasCards: filtered.length>0, noCards: filtered.length===0,
+      countLabel: filtered.length + ' z 6 ogłoszeń',
+    };
+  }
+}
+</script>
+</body>
+</html>

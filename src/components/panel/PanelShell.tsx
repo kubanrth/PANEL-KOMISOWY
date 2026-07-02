@@ -3,6 +3,8 @@ import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PanelSidebar } from "./PanelSidebar";
 import { PanelMobileNav } from "./PanelMobileNav";
 import { getTheme } from "@/lib/theme";
+import { createClient } from "@/lib/supabase/server";
+import type { NavBadges } from "./nav-config";
 
 export type PanelShellProps = {
   user: { email: string };
@@ -19,6 +21,8 @@ export type PanelShellProps = {
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
   cta?: React.ReactNode;
+  /** Liczby/kropki do badge'ów sidebara (klucze = badgeKey/dotKey z nav-config). */
+  badges?: NavBadges;
 };
 
 export async function PanelShell({
@@ -26,13 +30,14 @@ export async function PanelShell({
   walletBalance = 0,
   walletAvailable = 0,
   active, pageTitle, breadcrumb,
-  children, cta,
+  children, cta, badges,
 }: PanelShellProps) {
   const theme = await getTheme();
+  const resolvedBadges = { ...(await fetchPanelBadges()), ...badges };
 
   return (
     <div className="min-h-screen lg:flex">
-      {/* Mobile top bar + slide-in drawer (visible only under lg) */}
+      {/* Mobile: top bar + bottom tabs + FAB + sheet „Więcej" (pod lg) */}
       <PanelMobileNav
         user={user}
         profile={profile}
@@ -40,9 +45,10 @@ export async function PanelShell({
         walletAvailable={walletAvailable}
         active={active}
         theme={theme}
+        badges={resolvedBadges}
       />
 
-      {/* Desktop sidebar (visible from lg up) */}
+      {/* Desktop sidebar (od lg) */}
       <PanelSidebar
         user={user}
         profile={profile}
@@ -50,6 +56,7 @@ export async function PanelShell({
         walletAvailable={walletAvailable}
         active={active}
         theme={theme}
+        badges={resolvedBadges}
       />
 
       {/* MAIN */}
@@ -76,17 +83,8 @@ export async function PanelShell({
           </div>
         )}
 
-        <main className="px-4 py-5 lg:px-10 lg:py-10">{children}</main>
-
-        {/* Mobile-only sticky CTA at the bottom of the page (optional Nowa Oferta) */}
-        {!cta && (
-          <div className="lg:hidden sticky bottom-0 z-10 px-4 py-3 border-t border-border-soft bg-bg/85 backdrop-blur-md">
-            <ButtonLink href="/start" size="md" className="w-full">
-              Nowa Oferta
-              <ArrowRight size={14} />
-            </ButtonLink>
-          </div>
-        )}
+        {/* pb-24 na mobile — miejsce na bottom tab bar (68px + safe area) */}
+        <main className="px-4 py-5 pb-24 lg:px-10 lg:py-10 lg:pb-10">{children}</main>
       </div>
     </div>
   );
@@ -124,4 +122,24 @@ function Breadcrumb({
       )}
     </div>
   );
+}
+
+/** Liczniki sidebara — 3 równoległe head-county (RLS zawęża do własnych danych).
+ *  Defensywnie: każdy błąd → brak badge, nigdy 500. Strona może nadpisać przez props. */
+async function fetchPanelBadges(): Promise<Record<string, number | boolean | undefined>> {
+  try {
+    const supabase = await createClient();
+    const [subs, listed, demands] = await Promise.all([
+      supabase.from("submissions").select("*", { count: "exact", head: true }),
+      supabase.from("products").select("*", { count: "exact", head: true }).in("status", ["draft", "aqc", "listed", "offer"]),
+      supabase.from("demand_listings").select("*", { count: "exact", head: true }).eq("active", true),
+    ]);
+    return {
+      submissions: subs.count ?? undefined,
+      magazyn: listed.count ?? undefined,
+      zapotrzebowanie: demands.count ?? undefined,
+    };
+  } catch {
+    return {};
+  }
 }

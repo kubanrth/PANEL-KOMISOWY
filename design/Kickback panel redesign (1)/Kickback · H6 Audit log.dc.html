@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="H6 · Audit log" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="audit" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Audit log</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Full-text: actor, event, payload…</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1100px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · event log systemu</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Audit log<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onClick }}" style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 15px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s"><i class="ph {{ c.icon }}" style="font-size:14px"></i>{{ c.label }}</button>
+        </sc-for>
+        <div style="flex:1"></div>
+        <span style="display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:#16191A;font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD"><i class="ph ph-calendar-blank" style="font-size:14px;color:#7B7F7B"></i>1 – 2 lip 2026</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden">
+            <button onClick="{{ r.onToggle }}" style="width:100%;display:flex;align-items:center;gap:13px;padding:13px 16px;border:0;background:transparent;cursor:pointer;text-align:left;transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:{{ r.iBg }};border:1px solid {{ r.iBorder }};display:flex;align-items:center;justify-content:center"><i class="ph {{ r.icon }}" style="font-size:17px;color:{{ r.iColor }}"></i></span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</span>
+                <span style="display:block;font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:2px">{{ r.meta }}</span>
+              </span>
+              <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:#16191A;color:#7B7F7B;border:1px solid rgba(255,255,255,0.08);flex-shrink:0">{{ r.kind }}</span>
+              <i class="ph ph-caret-down" style="font-size:14px;color:#4A4E4B;flex-shrink:0;display:inline-block;transform:{{ r.caretTf }};transition:transform .2s"></i>
+            </button>
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 16px 14px;animation:kb-in .16s ease">
+                <pre style="margin:0;background:#1D2120;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:13px 15px;font:400 11px/1.7 'IBM Plex Mono',monospace;color:#BDBFBD;overflow-x:auto">{{ r.payload }}</pre>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B;align-self:center">6 z 1 240 zdarzeń · retencja 12 miesięcy</span>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { kind:'all', open:{} };
+  renderVals(){
+    const K={
+      auth:{icon:'ph-fingerprint', c:'#4A6BFF'},
+      product:{icon:'ph-t-shirt', c:'#66FF33'},
+      payout:{icon:'ph-hand-coins', c:'#22DD99'},
+      webhook:{icon:'ph-plugs-connected', c:'#F5A623'},
+    };
+    const rows=[
+      {id:'a1', k:'payout', title:'payout.executed — 3 000 zł → Marcin K.', meta:'2 lip, 09:44 · actor: DA (admin)', payload:'{ "actor": "admin:DA", "action": "payout.executed",\n  "client": 148, "amount": 3000, "method": "PKO-4921" }'},
+      {id:'a2', k:'webhook', title:'fakturownia.webhook failed — payout.settled #P-2604', meta:'2 lip, 07:41 · actor: system', payload:'{ "actor": "system", "action": "webhook.failed",\n  "error": "warehouse_id missing", "attempt": 3 }'},
+      {id:'a3', k:'product', title:'product.price_changed — Real Madryt 2011/12', meta:'2 lip, 08:14 · actor: system (promo)', payload:'{ "actor": "system:promo", "from": 2600, "to": 2400 }'},
+      {id:'a4', k:'auth', title:'auth.login — daniel@kickback.pl', meta:'2 lip, 07:02 · IP 91.223.xx.xx · 2FA ok', payload:'{ "actor": "admin:DA", "action": "auth.login", "mfa": true }'},
+      {id:'a5', k:'product', title:'product.aqc_pass — FC Barcelona 2008/09', meta:'1 lip, 15:20 · actor: DA (admin)', payload:'{ "actor": "admin:DA", "action": "aqc.pass", "grade": "A", "score": 9 }'},
+      {id:'a6', k:'auth', title:'auth.password_reset — kasia.s@gmail.com', meta:'1 lip, 11:38 · actor: klient', payload:'{ "actor": "client:212", "action": "auth.password_reset" }'},
+    ];
+    const s=this.state;
+    const chipDefs=[
+      {k:'all', label:'Wszystkie', icon:'ph-rows'},
+      {k:'auth', label:'Auth', icon:'ph-fingerprint'},
+      {k:'product', label:'Product', icon:'ph-t-shirt'},
+      {k:'payout', label:'Payout', icon:'ph-hand-coins'},
+      {k:'webhook', label:'Webhook', icon:'ph-plugs-connected'},
+    ];
+    const filtered=rows.filter(r=>s.kind==='all'||r.k===s.kind);
+    return {
+      chips: chipDefs.map(c=>({ ...c,
+        bg: s.kind===c.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: s.kind===c.k?'#66FF33':'#BDBFBD',
+        border: s.kind===c.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({kind:c.k}) })),
+      rows: filtered.map(r=>({ ...r, kind:r.k,
+        icon:K[r.k].icon, iColor:K[r.k].c, iBg:'rgba(255,255,255,0.03)', iBorder:'rgba(255,255,255,0.07)',
+        open:!!s.open[r.id],
+        caretTf: s.open[r.id]?'rotate(180deg)':'rotate(0deg)',
+        onToggle:()=>this.setState(st=>({open:{...st.open,[r.id]:!st.open[r.id]}})) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

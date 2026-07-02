@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="D7 · Ustawienia" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="st-pref" expanded="ustawienia" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Ustawienia</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:900px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Ustawienia · preferencje</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Ustawienia<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Powiadomienia</span>
+          <div style="display:flex;gap:26px;font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#4A4E4B"><span style="width:38px;text-align:center">E-mail</span><span style="width:38px;text-align:center">Push</span><span style="width:38px;text-align:center">SMS</span></div>
+        </div>
+        <sc-for list="{{ notifRows }}" as="n" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(255,255,255,0.05)">
+            <div><div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ n.label }}</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">{{ n.desc }}</div></div>
+            <div style="display:flex;gap:26px">
+              <sc-for list="{{ n.toggles }}" as="t" hint-placeholder-count="3">
+                <button onClick="{{ t.onClick }}" style="width:38px;height:22px;flex-shrink:0;border:0;border-radius:999px;background:{{ t.track }};position:relative;cursor:pointer;transition:background .2s"><span style="position:absolute;top:2px;left:{{ t.knob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+          <span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Bezpieczeństwo</span>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Nowe hasło</label><input type="password" defaultValue="••••••••••" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:4px">
+            <div><div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Weryfikacja dwuetapowa</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">Kod SMS przy logowaniu</div></div>
+            <button onClick="{{ toggle2fa }}" style="width:38px;height:22px;flex-shrink:0;border:0;border-radius:999px;background:{{ tfaTrack }};position:relative;cursor:pointer;transition:background .2s"><span style="position:absolute;top:2px;left:{{ tfaKnob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></button>
+          </div>
+          <button style="align-self:flex-start;height:38px;padding:0 18px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer" style-hover="background:#1D2120">Zmień hasło</button>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px">
+          <span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Motyw interfejsu</span>
+          <div style="display:inline-flex;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:999px;padding:4px;gap:4px;width:fit-content">
+            <sc-for list="{{ themes }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 16px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;background:{{ t.bg }};color:{{ t.color }};transition:.15s"><i class="ph {{ t.icon }}" style="font-size:15px"></i>{{ t.label }}</button>
+            </sc-for>
+          </div>
+          <p style="margin:0;font:400 12px/1.6 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ themeNote }}</p>
+          <div style="display:flex;align-items:center;gap:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
+            <i class="ph ph-file-text" style="font-size:19px;color:#66FF33;flex-shrink:0"></i>
+            <span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Umowa komisowa i warunki współpracy</span>
+            <a href="Kickback · D4 Umowa.dc.html" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120">Otwórz<i class="ph ph-arrow-right" style="font-size:13px"></i></a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;motyw&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Dark&quot;,&quot;Light&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Dark&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { n:{ sale_e:true, sale_p:true, sale_s:false, pay_e:true, pay_p:false, pay_s:true, wtb_e:true, wtb_p:false, wtb_s:false, mkt_e:false, mkt_p:false, mkt_s:false }, tfa:true, theme:null };
+  renderVals(){
+    const s=this.state;
+    const mkT=(key)=>({
+      track: s.n[key]?'#22DD99':'#2A2E2C',
+      knob: s.n[key]?'18px':'2px',
+      onClick:()=>this.setState(st=>({n:{...st.n,[key]:!st.n[key]}})),
+    });
+    const rows=[
+      {label:'Sprzedaże', desc:'Sprzedana koszulka, kontr-oferta, A&QC', keys:['sale_e','sale_p','sale_s']},
+      {label:'Wypłaty', desc:'Zlecenie, realizacja, odrzucenie', keys:['pay_e','pay_p','pay_s']},
+      {label:'Zapotrzebowanie', desc:'Nowe ogłoszenia pasujące do Twojej kolekcji', keys:['wtb_e','wtb_p','wtb_s']},
+      {label:'Marketing', desc:'Promocje i akcje specjalne', keys:['mkt_e','mkt_p','mkt_s']},
+    ];
+    const theme = s.theme ?? (this.props.motyw ?? 'Dark');
+    const themeDefs=[{k:'Dark',icon:'ph-moon-stars'},{k:'Light',icon:'ph-sun'},{k:'System',icon:'ph-desktop'}];
+    return {
+      notifRows: rows.map(r=>({ label:r.label, desc:r.desc, toggles:r.keys.map(mkT) })),
+      tfaTrack: s.tfa?'#22DD99':'#2A2E2C', tfaKnob: s.tfa?'18px':'2px',
+      toggle2fa:()=>this.setState(st=>({tfa:!st.tfa})),
+      themes: themeDefs.map(t=>({ label:t.k, icon:t.icon,
+        bg: theme===t.k?'#F5F5F3':'transparent', color: theme===t.k?'#0F1210':'#BDBFBD',
+        onClick:()=>this.setState({theme:t.k}) })),
+      themeNote: theme==='Dark' ? 'Dark — domyślny motyw Kickback.' : theme==='Light' ? 'Light — jasna wersja pojawi się wraz z próbką light mode (batch 13).' : 'System — motyw podąża za ustawieniem systemu operacyjnego.',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -100,7 +100,7 @@ export function ReplayQueueButton({ itemId }: { itemId: string }) {
           })
         }
         disabled={pending}
-        className="text-[11px] text-blue hover:underline"
+        className="text-[11px] text-lime hover:underline"
       >
         {pending ? "…" : "Replay"}
       </button>
@@ -123,7 +123,7 @@ export function ReplayEventButton({ eventId }: { eventId: string }) {
           })
         }
         disabled={pending}
-        className="text-[11px] text-blue hover:underline"
+        className="text-[11px] text-lime hover:underline"
       >
         {pending ? "…" : "Replay"}
       </button>

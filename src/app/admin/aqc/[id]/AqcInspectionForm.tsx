@@ -96,7 +96,7 @@ export function AqcInspectionForm({
               <div className="label">Checklist · 12 punktów</div>
               <h2 className="mt-2 font-bold text-2xl tracking-[-0.025em]">Audyt autentyczności</h2>
             </div>
-            <button type="button" onClick={autoVerdict} className="text-[12px] text-text-soft hover:text-blue">
+            <button type="button" onClick={autoVerdict} className="text-[12px] text-text-soft hover:text-lime">
               Auto-werdykt z wyniku
             </button>
           </div>
@@ -150,7 +150,7 @@ export function AqcInspectionForm({
           {verdict !== "fail" && (
             <div className="card p-6">
               <div className="label mb-3">Cena listingowa (rekomend.)</div>
-              <div className="flex items-baseline gap-2 border-b border-border focus-within:border-blue py-3">
+              <div className="flex items-baseline gap-2 border-b border-border focus-within:border-lime py-3">
                 <input
                   value={priceInput}
                   onChange={(e) => setPriceInput(e.target.value)}
@@ -165,7 +165,7 @@ export function AqcInspectionForm({
                   <button
                     type="button"
                     onClick={() => setPriceInput((compMedian / 100).toFixed(0))}
-                    className="text-blue hover:text-blue-soft num"
+                    className="text-lime hover:text-mint num"
                   >
                     {formatPLN(compMedian, { decimals: false })}
                   </button>
@@ -239,7 +239,7 @@ function ScoreRow({ index, label, value, onChange }: { index: number; label: str
         step={1}
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value, 10))}
-        className="w-32 accent-blue"
+        className="w-32 accent-lime"
       />
       <span className={`font-bold text-[15px] tracking-[-0.025em] num w-12 text-right ${colorCls}`}>
         {value}/10
@@ -262,7 +262,7 @@ function VerdictButton({
     <button
       type="button"
       onClick={() => onChange(value)}
-      className={`px-4 py-3 rounded-[12px] border-2 font-semibold text-[13px] transition-all ${
+      className={`px-4 py-3 rounded-[12px] border-2 font-semibold text-[13px] transition-colors ${
         active ? cls : "border-border bg-surface text-text-soft hover:bg-surface-2"
       }`}
     >

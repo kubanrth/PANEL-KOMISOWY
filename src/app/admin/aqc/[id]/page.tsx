@@ -59,7 +59,7 @@ export default async function AdminAqcDetailPage(props: { params: Promise<{ id: 
             <span className="pill pill-blue">{klientName}</span>
             <span className="pill pill-mute">stan {product.condition ?? "?"}/10</span>
           </div>
-          <h1 className="font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
+          <h1 className="font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
             {product.brand}
           </h1>
           <p className="mt-2 text-[20px] text-text-soft">{product.model}</p>

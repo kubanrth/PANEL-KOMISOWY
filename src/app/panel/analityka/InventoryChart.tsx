@@ -69,19 +69,19 @@ export function InventoryChart({ snapshots }: Props) {
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-[180px]" aria-label="Wartość magazynu w czasie">
         <defs>
           <linearGradient id="inv-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-blue)" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="var(--color-blue)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--color-lime)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--color-lime)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={areaPath} fill="url(#inv-fill)" />
-        <path d={path} fill="none" stroke="var(--color-blue)" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={path} fill="none" stroke="var(--color-lime)" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
         {data.points.map((p, i) => (
           <circle
             key={p.day}
             cx={padX + i * xStep}
             cy={yScale(p.value)}
             r="0.9"
-            fill="var(--color-blue)"
+            fill="var(--color-lime)"
           >
             <title>{p.day}: {formatPLN(p.value, { decimals: false })}</title>
           </circle>

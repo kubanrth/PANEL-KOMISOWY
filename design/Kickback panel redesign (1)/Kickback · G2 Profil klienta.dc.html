@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="G2 · Profil klienta" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="klienci" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Klienci</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Marcin K.</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <a href="Kickback · G1 Klienci.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 16px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120"><i class="ph ph-arrow-left" style="font-size:15px"></i>Lista</a>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <span style="width:64px;height:64px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:22px;color:#05140B">MK</span>
+        <div style="flex:1;min-width:220px">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h1 style="margin:0;font-weight:300;font-size:30px;line-height:1.16;letter-spacing:-0.025em">Marcin K<span style="color:#66FF33">.</span></h1><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:#16191A;color:#7B7F7B;border:1px solid rgba(255,255,255,0.08)">B2C</span><span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(102,255,51,0.13);color:#66FF33;border:1px solid rgba(102,255,51,0.28)"><span style="width:5px;height:5px;border-radius:9px;background:#66FF33"></span>Top klient</span></div>
+          <div style="display:flex;gap:18px;margin-top:7px;flex-wrap:wrap;font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B"><span>marcin.k@gmail.com</span><span>+48 601 220 418</span><span>klient od mar 2026</span></div>
+        </div>
+        <div style="display:flex;gap:12px">
+          <div style="background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 18px;text-align:center"><div style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Aktywne</div><div style="font:500 20px 'IBM Plex Mono',monospace;margin-top:3px">34</div></div>
+          <div style="background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 18px;text-align:center"><div style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Sprzedane</div><div style="font:500 20px 'IBM Plex Mono',monospace;margin-top:3px">12</div></div>
+          <div style="background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 18px;text-align:center"><div style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">LTV</div><div style="font:500 20px 'IBM Plex Mono',monospace;margin-top:3px;color:#22DD99">34,5 tys.</div></div>
+          <div style="background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px 18px;text-align:center"><div style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Śr. cena</div><div style="font:500 20px 'IBM Plex Mono',monospace;margin-top:3px">1 780 zł</div></div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.onClick }}" style="height:36px;padding:0 16px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ t.label }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ tabOferty }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;animation:kb-in .18s ease">
+          <div style="display:grid;grid-template-columns:130px 110px 90px 130px 160px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Numer</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Data</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Pozycje</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Wartość</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+          </div>
+          <sc-for list="{{ offers }}" as="o" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:130px 110px 90px 130px 160px;gap:12px;align-items:center;min-height:54px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:500 12px 'IBM Plex Mono',monospace;color:#F5F5F3">{{ o.num }}</span>
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ o.date }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;justify-self:end">{{ o.items }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;justify-self:end">{{ o.value }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ o.sBg }};color:{{ o.sColor }};border:1px solid {{ o.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ o.sColor }}"></span>{{ o.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabNotatki }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;animation:kb-in .18s ease">
+          <div style="display:flex;gap:11px;padding:12px;background:#16191A;border:1px solid rgba(255,255,255,0.05);border-radius:12px"><i class="ph ph-push-pin" style="font-size:16px;color:#FFCC00;flex-shrink:0;margin-top:2px"></i><div><div style="font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Kolekcjoner Realu — priorytetowo informować o zapotrzebowaniu na Madryt. Preferuje kontakt wieczorem.</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:4px">Daniel · 12 cze 2026</div></div></div>
+          <textarea placeholder="Dodaj notatkę o kliencie…" style="min-height:70px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)"></textarea>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabInne }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:48px 24px;display:flex;align-items:center;justify-content:center;gap:10px;color:#4A4E4B;animation:kb-in .18s ease"><i class="ph ph-squares-four" style="font-size:20px"></i><span style="font:500 13px 'IBM Plex Mono',monospace">zawartość taba „{{ activeLabel }}" — wzór jak Oferty (tabela) / timeline</span></div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { tab:'Oferty' };
+  renderVals(){
+    const S={
+      progress:{label:'W obiegu', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      listed:{label:'Wystawiona', c:'#66FF33', bg:'rgba(102,255,51,0.13)', bd:'rgba(102,255,51,0.28)'},
+      sold:{label:'Sprzedana', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+    };
+    const offers=[
+      {num:'KCB-26-C1D8', date:'26 cze', items:'3', value:'~4 700 zł', s:'progress'},
+      {num:'KCB-26-A4E7', date:'20 cze', items:'5', value:'~6 200 zł', s:'listed'},
+      {num:'KCB-26-9D31', date:'14 cze', items:'2', value:'~2 350 zł', s:'sold'},
+      {num:'KCB-26-7B02', date:'2 cze', items:'4', value:'~5 100 zł', s:'listed'},
+    ];
+    const tabs=['Oferty','Sprzedaże','Wypłaty','Komunikacja','Notatki'];
+    const t=this.state.tab;
+    return {
+      tabs: tabs.map(k=>({ label:k,
+        bg: t===k?'rgba(102,255,51,0.13)':'#16191A',
+        color: t===k?'#66FF33':'#BDBFBD',
+        border: t===k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({tab:k}) })),
+      tabOferty: t==='Oferty',
+      tabNotatki: t==='Notatki',
+      tabInne: t!=='Oferty' && t!=='Notatki',
+      activeLabel: t,
+      offers: offers.map(o=>({ ...o, status:S[o.s].label, sColor:S[o.s].c, sBg:S[o.s].bg, sBorder:S[o.s].bd })),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -28,7 +28,7 @@ export function AddBankAccountForm() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-[13px] text-blue hover:text-blue-soft inline-flex items-center gap-2"
+        className="text-[13px] text-text-soft hover:text-lime transition-colors inline-flex items-center gap-2"
       >
         + Dodaj konto bankowe
       </button>
@@ -46,7 +46,7 @@ export function AddBankAccountForm() {
         <input id="iban" name="iban" required placeholder="PL00 0000 0000 0000 0000 0000 0000" className="input" />
       </div>
       <label className="flex items-center gap-2 text-[13px] cursor-pointer">
-        <input type="checkbox" name="is_default" className="accent-blue" defaultChecked />
+        <input type="checkbox" name="is_default" className="accent-lime" defaultChecked />
         Ustaw jako domyślne
       </label>
       {error && (
@@ -56,7 +56,7 @@ export function AddBankAccountForm() {
         <button type="submit" disabled={isPending} className="btn-primary h-10 px-4 text-[13px]">
           {isPending ? "Zapisywanie…" : "Dodaj"}
         </button>
-        <button type="button" onClick={() => setOpen(false)} className="text-[12px] text-text-soft hover:text-text">
+        <button type="button" onClick={() => setOpen(false)} className="text-[12px] text-text-soft hover:text-text transition-colors">
           Anuluj
         </button>
       </div>

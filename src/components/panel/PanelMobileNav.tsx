@@ -1,15 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SquaresFour, Tray, Wallet, List, Plus, type IconProps } from "@phosphor-icons/react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Portal } from "@/components/ui/Portal";
 import { signOut } from "@/app/panel/actions";
 import { formatPLN } from "@/lib/format";
-import { NAV_GROUPS, normalizeActive, type NavItem } from "./nav-config";
+import {
+  PANEL_SECTIONS, PANEL_BOTTOM, PANEL_TABS, normalizeActive, isItemActive,
+  type NavBadges,
+} from "./nav-config";
+import { SidebarNav } from "./SidebarNav";
 import type { Theme } from "@/lib/theme";
+
+const TAB_ICONS: Record<string, ComponentType<IconProps>> = {
+  SquaresFour, Tray, Wallet, List,
+};
 
 export type PanelMobileNavProps = {
   user: { email: string };
@@ -22,140 +31,177 @@ export type PanelMobileNavProps = {
   walletAvailable: number;
   active: string | undefined;
   theme: Theme;
+  badges?: NavBadges;
 };
 
 /**
- * Mobile top bar + slide-in drawer for /panel/*. Visible only under `lg`.
- *
- * Behavior:
- * - Top bar: hamburger left, Logo center, ThemeToggle right (sticky).
- * - Tap hamburger → drawer slides from left, backdrop fades in, body locks scroll.
- * - Tap link / backdrop / Escape → drawer closes.
- * - Route change auto-closes (usePathname watcher).
+ * Mobile nav klienta wg designu M1: top bar 56px (logo + theme + avatar),
+ * bottom tab bar 68px (Przegląd / Oferty / [FAB Nowa oferta] / Portfel / Więcej),
+ * „Więcej" otwiera pełnoekranowy sheet z kompletną nawigacją (SidebarNav).
  */
 export function PanelMobileNav({
-  user, profile, walletBalance, walletAvailable, active, theme,
+  user, profile, walletBalance, walletAvailable, active, theme, badges = {},
 }: PanelMobileNavProps) {
-  const [open, setOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const pathname = usePathname();
   const activeKey = normalizeActive(active);
 
-  // Close on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  useEffect(() => setMoreOpen(false), [pathname]);
 
-  // Body scroll lock + ESC handler when drawer open
   useEffect(() => {
-    if (!open) return;
+    if (!moreOpen) return;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMoreOpen(false);
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = original;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [moreOpen]);
 
   const fullName =
     [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials =
     (profile.first_name?.[0] ?? "") +
     (profile.last_name?.[0] ?? user.email[0]?.toUpperCase() ?? "");
+  const resolvedBadges: NavBadges = { wallet: walletAvailable > 0, ...badges };
+
+  // Aktywny tab: bezpośredni klucz albo parent aktywnego subitemu.
+  const allItems = [...PANEL_SECTIONS, ...PANEL_BOTTOM].flatMap((s) => s.items);
+  function tabActive(tabKey: string): boolean {
+    if (tabKey === activeKey) return true;
+    const item = allItems.find((i) => i.key === tabKey);
+    return item ? isItemActive(item, activeKey) : false;
+  }
+  const anyTabActive = PANEL_TABS.some((t) => t.key !== "more" && tabActive(t.key));
 
   return (
     <>
-      {/* Mobile sticky top bar — visible under lg */}
+      {/* Top bar */}
       <header className="lg:hidden sticky top-0 z-30 backdrop-blur-md bg-bg/85 border-b border-border-soft">
         <div className="px-4 h-[56px] flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Otwórz menu"
-            className="h-9 w-9 rounded-[10px] border border-border bg-surface text-text-soft hover:text-text inline-flex items-center justify-center"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            </svg>
-          </button>
-
-          <Logo showSuffix={false} className="flex-1 justify-center" />
-
-          <ThemeToggle current={theme} />
+          <Logo showSuffix={false} />
+          <div className="flex items-center gap-2">
+            <ThemeToggle current={theme} />
+            <div className="h-9 w-9 rounded-full bg-surface-2 border border-border flex items-center justify-center font-medium text-lime text-[11px]">
+              {initials.toUpperCase().slice(0, 2)}
+            </div>
+          </div>
         </div>
       </header>
 
+      {/* Bottom tab bar + FAB */}
       <Portal>
-      {/* Backdrop */}
-      <div
-        onClick={() => setOpen(false)}
-        className={`lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        aria-hidden
-      />
+        <nav
+          aria-label="Nawigacja dolna"
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-bg/95 backdrop-blur-md border-t border-border"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <div className="h-[68px] grid grid-cols-5 items-center">
+            {PANEL_TABS.slice(0, 2).map((t) => (
+              <TabLink key={t.key} tab={t} active={tabActive(t.key)} />
+            ))}
 
-      {/* Drawer */}
-      <aside
-        className={`lg:hidden fixed top-0 left-0 bottom-0 z-50 w-[300px] max-w-[85vw] bg-bg border-r border-border flex flex-col transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
-        role="dialog"
-        aria-label="Menu nawigacyjne"
-        aria-hidden={!open}
-      >
-        <div className="px-5 pt-5 pb-4 border-b border-border-soft flex items-center justify-between">
-          <Logo />
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Zamknij menu"
-            className="h-9 w-9 rounded-[10px] text-text-mute hover:text-text inline-flex items-center justify-center"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6 6 18M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <nav className="px-5 py-5 flex-1 overflow-y-auto">
-          {NAV_GROUPS.map((group, gi) => (
-            <div key={group.label} className={gi > 0 ? "mt-7" : ""}>
-              <div className="label">{group.label}</div>
-              <ul className="mt-3 space-y-1.5 text-[14px]">
-                {group.items.map((item) => (
-                  <DrawerLink
-                    key={item.key}
-                    item={item}
-                    active={activeKey === item.key}
-                    walletBalance={walletBalance}
-                  />
-                ))}
-              </ul>
+            {/* FAB — Nowa oferta */}
+            <div className="flex justify-center">
+              <Link
+                href="/start"
+                aria-label="Nowa oferta"
+                className="h-14 w-14 -mt-7 rounded-full btn-primary !p-0 flex items-center justify-center"
+              >
+                <Plus size={22} weight="bold" />
+              </Link>
             </div>
-          ))}
+
+            <TabLink tab={PANEL_TABS[2]} active={tabActive(PANEL_TABS[2].key)} />
+            <button
+              type="button"
+              onClick={() => setMoreOpen(true)}
+              aria-label="Więcej"
+              aria-expanded={moreOpen}
+              className={`flex flex-col items-center justify-center gap-1 h-full ${
+                moreOpen || !anyTabActive ? "text-lime" : "text-text-mute"
+              }`}
+            >
+              <List size={21} weight="regular" />
+              <span className="text-[10px] font-medium">Więcej</span>
+            </button>
+          </div>
         </nav>
 
-        {walletBalance > 0 && (
-          <div className="px-5 py-4 border-t border-border-soft">
-            <div className="card-gradient-blue p-4 rounded-[14px]">
-              <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">Wallet</div>
-              <div className="mt-1 font-bold text-xl tracking-[-0.025em] text-white num">
-                {formatPLN(walletBalance, { decimals: false })}
-              </div>
-              <div className="mt-0.5 text-white/70 text-[11px] num">
-                Dostępne: {formatPLN(walletAvailable, { decimals: false })}
-              </div>
+        {/* Sheet „Więcej" — pełna nawigacja */}
+        <div
+          onClick={() => setMoreOpen(false)}
+          className={`lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
+            moreOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          aria-hidden
+        />
+        <aside
+          role="dialog"
+          aria-label="Pełne menu"
+          aria-hidden={!moreOpen}
+          className={`lg:hidden fixed left-0 right-0 bottom-0 z-50 max-h-[85vh] bg-bg border-t border-border rounded-t-[24px] flex flex-col transition-transform duration-300 ease-out ${
+            moreOpen ? "translate-y-0" : "translate-y-full"
+          }`}
+        >
+          {/* Drag handle + close */}
+          <div className="flex-shrink-0 pt-3 pb-2 flex flex-col items-center">
+            <div className="h-1 w-10 rounded-full bg-surface-3" aria-hidden />
+          </div>
+          <div className="px-4 pb-3 flex items-center justify-between border-b border-border-soft">
+            <div className="text-[15px] font-medium">Menu</div>
+            <button
+              type="button"
+              onClick={() => setMoreOpen(false)}
+              aria-label="Zamknij menu"
+              className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border-soft text-text-mute hover:text-text inline-flex items-center justify-center"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="px-3 py-4 flex-1 overflow-y-auto">
+            <SidebarNav
+              sections={PANEL_SECTIONS}
+              activeKey={activeKey}
+              badges={resolvedBadges}
+              storageKey="kb-nav-panel"
+              onNavigate={() => setMoreOpen(false)}
+            />
+            <div className="mt-6 pt-4 border-t border-border-soft">
+              <SidebarNav
+                sections={PANEL_BOTTOM}
+                activeKey={activeKey}
+                badges={resolvedBadges}
+                storageKey="kb-nav-panel-bottom"
+                onNavigate={() => setMoreOpen(false)}
+              />
             </div>
           </div>
-        )}
 
-        <div className="px-5 py-4 border-t border-border-soft">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-blue/15 border border-blue/30 flex items-center justify-center font-semibold text-blue text-[12px]">
+          {walletBalance > 0 && (
+            <div className="px-4 py-3 border-t border-border-soft flex-shrink-0">
+              <Link href="/panel/wallet" onClick={() => setMoreOpen(false)} className="block card-gradient-dark p-4 rounded-[16px]">
+                <div className="label !text-mint/80">Portfel</div>
+                <div className="mt-1 font-light text-[20px] tracking-[-0.02em] num text-mint">
+                  {formatPLN(walletBalance, { decimals: false })}
+                </div>
+                <div className="mt-0.5 text-[11px] num text-text-soft">
+                  Dostępne: {formatPLN(walletAvailable, { decimals: false })}
+                </div>
+              </Link>
+            </div>
+          )}
+
+          <div
+            className="px-4 py-3 border-t border-border-soft flex items-center gap-3 flex-shrink-0"
+            style={{ paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
+          >
+            <div className="h-9 w-9 rounded-full bg-surface-2 border border-border flex items-center justify-center font-medium text-lime text-[12px]">
               {initials.toUpperCase().slice(0, 2)}
             </div>
             <div className="flex-1 min-w-0">
@@ -169,60 +215,36 @@ export function PanelMobileNav({
               </div>
             </div>
             <form action={signOut}>
-              <button type="submit" className="text-text-mute hover:text-text p-1" title="Wyloguj">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <button type="submit" className="text-text-mute hover:text-text p-1" title="Wyloguj" aria-label="Wyloguj">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
                 </svg>
               </button>
             </form>
           </div>
-        </div>
-      </aside>
+        </aside>
       </Portal>
     </>
   );
 }
 
-function DrawerLink({
-  item, active, walletBalance,
+function TabLink({
+  tab, active,
 }: {
-  item: NavItem;
+  tab: (typeof PANEL_TABS)[number];
   active: boolean;
-  walletBalance: number;
 }) {
-  const baseCls = active
-    ? "bg-blue/10 text-blue font-semibold"
-    : "text-text-soft hover:text-text hover:bg-surface";
-
-  let badgeValue: string | number | undefined;
-  if (typeof item.badge === "string" || typeof item.badge === "number") {
-    badgeValue = item.badge;
-  } else if (item.key === "wallet" && walletBalance > 0) {
-    badgeValue = formatPLN(walletBalance, { decimals: false });
-  }
-  const badgeColor =
-    item.badgeAccent === "mint" ? "text-mint" : item.badgeAccent === "amber" ? "text-amber" : "text-text-mute";
-
+  const Icon = TAB_ICONS[tab.icon] ?? SquaresFour;
   return (
-    <li>
-      <Link
-        href={item.href}
-        className={`flex items-center justify-between py-2.5 px-3 -mx-3 rounded-[10px] transition-colors ${baseCls}`}
-      >
-        <span className="inline-flex items-center gap-2 min-w-0">
-          <span className="truncate">{item.label}</span>
-          {item.stub && (
-            <span className="text-[9px] font-semibold uppercase tracking-wider text-text-faint border border-border rounded-full px-1.5 py-px">
-              wkrótce
-            </span>
-          )}
-        </span>
-        {badgeValue != null && (
-          <span className={`text-[11px] num ${active ? "text-blue" : badgeColor}`}>
-            {badgeValue}
-          </span>
-        )}
-      </Link>
-    </li>
+    <Link
+      href={tab.href}
+      aria-current={active ? "page" : undefined}
+      className={`flex flex-col items-center justify-center gap-1 h-full ${
+        active ? "text-lime" : "text-text-mute"
+      }`}
+    >
+      <Icon size={21} weight="regular" />
+      <span className="text-[10px] font-medium">{tab.label}</span>
+    </Link>
   );
 }

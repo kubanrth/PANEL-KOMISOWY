@@ -1,0 +1,8 @@
+/* Kickback — Lufga (pliki lokalne) · spec FocusFlow: Light + Regular · line-height 116% · letter-spacing -1% */
+@font-face{font-family:'Lufga';src:url('uploads/Lufga-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Lufga';src:url('uploads/Lufga-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+/* Wagi 500–700 celowo mapowane do Regular — system typograficzny używa tylko Light/Regular; hierarchia przez skalę, wersaliki i kolor, nie przez pogrubienie */
+@font-face{font-family:'Lufga';src:url('uploads/Lufga-Regular.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Lufga';src:url('uploads/Lufga-Regular.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Lufga';src:url('uploads/Lufga-Regular.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+html{line-height:1.16;letter-spacing:-0.01em;font-synthesis:none}

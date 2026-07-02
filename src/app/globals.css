@@ -1,94 +1,121 @@
 @import "tailwindcss";
 
 /* ============================================================ */
-/* Revolut Design Tokens                                        */
+/* Kickback Design Tokens — FocusFlow language                  */
 /* ============================================================ */
 /*
- * Default tokens are dark (Revolut deep-black palette). They are registered
- * with Tailwind via `@theme`, so utility classes like `bg-bg`, `text-text`
- * compile to `background: var(--color-bg)` etc.
+ * Źródło prawdy: design/Kickback panel redesign (1)/Kickback Design System.dc.html
  *
- * For light mode we override the same custom properties on
- * `:root[data-theme="light"]`. The CSS variable cascade flows through every
- * Tailwind utility automatically — no per-component branching needed.
+ * Default = dark (near-black z zielonym cieniem). Tokeny rejestrowane przez
+ * `@theme`, więc utility `bg-bg`, `text-text`, `text-lime` itd. kompilują się
+ * do var(--color-*). Light mode nadpisuje te same custom properties na
+ * `:root[data-theme="light"]` — kaskada przepływa przez wszystkie utilities.
  *
- * Layout reads the `kb_theme` cookie and stamps `data-theme` on <html>
- * before paint, so the right palette renders on first byte (no flash).
+ * Layout czyta cookie `kb_theme` i stempluje `data-theme` na <html> przed
+ * paintem (bez flasha).
  */
 @theme {
-  /* Backgrounds */
-  --color-bg:           #0A0B10;
-  --color-bg-soft:      #0F1018;
-  --color-surface:      #13141A;
-  --color-surface-2:    #1B1D26;
-  --color-surface-3:    #232531;
-  --color-overlay:      rgba(255, 255, 255, 0.03);
-  --color-border:       #252834;
-  --color-border-soft:  #1D1F28;
+  /* Backgrounds — surface stack */
+  --color-bg:           #050807;
+  --color-bg-soft:      #0A0D0B;
+  --color-surface:      #0F1210;
+  --color-surface-2:    #16191A;
+  --color-surface-3:    #1D2120;
+  --color-overlay:      rgba(255, 255, 255, 0.04);
+  --color-border:       rgba(255, 255, 255, 0.08);
+  --color-border-soft:  rgba(255, 255, 255, 0.05);
 
   /* Text */
-  --color-text:         #F5F5F8;
-  --color-text-soft:    #A8AAB8;
-  --color-text-mute:    #6B6E7E;
-  --color-text-faint:   #45495A;
+  --color-text:         #F5F5F3;
+  --color-text-soft:    #BDBFBD;
+  --color-text-mute:    #7B7F7B;
+  --color-text-faint:   #4A4E4B;
 
-  /* Accents — same on both themes */
-  --color-blue:         #0066FF;
-  --color-blue-soft:    #1F7AFF;
-  --color-blue-deep:    #0050CC;
-  --color-purple:       #9358FF;
-  --color-pink:         #FF3D71;
-  --color-mint:         #00D29F;
-  --color-amber:        #FF8A3D;
-  --color-coral:        #FF5C50;
+  /* Akcenty — vocab statusów (ten sam kolor = to samo znaczenie w całej appce)
+     lime   = aktywne, nowe, primary accent
+     mint   = sprzedane, wypłacone, sukces
+     blue   = w toku, A&QC, informacja
+     yellow = oczekuje, uwaga
+     coral  = błąd, odrzucone
+     amber  = retro tag */
+  --color-lime:         #66FF33;
+  --color-mint:         #22DD99;
+  --color-blue:         #4A6BFF;
+  --color-blue-soft:    #6B85FF;
+  --color-blue-deep:    #3A55CC;
+  --color-yellow:       #FFCC00;
+  --color-coral:        #FF5A47;
+  --color-amber:        #F5A623;
+  /* Aliasy legacy (widoki sprzed redesignu — do wycięcia po migracji batchy).
+     ponytail: purple/pink znikają w Fazie 9; nie używać w nowym kodzie. */
+  --color-purple:       #22DD99;
+  --color-pink:         #FF5A47;
+
+  /* Tekst na gradiencie CTA (ciemna zieleń, nie czarny) */
+  --color-on-accent:    #05140B;
 
   /* Fonts */
-  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans:    var(--font-lufga), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-lufga), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-plex-mono), ui-monospace, monospace;
 
-  /* Radius */
-  --radius-card:   16px;
+  /* Radius — spójnie z Design Systemem */
+  --radius-card:   20px;
   --radius-pill:   999px;
-  --radius-button: 12px;
+  --radius-button: 999px;   /* wszystkie przyciski = pill */
+  --radius-input:  14px;
+  --radius-chip:   9px;
+  --radius-item:   12px;    /* nav items, wiersze */
   --radius-hero:   24px;
 
   /* Shadow */
-  --shadow-card:    0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px -8px rgba(0,0,0,0.6);
-  --shadow-elev:    0 1px 0 rgba(255,255,255,0.06) inset, 0 24px 48px -16px rgba(0,0,0,0.8);
-  --shadow-blue:    0 8px 32px -8px rgba(0,102,255,0.5);
-  --shadow-purple:  0 8px 32px -8px rgba(147,88,255,0.4);
+  --shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px -8px rgba(0,0,0,0.55);
+  --shadow-elev:  0 1px 0 rgba(255,255,255,0.06) inset, 0 24px 48px -16px rgba(0,0,0,0.75);
+  --shadow-cta:   0 10px 24px -8px rgba(34,221,153,0.45);
+  /* Aliasy legacy — mapowane na glow CTA do czasu migracji widoków */
+  --shadow-blue:   0 10px 24px -8px rgba(34,221,153,0.45);
+  --shadow-purple: 0 10px 24px -8px rgba(34,221,153,0.45);
 
-  /* Logo filter — flips between themes (none in light, invert in dark). */
+  /* Gradient primary (jedyny gradient poza hero/wyróżnieniami) */
+  --gradient-cta: linear-gradient(135deg, #6ECC1F 0%, #22DD99 100%);
+
+  /* Logo filter — flips between themes */
   --logo-filter: brightness(0) invert(1);
 }
 
-/* ---------- Light theme override ---------- */
+/* ---------- Light theme override (wzór: L1/L2 z design systemu) ---------- */
 :root[data-theme="light"] {
-  /* Backgrounds — clean white + cool grays. Tuned to keep Revolut "soft"
-     vibe: pure white canvas, surface card slightly off-white, borders subtle. */
-  --color-bg:           #FFFFFF;
-  --color-bg-soft:      #F7F8FA;
+  --color-bg:           #F7F8F5;
+  --color-bg-soft:      #F0F2ED;
   --color-surface:      #FFFFFF;
-  --color-surface-2:    #F2F4F8;
-  --color-surface-3:    #E8EBF1;
-  --color-overlay:      rgba(0, 0, 0, 0.03);
-  --color-border:       #DDE1E8;
-  --color-border-soft:  #EBEEF3;
+  --color-surface-2:    #F0F2ED;
+  --color-surface-3:    #E6E9E2;
+  --color-overlay:      rgba(5, 20, 11, 0.04);
+  --color-border:       rgba(5, 20, 11, 0.10);
+  --color-border-soft:  rgba(5, 20, 11, 0.06);
 
-  /* Text — deep blue-black so it doesn't feel pure black on white. */
-  --color-text:         #0F1117;
-  --color-text-soft:    #4A4E5E;
-  --color-text-mute:    #757988;
-  --color-text-faint:   #B0B4BE;
+  --color-text:         #2A2E2B;
+  --color-text-soft:    #3A3E3B;
+  --color-text-mute:    #6B6F6A;
+  --color-text-faint:   #A8ACA6;
 
-  /* Shadows — tuned much lighter than dark mode. */
-  --shadow-card:    0 1px 0 rgba(255,255,255,1) inset, 0 4px 12px -4px rgba(15,17,23,0.08);
-  --shadow-elev:    0 1px 0 rgba(255,255,255,1) inset, 0 8px 24px -8px rgba(15,17,23,0.12);
-  --shadow-blue:    0 8px 24px -6px rgba(0,102,255,0.30);
-  --shadow-purple:  0 8px 24px -6px rgba(147,88,255,0.25);
+  /* Akcenty ciemnieją dla kontrastu na jasnym tle (WCAG AA) */
+  --color-lime:         #0C9B52;
+  --color-mint:         #0D9F55;
+  --color-yellow:       #B48200;
+  --color-blue:         #3A55CC;
+  --color-blue-soft:    #4A6BFF;
+  --color-purple:       #0D9F55;
+  --color-pink:         #E0402F;
+  --color-coral:        #E0402F;
+  --color-amber:        #8A6400;
 
-  /* Logo — no filter on light bg (keep original colours of SVG). */
+  --shadow-card:  0 1px 0 rgba(255,255,255,1) inset, 0 4px 12px -4px rgba(5,20,11,0.08);
+  --shadow-elev:  0 1px 0 rgba(255,255,255,1) inset, 0 8px 24px -8px rgba(5,20,11,0.12);
+  --shadow-cta:   0 8px 20px -6px rgba(13,159,85,0.35);
+  --shadow-blue:   0 8px 20px -6px rgba(13,159,85,0.35);
+  --shadow-purple: 0 8px 20px -6px rgba(13,159,85,0.35);
+
   --logo-filter: none;
 }
 
@@ -100,26 +127,39 @@ html, body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  line-height: 1.16;              /* spec Lufga/FocusFlow */
+  letter-spacing: -0.01em;
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "ss01", "cv11";
-  /* Faster transitions to make toggle feel snappy without animating layout. */
   transition: background-color .25s ease, color .25s ease;
 }
 
 ::selection {
-  background: var(--color-blue);
-  color: white;
+  background: var(--color-lime);
+  color: #05140B;
 }
 
 * {
   border-color: var(--color-border);
 }
 
-/* Tabular numerics for prices/IDs */
+/* Spójny focus dla WSZYSTKICH elementów interaktywnych (CLAUDE.md: hover,
+   focus-visible i active bez wyjątków). Przyciski btn-* mają własne ringi —
+   ta reguła łapie resztę: chipy, linki-akcje, ikony, taby. */
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* Tabular numerics + mono dla cen/SKU/dat */
 .num {
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+  letter-spacing: 0;
 }
 
 /* ============================================================ */
@@ -128,32 +168,32 @@ html, body {
 
 /* Buttons */
 .btn-primary {
-  background: var(--color-blue);
-  color: white;
+  background: var(--gradient-cta);
+  color: var(--color-on-accent);
   font-weight: 600;
   letter-spacing: -0.01em;
   border-radius: var(--radius-button);
-  transition: transform .25s cubic-bezier(0.22,1,0.36,1), background-color .2s ease, box-shadow .25s ease;
+  box-shadow: var(--shadow-cta);
+  transition: transform .25s cubic-bezier(0.22,1,0.36,1), box-shadow .25s ease, opacity .2s ease;
 }
 .btn-primary:hover {
-  background: var(--color-blue-soft);
   transform: translate3d(0, -1px, 0);
-  box-shadow: var(--shadow-blue);
+  box-shadow: 0 14px 30px -8px rgba(34,221,153,0.55);
 }
-.btn-primary:active { transform: translate3d(0, 0, 0); }
-.btn-primary:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
-.btn-primary:disabled { opacity: .55; pointer-events: none; }
+.btn-primary:active { transform: translate3d(0, 0, 0) scale(.98); }
+.btn-primary:focus-visible { outline: 2px solid var(--color-lime); outline-offset: 3px; }
+.btn-primary:disabled { opacity: .45; pointer-events: none; }
 
 .btn-ghost {
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   color: var(--color-text);
   font-weight: 600;
   border-radius: var(--radius-button);
   border: 1px solid var(--color-border);
   transition: background-color .2s ease, transform .25s cubic-bezier(0.22,1,0.36,1);
 }
-.btn-ghost:hover { background: var(--color-surface-2); transform: translate3d(0, -1px, 0); }
-.btn-ghost:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; }
+.btn-ghost:hover { background: var(--color-surface-3); transform: translate3d(0, -1px, 0); }
+.btn-ghost:focus-visible { outline: 2px solid var(--color-lime); outline-offset: 3px; }
 
 .btn-soft {
   background: var(--color-overlay);
@@ -162,6 +202,17 @@ html, body {
   transition: background-color .2s ease;
 }
 .btn-soft:hover { background: var(--color-surface-2); }
+
+.btn-danger {
+  background: color-mix(in oklab, var(--color-coral) 10%, transparent);
+  color: var(--color-coral);
+  border: 1px solid color-mix(in oklab, var(--color-coral) 30%, transparent);
+  font-weight: 600;
+  border-radius: var(--radius-button);
+  transition: background-color .2s ease;
+}
+.btn-danger:hover { background: color-mix(in oklab, var(--color-coral) 18%, transparent); }
+.btn-danger:focus-visible { outline: 2px solid var(--color-coral); outline-offset: 3px; }
 
 /* Cards */
 .card {
@@ -181,50 +232,55 @@ html, body {
   border-radius: var(--radius-card);
 }
 
-/* Gradient feature cards — always white text on coloured gradient
-   regardless of theme; they are "advertising surfaces". */
+/* Gradient feature cards — powierzchnie "reklamowe".
+   Gradient TYLKO na: primary CTA, hero portfela, wyróżniona pozycja timeline. */
 .card-gradient-purple {
-  background: linear-gradient(135deg, #9358FF 0%, #FF3D71 100%);
-  color: white;
+  background: var(--gradient-cta);
+  color: var(--color-on-accent);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-purple);
+  box-shadow: var(--shadow-cta);
 }
 .card-gradient-blue {
-  background: linear-gradient(135deg, #0066FF 0%, #00D29F 100%);
+  background: linear-gradient(135deg, #4A6BFF 0%, #22DD99 100%);
   color: white;
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-blue);
+  box-shadow: var(--shadow-cta);
 }
 .card-gradient-dark {
-  background: linear-gradient(135deg, #1B1D26 0%, #0F1018 100%);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(135deg, #0F2A16 0%, #052610 100%);
+  border: 1px solid rgba(34, 221, 153, 0.2);
   border-radius: var(--radius-card);
-  color: white;
+  color: #F5F5F3;
 }
 
-/* Pills / chips */
+/* Pills / chips — vocab statusów: kropka + UPPERCASE */
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
-.pill-mint  { background: color-mix(in oklab, var(--color-mint) 15%,  transparent);  color: var(--color-mint); }
-.pill-blue  { background: color-mix(in oklab, var(--color-blue) 15%,  transparent);  color: var(--color-blue-soft); }
-.pill-amber { background: color-mix(in oklab, var(--color-amber) 15%, transparent); color: var(--color-amber); }
-.pill-pink  { background: color-mix(in oklab, var(--color-pink) 15%,  transparent);  color: var(--color-pink); }
-.pill-mute  { background: var(--color-overlay); color: var(--color-text-soft); }
+.pill-lime   { background: color-mix(in oklab, var(--color-lime) 13%,   transparent); color: var(--color-lime);   border: 1px solid color-mix(in oklab, var(--color-lime) 26%,   transparent); }
+.pill-mint   { background: color-mix(in oklab, var(--color-mint) 13%,   transparent); color: var(--color-mint);   border: 1px solid color-mix(in oklab, var(--color-mint) 28%,   transparent); }
+.pill-blue   { background: color-mix(in oklab, var(--color-blue) 14%,   transparent); color: var(--color-blue-soft); border: 1px solid color-mix(in oklab, var(--color-blue) 30%, transparent); }
+.pill-yellow { background: color-mix(in oklab, var(--color-yellow) 13%, transparent); color: var(--color-yellow); border: 1px solid color-mix(in oklab, var(--color-yellow) 26%, transparent); }
+.pill-coral  { background: color-mix(in oklab, var(--color-coral) 13%,  transparent); color: var(--color-coral);  border: 1px solid color-mix(in oklab, var(--color-coral) 30%,  transparent); }
+.pill-amber  { background: color-mix(in oklab, var(--color-amber) 14%,  transparent); color: var(--color-amber);  border: 1px solid color-mix(in oklab, var(--color-amber) 28%,  transparent); }
+.pill-mute   { background: var(--color-overlay); color: var(--color-text-soft); border: 1px solid var(--color-border-soft); }
+/* legacy alias */
+.pill-pink   { background: color-mix(in oklab, var(--color-coral) 13%,  transparent); color: var(--color-coral);  border: 1px solid color-mix(in oklab, var(--color-coral) 30%,  transparent); }
 
-/* Label (small caps mono — used VERY sparingly) */
+/* Label (uppercase, nad H1 i nad inputami) */
 .label {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--color-text-mute);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -235,7 +291,24 @@ html, body {
 }
 .live-dot { animation: pulse-dot 2.2s ease-in-out infinite; }
 
-/* Hero entrance */
+/* Motion — keyframes kb-* z Design Systemu (tylko transform + opacity) */
+@keyframes kb-in     { from { opacity: 0; transform: translateY(8px); }   to { opacity: 1; transform: none; } }
+@keyframes kb-drawer { from { opacity: 0; transform: translateX(34px); }  to { opacity: 1; transform: none; } }
+@keyframes kb-modal  { from { opacity: 0; transform: scale(.96) translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes kb-fade   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes kb-pulse  { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes kb-shim   { 0% { background-position: -420px 0; } 100% { background-position: 420px 0; } }
+.kb-in     { animation: kb-in .2s cubic-bezier(.4,0,.2,1) both; }
+.kb-drawer { animation: kb-drawer .24s cubic-bezier(.32,.72,0,1) both; }
+.kb-modal  { animation: kb-modal .24s cubic-bezier(.32,.72,0,1) both; }
+.kb-fade   { animation: kb-fade .2s ease both; }
+.kb-skeleton {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-chip);
+  animation: kb-pulse 1.6s ease-in-out infinite;
+}
+
+/* Hero entrance (legacy — widoki sprzed redesignu) */
 @keyframes rise {
   from { opacity: 0; transform: translate3d(0, 14px, 0); }
   to   { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -249,35 +322,40 @@ html, body {
 /* Smooth scroll for anchor nav */
 html { scroll-behavior: smooth; }
 
-/* Glow background blob (used in heroes) */
+/* Glow background blob (hero) — radial lime/mint z prawego-górnego rogu */
 .glow-blob {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(40% 30% at 80% 0%, color-mix(in oklab, var(--color-blue) 18%, transparent), transparent 60%),
-    radial-gradient(45% 35% at 20% 80%, color-mix(in oklab, var(--color-purple) 16%, transparent), transparent 60%);
+    radial-gradient(40% 30% at 80% 0%, color-mix(in oklab, var(--color-mint) 12%, transparent), transparent 60%),
+    radial-gradient(45% 35% at 20% 80%, color-mix(in oklab, var(--color-lime) 7%, transparent), transparent 60%);
 }
 
 /* Inputs */
 .input {
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-button);
+  border-radius: var(--radius-input);
   padding: 14px 16px;
   font-size: 16px;
   color: var(--color-text);
   width: 100%;
   outline: none;
-  transition: border-color .2s ease, background-color .2s ease;
+  transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
 }
 .input::placeholder { color: var(--color-text-faint); }
-.input:focus { border-color: var(--color-blue); background: var(--color-surface-2); }
+.input:focus {
+  border-color: var(--color-lime);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-lime) 20%, transparent);
+}
 
 .input-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text-soft);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-mute);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: 8px;
   display: block;
 }
@@ -286,8 +364,12 @@ html { scroll-behavior: smooth; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
-/* Tables — desktop renders the full grid, mobile gets horizontal scroll
-   with thin scrollbar so user knows they can swipe. */
+/* Scrollbar w brandzie */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-3); border-radius: 8px; border: 3px solid var(--color-bg); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Tables — desktop pełny grid, mobile horizontal scroll */
 .table-scroll {
   overflow-x: auto;
   overflow-y: hidden;
@@ -301,10 +383,10 @@ html { scroll-behavior: smooth; }
   .table-scroll > * { min-width: 0; }
 }
 
-/* Tap-targets: w mobile zwiększamy min wysokość kontrolnych elementów do 44px (Apple HIG) */
+/* Tap-targets: mobile min 44px (Apple HIG) */
 @media (max-width: 1023px) {
   .input { padding-top: 12px; padding-bottom: 12px; font-size: 16px; }
-  .btn-primary, .btn-ghost, .btn-soft { min-height: 44px; }
+  .btn-primary, .btn-ghost, .btn-soft, .btn-danger { min-height: 44px; }
 }
 
 /* line-clamp utility */
@@ -315,7 +397,7 @@ html { scroll-behavior: smooth; }
   overflow: hidden;
 }
 
-/* Logo helper — single class consuming the per-theme --logo-filter variable. */
+/* Logo helper — per-theme filter */
 .logo-img {
   filter: var(--logo-filter);
 }

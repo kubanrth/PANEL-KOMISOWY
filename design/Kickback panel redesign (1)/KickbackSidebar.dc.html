@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div style="font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;position:relative;height:{{ rootH }}">
+
+<sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;width:{{ fullWidth }};height:{{ fullHeight }};background:#0A0D0B;border-right:{{ borderRight }};padding:14px 16px 16px">
+
+  <div style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:11px 10px 11px 12px;border:1px solid {{ headerBorder }};border-radius:16px;background:{{ headerBg }}">
+    <div style="width:32px;height:32px;flex-shrink:0;border-radius:10px;background:linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(34,221,153,0.55),inset 0 1px 0 rgba(255,255,255,0.35)"><div style="width:0;height:0;border-left:8px solid #05140B;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px"></div></div>
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+      <div style="display:flex;align-items:center;gap:7px"><span style="font-weight:600;font-size:15px;letter-spacing:-0.01em;line-height:1.2">Kickback</span><sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase">Admin</span></sc-if></div>
+      <div style="display:flex;align-items:center;gap:5px"><sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><span style="width:6px;height:6px;border-radius:50%;background:#FF5A47;flex-shrink:0"></span></sc-if><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ subtitle }}</span></div>
+    </div>
+    <button style="width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:10px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph {{ collapseIcon }}" style="font-size:14px"></i></button>
+  </div>
+
+  <div style="flex-shrink:0;display:flex;align-items:center;gap:9px;height:36px;margin-top:12px;padding:0 10px;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:10px;cursor:pointer" style-hover="background:#1D2120">
+    <i class="ph ph-magnifying-glass" style="font-size:15px;color:#7B7F7B;flex-shrink:0"></i>
+    <span style="flex:1;min-width:0;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj…</span>
+    <span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:1px 5px">⌘K</span>
+  </div>
+
+  <div style="flex:1;min-height:0;overflow-y:{{ bodyOverflow }};margin:4px -6px 0;padding:8px 6px 0">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+      <div style="margin-bottom:{{ r.mb }}px">
+        <sc-if value="{{ r.isSec }}" hint-placeholder-val="{{ false }}">
+          <div style="font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;padding:16px 4px 8px">{{ r.label }}</div>
+        </sc-if>
+        <sc-if value="{{ r.isItem }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ r.onClick }}" style="width:100%;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 4px 0 2px;border:0;border-radius:12px;background:transparent;cursor:pointer;text-align:left;transition:background .18s" style-hover="background:rgba(255,255,255,0.03)">
+            <span style="width:40px;height:40px;flex-shrink:0;border-radius:10px;background:{{ r.tileBg }};border:1px solid {{ r.tileBorder }};box-shadow:{{ r.tileShadow }};display:flex;align-items:center;justify-content:center"><i class="ph {{ r.icon }}" style="font-size:19px;color:{{ r.iconColor }}"></i></span>
+            <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ r.labelWeight }};letter-spacing:-0.01em;color:{{ r.labelColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.label }}</span>
+            <sc-if value="{{ r.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width:22px;height:22px;flex-shrink:0;border-radius:999px;padding:0 6px;background:{{ r.cBg }};border:1px solid {{ r.cBorder }};display:flex;align-items:center;justify-content:center;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ r.cColor }}">{{ r.count }}</span></sc-if>
+            <sc-if value="{{ r.hasDotBadge }}" hint-placeholder-val="{{ false }}"><span style="width:22px;height:22px;flex-shrink:0;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ r.dotBadge }}"></span></span></sc-if>
+          </button>
+        </sc-if>
+        <sc-if value="{{ r.isGrp }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius:14px;background:{{ r.contBg }};border:1px solid {{ r.contBorder }};padding:{{ r.contPad }};transition:background .28s,border-color .28s,padding .28s">
+            <div style="display:flex;align-items:center;gap:8px;min-height:44px">
+              <button onClick="{{ r.onToggle }}" style="width:28px;height:40px;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:#101413;color:#BDBFBD;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#16191A"><i class="ph ph-caret-down" style="font-size:13px;display:inline-block;transform:{{ r.caretTf }};transition:transform .28s cubic-bezier(.4,0,.2,1)"></i></button>
+              <button onClick="{{ r.onClick }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 2px;border:0;border-radius:12px;background:transparent;cursor:pointer;text-align:left" style-hover="background:rgba(255,255,255,0.02)">
+                <span style="width:40px;height:40px;flex-shrink:0;border-radius:10px;background:{{ r.tileBg }};border:1px solid {{ r.tileBorder }};box-shadow:{{ r.tileShadow }};display:flex;align-items:center;justify-content:center"><i class="ph {{ r.icon }}" style="font-size:19px;color:{{ r.iconColor }}"></i></span>
+                <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ r.labelWeight }};letter-spacing:-0.01em;color:{{ r.labelColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.label }}</span>
+                <sc-if value="{{ r.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width:22px;height:22px;flex-shrink:0;border-radius:999px;padding:0 6px;background:{{ r.cBg }};border:1px solid {{ r.cBorder }};display:flex;align-items:center;justify-content:center;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ r.cColor }}">{{ r.count }}</span></sc-if>
+                <sc-if value="{{ r.hasDotBadge }}" hint-placeholder-val="{{ false }}"><span style="width:22px;height:22px;flex-shrink:0;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ r.dotBadge }}"></span></span></sc-if>
+              </button>
+            </div>
+            <div style="overflow:hidden;max-height:{{ r.kidsMaxH }};opacity:{{ r.kidsOpacity }};visibility:{{ r.kidsVis }};transition:max-height .28s cubic-bezier(.4,0,.2,1),opacity .22s ease,visibility .28s">
+              <div style="display:flex;flex-direction:column;padding:2px 0 4px">
+                <sc-for list="{{ r.kids }}" as="k" hint-placeholder-count="4">
+                  <sc-if value="{{ k.isGhost }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ k.onClick }}" style="display:flex;align-items:center;gap:8px;min-height:32px;padding:0 8px 0 46px;border:0;background:transparent;border-radius:10px;cursor:pointer;text-align:left;color:#7B7F7B" style-hover="color:#F5F5F3"><i class="ph ph-download-simple" style="font-size:14px;flex-shrink:0"></i><span style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.01em">{{ k.label }}</span></button>
+                  </sc-if>
+                  <sc-if value="{{ k.isSub }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ k.onClick }}" style="display:flex;align-items:center;gap:10px;min-height:36px;padding:0 8px 0 46px;border:0;background:{{ k.bg }};border-radius:10px;cursor:pointer;text-align:left;transition:background .15s" style-hover="background:rgba(255,255,255,0.03)">
+                      <span style="width:8px;height:8px;flex-shrink:0;border-radius:50%;background:{{ k.dot }};opacity:{{ k.dotOp }}"></span>
+                      <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:13px;font-weight:{{ k.weight }};color:{{ k.color }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.label }}</span>
+                      <sc-if value="{{ k.hasValue }}" hint-placeholder-val="{{ false }}"><span style="flex-shrink:0;font:600 11px 'IBM Plex Mono',monospace;color:#22DD99">{{ k.value }}</span></sc-if>
+                      <sc-if value="{{ k.hasCount }}" hint-placeholder-val="{{ false }}"><span style="min-width:20px;height:20px;flex-shrink:0;border-radius:999px;padding:0 5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ k.count }}</span></sc-if>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="flex-shrink:0;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)">
+    <sc-for list="{{ bottomRows }}" as="b" hint-placeholder-count="2">
+      <div style="margin-bottom:2px">
+        <sc-if value="{{ b.isItem }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ b.onClick }}" style="width:100%;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 4px 0 2px;border:0;border-radius:12px;background:transparent;cursor:pointer;text-align:left;transition:background .18s" style-hover="background:rgba(255,255,255,0.03)">
+            <span style="width:40px;height:40px;flex-shrink:0;border-radius:10px;background:{{ b.tileBg }};border:1px solid {{ b.tileBorder }};box-shadow:{{ b.tileShadow }};display:flex;align-items:center;justify-content:center"><i class="ph {{ b.icon }}" style="font-size:19px;color:{{ b.iconColor }}"></i></span>
+            <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ b.labelWeight }};letter-spacing:-0.01em;color:{{ b.labelColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.label }}</span>
+            <sc-if value="{{ b.hasDotBadge }}" hint-placeholder-val="{{ false }}"><span style="width:22px;height:22px;flex-shrink:0;border-radius:999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ b.dotBadge }}"></span></span></sc-if>
+          </button>
+        </sc-if>
+        <sc-if value="{{ b.isGrp }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius:14px;background:{{ b.contBg }};border:1px solid {{ b.contBorder }};padding:{{ b.contPad }};transition:background .28s,border-color .28s,padding .28s">
+            <div style="display:flex;align-items:center;gap:8px;min-height:44px">
+              <button onClick="{{ b.onToggle }}" style="width:28px;height:40px;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:#101413;color:#BDBFBD;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#16191A"><i class="ph ph-caret-down" style="font-size:13px;display:inline-block;transform:{{ b.caretTf }};transition:transform .28s cubic-bezier(.4,0,.2,1)"></i></button>
+              <button onClick="{{ b.onClick }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 2px;border:0;background:transparent;cursor:pointer;text-align:left">
+                <span style="width:40px;height:40px;flex-shrink:0;border-radius:10px;background:{{ b.tileBg }};border:1px solid {{ b.tileBorder }};display:flex;align-items:center;justify-content:center"><i class="ph {{ b.icon }}" style="font-size:19px;color:{{ b.iconColor }}"></i></span>
+                <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:14px;font-weight:{{ b.labelWeight }};letter-spacing:-0.01em;color:{{ b.labelColor }}">{{ b.label }}</span>
+              </button>
+            </div>
+            <div style="overflow:hidden;max-height:{{ b.kidsMaxH }};opacity:{{ b.kidsOpacity }};visibility:{{ b.kidsVis }};transition:max-height .28s cubic-bezier(.4,0,.2,1),opacity .22s ease,visibility .28s">
+              <div style="display:flex;flex-direction:column;padding:2px 0 4px">
+                <sc-for list="{{ b.kids }}" as="k" hint-placeholder-count="4">
+                  <button onClick="{{ k.onClick }}" style="display:flex;align-items:center;gap:10px;min-height:36px;padding:0 8px 0 46px;border:0;background:{{ k.bg }};border-radius:10px;cursor:pointer;text-align:left;transition:background .15s" style-hover="background:rgba(255,255,255,0.03)">
+                    <span style="width:8px;height:8px;flex-shrink:0;border-radius:50%;background:{{ k.dot }};opacity:{{ k.dotOp }}"></span>
+                    <span style="flex:1;min-width:0;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;font-size:13px;font-weight:{{ k.weight }};color:{{ k.color }}">{{ k.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;padding:8px 4px 0;border-top:1px solid rgba(255,255,255,0.05)">
+      <span style="width:32px;height:32px;flex-shrink:0;border-radius:50%;background:linear-gradient(140deg,#9BFF57,#37D663 45%,#0C9B52);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">{{ userInitials }}</span>
+      <span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ userName }}</span><span style="font:400 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ userEmail }}</span></span>
+      <button style="width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:9px;color:#7B7F7B;cursor:pointer" style-hover="background:#16191A;color:#F5F5F3"><i class="ph ph-caret-down" style="font-size:14px"></i></button>
+    </div>
+  </div>
+
+</div>
+</sc-if>
+
+<sc-if value="{{ isCollapsed }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;width:72px;background:#0A0D0B;border-right:1px solid rgba(255,255,255,0.06);padding:14px 0 16px">
+  <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(34,221,153,0.55)"><div style="width:0;height:0;border-left:9px solid #05140B;border-top:5.5px solid transparent;border-bottom:5.5px solid transparent;margin-left:2px"></div></div>
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><span style="margin-top:6px;width:6px;height:6px;border-radius:50%;background:#FF5A47"></span></sc-if>
+  <div style="width:28px;height:1px;background:rgba(255,255,255,0.08);margin:12px 0"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+    <sc-for list="{{ colRows }}" as="c" hint-placeholder-count="10">
+      <sc-if value="{{ c.isDiv }}" hint-placeholder-val="{{ false }}"><div style="width:24px;height:1px;background:rgba(255,255,255,0.07);margin:3px 0"></div></sc-if>
+      <sc-if value="{{ c.isTile }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative">
+          <button onClick="{{ c.onClick }}" style="width:40px;height:40px;border-radius:10px;background:{{ c.tileBg }};border:1px solid {{ c.tileBorder }};box-shadow:{{ c.tileShadow }};color:{{ c.iconColor }};cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#1D2120"><i class="ph {{ c.icon }}" style="font-size:19px"></i></button>
+          <sc-if value="{{ c.hasDot }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:{{ c.dot }};border:2px solid #0A0D0B"></span></sc-if>
+          <sc-if value="{{ c.tip }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:52px;top:2px;z-index:9;display:flex;align-items:center;gap:8px;background:#1D2120;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;box-shadow:0 14px 34px -12px rgba(0,0,0,0.8);white-space:nowrap">
+              <span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">{{ c.tipLabel }}</span>
+              <span style="min-width:20px;height:20px;border-radius:999px;padding:0 5px;background:{{ c.tipBg }};border:1px solid {{ c.tipBorder }};display:flex;align-items:center;justify-content:center;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ c.tipColor }}">{{ c.tipCount }}</span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </sc-for>
+  </div>
+  <div style="flex:1;min-height:16px"></div>
+  <div style="width:28px;height:1px;background:rgba(255,255,255,0.08);margin:0 0 12px"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+    <div style="position:relative"><button style="width:40px;height:40px;border-radius:10px;background:#1B1F1D;border:1px solid rgba(255,255,255,0.07);color:#D8DAD6;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i></button><span style="position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#FFCC00;border:2px solid #0A0D0B"></span></div>
+    <button style="width:40px;height:40px;border-radius:10px;background:#1B1F1D;border:1px solid rgba(255,255,255,0.07);color:#D8DAD6;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#1D2120"><i class="ph ph-gear-six" style="font-size:19px"></i></button>
+    <span style="width:36px;height:36px;border-radius:50%;background:linear-gradient(140deg,#9BFF57,#37D663 45%,#0C9B52);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">{{ userInitials }}</span>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;$preview&quot;: {&quot;width&quot;: 260, &quot;height&quot;: 1240},
+ &quot;variant&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;klient&quot;,&quot;admin&quot;],&quot;default&quot;:&quot;klient&quot;,&quot;tsType&quot;:&quot;'klient'|'admin'&quot;,&quot;section&quot;:&quot;Sidebar&quot;},
+ &quot;mode&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;collapsed&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;'default'|'collapsed'|'mobile'&quot;,&quot;section&quot;:&quot;Sidebar&quot;},
+ &quot;activeId&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;activeSub&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;expanded&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;persist&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;showTooltip&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { exp: null, activeId: null, activeSub: null };
+
+  variant(){ return (this.props.variant ?? 'klient') === 'admin' ? 'admin' : 'klient'; }
+  mode(){ const m = this.props.mode ?? 'default'; return ['default','collapsed','mobile'].includes(m) ? m : 'default'; }
+  sk(id){ return 'kb-sb-' + this.variant() + '-' + id; }
+
+  defs(){
+    const admin = this.variant()==='admin';
+    if(!admin) return {
+      subtitle:'Panel komisanta',
+      user:{initials:'MK', name:'Marcin K.', email:'marcin.k@gmail.com'},
+      defaultActive:'przeglad', defaultExp:'oferty', tipId:'magazyn',
+      rows:[
+        {t:'item', id:'przeglad', icon:'ph-squares-four', label:'Przegląd'},
+        {t:'sec', label:'Sprzedaż'},
+        {t:'grp', id:'oferty', icon:'ph-tray', label:'Oferty', count:21, kids:[
+          {id:'of-obieg', label:'W obiegu', dot:'blue', count:9},
+          {id:'of-draft', label:'Draft', dot:'mute', count:2},
+          {id:'of-sprz', label:'Sprzedane', dot:'mint', count:12},
+          {id:'of-wypl', label:'Wypłacone', dot:'mint'},
+          {id:'of-odrz', label:'Odrzucone', dot:'coral', count:1},
+          {id:'of-eksport', label:'Eksport CSV / XLSX', ghost:true},
+        ]},
+        {t:'grp', id:'magazyn', icon:'ph-package', label:'Magazyn', count:34, kids:[
+          {id:'mg-listed', label:'W sprzedaży', dot:'lime', count:29},
+          {id:'mg-res', label:'Zarezerwowane', dot:'blue', count:3},
+          {id:'mg-out', label:'Wycofane z komisu', dot:'mute', count:2},
+        ]},
+        {t:'item', id:'zwroty', icon:'ph-arrow-counter-clockwise', label:'Zwroty', dotBadge:'mute'},
+        {t:'item', id:'zmiany', icon:'ph-trend-down', label:'Zmiany cen'},
+        {t:'sec', label:'Finanse'},
+        {t:'grp', id:'portfel', icon:'ph-wallet', label:'Portfel', dotBadge:'yellow', kids:[
+          {id:'pf-dost', label:'Dostępne do wypłaty', dot:'mint', value:'8 240 zł'},
+          {id:'pf-rozl', label:'W rozliczeniu', dot:'yellow', count:3},
+          {id:'pf-hist', label:'Historia wypłat', dot:'mute'},
+          {id:'pf-fakt', label:'Faktury', dot:'mute'},
+        ]},
+        {t:'item', id:'uks', icon:'ph-star', label:'Program lojalnościowy'},
+        {t:'sec', label:'Operacje'},
+        {t:'item', id:'przyjecia', icon:'ph-download-simple', label:'Przyjęcia', count:2},
+        {t:'item', id:'wydania', icon:'ph-upload-simple', label:'Wydania'},
+        {t:'item', id:'fulfillment', icon:'ph-truck', label:'Fulfillment'},
+        {t:'sec', label:'Insights'},
+        {t:'item', id:'wtb', icon:'ph-target', label:'Zapotrzebowanie', count:5},
+        {t:'item', id:'plany', icon:'ph-sparkle', label:'Co warto dodać', dotBadge:'lime'},
+        {t:'item', id:'promocje', icon:'ph-percent', label:'Promocje'},
+        {t:'grp', id:'analityka', icon:'ph-chart-line-up', label:'Analityka', kids:[
+          {id:'an-dash', label:'Dashboard', dot:'mute'},
+          {id:'an-deep', label:'Deep dive', dot:'mute'},
+          {id:'an-sales', label:'My sales', dot:'mute'},
+        ]},
+      ],
+      bottom:[
+        {t:'item', id:'notif', icon:'ph-bell', label:'Notyfikacje', dotBadge:'yellow'},
+        {t:'grp', id:'ustawienia', icon:'ph-gear-six', label:'Ustawienia', kids:[
+          {id:'st-dane', label:'Dane', dot:'mute'},
+          {id:'st-pref', label:'Preferencje', dot:'mute'},
+          {id:'st-umowa', label:'Umowa', dot:'mute'},
+          {id:'st-warunki', label:'Warunki', dot:'mute'},
+        ]},
+      ],
+    };
+    return {
+      subtitle:'Admin operacyjny',
+      user:{initials:'DA', name:'Daniel', email:'daniel@kickback.pl'},
+      defaultActive:'queue', defaultExp:'aqc', tipId:'aqc',
+      rows:[
+        {t:'item', id:'queue', icon:'ph-squares-four', label:'Queue'},
+        {t:'sec', label:'Operacje'},
+        {t:'item', id:'inbox', icon:'ph-envelope-simple', label:'Inbox', count:7, alert:true},
+        {t:'grp', id:'submissions', icon:'ph-tray', label:'Submissions', count:12, kids:[
+          {id:'sb-new', label:'Nowe', dot:'blue', count:4},
+          {id:'sb-prog', label:'W obiegu', dot:'yellow', count:6},
+          {id:'sb-acc', label:'Zaakceptowane', dot:'mint'},
+          {id:'sb-rej', label:'Odrzucone', dot:'coral', count:2},
+        ]},
+        {t:'grp', id:'aqc', icon:'ph-shield-check', label:'A&QC', count:14, alert:true, kids:[
+          {id:'aq-q', label:'Kolejka', dot:'blue', count:14},
+          {id:'aq-pass', label:'Passed', dot:'mint'},
+          {id:'aq-fail', label:'Failed', dot:'coral'},
+          {id:'aq-rev', label:'Do rewizji', dot:'yellow', count:2},
+        ]},
+        {t:'grp', id:'offers', icon:'ph-handshake', label:'Offers (Zerr)', count:6, kids:[
+          {id:'off-sent', label:'Wysłane', dot:'blue', count:4},
+          {id:'off-acc', label:'Zaakceptowane', dot:'mint'},
+          {id:'off-rej', label:'Odrzucone', dot:'coral'},
+          {id:'off-counter', label:'Kontr-oferty klienta', dot:'yellow', count:2},
+        ]},
+        {t:'item', id:'returns', icon:'ph-arrow-counter-clockwise', label:'Returns', count:3},
+        {t:'item', id:'qr', icon:'ph-qr-code', label:'Generator QR', dotBadge:'lime'},
+        {t:'sec', label:'Relacje'},
+        {t:'grp', id:'klienci', icon:'ph-users', label:'Klienci', count:148, kids:[
+          {id:'kl-act', label:'Aktywni', dot:'mint', count:96},
+          {id:'kl-b2b', label:'B2B', dot:'blue', count:31},
+          {id:'kl-b2c', label:'B2C', dot:'mute', count:117},
+          {id:'kl-inact', label:'Nieaktywni 90d', dot:'yellow', count:12},
+        ]},
+        {t:'grp', id:'crm', icon:'ph-kanban', label:'CRM', kids:[
+          {id:'crm-lead', label:'Leady', dot:'blue', count:8},
+          {id:'crm-kontakt', label:'W kontakcie', dot:'lime', count:5},
+          {id:'crm-ofert', label:'Ofertowanie', dot:'yellow', count:3},
+          {id:'crm-inact', label:'Nieaktywni', dot:'mute'},
+        ]},
+        {t:'sec', label:'Workflow / CMS'},
+        {t:'item', id:'wtb', icon:'ph-target', label:'Zapotrzebowanie', count:8},
+        {t:'item', id:'cwd', icon:'ph-sparkle', label:'Co warto dodać', count:6},
+        {t:'item', id:'zmiany', icon:'ph-trend-down', label:'Zmiany cen'},
+        {t:'item', id:'promocje', icon:'ph-percent', label:'Promocje'},
+        {t:'sec', label:'Finanse'},
+        {t:'grp', id:'payouts', icon:'ph-money', label:'Wypłaty', count:23, alert:true, kids:[
+          {id:'po-todo', label:'Do zrealizowania', dot:'yellow', count:23},
+          {id:'po-plan', label:'Zaplanowane', dot:'blue', count:4},
+          {id:'po-done', label:'Zrealizowane', dot:'mint'},
+          {id:'po-rej', label:'Odrzucone', dot:'coral'},
+        ]},
+        {t:'sec', label:'Integracje & System'},
+        {t:'item', id:'fakturownia', icon:'ph-file-text', label:'Fakturownia', dotBadge:'mint'},
+        {t:'item', id:'audit', icon:'ph-clock-counter-clockwise', label:'Audit log'},
+        {t:'item', id:'stats', icon:'ph-chart-bar', label:'Statystyki'},
+      ],
+      bottom:[
+        {t:'item', id:'notif', icon:'ph-bell', label:'Notyfikacje', dotBadge:'yellow'},
+        {t:'item', id:'switch', icon:'ph-user-switch', label:'Panel klienta'},
+      ],
+    };
+  }
+
+  getExpanded(d){
+    if(this.state.exp) return this.state.exp;
+    const base={};
+    const init = this.props.expanded || d.defaultExp || '';
+    init.split(',').forEach(k=>{ k=k.trim(); if(k) base[k]=true; });
+    if(this.props.persist){
+      try{
+        d.rows.concat(d.bottom).forEach(r=>{
+          if(r.t!=='grp') return;
+          const v = localStorage.getItem(this.sk(r.id));
+          if(v==='1') base[r.id]=true;
+          if(v==='0') delete base[r.id];
+        });
+      }catch(e){}
+    }
+    return base;
+  }
+
+  toggle(d,id){
+    const cur = this.getExpanded(d);
+    const next = {...cur, [id]: !cur[id]};
+    this.setState({exp:next});
+    if(this.props.persist){ try{ localStorage.setItem(this.sk(id), next[id]?'1':'0'); }catch(e){} }
+  }
+
+  renderVals(){
+    const C={mint:'#22DD99',lime:'#66FF33',blue:'#4A6BFF',yellow:'#FFCC00',coral:'#FF5A47',mute:'#7B7F7B'};
+    const GRAD='linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%)';
+    const d=this.defs();
+    const mode=this.mode();
+    const admin=this.variant()==='admin';
+    const exp=this.getExpanded(d);
+    const rawActive = this.state.activeId ?? (this.props.activeId || d.defaultActive);
+    const activeId = rawActive==='none' ? null : rawActive;
+    const activeSub = this.state.activeSub ?? (this.props.activeSub || '');
+
+    const mapKid=(k)=>{
+      const on = activeSub===k.id;
+      return {
+        key:k.id, isGhost:!!k.ghost, isSub:!k.ghost,
+        label:k.label, dot:C[k.dot]||C.mute, dotOp:on?1:0.6,
+        color:on?'#FFFFFF':'#BDBFBD', weight:on?600:500,
+        bg:on?'rgba(255,255,255,0.04)':'transparent',
+        hasCount:k.count!=null, count:k.count==null?'':String(k.count),
+        hasValue:!!k.value, value:k.value||'',
+        onClick:()=>this.setState({activeSub:k.id, activeId:'none'}),
+      };
+    };
+    const mapRow=(r,i,arr)=>{
+      if(r.t==='sec') return {key:'sec-'+r.label, isSec:true,isItem:false,isGrp:false, label:r.label, mb:0};
+      const on = activeId===r.id;
+      const base={
+        key:r.id, isSec:false, label:r.label, icon:r.icon, mb:2,
+        tileBg:on?GRAD:'#1B1F1D',
+        tileBorder:on?'rgba(255,255,255,0)':'rgba(255,255,255,0.07)',
+        tileShadow:on?'0 8px 20px -6px rgba(34,221,153,0.55),inset 0 1px 0 rgba(255,255,255,0.35)':'none',
+        iconColor:on?'#FFFFFF':'#D8DAD6',
+        labelColor:on?'#FFFFFF':'#E9EBE7', labelWeight:on?600:500,
+        hasCount:r.count!=null,
+        count:r.count==null?'':String(r.count),
+        cBg:r.alert?'rgba(255,90,71,0.15)':'rgba(255,255,255,0.05)',
+        cColor:r.alert?'#FF5A47':'#BDBFBD',
+        cBorder:r.alert?'rgba(255,90,71,0.3)':'rgba(255,255,255,0.09)',
+        hasDotBadge:!!r.dotBadge, dotBadge:C[r.dotBadge]||'transparent',
+        onClick:()=>this.setState({activeId:r.id, activeSub:''}),
+      };
+      if(r.t==='item') return {...base, isItem:true, isGrp:false};
+      const open=!!exp[r.id];
+      const kidsH=(r.kids||[]).reduce((a,k)=>a+(k.ghost?32:36),0)+16;
+      return {...base, isItem:false, isGrp:true, expanded:open,
+        caret:open?'ph-caret-up':'ph-caret-down',
+        caretTf:open?'rotate(180deg)':'rotate(0deg)',
+        kidsMaxH:open?kidsH+'px':'0px',
+        kidsOpacity:open?1:0,
+        kidsVis:open?'visible':'hidden',
+        contBg:open?'#131716':'transparent',
+        contBorder:open?'rgba(255,255,255,0.05)':'transparent',
+        contPad:open?'6px':'0px',
+        kids:(r.kids||[]).map(mapKid),
+        onToggle:()=>this.toggle(d,r.id),
+      };
+    };
+
+    const colRows = d.rows.map(r=>{
+      if(r.t==='sec') return {key:'d-'+r.label, isDiv:true, isTile:false};
+      const on=activeId===r.id;
+      const isTip = !!this.props.showTooltip && r.id===d.tipId;
+      return {
+        key:r.id, isDiv:false, isTile:true, icon:r.icon,
+        tileBg:on?GRAD:'#1B1F1D',
+        tileBorder:on?'rgba(255,255,255,0)':'rgba(255,255,255,0.07)',
+        tileShadow:on?'0 8px 20px -6px rgba(34,221,153,0.55)':'none',
+        iconColor:on?'#FFFFFF':'#D8DAD6',
+        hasDot:!!(r.alert||r.dotBadge), dot:r.alert?C.coral:(C[r.dotBadge]||'transparent'),
+        tip:isTip, tipLabel:r.label, tipCount:r.count==null?'':String(r.count),
+        tipBg:r.alert?'rgba(255,90,71,0.15)':'rgba(255,255,255,0.06)',
+        tipColor:r.alert?'#FF5A47':'#BDBFBD',
+        tipBorder:r.alert?'rgba(255,90,71,0.3)':'rgba(255,255,255,0.1)',
+        onClick:()=>this.setState({activeId:r.id, activeSub:''}),
+      };
+    });
+
+    return {
+      isFull: mode!=='collapsed',
+      isCollapsed: mode==='collapsed',
+      isAdmin: admin,
+      rootH: mode==='mobile' ? '100%' : 'auto',
+      fullWidth: mode==='mobile' ? '100%' : '260px',
+      fullHeight: mode==='mobile' ? '100%' : 'auto',
+      borderRight: mode==='mobile' ? 'none' : '1px solid rgba(255,255,255,0.06)',
+      bodyOverflow: mode==='mobile' ? 'auto' : 'visible',
+      collapseIcon: mode==='mobile' ? 'ph-x' : 'ph-caret-left',
+      headerBg: admin ? 'linear-gradient(180deg,rgba(255,90,71,0.06),rgba(255,255,255,0.02))' : 'rgba(255,255,255,0.02)',
+      headerBorder: admin ? 'rgba(255,90,71,0.16)' : 'rgba(255,255,255,0.09)',
+      subtitle: d.subtitle,
+      rows: d.rows.map(mapRow),
+      bottomRows: d.bottom.map(mapRow),
+      colRows,
+      userInitials: d.user.initials, userName: d.user.name, userEmail: d.user.email,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="F7 · Generator QR" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="qr" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Generator QR</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · etykiety magazynowe</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Generator QR<span style="color:#66FF33">.</span></h1>
+        </div>
+        <button onClick="{{ togglePreview }}" style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer;flex-shrink:0" style-hover="background:#1D2120"><i class="ph {{ pvIcon }}" style="font-size:16px;color:#66FF33"></i>{{ pvLabel }}</button>
+      </div>
+
+      <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;animation:kb-in .18s ease">
+          <div style="display:grid;grid-template-columns:40px 130px minmax(180px,1.5fr) 110px 130px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <button onClick="{{ toggleAll }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ allBorder }};background:{{ allBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ allChecked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">SKU</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Produkt</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Lokacja</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Etykieta</span>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:40px 130px minmax(180px,1.5fr) 110px 130px;gap:12px;align-items:center;min-height:54px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);background:{{ r.rowBg }};transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <button onClick="{{ r.onCheck }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ r.cbBorder }};background:{{ r.cbBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ r.checked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+              <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ r.sku }}</span>
+              <span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.item }}</span>
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ r.loc }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px">
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ selLabel }}</span>
+            <button onClick="{{ print }}" style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45);opacity:{{ printOp }}"><i class="ph ph-printer" style="font-size:16px"></i>Drukuj zaznaczone</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showPreview }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:14px;animation:kb-in .18s ease">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Arkusz A4 · 10 etykiet 60×30 mm</span><button style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-file-pdf" style="font-size:16px"></i>Wydrukuj PDF</button></div>
+          <div style="align-self:center;width:560px;max-width:100%;aspect-ratio:210/297;background:#F5F5F3;border-radius:10px;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8);padding:34px 30px;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:min-content;gap:14px">
+            <sc-for list="{{ labels }}" as="l" hint-placeholder-count="10">
+              <div style="border:1px solid #D8DAD6;border-radius:6px;padding:9px 11px;display:flex;align-items:center;gap:10px;background:#FFFFFF">
+                <span style="width:44px;height:44px;flex-shrink:0;background:repeating-linear-gradient(0deg,#0F1210 0 2px,#fff 2px 4px),repeating-linear-gradient(90deg,#0F1210 0 2px,#fff 2px 4px);background-blend-mode:multiply;border:2px solid #0F1210;border-radius:3px"></span>
+                <span style="min-width:0;display:flex;flex-direction:column;gap:1px">
+                  <span style="font:600 10px 'IBM Plex Mono',monospace;color:#0F1210;letter-spacing:0.02em">{{ l.sku }}</span>
+                  <span style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#3A3E3B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.item }}</span>
+                  <span style="font:400 8px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ l.loc }} · Kickback</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;widok&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lista&quot;,&quot;arkusz&quot;],&quot;default&quot;:&quot;lista&quot;,&quot;tsType&quot;:&quot;'lista'|'arkusz'&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  state = { sel:{q1:true,q2:true}, view:null };
+  renderVals(){
+    const S={
+      need:{label:'Wymaga etykiety', c:'#66FF33', bg:'rgba(102,255,51,0.13)', bd:'rgba(102,255,51,0.28)'},
+      done:{label:'Wydrukowano', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+    };
+    const rows=[
+      {id:'q1', sku:'KCB-26-C1D8-1', item:'Juventus 2011/12 · L', loc:'R2 · P14', s:'need'},
+      {id:'q2', sku:'KCB-26-C1D8-2', item:'Real Madryt away 2016/17 · M', loc:'R2 · P15', s:'need'},
+      {id:'q3', sku:'KCB-26-H2E441-1', item:'FC Barcelona 2008/09 · S', loc:'R1 · P03', s:'need'},
+      {id:'q4', sku:'KCB-26-J8A105-1', item:'Polska EURO 2016 · M', loc:'R3 · P22', s:'done'},
+      {id:'q5', sku:'KCB-26-K1C773-1', item:'AC Milan 2010/11 · M', loc:'R1 · P08', s:'done'},
+    ];
+    const view = this.state.view ?? (this.props.widok ?? 'lista');
+    const sel=this.state.sel;
+    const selCount=rows.filter(r=>sel[r.id]).length;
+    const allChecked=selCount===rows.length;
+    const labels=[];
+    for(let i=0;i<10;i++){ const r=rows[i%rows.length]; labels.push({key:'l'+i, sku:r.sku, item:r.item, loc:r.loc}); }
+    return {
+      showList: view==='lista', showPreview: view==='arkusz',
+      pvIcon: view==='lista'?'ph-file-pdf':'ph-rows',
+      pvLabel: view==='lista'?'Podgląd arkusza A4':'Wróć do listy',
+      togglePreview:()=>this.setState({view: view==='lista'?'arkusz':'lista'}),
+      rows: rows.map(r=>({ ...r, status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        checked:!!sel[r.id],
+        cbBg: sel[r.id]?'#66FF33':'transparent', cbBorder: sel[r.id]?'#66FF33':'rgba(255,255,255,0.22)',
+        rowBg: sel[r.id]?'rgba(102,255,51,0.04)':'transparent',
+        onCheck:()=>this.setState(st=>({sel:{...st.sel,[r.id]:!st.sel[r.id]}})) })),
+      allChecked,
+      allBg: allChecked?'#66FF33':'transparent', allBorder: allChecked?'#66FF33':'rgba(255,255,255,0.22)',
+      toggleAll:()=>{ const n={}; if(!allChecked) rows.forEach(r=>n[r.id]=true); this.setState({sel:n}); },
+      selLabel: selCount+' zaznaczone z '+rows.length,
+      printOp: selCount>0?1:0.4,
+      print:()=>this.setState({view:'arkusz'}),
+      labels,
+    };
+  }
+}
+</script>
+</body>
+</html>

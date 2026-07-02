@@ -1,62 +1,67 @@
 import type { SubmissionStatus, ProductStatus } from "@/lib/types";
 import { SUBMISSION_STATUS_LABEL, PRODUCT_STATUS_LABEL } from "@/lib/types";
 
-type Variant = "mint" | "blue" | "amber" | "pink" | "mute";
+/* Vocab statusów (Design System): ten sam kolor = to samo znaczenie wszędzie.
+   lime = aktywne/w sprzedaży · mint = sprzedane/wypłacone · blue = w toku/A&QC
+   yellow = oczekuje/do decyzji · coral = odrzucone/zwrot · mute = draft/archiwum */
+export type PillVariant = "lime" | "mint" | "blue" | "yellow" | "coral" | "amber" | "mute";
 
-const SUB_VARIANT: Record<SubmissionStatus, Variant> = {
+const SUB_VARIANT: Record<SubmissionStatus, PillVariant> = {
   draft: "mute",
   signed: "blue",
   in_transit: "blue",
-  aqc: "mute",
-  listed: "mint",
+  aqc: "blue",
+  listed: "lime",
   sold: "mint",
   payout: "mint",
-  withdrawn: "amber",
-  returned: "pink",
+  withdrawn: "mute",
+  returned: "coral",
 };
 
-const PROD_VARIANT: Record<ProductStatus, Variant> = {
+export const PROD_VARIANT: Record<ProductStatus, PillVariant> = {
   draft: "mute",
-  aqc: "mute",
-  listed: "mint",
-  offer: "amber",
+  aqc: "blue",
+  listed: "lime",
+  offer: "yellow",
   sold: "mint",
-  withdrawn: "amber",
-  returned: "pink",
+  withdrawn: "mute",
+  returned: "coral",
 };
 
-const VARIANT_CLS: Record<Variant, string> = {
+const VARIANT_CLS: Record<PillVariant, string> = {
+  lime: "pill-lime",
   mint: "pill-mint",
   blue: "pill-blue",
+  yellow: "pill-yellow",
+  coral: "pill-coral",
   amber: "pill-amber",
-  pink: "pill-pink",
   mute: "pill-mute",
 };
 
-const DOT_BG: Record<Variant, string> = {
+const DOT_BG: Record<PillVariant, string> = {
+  lime: "bg-lime",
   mint: "bg-mint",
   blue: "bg-blue-soft",
+  yellow: "bg-yellow",
+  coral: "bg-coral",
   amber: "bg-amber",
-  pink: "bg-pink",
   mute: "bg-text-mute",
 };
 
-export function SubmissionStatusPill({ status }: { status: SubmissionStatus }) {
-  const v = SUB_VARIANT[status];
+/** Generyczna pigułka vocabu — do statusów spoza enumów (wypłaty, webhooki itd.). */
+export function Pill({ variant, children }: { variant: PillVariant; children: React.ReactNode }) {
   return (
-    <span className={`pill ${VARIANT_CLS[v]}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${DOT_BG[v]}`} />
-      {SUBMISSION_STATUS_LABEL[status]}
+    <span className={`pill ${VARIANT_CLS[variant]}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${DOT_BG[variant]}`} />
+      {children}
     </span>
   );
 }
 
+export function SubmissionStatusPill({ status }: { status: SubmissionStatus }) {
+  return <Pill variant={SUB_VARIANT[status]}>{SUBMISSION_STATUS_LABEL[status]}</Pill>;
+}
+
 export function ProductStatusPill({ status }: { status: ProductStatus }) {
-  const v = PROD_VARIANT[status];
-  return (
-    <span className={`pill ${VARIANT_CLS[v]}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${DOT_BG[v]}`} />
-      {PRODUCT_STATUS_LABEL[status]}
-    </span>
-  );
+  return <Pill variant={PROD_VARIANT[status]}>{PRODUCT_STATUS_LABEL[status]}</Pill>;
 }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0A0D0B;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0A0D0B;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+  <div data-screen-label="M4 · Mobile Admin Queue 390" style="position:relative;width:390px;height:844px;background:#050807;border:1px solid rgba(255,255,255,0.1);border-radius:32px;overflow:hidden;box-shadow:0 40px 100px -40px rgba(0,0,0,0.9);display:flex;flex-direction:column">
+
+    <header style="flex-shrink:0;height:56px;display:flex;align-items:center;gap:10px;padding:0 16px;background:linear-gradient(180deg,rgba(255,90,71,0.05),rgba(5,8,7,0.9));border-bottom:1px solid rgba(255,90,71,0.14)">
+      <button style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:11px;background:#16191A;color:#BDBFBD;cursor:pointer"><i class="ph ph-list" style="font-size:19px"></i></button>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px"><span style="font-weight:600;font-size:14px">Kickback</span><span style="font:600 8px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase">Admin</span></div>
+      <button style="position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:11px;background:#16191A;color:#BDBFBD;cursor:pointer"><i class="ph ph-bell" style="font-size:18px"></i><span style="position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:9px;background:#FF5A47;border:1.5px solid #16191A"></span></button>
+    </header>
+
+    <main style="flex:1;overflow-y:auto;padding:20px 16px 90px;display:flex;flex-direction:column;gap:16px">
+      <h1 style="margin:0;font-weight:300;font-size:24px;line-height:1.2;letter-spacing:-0.025em">Poranek. 12 nowych ofert<span style="color:#66FF33">.</span></h1>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#0F1210;border:1px solid rgba(255,90,71,0.35);border-radius:16px;padding:14px"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">A&amp;QC</div><div style="font:300 26px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1;color:#FF5A47;margin-top:6px">14</div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Sprzedaże dziś</div><div style="display:flex;align-items:baseline;gap:6px;margin-top:6px"><span style="font:300 26px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">5</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#22DD99">11,3 tys.</span></div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Wypłaty</div><div style="font:300 26px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1;margin-top:6px">8</div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,90,71,0.35);border-radius:16px;padding:14px"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Alerty</div><div style="font:300 26px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1;color:#FF5A47;margin-top:6px">2</div></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between"><h2 style="margin:0;font-weight:500;font-size:16px;letter-spacing:-0.015em">Kolejka A&amp;QC</h2><span style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#66FF33">Wszystkie →</span></div>
+        <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:11px;background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px 13px">
+            <span style="width:36px;height:36px;flex-shrink:0;border-radius:10px;background:radial-gradient(circle at 50% 35%, {{ q.crest }} 0%, #0C0F0D 85%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ q.cl }}</span>
+            <div style="flex:1;min-width:0"><div style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.name }}</div><div style="font:400 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:1px">{{ q.client }}</div></div>
+            <span style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px;border-radius:999px;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ q.aBg }};color:{{ q.aColor }};border:1px solid {{ q.aBorder }};flex-shrink:0"><i class="ph ph-clock" style="font-size:10px"></i>{{ q.age }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:14px;background:rgba(255,90,71,0.08);border:1px solid rgba(255,90,71,0.22);border-left:3px solid #FF5A47">
+        <i class="ph ph-warning" style="font-size:17px;color:#FF5A47;flex-shrink:0"></i>
+        <span style="flex:1;font:400 12px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Fakturownia: webhook FAILED — payout #P-2604.</span>
+        <span style="font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#FF5A47">Napraw</span>
+      </div>
+    </main>
+
+    <nav style="position:absolute;bottom:0;left:0;right:0;z-index:20;height:68px;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(5,8,7,0.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,0.07)">
+      <button style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#66FF33"><i class="ph ph-squares-four" style="font-size:21px"></i><span style="font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Queue</span></button>
+      <button style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#7B7F7B;position:relative"><i class="ph ph-shield-check" style="font-size:21px"></i><span style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">A&amp;QC</span><span style="position:absolute;top:10px;right:22px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#FF5A47;color:#FFF;font:600 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;display:flex;align-items:center;justify-content:center">14</span></button>
+      <button style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#7B7F7B"><i class="ph ph-tray" style="font-size:21px"></i><span style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Oferty</span></button>
+      <button style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#7B7F7B"><i class="ph ph-money" style="font-size:21px"></i><span style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Wypłaty</span></button>
+      <button style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#7B7F7B"><i class="ph ph-dots-three-circle" style="font-size:21px"></i><span style="font:500 9px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Więcej</span></button>
+    </nav>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:924}}">
+class Component extends DCLogic {
+  renderVals(){
+    const age=(d)=> d>3 ? {aColor:'#FF5A47',aBg:'rgba(255,90,71,0.13)',aBorder:'rgba(255,90,71,0.3)'} : {aColor:'#FFCC00',aBg:'rgba(255,204,0,0.13)',aBorder:'rgba(255,204,0,0.3)'};
+    const queue=[
+      {name:'Juventus 2011/12 · L', client:'Marcin K.', d:4, age:'4 d', crest:'#22242A', cl:'J'},
+      {name:'Real Madryt away 16/17 · M', client:'Marcin K.', d:4, age:'4 d', crest:'#3A1D24', cl:'R'},
+      {name:'FC Barcelona 2008/09 · S', client:'Anna W.', d:3, age:'3 d', crest:'#1D2A3A', cl:'B'},
+      {name:'Polska EURO 2016 · M', client:'Tomek R.', d:2, age:'2 d', crest:'#2A2410', cl:'P'},
+    ];
+    return { queue: queue.map(q=>({ ...q, ...age(q.d) })) };
+  }
+}
+</script>
+</body>
+</html>

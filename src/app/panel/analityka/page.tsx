@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { formatPLN } from "@/lib/format";
 import type { Product, DemandListing, Club, Player, NationalTeam, InventorySnapshot } from "@/lib/types";
 import { RevenueSimulator } from "./RevenueSimulator";
@@ -146,16 +147,11 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
       active="analityka"
       breadcrumb={[{ label: "Analityka" }]}
     >
-      <section>
-        <div className="label">Twoje dane sprzedażowe</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Analityka <span className="text-text-soft">i rekomendacje.</span>
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Sprzedaż, rotacja, symulator przychodu i sugestie Kickback. Wszystko obliczane na podstawie
-          Twoich rzeczywistych danych — żadnej magii, deterministycznie.
-        </p>
-      </section>
+      <PageHeader
+        label="Twoje dane sprzedażowe"
+        title="Analityka"
+        sub="Sprzedaż, rotacja, symulator przychodu i sugestie Kickback. Wszystko obliczane na podstawie Twoich rzeczywistych danych — żadnej magii, deterministycznie."
+      />
 
       <section className="mt-8 flex flex-wrap items-center gap-2">
         <span className="label mr-2">Zakres:</span>
@@ -165,8 +161,8 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
             <Link
               key={r}
               href={`/panel/analityka?range=${r}`}
-              className={`px-3 py-1 rounded-[8px] text-[12px] transition-colors ${
-                active ? "bg-text text-bg font-semibold" : "bg-surface text-text-soft hover:bg-surface-2 hover:text-text"
+              className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
+                active ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
               }`}
             >
               {r === "365" ? "12 mies." : `${r} dni`}
@@ -179,7 +175,7 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
       <section className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="card-elev p-6 lg:col-span-2">
           <div className="label">Sprzedaż w okresie · {range === "365" ? "12 mies." : `${range} dni`}</div>
-          <div className="mt-2 font-bold text-4xl lg:text-5xl tracking-[-0.04em] num">
+          <div className="mt-2 font-light text-4xl lg:text-5xl tracking-[-0.02em] num">
             {formatPLN(revenue, { decimals: false })}
           </div>
           <div className="mt-2 text-[13px] text-text-soft">
@@ -192,7 +188,7 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
 
         <div className="card-elev p-6">
           <div className="label">Wskaźnik rotacji</div>
-          <div className="mt-2 font-bold text-4xl tracking-[-0.04em] num">
+          <div className="mt-2 font-light text-4xl tracking-[-0.02em] num">
             {overallRotation != null ? Math.round(overallRotation) : "—"}
             <span className="text-text-mute text-lg ml-1.5 font-normal">dni</span>
           </div>

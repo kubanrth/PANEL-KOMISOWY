@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="C8 · Karta produktu" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="magazyn" expanded="magazyn" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Magazyn</span><span style="color:#4A4E4B">/</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">KCB-26-A9F421</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;max-width:1240px;width:100%">
+      <a href="Kickback · C4 Magazyn.dc.html" style="display:inline-flex;align-items:center;gap:7px;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;text-decoration:none;margin-bottom:18px" style-hover="color:#F5F5F3"><i class="ph ph-arrow-left" style="font-size:15px"></i>Wróć do magazynu</a>
+
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:start">
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:1/1;border-radius:20px;position:relative;background:radial-gradient(circle at 50% 32%, #3A1D24 0%, #0C0F0D 78%),repeating-linear-gradient(135deg,#0F1210 0 11px,#12160f 11px 22px);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;overflow:hidden">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:#4A4E4B">zdjęcie · {{ mainLabel }}</span>
+            <sc-if value="{{ isRetro }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.05em;text-transform:uppercase;background:rgba(245,166,35,0.16);color:#F5A623;border:1px solid rgba(245,166,35,0.3)"><i class="ph ph-star" style="font-size:12px"></i>Retro</span></sc-if>
+            <span style="position:absolute;bottom:14px;right:14px;font:500 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ mainIndex }} / 6</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+            <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.onClick }}" style="aspect-ratio:1/1;border-radius:12px;background:radial-gradient(circle at 50% 40%, #1a1f1c 0%, #0C0F0D 85%);border:1px solid {{ t.border }};cursor:pointer;display:flex;align-items:center;justify-content:center;font:500 9px 'IBM Plex Mono',monospace;color:{{ t.color }};transition:border-color .15s">{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div>
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Magazyn · karta produktu</div>
+            <h1 style="margin:0 0 12px;font-weight:300;font-size:36px;line-height:1.08;letter-spacing:-0.03em">Real Madryt 2011/12<span style="color:#66FF33">.</span></h1>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 12px;border-radius:999px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ sBg }};color:{{ sColor }};border:1px solid {{ sBorder }}"><span style="width:6px;height:6px;border-radius:9px;background:{{ sColor }}"></span>{{ statusLabel }}</span>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden">
+            <button onClick="{{ toggleHist }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border:0;background:transparent;cursor:pointer;text-align:left" style-hover="background:#16191A">
+              <span style="display:flex;flex-direction:column;gap:2px"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Cena aktualna</span><span style="font:300 32px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.025em;color:#F5F5F3">2 400 zł</span></span>
+              <span style="display:flex;align-items:center;gap:10px"><span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">3 zmiany</span><i class="ph ph-caret-down" style="font-size:16px;color:#7B7F7B;display:inline-block;transform:{{ histCaret }};transition:transform .2s"></i></span>
+            </button>
+            <div style="overflow:hidden;max-height:{{ histMaxH }};opacity:{{ histOp }};transition:max-height .26s cubic-bezier(.4,0,.2,1),opacity .2s">
+              <div style="padding:4px 18px 16px;display:flex;flex-direction:column">
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B;width:64px">26 cze</span><span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Promocja tygodnia</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">2 600 → <span style="color:#FF5A47">2 400 zł</span></span></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B;width:64px">19 cze</span><span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Twoja korekta</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">2 900 → <span style="color:#FF5A47">2 600 zł</span></span></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:9px 0"><span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B;width:64px">16 cze</span><span style="flex:1;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Cena startowa</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#22DD99">2 900 zł</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:6px 18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Klub</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Real Madryt CF</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Sezon</span><span style="font:500 13px 'IBM Plex Mono',monospace">2011/12</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Rozmiar</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">L</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Stan</span><span style="display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;border-radius:8px;background:#16191A;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">A</span><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">bardzo dobry</span></span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Prowizja</span><span style="font:500 13px 'IBM Plex Mono',monospace">20%</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">SKU</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">KCB-26-A9F421</span></div>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:18px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:14px">Droga w komisie</div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+                <div style="display:flex;gap:12px">
+                  <div style="display:flex;flex-direction:column;align-items:center;width:16px">
+                    <span style="width:12px;height:12px;border-radius:50%;background:{{ st.dotBg }};border:2px solid {{ st.dotBorder }};box-shadow:{{ st.glow }};flex-shrink:0;margin-top:2px"></span>
+                    <sc-if value="{{ st.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;flex:1;min-height:22px;background:{{ st.lineBg }};margin:3px 0"></span></sc-if>
+                  </div>
+                  <div style="padding-bottom:{{ st.pb }}px">
+                    <div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;color:{{ st.color }}">{{ st.label }}</div>
+                    <div style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B;margin-top:2px">{{ st.date }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px">
+            <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-tag" style="font-size:16px"></i>Zmień cenę</button>
+            <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border:1px solid rgba(255,90,71,0.3);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#FF5A47;background:rgba(255,90,71,0.08);cursor:pointer" style-hover="background:rgba(255,90,71,0.16)"><i class="ph ph-arrow-u-up-left" style="font-size:16px"></i>Wycofaj z komisu</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;statusProduktu&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;W sprzedaży&quot;,&quot;Zarezerwowane&quot;,&quot;Sprzedane&quot;],&quot;default&quot;:&quot;W sprzedaży&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Stan&quot;},
+ &quot;retro&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { img:0, hist:false };
+  renderVals(){
+    const labels=['front','tył','crest','naszywki','metka','detal'];
+    const status = this.props.statusProduktu ?? 'W sprzedaży';
+    const meta = {
+      'W sprzedaży':{c:'#66FF33', bg:'rgba(102,255,51,0.13)', bd:'rgba(102,255,51,0.28)'},
+      'Zarezerwowane':{c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      'Sprzedane':{c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+    }[status];
+    const sold = status==='Sprzedane';
+    const stepDefs=[
+      {label:'Przyjęta do magazynu', date:'12 cze 2026, 14:32', done:true},
+      {label:'A&QC — pass', date:'15 cze 2026, 10:05', done:true},
+      {label:'Wystawiona w sklepie', date:'16 cze 2026, 09:00', done:true},
+      {label:'Sprzedana', date: sold?'30 cze 2026, 21:14':'oczekuje', done:sold},
+    ];
+    const steps=stepDefs.map((s,i)=>({
+      key:s.label, label:s.label, date:s.date,
+      dotBg:s.done?'#66FF33':'transparent',
+      dotBorder:s.done?'#66FF33':'rgba(255,255,255,0.25)',
+      glow:s.done?'0 0 10px 1px rgba(102,255,51,0.4)':'none',
+      color:s.done?'#F5F5F3':'#7B7F7B',
+      lineBg: stepDefs[i+1] && stepDefs[i+1].done ? 'rgba(102,255,51,0.5)' : 'rgba(255,255,255,0.09)',
+      hasLine: i<stepDefs.length-1,
+      pb: i<stepDefs.length-1?18:0,
+    }));
+    return {
+      isRetro: this.props.retro ?? true,
+      statusLabel: status, sColor: meta.c, sBg: meta.bg, sBorder: meta.bd,
+      mainLabel: labels[this.state.img], mainIndex: String(this.state.img+1),
+      thumbs: labels.map((l,i)=>({ label:l,
+        border: i===this.state.img?'rgba(102,255,51,0.5)':'rgba(255,255,255,0.07)',
+        color: i===this.state.img?'#BDBFBD':'#4A4E4B',
+        onClick:()=>this.setState({img:i}) })),
+      toggleHist:()=>this.setState(s=>({hist:!s.hist})),
+      histCaret: this.state.hist?'rotate(180deg)':'rotate(0deg)',
+      histMaxH: this.state.hist?'160px':'0px',
+      histOp: this.state.hist?1:0,
+      steps,
+    };
+  }
+}
+</script>
+</body>
+</html>

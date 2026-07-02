@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="H4 · Payouts" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="payouts" expanded="payouts" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Wypłaty</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 100px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · realizacja wypłat</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Wypłaty<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ t.label }}<span style="font:500 11px 'IBM Plex Mono',monospace;opacity:.75">{{ t.count }}</span></button>
+        </sc-for>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:40px minmax(160px,1.3fr) 110px 140px 110px 190px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <button onClick="{{ toggleAll }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ allBorder }};background:{{ allBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ allChecked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Klient</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Kwota</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Metoda</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Termin</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Akcja</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:40px minmax(160px,1.3fr) 110px 140px 110px 190px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);background:{{ r.rowBg }};transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+            <button onClick="{{ r.onCheck }}" style="width:18px;height:18px;border-radius:6px;border:1px solid {{ r.cbBorder }};background:{{ r.cbBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0"><sc-if value="{{ r.checked }}" hint-placeholder-val="{{ false }}"><i class="ph ph-check" style="font-size:12px;color:#05140B"></i></sc-if></button>
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="width:32px;height:32px;flex-shrink:0;border-radius:50%;background:#1B1F1D;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;color:#BDBFBD">{{ r.init }}</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">{{ r.client }}</span></span>
+            <span style="font:500 14px 'IBM Plex Mono',monospace;justify-self:end">{{ r.amount }}</span>
+            <span style="display:flex;align-items:center;gap:7px;font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B"><i class="ph ph-bank" style="font-size:14px;color:#4A4E4B"></i>{{ r.method }}</span>
+            <span style="font:400 12px 'IBM Plex Mono',monospace;color:{{ r.dueColor }}">{{ r.due }}</span>
+            <span style="display:flex;gap:6px;justify-self:end">
+              <button style="height:30px;padding:0 13px;border:0;border-radius:999px;background:linear-gradient(135deg,#6ECC1F,#22DD99);font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;box-shadow:0 8px 18px -8px rgba(34,221,153,0.45)">Zrealizuj</button>
+              <button style="height:30px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#F5F5F3">Zaplanuj</button>
+              <button style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;background:transparent;color:#BDBFBD;cursor:pointer" style-hover="background:rgba(255,90,71,0.1);color:#FF5A47"><i class="ph ph-x" style="font-size:14px"></i></button>
+            </span>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ footLabel }}</span></div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ bulkVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(calc(-50% + 130px));z-index:60;display:flex;align-items:center;gap:14px;background:#1D2120;border:1px solid rgba(255,255,255,0.09);border-radius:999px;padding:10px 12px 10px 20px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.8)">
+      <span style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD"><span style="width:7px;height:7px;border-radius:50%;background:#66FF33"></span>{{ bulkLabel }}</span>
+      <button onClick="{{ clearSel }}" style="height:36px;padding:0 14px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)">Wyczyść</button>
+      <button onClick="{{ clearSel }}" style="display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)"><i class="ph ph-check" style="font-size:15px"></i>{{ bulkCta }}</button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { tab:'todo', sel:{p1:true,p2:true} };
+  renderVals(){
+    const all=[
+      {id:'p1', client:'Marcin K.', init:'MK', amountN:2340, amount:'2 340 zł', method:'PKO •• 4921', due:'dziś', urgent:true},
+      {id:'p2', client:'Anna W.', init:'AW', amountN:4180, amount:'4 180 zł', method:'mBank •• 7702', due:'dziś', urgent:true},
+      {id:'p3', client:'Tomek R.', init:'TR', amountN:1520, amount:'1 520 zł', method:'ING •• 3319', due:'do 3 lip', urgent:false},
+      {id:'p4', client:'Kasia S.', init:'KS', amountN:990, amount:'990 zł', method:'PKO •• 8850', due:'do 4 lip', urgent:false},
+    ];
+    const tabDefs=[
+      {k:'todo', label:'Do zrealizowania', count:'23'},
+      {k:'planned', label:'Zaplanowane', count:'4'},
+      {k:'done', label:'Zrealizowane', count:'—'},
+      {k:'rejected', label:'Odrzucone', count:'1'},
+    ];
+    const t=this.state.tab;
+    const rows= t==='todo'? all : [];
+    const sel=this.state.sel;
+    const selRows=rows.filter(r=>sel[r.id]);
+    const sum=selRows.reduce((a,r)=>a+r.amountN,0);
+    const allChecked=rows.length>0 && selRows.length===rows.length;
+    return {
+      tabs: tabDefs.map(d=>({ ...d,
+        bg: t===d.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: t===d.k?'#66FF33':'#BDBFBD',
+        border: t===d.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({tab:d.k, sel: d.k==='todo'?this.state.sel:{}}) })),
+      rows: rows.map(r=>({ ...r,
+        dueColor: r.urgent?'#FFCC00':'#7B7F7B',
+        checked:!!sel[r.id],
+        cbBg: sel[r.id]?'#66FF33':'transparent', cbBorder: sel[r.id]?'#66FF33':'rgba(255,255,255,0.22)',
+        rowBg: sel[r.id]?'rgba(102,255,51,0.04)':'transparent',
+        onCheck:()=>this.setState(st=>({sel:{...st.sel,[r.id]:!st.sel[r.id]}})) })),
+      allChecked,
+      allBg: allChecked?'#66FF33':'transparent', allBorder: allChecked?'#66FF33':'rgba(255,255,255,0.22)',
+      toggleAll:()=>{ const n={}; if(!allChecked) rows.forEach(r=>n[r.id]=true); this.setState({sel:n}); },
+      footLabel: rows.length>0 ? rows.length+' z 23 w kolejce · suma widoku: 9 030 zł' : 'Brak pozycji w tym filtrze — przełącz zakładkę.',
+      bulkVisible: selRows.length>0,
+      bulkLabel: selRows.length+' zaznaczone',
+      bulkCta: 'Zbiorczo zrealizuj · '+sum.toLocaleString('pl-PL').replace(/,/g,' ')+' zł',
+      clearSel:()=>this.setState({sel:{}}),
+    };
+  }
+}
+</script>
+</body>
+</html>

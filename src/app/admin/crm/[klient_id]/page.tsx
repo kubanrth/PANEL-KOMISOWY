@@ -78,7 +78,7 @@ export default async function AdminCrmDetailPage(props: {
               {k.account_type === "individual" ? "Indywidualne" : k.account_type === "business" ? "Biznesowe" : "—"}
               {k.master_agreement_signed_at && " · umowa podpisana"}
             </div>
-            <h1 className="mt-2 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
+            <h1 className="mt-2 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
               {fullName}
             </h1>
             <p className="mt-1 text-[13px] text-text-mute num">{k.id}</p>
@@ -101,13 +101,13 @@ export default async function AdminCrmDetailPage(props: {
               href={`/admin/crm/${klient_id}?tab=${t.key}`}
               className={`px-4 py-2.5 text-[13px] -mb-px border-b-2 transition-colors ${
                 active
-                  ? "border-purple text-purple font-semibold"
+                  ? "border-purple text-lime font-semibold"
                   : "border-transparent text-text-soft hover:text-text"
               }`}
             >
               {t.label}
               {t.count != null && (
-                <span className={`ml-1.5 text-[11px] num ${active ? "text-purple" : "text-text-mute"}`}>
+                <span className={`ml-1.5 text-[11px] num ${active ? "text-lime" : "text-text-mute"}`}>
                   · {t.count}
                 </span>
               )}
@@ -141,7 +141,7 @@ function SubmissionsTab({ submissions }: { submissions: Submission[] }) {
   if (!submissions.length) return <Empty msg="Brak submission'ów." />;
   return (
     <div className="card table-scroll">
-      <div className="hidden md:grid grid-cols-[160px_140px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+      <div className="hidden md:grid grid-cols-[160px_140px_120px_120px] gap-3 px-4 h-11 items-center label border-b border-border">
         <div>SUB-Numer</div>
         <div>Data</div>
         <div>Podpisana</div>
@@ -167,7 +167,7 @@ function ProductsTab({ products, title, showSold = false }: { products: Product[
   if (!products.length) return <Empty msg={`Brak pozycji w "${title}".`} />;
   return (
     <div className="card table-scroll">
-      <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_120px_120px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+      <div className="hidden md:grid grid-cols-[minmax(220px,3fr)_120px_120px_120px_120px] gap-3 px-4 h-11 items-center label border-b border-border">
         <div>Produkt</div>
         <div>Cena</div>
         <div>Status</div>
@@ -207,7 +207,7 @@ function WalletTab({ transactions }: { transactions: WalletTransaction[] }) {
   if (!transactions.length) return <Empty msg="Brak transakcji w Wallet." />;
   return (
     <div className="card table-scroll">
-      <div className="hidden md:grid grid-cols-[140px_180px_minmax(180px,2fr)_140px] gap-3 px-4 py-3 label border-b border-border-soft">
+      <div className="hidden md:grid grid-cols-[140px_180px_minmax(180px,2fr)_140px] gap-3 px-4 h-11 items-center label border-b border-border">
         <div>Data</div>
         <div>Typ</div>
         <div>Opis</div>
@@ -241,7 +241,7 @@ function DocsTab({ documents }: { documents: AppDocument[] }) {
             <div className="text-[11px] text-text-mute num">{formatDate(d.created_at)} · {d.id.slice(0, 8)}</div>
           </div>
           {d.file_url && (
-            <a href={d.file_url} target="_blank" rel="noreferrer" className="text-[12px] text-blue hover:underline">
+            <a href={d.file_url} target="_blank" rel="noreferrer" className="text-[12px] text-lime hover:underline">
               Pobierz →
             </a>
           )}

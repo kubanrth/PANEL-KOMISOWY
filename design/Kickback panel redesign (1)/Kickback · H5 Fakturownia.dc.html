@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="H5 · Fakturownia" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="fakturownia" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Fakturownia</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · integracja księgowa</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Fakturownia<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><span style="width:36px;height:36px;border-radius:10px;background:rgba(34,221,153,0.1);border:1px solid rgba(34,221,153,0.25);display:flex;align-items:center;justify-content:center"><i class="ph ph-key" style="font-size:18px;color:#22DD99"></i></span><div><div style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">API key</div><div style="font:500 11px 'IBM Plex Mono',monospace;color:#22DD99;margin-top:2px">ustawiony ✓</div></div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><span style="width:36px;height:36px;border-radius:10px;background:rgba(34,221,153,0.1);border:1px solid rgba(34,221,153,0.25);display:flex;align-items:center;justify-content:center"><i class="ph ph-lock-key" style="font-size:18px;color:#22DD99"></i></span><div><div style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Webhook secret</div><div style="font:500 11px 'IBM Plex Mono',monospace;color:#22DD99;margin-top:2px">ustawiony ✓</div></div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><span style="width:36px;height:36px;border-radius:10px;background:rgba(34,221,153,0.1);border:1px solid rgba(34,221,153,0.25);display:flex;align-items:center;justify-content:center"><i class="ph ph-plugs-connected" style="font-size:18px;color:#22DD99"></i></span><div><div style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Endpoint</div><div style="font:500 11px 'IBM Plex Mono',monospace;color:#22DD99;margin-top:2px">200 OK ✓</div></div></div>
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;align-items:center;gap:10px;min-width:0"><span style="flex:1;min-width:0;font:400 11px 'IBM Plex Mono',monospace;color:#7B7F7B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">https://kickback.pl/api/hooks/fakturownia</span><button onClick="{{ copyHook }}" style="width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:9px;background:transparent;color:{{ copyColor }};cursor:pointer" style-hover="background:#1D2120"><i class="ph {{ copyIcon }}" style="font-size:15px"></i></button></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08)"><span style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Warehouse mappings</span><button style="display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:#16191A;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-plus" style="font-size:13px;color:#66FF33"></i>Dodaj</button></div>
+          <div style="display:flex;align-items:center;gap:12px;min-height:48px;padding:4px 18px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="flex:1;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Anna W. · B2B</span><span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">WH-2201</span><button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:#7B7F7B;cursor:pointer;border-radius:8px" style-hover="color:#FF5A47;background:rgba(255,90,71,0.08)"><i class="ph ph-x" style="font-size:14px"></i></button></div>
+          <div style="display:flex;align-items:center;gap:12px;min-height:48px;padding:4px 18px"><span style="flex:1;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif">Vintage11 sp. z o.o. · B2B</span><span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">WH-2214</span><button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:#7B7F7B;cursor:pointer;border-radius:8px" style-hover="color:#FF5A47;background:rgba(255,90,71,0.08)"><i class="ph ph-x" style="font-size:14px"></i></button></div>
+        </div>
+
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08)"><span style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Push queue · po A&amp;QC pass</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">2 w kolejce</span></div>
+          <div style="display:flex;align-items:center;gap:12px;min-height:48px;padding:4px 18px;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="width:7px;height:7px;border-radius:9px;background:#FFCC00"></span><span style="flex:1;font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">PUSH product KCB-26-C1D8-2</span><button style="height:28px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#F5F5F3">Retry</button></div>
+          <div style="display:flex;align-items:center;gap:12px;min-height:48px;padding:4px 18px"><span style="width:7px;height:7px;border-radius:9px;background:#FFCC00"></span><span style="flex:1;font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD">PUSH product KCB-26-H2E441-1</span><button style="height:28px;padding:0 12px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;background:transparent;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120;color:#F5F5F3">Retry</button></div>
+        </div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.08)"><h2 style="margin:0;font-weight:500;font-size:17px;letter-spacing:-0.015em">Recent events · webhooki</h2></div>
+        <sc-for list="{{ events }}" as="e" hint-placeholder-count="5">
+          <div style="border-bottom:1px solid rgba(255,255,255,0.05)">
+            <button onClick="{{ e.onToggle }}" style="width:100%;display:grid;grid-template-columns:130px minmax(180px,1.4fr) 130px 110px 34px;gap:12px;align-items:center;min-height:52px;padding:6px 20px;border:0;background:{{ e.rowBg }};cursor:pointer;text-align:left;transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ e.ts }}</span>
+              <span style="font:500 12px 'IBM Plex Mono',monospace;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.name }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ e.sBg }};color:{{ e.sColor }};border:1px solid {{ e.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ e.sColor }}"></span>{{ e.status }}</span>
+              <sc-if value="{{ e.failed }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px;border:1px solid rgba(74,107,255,0.3);border-radius:999px;background:rgba(74,107,255,0.1);font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7FA0FF;width:fit-content"><i class="ph ph-arrow-clockwise" style="font-size:12px"></i>Replay</span></sc-if>
+              <sc-if value="{{ e.ok }}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+              <i class="ph ph-caret-down" style="font-size:14px;color:#4A4E4B;justify-self:end;display:inline-block;transform:{{ e.caretTf }};transition:transform .2s"></i>
+            </button>
+            <sc-if value="{{ e.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:4px 20px 16px;animation:kb-in .16s ease">
+                <pre style="margin:0;background:#1D2120;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px;font:400 11px/1.7 'IBM Plex Mono',monospace;color:#BDBFBD;overflow-x:auto">{{ e.payload }}</pre>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <div style="padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">5 z 50 ostatnich · retencja 30 dni</span></div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { open:{e2:true}, copied:false };
+  renderVals(){
+    const S={
+      processed:{label:'Processed', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      failed:{label:'Failed', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+      skipped:{label:'Skipped', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+      replayed:{label:'Replayed', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+    };
+    const events=[
+      {id:'e1', ts:'2 lip, 09:31', name:'invoice.created · FV/2026/07/002', s:'processed', payload:'{ "event": "invoice.created", "id": "FV/2026/07/002",\n  "warehouse": "WH-2201", "amount": 2900, "status": 200 }'},
+      {id:'e2', ts:'2 lip, 07:41', name:'payout.settled · #P-2604', s:'failed', payload:'{ "event": "payout.settled", "id": "P-2604",\n  "error": "warehouse_id missing for client 148",\n  "attempt": 3, "status": 422 }'},
+      {id:'e3', ts:'1 lip, 22:10', name:'invoice.created · FV/2026/07/001', s:'processed', payload:'{ "event": "invoice.created", "id": "FV/2026/07/001", "status": 200 }'},
+      {id:'e4', ts:'1 lip, 16:44', name:'product.stock_changed · KCB-26-E5A144', s:'skipped', payload:'{ "event": "product.stock_changed", "reason": "not mapped", "status": 204 }'},
+      {id:'e5', ts:'30 cze, 12:02', name:'payout.settled · #P-2598', s:'replayed', payload:'{ "event": "payout.settled", "id": "P-2598", "replayed_at": "2026-06-30T12:02Z", "status": 200 }'},
+    ];
+    return {
+      events: events.map(e=>({ ...e, status:S[e.s].label, sColor:S[e.s].c, sBg:S[e.s].bg, sBorder:S[e.s].bd,
+        failed: e.s==='failed', ok: e.s!=='failed',
+        open: !!this.state.open[e.id],
+        caretTf: this.state.open[e.id]?'rotate(180deg)':'rotate(0deg)',
+        rowBg: e.s==='failed'?'rgba(255,90,71,0.04)':'transparent',
+        onToggle:()=>this.setState(s=>({open:{...s.open,[e.id]:!s.open[e.id]}})) })),
+      copyHook:()=>{ try{ navigator.clipboard && navigator.clipboard.writeText('https://kickback.pl/api/hooks/fakturownia'); }catch(err){}
+        this.setState({copied:true}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({copied:false}),1800); },
+      copyIcon: this.state.copied?'ph-check':'ph-copy',
+      copyColor: this.state.copied?'#22DD99':'#7B7F7B',
+    };
+  }
+}
+</script>
+</body>
+</html>

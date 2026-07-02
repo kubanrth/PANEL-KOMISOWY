@@ -32,7 +32,7 @@ export default async function AdminAuditLogPage() {
     <AdminShell user={user} profile={profile} active="audit" breadcrumb={[{ label: "Audit log" }]}>
       <section>
         <div className="label">{logs.length} eventów (ostatnie 200)</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Audit log
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
@@ -61,7 +61,7 @@ export default async function AdminAuditLogPage() {
                     <div className="text-[13px]">{actorName}</div>
                     <div className="text-[10px] text-text-mute">{l.profiles?.role ?? "—"}</div>
                   </div>
-                  <div className="col-span-2 font-mono text-purple">{l.action}</div>
+                  <div className="col-span-2 font-mono text-lime">{l.action}</div>
                   <div className="col-span-2 text-text-soft">
                     {l.target_type ?? "—"}
                   </div>

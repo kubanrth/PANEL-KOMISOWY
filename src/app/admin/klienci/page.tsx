@@ -37,7 +37,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
     <AdminShell user={user} profile={profile} active="klienci" breadcrumb={[{ label: "Klienci" }]}>
       <section>
         <div className="label">{klienci.length} klientów · {admins.length} adminów</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Klienci
         </h1>
       </section>
@@ -49,7 +49,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
 
       <section className="mt-8">
         <div className="card table-scroll">
-          <div className="grid grid-cols-12 gap-4 px-6 py-3 label border-b border-border-soft">
+          <div className="grid grid-cols-12 gap-4 px-6 h-11 items-center label border-b border-border">
             <div className="col-span-4">Klient</div>
             <div className="col-span-2">Typ konta</div>
             <div className="col-span-2">Miasto</div>
@@ -69,7 +69,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
                   className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
                   <div className="col-span-4 flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-full bg-purple/15 border border-purple/30 flex items-center justify-center text-purple text-[12px] font-semibold">
+                    <div className="h-9 w-9 rounded-full bg-purple/15 border border-purple/30 flex items-center justify-center text-lime text-[12px] font-semibold">
                       {initials}
                     </div>
                     <div className="min-w-0">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import * as React from "react";
 
-type Variant = "primary" | "ghost" | "soft";
+type Variant = "primary" | "ghost" | "soft" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const sizes: Record<Size, string> = {
@@ -13,6 +13,7 @@ const variants: Record<Variant, string> = {
   primary: "btn-primary",
   ghost: "btn-ghost",
   soft: "btn-soft",
+  danger: "btn-danger",
 };
 
 type CommonProps = {

@@ -2,8 +2,11 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { signOut } from "@/app/panel/actions";
 import { getTheme } from "@/lib/theme";
+import { createClient } from "@/lib/supabase/server";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AdminMobileNav } from "./AdminMobileNav";
+import { SidebarNav } from "@/components/panel/SidebarNav";
+import { ADMIN_SECTIONS, type NavBadges } from "@/components/panel/nav-config";
 
 export type AdminShellProps = {
   user: { email: string };
@@ -28,86 +31,61 @@ export type AdminShellProps = {
   breadcrumb?: Array<{ label: string; href?: string }>;
   children: React.ReactNode;
   cta?: React.ReactNode;
+  badges?: NavBadges;
 };
 
-export async function AdminShell({ user, profile, active, breadcrumb, children, cta }: AdminShellProps) {
+export async function AdminShell({ user, profile, active, breadcrumb, children, cta, badges }: AdminShellProps) {
   const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials = (profile.first_name?.[0] ?? "") + (profile.last_name?.[0] ?? user.email[0]?.toUpperCase());
   const theme = await getTheme();
+  const resolvedBadges = { ...(await fetchAdminBadges()), ...badges };
 
   return (
     <div className="min-h-screen lg:flex">
-      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} />
+      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} badges={resolvedBadges} />
 
-      <aside className="hidden lg:flex flex-col w-[260px] xl:w-[280px] border-r border-border-soft bg-bg-soft/40 sticky top-0 h-screen">
-        <div className="px-6 pt-6 pb-5 border-b border-border-soft flex items-start justify-between">
-          <div>
-            <div className="flex items-baseline gap-2">
+      <aside className="hidden lg:flex flex-col w-[260px] border-r border-border bg-bg sticky top-0 h-screen">
+        {/* Header z coral differentiator: jesteś w back-office */}
+        <div className="px-4 pt-5 pb-4 border-b border-border-soft bg-gradient-to-b from-coral/[.04] to-transparent">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Logo showSuffix={false} />
-              <span className="label text-purple">/admin</span>
+              <span className="pill pill-coral !text-[10px] !px-2 !py-0.5">Admin</span>
             </div>
-            <div className="text-[12px] text-text-mute mt-1.5">
-              {profile.role === "super_admin" ? "Super-admin" : "Admin operacyjny"}
-            </div>
+            <ThemeToggle current={theme} />
           </div>
-          <ThemeToggle current={theme} />
+          <div className="text-[11px] text-text-mute mt-1.5 px-0.5 flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-coral" aria-hidden />
+            {profile.role === "super_admin" ? "Super-admin" : "Admin operacyjny"}
+          </div>
         </div>
 
-        <nav className="px-6 py-6 flex-1 overflow-y-auto">
-          <div className="label">Operacje</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <Item label="Queue" href="/admin" active={active === "queue"} />
-            <Item label="CRM (master/detail)" href="/admin/crm" active={active === "crm"} />
-            <Item label="Submissions" href="/admin/submissions" active={active === "submissions"} />
-            <Item label="Klienci" href="/admin/klienci" active={active === "klienci"} />
-            <Item label="A&QC" href="/admin/aqc" active={active === "aqc"} />
-            <Item label="Offers (Zerr)" href="/admin/offers" active={active === "offers"} />
-            <Item label="Returns" href="/admin/returns" active={active === "returns"} />
-            <Item label="Generator QR" href="/admin/qr" active={active === "qr"} />
-          </ul>
+        <div className="px-3 py-4 flex-1 overflow-y-auto">
+          <SidebarNav sections={ADMIN_SECTIONS} activeKey={active} badges={resolvedBadges} storageKey="kb-nav-admin" />
+        </div>
 
-          <div className="label mt-9">Workflow</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <Item label="Zapotrzebowanie" href="/admin/zapotrzebowanie" active={active === "zapotrzebowanie"} />
-            <Item label="Co warto dodać" href="/admin/co-warto-dodac" active={active === "co-warto-dodac"} />
-            <Item label="Zmiany ceny" href="/admin/zmiany-ceny" active={active === "zmiany-ceny"} />
-          </ul>
-
-          <div className="label mt-9">Finanse</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <Item label="Wypłaty" href="/admin/payouts" active={active === "payouts"} />
-          </ul>
-
-          <div className="label mt-9">Integracje</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <Item label="Fakturownia" href="/admin/integrations/fakturownia" active={active === "integrations"} />
-          </ul>
-
-          <div className="label mt-9">Komunikacja</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <Item label="Inbox" href="/admin/inbox" active={active === "inbox"} />
-            <Item label="Statystyki" href="/admin/stats" active={active === "stats"} />
-            <Item label="Audit log" href="/admin/audit" active={active === "audit"} />
-          </ul>
-
-          <div className="label mt-9">Powrót</div>
-          <ul className="mt-3 space-y-1.5 text-[14px]">
-            <li><Link href="/panel" className="text-text-soft hover:text-text">↩ Panel klienta</Link></li>
-          </ul>
-        </nav>
-
-        <div className="px-6 py-5 border-t border-border-soft">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-purple/15 border border-purple/30 flex items-center justify-center font-semibold text-purple text-[12px]">
+        {/* Bottom sticky group */}
+        <div className="px-3 pt-3 pb-4 border-t border-border flex-shrink-0">
+          <Link
+            href="/panel"
+            className="flex items-center gap-3 h-11 pl-3.5 pr-3 rounded-[12px] text-[13.5px] text-text-soft hover:text-text hover:bg-surface-2/60 transition-colors"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+            </svg>
+            Panel klienta
+          </Link>
+          <div className="mt-3 px-1.5 flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-surface-2 border border-coral/30 flex items-center justify-center font-medium text-coral text-[12px] flex-shrink-0">
               {initials.toUpperCase().slice(0, 2)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[13px] truncate">{fullName}</div>
-              <div className="text-[11px] text-text-mute">{user.email}</div>
+              <div className="text-[11px] text-text-mute truncate">{user.email}</div>
             </div>
             <form action={signOut}>
-              <button type="submit" className="text-text-mute hover:text-text transition-colors p-1" title="Wyloguj">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <button type="submit" className="text-text-mute hover:text-text transition-colors p-1" title="Wyloguj" aria-label="Wyloguj">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
                 </svg>
               </button>
@@ -163,17 +141,21 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
   );
 }
 
-function Item({ label, href, active }: { label: string; href: string; active?: boolean }) {
-  return (
-    <li>
-      <Link
-        href={href}
-        className={`block py-2 px-3 -mx-3 rounded-[10px] transition-colors ${
-          active ? "bg-purple/10 text-purple font-semibold" : "text-text-soft hover:text-text hover:bg-surface"
-        }`}
-      >
-        {label}
-      </Link>
-    </li>
-  );
+/** Liczniki kolejek admina — równoległe head-county; błąd → brak badge. */
+async function fetchAdminBadges(): Promise<Record<string, number | boolean | undefined>> {
+  try {
+    const supabase = await createClient();
+    const [aqc, payouts, offers] = await Promise.all([
+      supabase.from("products").select("*", { count: "exact", head: true }).eq("status", "aqc"),
+      supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
+      supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
+    ]);
+    return {
+      aqc: aqc.count ?? undefined,
+      payouts: payouts.count ?? undefined,
+      offers: offers.count ?? undefined,
+    };
+  } catch {
+    return {};
+  }
 }

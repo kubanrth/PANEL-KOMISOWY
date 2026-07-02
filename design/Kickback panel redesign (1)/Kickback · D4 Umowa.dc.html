@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="D4 · Umowa" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="st-umowa" expanded="ustawienia" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Ustawienia</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Umowa</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1000px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Ustawienia · dokumenty</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Umowa komisowa<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <sc-if value="{{ aneks }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:14px;background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.22);border-left:3px solid #FFCC00">
+          <i class="ph ph-pen-nib" style="font-size:20px;color:#FFCC00;flex-shrink:0"></i>
+          <span style="flex:1;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Czeka aneks do podpisu: <span style="font-weight:600">zaktualizowane stawki prowizji od lipca 2026</span>. Obecna umowa obowiązuje do czasu podpisania.</span>
+          <button onClick="{{ sign }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45);flex-shrink:0"><i class="ph ph-pen-nib" style="font-size:15px"></i>Podpisz aneks</button>
+        </div>
+      </sc-if>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Podgląd dokumentu</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">umowa-komisowa-v2.4.pdf · 12 stron</span></div>
+          <div style="aspect-ratio:210/260;border-radius:12px;background:#16191A;border:1px solid rgba(255,255,255,0.07);padding:28px 30px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px"><span style="width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,#9BFF57,#37D663 45%,#0C9B52);display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:6px solid #05140B;border-top:3.5px solid transparent;border-bottom:3.5px solid transparent;margin-left:1px"></span></span><span style="font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Umowa komisu · Kickback sp. z o.o.</span></div>
+            <div style="height:10px;width:62%;border-radius:5px;background:rgba(255,255,255,0.1)"></div>
+            <div style="height:7px;width:94%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:7px;width:88%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:7px;width:91%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:7px;width:56%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:10px;width:44%;border-radius:5px;background:rgba(255,255,255,0.09);margin-top:8px"></div>
+            <div style="height:7px;width:92%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:7px;width:85%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="height:7px;width:90%;border-radius:5px;background:rgba(255,255,255,0.05)"></div>
+            <div style="flex:1"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="height:7px;width:30%;border-radius:5px;background:rgba(255,255,255,0.07)"></div><span style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B">1 / 12</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-download-simple" style="font-size:16px;color:#66FF33"></i>Pobierz PDF</button>
+            <button style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;background:transparent;cursor:pointer" style-hover="color:#F5F5F3;background:rgba(255,255,255,0.05)"><i class="ph ph-printer" style="font-size:16px"></i>Drukuj</button>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Szczegóły umowy</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Wersja</span><span style="font:500 13px 'IBM Plex Mono',monospace">v2.4</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Podpisana</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD">12 mar 2026</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Prowizja bazowa</span><span style="font:500 13px 'IBM Plex Mono',monospace">20%</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Status</span><span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ stBg }};color:{{ stColor }};border:1px solid {{ stBorder }}"><span style="width:6px;height:6px;border-radius:9px;background:{{ stColor }}"></span>{{ stLabel }}</span></div>
+          </div>
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;align-items:center;gap:12px">
+            <i class="ph ph-scroll" style="font-size:20px;color:#7B7F7B;flex-shrink:0"></i>
+            <span style="flex:1;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Warunki współpracy i regulamin komisu — wersja publiczna.</span>
+            <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer;flex-shrink:0" style-hover="background:#1D2120">Czytaj</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;aneksDoPodpisu&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Stan&quot;}
+}">
+class Component extends DCLogic {
+  state = { signed:false };
+  renderVals(){
+    const aneksPending = (this.props.aneksDoPodpisu ?? true) && !this.state.signed;
+    return {
+      aneks: aneksPending,
+      sign:()=>this.setState({signed:true}),
+      stLabel: aneksPending?'Aneks oczekuje':'Aktualna',
+      stColor: aneksPending?'#FFCC00':'#22DD99',
+      stBg: aneksPending?'rgba(255,204,0,0.13)':'rgba(34,221,153,0.13)',
+      stBorder: aneksPending?'rgba(255,204,0,0.3)':'rgba(34,221,153,0.3)',
+    };
+  }
+}
+</script>
+</body>
+</html>

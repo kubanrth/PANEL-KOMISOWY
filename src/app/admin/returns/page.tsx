@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate, daysFromNow } from "@/lib/format";
 import { RETURN_REASON_LABEL } from "@/lib/types";
@@ -44,15 +45,10 @@ export default async function AdminReturnsPage() {
 
   return (
     <AdminShell user={user} profile={profile} active="returns" breadcrumb={[{ label: "Returns" }]}>
-      <section>
-        <div className="label">{pending.length} czeka · {resolved.length} rozwiązanych</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
-          Zwroty <span className="text-text-soft">/ polityka.</span>
-        </h1>
-      </section>
+      <PageHeader label={`${pending.length} czeka · ${resolved.length} rozwiązanych`} title="Returns" sub="Zwroty od kupujących i wycofania — decyzje i historia." />
 
       {/* Pending */}
-      <section className="mt-12">
+      <section className="mt-8">
         <div className="label mb-5">Wymagające decyzji</div>
         {pending.length === 0 ? (
           <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-8 text-center text-text-soft">

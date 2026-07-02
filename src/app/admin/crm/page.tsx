@@ -75,7 +75,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
     >
       <section>
         <div className="label">{klienci.length} klientów</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
+        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           CRM <span className="text-text-soft">/ master-detail.</span>
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
@@ -105,7 +105,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
 
       <section className="mt-6">
         <div className="card table-scroll">
-          <div className="hidden md:grid grid-cols-[minmax(200px,2fr)_120px_100px_100px_140px_140px_60px] gap-3 px-4 py-3 label border-b border-border-soft">
+          <div className="hidden md:grid grid-cols-[minmax(200px,2fr)_120px_100px_100px_140px_140px_60px] gap-3 px-4 h-11 items-center label border-b border-border">
             <div>Klient</div>
             <div>Typ konta</div>
             <div>Oferty</div>
@@ -143,7 +143,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
                 <div className="text-[13px] num font-semibold text-mint">{formatPLN(agg.gmv, { decimals: false })}</div>
                 <div className="text-[12px] num text-text-soft">{formatPLN(agg.stock, { decimals: false })}</div>
                 <div className="text-right">
-                  <Link href={`/admin/crm/${k.id}`} className="text-[12px] text-blue hover:underline">
+                  <Link href={`/admin/crm/${k.id}`} className="text-[12px] text-lime hover:underline">
                     →
                   </Link>
                 </div>
@@ -165,7 +165,7 @@ function Kpi({ label, value, sub, accent = "" }: { label: string; value: string;
   return (
     <div className="card p-4">
       <div className="label">{label}</div>
-      <div className={`mt-2 font-bold text-2xl tracking-[-0.035em] num ${accent}`}>{value}</div>
+      <div className={`mt-2 font-light text-[24px] tracking-[-0.02em] num ${accent}`}>{value}</div>
       {sub && <div className="mt-1.5 text-[12px] text-text-mute">{sub}</div>}
     </div>
   );

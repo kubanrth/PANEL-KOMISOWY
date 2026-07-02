@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="A3 · Rejestracja" style="position:relative;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;display:flex;align-items:center;justify-content:center;padding:40px 24px;overflow:hidden">
+  <div style="position:absolute;inset:-20% -10% auto auto;width:900px;height:700px;pointer-events:none;background:radial-gradient(circle at 70% 30%, rgba(34,221,153,0.13) 0%, rgba(102,255,51,0.05) 34%, transparent 62%)"></div>
+
+  <div style="position:relative;width:480px;max-width:100%;display:flex;flex-direction:column;align-items:center;gap:24px">
+    <div style="width:46px;height:46px;border-radius:14px;background:linear-gradient(140deg,#9BFF57 0%,#37D663 45%,#0C9B52 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -10px rgba(34,221,153,0.55)"><div style="width:0;height:0;border-left:12px solid #05140B;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></div></div>
+
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="width:26px;height:6px;border-radius:999px;background:{{ dot1 }}"></span>
+      <span style="width:26px;height:6px;border-radius:999px;background:{{ dot2 }}"></span>
+    </div>
+
+    <div style="width:100%;background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:30px;box-shadow:0 40px 100px -40px rgba(0,0,0,0.9);display:flex;flex-direction:column;gap:18px">
+      <sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:kb-in .18s ease;display:flex;flex-direction:column;gap:18px">
+          <div><div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:#66FF33;margin-bottom:8px">KROK 1 / 2</div><h1 style="margin:0;font-weight:300;font-size:28px;line-height:1.16;letter-spacing:-0.025em">Załóż konto<span style="color:#66FF33">.</span></h1></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">E-mail</label><input placeholder="twoj@email.pl" style="height:46px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Hasło</label><input type="password" placeholder="min. 10 znaków" style="height:46px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <button onClick="{{ next }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border:0;border-radius:999px;font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 14px 32px -10px rgba(34,221,153,0.5)" style-hover="transform:translateY(-2px)">Dalej<i class="ph ph-arrow-right" style="font-size:17px"></i></button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:kb-in .18s ease;display:flex;flex-direction:column;gap:18px">
+          <div><div style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:#66FF33;margin-bottom:8px">KROK 2 / 2</div><h1 style="margin:0;font-weight:300;font-size:28px;line-height:1.16;letter-spacing:-0.025em">Jak się do Ciebie zwracać<span style="color:#66FF33">?</span></h1></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Imię</label><input placeholder="Marcin" style="height:46px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Telefon</label><input placeholder="+48" style="height:46px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          </div>
+          <button style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border:0;border-radius:999px;font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 14px 32px -10px rgba(34,221,153,0.5)" style-hover="transform:translateY(-2px)"><i class="ph ph-check" style="font-size:17px"></i>Utwórz konto</button>
+          <button onClick="{{ back }}" style="border:0;background:transparent;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;cursor:pointer;padding:0;align-self:center" style-hover="color:#F5F5F3">← Wstecz</button>
+        </div>
+      </sc-if>
+    </div>
+
+    <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Masz konto? <a href="Kickback · A2 Login.dc.html" style="color:#66FF33;font-weight:600;text-decoration:none">Zaloguj się</a></span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { step:1 };
+  renderVals(){
+    const s=this.state.step;
+    return {
+      step1: s===1, step2: s===2,
+      dot1: '#66FF33',
+      dot2: s===2?'#66FF33':'#2A2E2C',
+      next:()=>this.setState({step:2}),
+      back:()=>this.setState({step:1}),
+    };
+  }
+}
+</script>
+</body>
+</html>

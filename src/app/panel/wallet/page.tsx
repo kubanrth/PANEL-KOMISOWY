@@ -2,11 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { KpiCard } from "@/components/ui/KpiCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { WalletTransaction, BankAccount } from "@/lib/types";
 import { WithdrawForm } from "./WithdrawForm";
 import { AddBankAccountForm } from "./AddBankAccountForm";
+
+/* Wallet — redesign: hero „Dostępne do wypłaty" na card-gradient-dark + glow-blob,
+   2 KPI (W rozliczeniu / Wypłacone łącznie), tabela transakcji z pigułkami typów
+   i saldem bieżącym, prawy panel: zlecenie wypłaty + metody wypłaty. */
 
 export default async function WalletPage() {
   const supabase = await createClient();
@@ -31,6 +39,7 @@ export default async function WalletPage() {
     .from("wallet_transactions")
     .select("*")
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .limit(20);
   const transactions = (txsRaw ?? []) as WalletTransaction[];
 
@@ -44,6 +53,21 @@ export default async function WalletPage() {
 
   const isBusiness = profile.account_type === "business";
 
+  // Saldo po każdej transakcji — liczone od bieżącego balance w dół listy (desc).
+  // ponytail: zakłada balance = suma ledgera; rozjazd RPC↔ledger pokaże przesunięcie.
+  let running = balance;
+  const txRows = transactions.map((tx) => {
+    const saldo = running;
+    running -= tx.amount_cents;
+    return { tx, saldo };
+  });
+
+  // ponytail: suma z ostatnich 20 tx (limit istniejącego query) — pełny agregat
+  // wymaga osobnego RPC, dodać gdy historia > 20 wypłat.
+  const paidOutTotal = transactions
+    .filter((t) => t.type === "payout_done")
+    .reduce((a, t) => a + Math.abs(t.amount_cents), 0);
+
   return (
     <PanelShell
       user={{ email: user.email! }}
@@ -53,58 +77,82 @@ export default async function WalletPage() {
       active="wallet"
       breadcrumb={[{ label: "Wallet" }]}
     >
-      {/* Hero balance card */}
-      <section className="grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-7">
-          <div className="card-gradient-blue p-7 lg:p-9 rounded-[24px] text-white">
-            <div className="flex items-center justify-between">
-              <span className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">
-                Wallet · {formatDate(new Date())}
-              </span>
-              <span className="pill bg-white/15 text-white">
-                <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-                Subkonto Santander
-              </span>
-            </div>
-            <div className="mt-7">
-              <div className="font-bold text-[80px] lg:text-[112px] leading-none tracking-[-0.05em] num">
-                {formatPLN(balance, { decimals: false })}
-              </div>
-              <div className="mt-3 text-white/70 text-[14px]">Saldo w portfelu</div>
-            </div>
+      <PageHeader
+        label={`Wallet · ${formatDate(new Date())}`}
+        title="Portfel"
+        sub="Środki ze sprzedaży trafiają na subkonto w Santander. Po 14-dniowej karencji i weryfikacji dokumentu możesz je wypłacić na konto."
+      />
 
-            <div className="mt-7 grid grid-cols-2 gap-5 pt-5 border-t border-white/15">
-              <BalanceCol label="Dostępne" value={formatPLN(available, { decimals: false })} sub="do wypłaty teraz" hi />
-              <BalanceCol label="Pending · 14d" value={formatPLN(pending, { decimals: false })} sub="po karencji" />
+      <section className="mt-8 grid grid-cols-12 gap-6">
+        {/* Hero + KPI */}
+        <div className="col-span-12 lg:col-span-7 space-y-3">
+          <div className="card-gradient-dark relative overflow-hidden p-7 lg:p-9">
+            <div className="glow-blob" aria-hidden />
+            <div className="relative">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="label !text-white/55">Dostępne do wypłaty</span>
+                <span className="pill pill-mint">
+                  <span className="h-1.5 w-1.5 rounded-full bg-mint" />
+                  Subkonto Santander
+                </span>
+              </div>
+              <div className="mt-5 num font-light text-[40px] lg:text-[56px] leading-none tracking-[-0.03em] text-mint">
+                {formatPLN(available, { decimals: false })}
+              </div>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <ButtonLink href="#wyplata" size="md">
+                  Wypłać teraz <ArrowRight size={16} />
+                </ButtonLink>
+                <span className="text-[12px] text-white/60 num">
+                  Saldo całkowite: {formatPLN(balance, { decimals: false })}
+                </span>
+              </div>
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <KpiCard
+              label="W rozliczeniu"
+              value={<span className="text-yellow">{formatPLN(pending, { decimals: false })}</span>}
+              mono
+              sub="karencja 14 dni po sprzedaży"
+            />
+            <KpiCard
+              label="Wypłacone (ost. transakcje)"
+              value={formatPLN(paidOutTotal, { decimals: false })}
+              mono
+              sub="zrealizowane wypłaty"
+            />
           </div>
         </div>
 
-        {/* Withdraw + accounts */}
+        {/* Prawy panel: wypłata + metody wypłaty */}
         <div className="col-span-12 lg:col-span-5 space-y-5">
           <WithdrawForm available={available} accounts={accounts} />
 
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="label">Konta bankowe</div>
+              <div className="label">Metody wypłaty</div>
               <span className="text-[11px] text-text-mute num">{accounts.length}</span>
             </div>
             {accounts.length === 0 ? (
-              <p className="text-[13px] text-text-soft">Brak kont. Dodaj pierwsze, by móc zlecić wypłatę.</p>
+              <p className="text-[13px] text-text-soft mb-4">
+                Brak kont. Dodaj pierwsze, by móc zlecić wypłatę.
+              </p>
             ) : (
               <ul className="space-y-3 mb-5">
                 {accounts.map((a) => (
                   <li key={a.id} className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border flex items-center justify-center text-[10px] font-mono text-blue-soft">
+                    <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border flex items-center justify-center text-[10px] num text-text-mute">
                       {a.bank_name.slice(0, 3).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-[13px] truncate">{a.bank_name}</div>
-                      <div className="text-[11px] text-text-mute font-mono">
+                      <div className="text-[11px] text-text-mute num">
                         {a.iban.slice(0, 6)}…{a.iban.slice(-4)}
                       </div>
                     </div>
-                    {a.is_default && <span className="pill pill-mint">Domyślne</span>}
+                    {a.is_default && <Pill variant="lime">Domyślne</Pill>}
                   </li>
                 ))}
               </ul>
@@ -118,25 +166,31 @@ export default async function WalletPage() {
       <PendingDocumentsCallout supabase={supabase} userId={user.id} isBusiness={isBusiness} />
 
       {/* Transaction history */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between mb-6">
+      <section className="mt-10">
+        <div className="flex items-end justify-between gap-3 mb-4">
           <div>
             <div className="label">Ruch w portfelu</div>
-            <h2 className="mt-2 font-bold text-2xl lg:text-3xl tracking-[-0.025em]">
-              Historia transakcji
-            </h2>
+            <h2 className="mt-2 font-light text-[22px] tracking-[-0.02em]">Historia transakcji</h2>
           </div>
           <span className="text-[12px] text-text-mute num">{transactions.length} ostatnich</span>
         </div>
 
         {transactions.length === 0 ? (
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-10 text-center text-text-soft">
-            Brak transakcji. Środki pojawią się tu po pierwszej sprzedaży.
-          </div>
+          <EmptyState
+            title="Brak transakcji"
+            sub="Środki pojawią się tu po pierwszej sprzedaży."
+          />
         ) : (
           <div className="card table-scroll">
-            {transactions.map((tx, i) => (
-              <TxRow key={tx.id} tx={tx} isLast={i === transactions.length - 1} />
+            <div className="hidden md:grid grid-cols-[110px_150px_minmax(220px,1fr)_150px_140px] gap-3 px-4 h-11 label border-b border-border items-center">
+              <div>Data</div>
+              <div>Typ</div>
+              <div>Operacja</div>
+              <div className="text-right">Kwota</div>
+              <div className="text-right">Saldo</div>
+            </div>
+            {txRows.map(({ tx, saldo }) => (
+              <TxRow key={tx.id} tx={tx} saldo={saldo} />
             ))}
           </div>
         )}
@@ -146,7 +200,7 @@ export default async function WalletPage() {
       <section className="mt-12 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-5">
           <div className="label">Bezpieczeństwo środków</div>
-          <h3 className="mt-3 font-bold text-2xl lg:text-3xl tracking-[-0.025em]">Subkonto bankowe.</h3>
+          <h3 className="mt-3 font-light text-[24px] lg:text-[28px] tracking-[-0.02em]">Subkonto bankowe.</h3>
           <p className="mt-3 max-w-[44ch] text-[14px] leading-[1.65] text-text-soft">
             Środki klientów Kickback przechowujemy na osobnym subkoncie w Santander Bank Polska — odseparowanym od środków operacyjnych spółki.
           </p>
@@ -154,17 +208,17 @@ export default async function WalletPage() {
         <div className="col-span-12 lg:col-span-7 grid grid-cols-2 lg:grid-cols-3 gap-3">
           <div className="card p-5">
             <div className="label">IBAN subkonta</div>
-            <div className="mt-2 text-[12px] font-mono break-all">PL 84 1090 1014 0000 0000 0042 0042</div>
+            <div className="mt-2 text-[12px] num break-all">PL 84 1090 1014 0000 0000 0042 0042</div>
           </div>
           <div className="card p-5">
             <div className="label">BFG · gwarancja</div>
-            <div className="mt-2 font-bold text-2xl tracking-[-0.035em]">100k €</div>
-            <div className="text-[11px] text-text-mute">na klienta</div>
+            <div className="mt-2 font-light text-[24px] tracking-[-0.02em] num">100k €</div>
+            <div className="mt-1 text-[11px] text-text-mute">na klienta</div>
           </div>
           <div className="card p-5">
             <div className="label">Saldo subkonta</div>
-            <div className="mt-2 font-bold text-2xl tracking-[-0.035em] num">{formatPLN(balance, { decimals: false })}</div>
-            <div className="text-[11px] text-text-mute">{formatDate(new Date())}</div>
+            <div className="mt-2 font-light text-[24px] tracking-[-0.02em] num">{formatPLN(balance, { decimals: false })}</div>
+            <div className="mt-1 text-[11px] text-text-mute num">{formatDate(new Date())}</div>
           </div>
         </div>
       </section>
@@ -172,52 +226,18 @@ export default async function WalletPage() {
   );
 }
 
-function BalanceCol({ label, value, sub, hi }: { label: string; value: string; sub: string; hi?: boolean }) {
-  return (
-    <div>
-      <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">{label}</div>
-      <div className={`mt-1 font-bold text-2xl tracking-[-0.035em] num ${hi ? "text-mint" : "text-white"}`}>{value}</div>
-      <div className="mt-1 text-white/60 text-[11px]">{sub}</div>
-    </div>
-  );
-}
-
-function TxRow({ tx, isLast }: { tx: WalletTransaction; isLast: boolean }) {
-  const positive = tx.amount_cents >= 0;
-  const sign = positive ? "+" : "−";
-  const amountDisplay = `${sign} ${formatPLN(Math.abs(tx.amount_cents), { decimals: false })}`;
-  const colorClass = positive
-    ? tx.type === "sale_pending"
-      ? "text-amber"
-      : "text-mint"
-    : "text-text-soft";
-
-  const typeLabel = TYPE_LABEL[tx.type];
-
-  return (
-    <div className={`grid grid-cols-12 gap-4 px-6 py-4 items-center ${isLast ? "" : "border-b border-border-soft"}`}>
-      <div className="col-span-2 text-[12px] text-text-mute num">{formatDate(tx.created_at)}</div>
-      <div className="col-span-6 flex items-center gap-3">
-        <span className={`h-1.5 w-1.5 rounded-full ${
-          tx.type === "sale_pending" ? "bg-amber" :
-          tx.type === "sale_unlocked" ? "bg-mint" :
-          tx.type === "payout_done" || tx.type === "payout_request" ? "bg-text-mute" :
-          "bg-blue-soft"
-        }`} />
-        <div className="min-w-0">
-          <div className="text-[14px] truncate">{typeLabel}</div>
-          {tx.description && <div className="text-[12px] text-text-mute truncate">{tx.description}</div>}
-        </div>
-      </div>
-      <div className="col-span-2 text-[12px] text-text-mute num">
-        {tx.reference_id ?? "—"}
-      </div>
-      <div className={`col-span-2 text-right font-bold text-lg tracking-[-0.025em] num ${colorClass}`}>
-        {amountDisplay}
-      </div>
-    </div>
-  );
-}
+/* Vocab pigułek typów transakcji: mint=sprzedaż, blue=wypłata (w toku/zrealizowana),
+   yellow=karencja, amber=korekta. */
+const TX_PILL: Record<WalletTransaction["type"], { label: string; variant: PillVariant }> = {
+  sale_pending: { label: "Karencja", variant: "yellow" },
+  sale_unlocked: { label: "Sprzedaż", variant: "mint" },
+  payout_request: { label: "Wypłata", variant: "blue" },
+  payout_done: { label: "Wypłata", variant: "blue" },
+  payout_cancelled: { label: "Korekta", variant: "amber" },
+  return_fee: { label: "Korekta", variant: "amber" },
+  deposit_topup: { label: "Korekta", variant: "amber" },
+  manual_adjustment: { label: "Korekta", variant: "amber" },
+};
 
 const TYPE_LABEL: Record<WalletTransaction["type"], string> = {
   sale_pending: "Sprzedaż (karencja 14d)",
@@ -229,6 +249,35 @@ const TYPE_LABEL: Record<WalletTransaction["type"], string> = {
   deposit_topup: "Doładowanie",
   manual_adjustment: "Korekta",
 };
+
+function TxRow({ tx, saldo }: { tx: WalletTransaction; saldo: number }) {
+  const positive = tx.amount_cents >= 0;
+  const sign = positive ? "+" : "−";
+  const amountDisplay = `${sign} ${formatPLN(Math.abs(tx.amount_cents), { decimals: false })}`;
+  const amountCls = positive ? "text-mint" : "text-coral";
+  const { label, variant } = TX_PILL[tx.type] ?? { label: tx.type, variant: "mute" as const };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-[110px_150px_minmax(220px,1fr)_150px_140px] gap-2 md:gap-3 px-4 py-3.5 md:items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors">
+      <div className="hidden md:block text-[12px] num text-text-soft">{formatDate(tx.created_at)}</div>
+      <div className="flex items-center justify-between md:block">
+        <Pill variant={variant}>{label}</Pill>
+        <span className={`md:hidden text-[14px] num ${amountCls}`}>{amountDisplay}</span>
+      </div>
+      <div className="min-w-0">
+        <div className="text-[13.5px] font-medium truncate">{tx.description ?? TYPE_LABEL[tx.type]}</div>
+        <div className="text-[11px] num text-text-mute truncate">
+          <span className="md:hidden">{formatDate(tx.created_at)} · </span>
+          {tx.reference_id ?? TYPE_LABEL[tx.type]}
+        </div>
+      </div>
+      <div className={`hidden md:block text-[13px] num text-right ${amountCls}`}>{amountDisplay}</div>
+      <div className="hidden md:block text-[12px] num text-text-soft text-right">
+        {formatPLN(saldo, { decimals: false })}
+      </div>
+    </div>
+  );
+}
 
 async function PendingDocumentsCallout({
   supabase, userId, isBusiness,
@@ -274,36 +323,32 @@ async function PendingDocumentsCallout({
   if (missing.length === 0) return null;
 
   return (
-    <section className="mt-12">
-      <div className="card p-6 lg:p-7 border-amber/30 bg-amber/5">
-        <div className="flex items-start gap-4">
-          <div className="h-10 w-10 rounded-full bg-amber/15 flex items-center justify-center text-amber flex-shrink-0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" />
-            </svg>
+    <section className="mt-10">
+      <div className="rounded-[14px] bg-yellow/8 border border-yellow/25 p-5 flex items-start gap-3">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" />
+        </svg>
+        <div className="flex-1 min-w-0">
+          <div className="text-[13px] font-medium text-yellow">
+            {isBusiness
+              ? `Wymagane faktury sprzedażowe · ${missing.length}`
+              : `Wymagane Umowy Kupna-Sprzedaży · ${missing.length}`}
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg tracking-[-0.025em]">
-              {isBusiness
-                ? `Wymagane faktury sprzedażowe · ${missing.length}`
-                : `Wymagane Umowy Kupna-Sprzedaży · ${missing.length}`}
-            </h3>
-            <p className="mt-2 text-[14px] text-text-soft max-w-[60ch]">
-              {isBusiness
-                ? "Po wystawieniu FV środki przechodzą z Pending do Dostępne — możesz je wypłacić."
-                : "Po podpisaniu Umowy K-S i wgraniu skanu środki przechodzą z Pending do Dostępne."}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {missing.slice(0, 3).map((sid) => (
-                <Link
-                  key={sid}
-                  href={`/panel/submissions/${sid}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-surface border border-border text-[13px] hover:border-blue hover:text-blue transition-colors num"
-                >
-                  {sid} <ArrowRight size={12} />
-                </Link>
-              ))}
-            </div>
+          <p className="mt-1 text-[12px] leading-[1.55] text-text-soft max-w-[60ch]">
+            {isBusiness
+              ? "Po wystawieniu FV środki przechodzą z karencji do dostępnych — możesz je wypłacić."
+              : "Po podpisaniu Umowy K-S i wgraniu skanu środki przechodzą z karencji do dostępnych."}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {missing.slice(0, 3).map((sid) => (
+              <Link
+                key={sid}
+                href={`/panel/submissions/${sid}`}
+                className="btn-ghost h-9 px-4 text-[12px] num inline-flex items-center gap-2"
+              >
+                {sid} <ArrowRight size={12} />
+              </Link>
+            ))}
           </div>
         </div>
       </div>

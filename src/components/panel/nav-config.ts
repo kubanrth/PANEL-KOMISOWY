@@ -1,104 +1,218 @@
 /**
- * Single source of truth for the client panel left rail.
+ * Single source of truth dla nawigacji obu paneli (klient + admin).
  *
- * Adding a new panel route = add an entry here AND create the route file
- * under `app/panel/<key>/page.tsx`. The PanelSidebar reads this config and
- * renders the 4 grouped sections. Active state is matched by `key` against
- * the `active` prop on PanelShell.
+ * Struktura wg zatwierdzonego designu „Sidebary klient + admin":
+ * sekcje z uppercase labelami → itemy z ikoną Phosphor (nazwa stringiem,
+ * mapowana na komponent w SidebarNav — config zostaje serializowalny
+ * server→client) → opcjonalne subitemy z kolorową kropką statusu.
  *
- * `stub: true` marks routes that currently render a "Wkrótce" placeholder.
- * As deep implementations land in later phases, flip `stub` to false.
+ * Vocab kropek = vocab pigułek: lime=aktywne · mint=sprzedane/OK ·
+ * blue=w toku · yellow=uwaga · coral=problem · mute=archiwum.
+ *
+ * Klucz `key` itemu/subitemu odpowiada wartości `active` przekazywanej
+ * przez strony. Parent podświetla się też gdy aktywny jest jego subitem.
+ * Subitemy linkują TYLKO do realnych stron (filtry query dojdą w batchach
+ * migracji, gdy strony będą je czytać).
  */
 
-export type NavBadgeResolver = (ctx: NavBadgeContext) => string | number | undefined;
+export type DotColor = "lime" | "mint" | "blue" | "yellow" | "coral" | "mute";
 
-export type NavBadgeContext = {
-  klientId: string;
-  // Resolver receives a Supabase-typed lightweight client in future phases;
-  // for now most resolvers are static, so the signature is intentionally
-  // narrow. Phase 2 will widen it to accept query helpers.
+export type NavSubItem = {
+  key: string;
+  label: string;
+  href: string;
+  dot: DotColor;
 };
 
 export type NavItem = {
   key: string;
   label: string;
   href: string;
-  stub?: boolean;
-  /** Optional accent on the badge (mint/blue/amber); resolved at render. */
-  badgeAccent?: "mint" | "blue" | "amber";
-  /** Optional dynamic badge resolver (count, currency, etc.). */
-  badge?: NavBadgeResolver | string | number;
+  /** Nazwa ikony Phosphor — lookup w SidebarNav.ICONS. */
+  icon: string;
+  subs?: NavSubItem[];
+  /** Slot na badge liczbowy — wartość wstrzykiwana przez shell (counts). */
+  badgeKey?: string;
+  /** Kropka sygnałowa zamiast liczby (np. środki w portfelu). */
+  dotKey?: string;
 };
 
-export type NavGroup = {
-  label: string;
+export type NavSection = {
+  /** Uppercase label sekcji; null = itemy bez nagłówka (top standalone). */
+  label: string | null;
   items: NavItem[];
 };
 
-/**
- * Routes keyed by stable string identifiers. The values match folder names
- * under `app/panel/` so we can derive route paths mechanically.
- */
-export const NAV_GROUPS: NavGroup[] = [
+/* ================= PANEL KLIENTA ================= */
+
+export const PANEL_SECTIONS: NavSection[] = [
+  {
+    label: null,
+    items: [{ key: "dashboard", label: "Przegląd", href: "/panel", icon: "SquaresFour" }],
+  },
   {
     label: "Sprzedaż",
     items: [
-      { key: "analityka",       label: "Analityka i rekomendacje", href: "/panel/analityka",       stub: true },
-      { key: "magazyn",         label: "Magazyn",                  href: "/panel/magazyn",         stub: true },
-      { key: "przyjecia",       label: "Przyjęcia magazynowe",     href: "/panel/przyjecia",       stub: true },
-      { key: "wydania",         label: "Wydania magazynowe",       href: "/panel/wydania",         stub: true },
-      { key: "sprzedaze",       label: "Sprzedaże",                href: "/panel/sprzedaze",       stub: true },
-      { key: "zapotrzebowanie", label: "Zapotrzebowanie",          href: "/panel/zapotrzebowanie", stub: true },
-      { key: "promocje",        label: "Twoje promocje",           href: "/panel/promocje",        stub: true },
-      { key: "zmiany-ceny",     label: "Zmiany ceny",              href: "/panel/zmiany-ceny",     stub: true },
+      {
+        key: "submissions",
+        label: "Oferty",
+        href: "/panel/submissions",
+        icon: "Tray",
+        badgeKey: "submissions",
+        subs: [
+          { key: "submissions", label: "W obiegu", href: "/panel/submissions", dot: "blue" },
+          { key: "sprzedaze", label: "Sprzedane", href: "/panel/sprzedaze", dot: "mint" },
+        ],
+      },
+      {
+        key: "magazyn",
+        label: "Magazyn",
+        href: "/panel/magazyn",
+        icon: "Package",
+        badgeKey: "magazyn",
+        subs: [
+          { key: "magazyn", label: "W sprzedaży", href: "/panel/magazyn", dot: "lime" },
+          { key: "komis-wyciagniety", label: "Wycofane z komisu", href: "/panel/komis-wyciagniety", dot: "mute" },
+        ],
+      },
+      { key: "zwroty", label: "Zwroty", href: "/panel/zwroty", icon: "ArrowCounterClockwise" },
+      { key: "zmiany-ceny", label: "Zmiany cen", href: "/panel/zmiany-ceny", icon: "ChartLineDown" },
     ],
   },
   {
     label: "Finanse",
     items: [
-      { key: "faktury",   label: "Faktury i rozliczenia", href: "/panel/faktury",   stub: true },
-      { key: "wallet",    label: "Wallet",                href: "/panel/wallet",    badgeAccent: "mint" },
-      { key: "wyplaty",   label: "Nadchodzące wypłaty",   href: "/panel/wyplaty",   stub: true },
-      { key: "zwroty",    label: "Zwroty",                href: "/panel/zwroty",    stub: true },
+      {
+        key: "wallet",
+        label: "Portfel",
+        href: "/panel/wallet",
+        icon: "Wallet",
+        dotKey: "wallet",
+        subs: [
+          { key: "wyplaty", label: "Historia wypłat", href: "/panel/wyplaty", dot: "mint" },
+          { key: "faktury", label: "Faktury", href: "/panel/faktury", dot: "mute" },
+        ],
+      },
+      { key: "uks", label: "UKS", href: "/panel/uks", icon: "FileText" },
     ],
   },
   {
-    label: "Dokumenty",
+    label: "Operacje",
     items: [
-      { key: "dane",              label: "Dane rozliczeniowe",  href: "/panel/dane",              stub: true },
-      { key: "warunki",           label: "Warunki komisowe",    href: "/panel/warunki",           stub: true },
-      { key: "umowa",             label: "Umowa komisowa",      href: "/panel/umowa" },
-      { key: "uks",               label: "UKS",                 href: "/panel/uks",               stub: true },
-      { key: "komis-wyciagniety", label: "Komis wyciągnięty",   href: "/panel/komis-wyciagniety", stub: true },
-      { key: "fulfillment",       label: "Fulfillment",         href: "/panel/fulfillment",       stub: true },
+      { key: "przyjecia", label: "Przyjęcia", href: "/panel/przyjecia", icon: "TrayArrowDown" },
+      { key: "wydania", label: "Wydania", href: "/panel/wydania", icon: "ArrowSquareOut" },
+      { key: "fulfillment", label: "Fulfillment", href: "/panel/fulfillment", icon: "Truck" },
     ],
   },
   {
-    label: "Konto",
+    label: "Insights",
     items: [
-      { key: "notifications", label: "Powiadomienia", href: "/panel/notifications" },
-      { key: "ustawienia",    label: "Ustawienia",    href: "/panel/ustawienia", stub: true },
-      { key: "plany",         label: "Plany sprzedaży", href: "/panel/plany",    stub: true },
+      { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/panel/zapotrzebowanie", icon: "Target", badgeKey: "zapotrzebowanie" },
+      { key: "plany", label: "Co warto dodać", href: "/panel/plany", icon: "Sparkle", dotKey: "plany" },
+      { key: "promocje", label: "Promocje", href: "/panel/promocje", icon: "Percent" },
+      { key: "analityka", label: "Analityka", href: "/panel/analityka", icon: "ChartLine" },
     ],
   },
 ];
 
-/** Flat list of all nav items — used for runtime active-key validation. */
-export const ALL_NAV_KEYS: string[] = NAV_GROUPS.flatMap((g) => g.items.map((i) => i.key));
+/** Bottom sticky group klienta (nad avatarem). */
+export const PANEL_BOTTOM: NavSection[] = [
+  {
+    label: null,
+    items: [
+      { key: "notifications", label: "Powiadomienia", href: "/panel/notifications", icon: "Bell", dotKey: "notifications" },
+      {
+        key: "ustawienia",
+        label: "Ustawienia",
+        href: "/panel/ustawienia",
+        icon: "GearSix",
+        subs: [
+          { key: "dane", label: "Dane", href: "/panel/dane", dot: "mute" },
+          { key: "umowa", label: "Umowa", href: "/panel/umowa", dot: "mute" },
+          { key: "warunki", label: "Warunki", href: "/panel/warunki", dot: "mute" },
+        ],
+      },
+    ],
+  },
+];
 
-/** Legacy keys (Phase 1 doesn't rename, but PanelShell callers may still
- * pass these). We map them onto the new key space here so existing pages
- * don't all need touching at once. */
+/* ================= PANEL ADMINA ================= */
+
+export const ADMIN_SECTIONS: NavSection[] = [
+  {
+    label: null,
+    items: [{ key: "queue", label: "Queue", href: "/admin", icon: "SquaresFour" }],
+  },
+  {
+    label: "Operacje",
+    items: [
+      { key: "inbox", label: "Inbox", href: "/admin/inbox", icon: "EnvelopeSimple", badgeKey: "inbox" },
+      { key: "submissions", label: "Submissions", href: "/admin/submissions", icon: "Tray", badgeKey: "submissions" },
+      { key: "aqc", label: "A&QC", href: "/admin/aqc", icon: "ShieldCheck", badgeKey: "aqc" },
+      { key: "offers", label: "Offers (Zerr)", href: "/admin/offers", icon: "Handshake", badgeKey: "offers" },
+      { key: "returns", label: "Returns", href: "/admin/returns", icon: "ArrowCounterClockwise" },
+      { key: "qr", label: "Generator QR", href: "/admin/qr", icon: "QrCode" },
+    ],
+  },
+  {
+    label: "Relacje",
+    items: [
+      { key: "klienci", label: "Klienci", href: "/admin/klienci", icon: "Users" },
+      { key: "crm", label: "CRM", href: "/admin/crm", icon: "Kanban" },
+    ],
+  },
+  {
+    label: "Workflow / CMS",
+    items: [
+      { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/admin/zapotrzebowanie", icon: "Target" },
+      { key: "co-warto-dodac", label: "Co warto dodać", href: "/admin/co-warto-dodac", icon: "Sparkle" },
+      { key: "zmiany-ceny", label: "Zmiany cen", href: "/admin/zmiany-ceny", icon: "ChartLineDown" },
+    ],
+  },
+  {
+    label: "Finanse",
+    items: [
+      { key: "payouts", label: "Wypłaty", href: "/admin/payouts", icon: "Money", badgeKey: "payouts" },
+    ],
+  },
+  {
+    label: "Integracje & system",
+    items: [
+      { key: "integrations", label: "Fakturownia", href: "/admin/integrations/fakturownia", icon: "FileText", dotKey: "integrations" },
+      { key: "audit", label: "Audit log", href: "/admin/audit", icon: "Scroll" },
+      { key: "stats", label: "Statystyki", href: "/admin/stats", icon: "ChartBar" },
+    ],
+  },
+];
+
+/** Liczby/kropki do badge'ów — shell podaje co ma; brak wpisu = brak badge. */
+export type NavBadges = Record<string, number | boolean | undefined>;
+
+/** Mobile bottom tab bar klienta: 4 taby + FAB w środku (Nowa oferta). */
+export const PANEL_TABS = [
+  { key: "dashboard", label: "Przegląd", href: "/panel", icon: "SquaresFour" },
+  { key: "submissions", label: "Oferty", href: "/panel/submissions", icon: "Tray" },
+  { key: "wallet", label: "Portfel", href: "/panel/wallet", icon: "Wallet" },
+  { key: "more", label: "Więcej", href: "#", icon: "List" },
+] as const;
+
+/** Klucze subitemów per parent — do podświetlania parenta. */
+export function isItemActive(item: NavItem, activeKey: string | undefined): boolean {
+  if (!activeKey) return false;
+  if (item.key === activeKey) return true;
+  return item.subs?.some((s) => s.key === activeKey) ?? false;
+}
+
+/** Legacy aliasy (strony sprzed redesignu). */
 export const LEGACY_ACTIVE_ALIASES: Record<string, string> = {
-  dashboard: "panel",
-  submissions: "oferty",
+  panel: "dashboard",
+  oferty: "submissions",
+  settings: "ustawienia",
   "my-sales": "sprzedaze",
   inventory: "magazyn",
   stats: "analityka",
-  settings: "ustawienia",
 };
 
-/** Normalize the `active` prop coming from a page into a nav key we render. */
 export function normalizeActive(active: string | undefined): string | undefined {
   if (!active) return undefined;
   return LEGACY_ACTIVE_ALIASES[active] ?? active;

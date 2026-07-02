@@ -119,7 +119,7 @@ export default async function PublicQrLandingPage(props: { params: Promise<{ slu
                 <p className="mt-6 text-[14px] text-text-soft leading-[1.7] max-w-[60ch]">{product.description}</p>
               )}
 
-              <div className="mt-8 card-gradient-blue p-6 rounded-[20px] text-white">
+              <div className="mt-8 card-gradient-dark p-6 rounded-[20px] text-white">
                 <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Cena listing</div>
                 <div className="mt-2 font-bold text-4xl tracking-[-0.04em] num">
                   {formatPLN(product.listing_price_cents ?? 0, { decimals: false })}

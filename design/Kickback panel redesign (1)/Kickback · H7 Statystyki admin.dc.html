@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="H7 · Statystyki admin" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="stats" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Statystyki</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · KPI biznesu</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">Statystyki<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="8">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:transform .18s" style-hover="transform:translateY(-2px)">
+            <span style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">{{ k.label }}</span>
+            <span style="font:300 24px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.02em;line-height:1">{{ k.value }}</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;color:{{ k.dColor }}">{{ k.delta }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Revenue · 12 miesięcy</div><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">prowizje + opłaty · zł</span></div>
+        <svg viewBox="0 0 640 210" width="100%" height="auto" style="display:block;overflow:visible" preserveAspectRatio="none"><defs><linearGradient id="hl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#66FF33"/><stop offset="1" stop-color="#22DD99"/></linearGradient><linearGradient id="hf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(102,255,51,0.16)"/><stop offset="1" stop-color="rgba(102,255,51,0)"/></linearGradient></defs><line x1="0" y1="20" x2="640" y2="20" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="70" x2="640" y2="70" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="120" x2="640" y2="120" stroke="rgba(255,255,255,0.05)"/><line x1="0" y1="170" x2="640" y2="170" stroke="rgba(255,255,255,0.05)"/><path d="M0,168 L58,160 L116,150 L175,138 L233,128 L291,110 L349,118 L407,92 L465,78 L524,60 L582,52 L640,30 L640,210 L0,210 Z" fill="url(#hf)"/><polyline points="0,168 58,160 116,150 175,138 233,128 291,110 349,118 407,92 465,78 524,60 582,52 640,30" fill="none" stroke="url(#hl)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B"><span>lip</span><span>sie</span><span>wrz</span><span>paź</span><span>lis</span><span>gru</span><span>sty</span><span>lut</span><span>mar</span><span>kwi</span><span>maj</span><span>cze</span></div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:22px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Drill-down GMV</div>
+          <div style="display:inline-flex;background:#16191A;border:1px solid rgba(255,255,255,0.06);border-radius:999px;padding:4px;gap:4px">
+            <sc-for list="{{ dims }}" as="d" hint-placeholder-count="4">
+              <button onClick="{{ d.onClick }}" style="height:30px;padding:0 15px;border:0;border-radius:999px;font:600 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;background:{{ d.bg }};color:{{ d.color }};transition:.15s">{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="width:110px;font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.label }}</span>
+              <div style="flex:1;height:20px;border-radius:6px;background:#16191A;overflow:hidden"><div style="width:{{ b.pct }};height:100%;border-radius:6px;background:linear-gradient(90deg,#6ECC1F,#22DD99);opacity:{{ b.op }};transition:width .3s"></div></div>
+              <span style="width:70px;text-align:right;font:500 12px 'IBM Plex Mono',monospace">{{ b.value }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { dim:'klub' };
+  renderVals(){
+    const kpis=[
+      {label:'Revenue (mies.)', value:'14,9 tys.', delta:'+18% m/m', up:true},
+      {label:'GMV (mies.)', value:'84,2 tys.', delta:'+22% m/m', up:true},
+      {label:'Zamówienia', value:'47', delta:'+9', up:true},
+      {label:'Śr. cena', value:'1 790 zł', delta:'+4%', up:true},
+      {label:'Aktywni klienci', value:'148', delta:'+12 w cze', up:true},
+      {label:'A&QC pass rate', value:'92%', delta:'−2 p.p.', up:false},
+      {label:'Return rate', value:'3,4%', delta:'stabilnie', up:null},
+      {label:'Payout latency', value:'1,4 dnia', delta:'−0,3 dnia', up:true},
+    ];
+    const data={
+      klub:[{label:'Real Madryt',v:'24,1 tys.',p:92},{label:'AC Milan',v:'18,8 tys.',p:72},{label:'FC Barcelona',v:'14,2 tys.',p:54},{label:'Juventus',v:'9,6 tys.',p:37},{label:'Legia',v:'4,1 tys.',p:16}],
+      sezon:[{label:'2006–2012 retro',v:'31,4 tys.',p:92},{label:'2013–2017',v:'22,7 tys.',p:67},{label:'2018–2022',v:'12,3 tys.',p:36},{label:'EURO / repr.',v:'8,9 tys.',p:26},{label:'Aktualne',v:'4,4 tys.',p:13}],
+      klient:[{label:'Marcin K.',v:'12,4 tys.',p:92},{label:'Anna W.',v:'9,8 tys.',p:73},{label:'Vintage11',v:'6,2 tys.',p:46},{label:'Tomek R.',v:'4,9 tys.',p:36},{label:'pozostali',v:'18,1 tys.',p:60}],
+      rozmiar:[{label:'L',v:'28,4 tys.',p:92},{label:'M',v:'24,9 tys.',p:81},{label:'S',v:'13,2 tys.',p:43},{label:'XL',v:'9,8 tys.',p:32},{label:'XXL',v:'2,1 tys.',p:7}],
+    };
+    const dims=[{k:'klub',label:'Wg klubu'},{k:'sezon',label:'Wg sezonu'},{k:'klient',label:'Wg klienta'},{k:'rozmiar',label:'Wg rozmiaru'}];
+    const d=this.state.dim;
+    return {
+      kpis: kpis.map(k=>({ ...k, dColor: k.up===true?'#22DD99': k.up===false?'#FF5A47':'#7B7F7B' })),
+      dims: dims.map(x=>({ ...x, bg: d===x.k?'#F5F5F3':'transparent', color: d===x.k?'#0F1210':'#BDBFBD', onClick:()=>this.setState({dim:x.k}) })),
+      bars: data[d].map((b,i)=>({ key:d+i, label:b.label, value:b.v, pct:b.p+'%', op: 1-(i*0.13) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

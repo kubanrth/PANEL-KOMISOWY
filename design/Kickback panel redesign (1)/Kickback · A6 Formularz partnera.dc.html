@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="A6 · Formularz z linku /q/[slug]" style="position:relative;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;overflow:hidden">
+  <div style="position:absolute;inset:-20% -10% auto auto;width:900px;height:700px;pointer-events:none;background:radial-gradient(circle at 70% 30%, rgba(34,221,153,0.11) 0%, transparent 60%)"></div>
+
+  <header style="position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:22px 24px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,#9BFF57,#37D663 45%,#0C9B52);display:flex;align-items:center;justify-content:center"><div style="width:0;height:0;border-left:8px solid #05140B;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px"></div></div><span style="font-weight:600;font-size:15px">Kickback</span></div>
+    <span style="color:#4A4E4B">×</span>
+    <div style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:9px;background:#16191A;border:1px solid rgba(255,255,255,0.09);display:flex;align-items:center;justify-content:center;font:600 11px 'IBM Plex Mono',monospace;color:#BDBFBD">RS</span><span style="font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">@retro.szafa</span></div>
+  </header>
+
+  <main style="position:relative;max-width:1080px;margin:0 auto;padding:16px 24px 80px;display:grid;grid-template-columns:1.5fr 1fr;gap:28px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Oferta z polecenia · @retro.szafa</div>
+        <h1 style="margin:0;font-weight:300;font-size:34px;line-height:1.16;letter-spacing:-0.03em">Prześlij nam koszulkę<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Koszulka</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Klub / reprezentacja</label><input placeholder="np. AC Milan" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Sezon</label><input placeholder="np. 2006/07" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" /></div>
+        </div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap">
+          <div style="display:flex;flex-direction:column;gap:10px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Rozmiar</label><div style="display:flex;gap:8px"><sc-for list="{{ sizes }}" as="sz" hint-placeholder-count="5"><button onClick="{{ sz.onClick }}" style="height:34px;min-width:44px;padding:0 13px;border-radius:10px;border:1px solid {{ sz.border }};background:{{ sz.bg }};color:{{ sz.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ sz.k }}</button></sc-for></div></div>
+          <div style="display:flex;flex-direction:column;gap:10px"><label style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Stan</label><div style="display:flex;gap:8px"><sc-for list="{{ conds }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.onClick }}" style="height:34px;min-width:44px;border-radius:10px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ c.k }}</button></sc-for></div></div>
+        </div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Zdjęcia · 2 / 6</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">front, tył, crest, metka, tag, detal</span></div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+          <div style="aspect-ratio:1/1;border-radius:12px;background:radial-gradient(circle at 50% 35%,#2A0F14,#0C0F0D);border:1px solid rgba(102,255,51,0.35);position:relative;display:flex;align-items:center;justify-content:center"><span style="font:500 9px 'IBM Plex Mono',monospace;color:#7B7F7B">front.jpg</span><span style="position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;background:#66FF33;display:flex;align-items:center;justify-content:center"><i class="ph ph-check" style="font-size:10px;color:#05140B"></i></span></div>
+          <div style="aspect-ratio:1/1;border-radius:12px;background:radial-gradient(circle at 50% 35%,#2A0F14,#0C0F0D);border:1px solid rgba(102,255,51,0.35);position:relative;display:flex;align-items:center;justify-content:center"><span style="font:500 9px 'IBM Plex Mono',monospace;color:#7B7F7B">tyl.jpg</span><span style="position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;background:#66FF33;display:flex;align-items:center;justify-content:center"><i class="ph ph-check" style="font-size:10px;color:#05140B"></i></span></div>
+          <div style="aspect-ratio:1/1;border-radius:12px;border:1px dashed rgba(255,255,255,0.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#4A4E4B;cursor:pointer" style-hover="border-color:rgba(102,255,51,0.4);color:#7B7F7B"><i class="ph ph-plus" style="font-size:16px"></i><span style="font:500 8px 'IBM Plex Mono',monospace">crest</span></div>
+          <div style="aspect-ratio:1/1;border-radius:12px;border:1px dashed rgba(255,255,255,0.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#4A4E4B;cursor:pointer" style-hover="border-color:rgba(102,255,51,0.4);color:#7B7F7B"><i class="ph ph-plus" style="font-size:16px"></i><span style="font:500 8px 'IBM Plex Mono',monospace">metka</span></div>
+          <div style="aspect-ratio:1/1;border-radius:12px;border:1px dashed rgba(255,255,255,0.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#4A4E4B;cursor:pointer" style-hover="border-color:rgba(102,255,51,0.4);color:#7B7F7B"><i class="ph ph-plus" style="font-size:16px"></i><span style="font:500 8px 'IBM Plex Mono',monospace">tag</span></div>
+          <div style="aspect-ratio:1/1;border-radius:12px;border:1px dashed rgba(255,255,255,0.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#4A4E4B;cursor:pointer" style-hover="border-color:rgba(102,255,51,0.4);color:#7B7F7B"><i class="ph ph-plus" style="font-size:16px"></i><span style="font:500 8px 'IBM Plex Mono',monospace">detal</span></div>
+        </div>
+      </div>
+
+      <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Kontakt i odbiór</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <input placeholder="E-mail" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" />
+          <input placeholder="Telefon" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px 'IBM Plex Mono',monospace;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" />
+        </div>
+        <input placeholder="Adres odbioru paczki" style="height:44px;padding:0 16px;background:#16191A;border:1px solid rgba(255,255,255,0.09);border-radius:14px;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.18)" />
+        <a href="Kickback · A7 Potwierdzenie.dc.html" style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border:0;border-radius:999px;font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 14px 32px -10px rgba(34,221,153,0.5);text-decoration:none" style-hover="transform:translateY(-2px)"><i class="ph ph-paper-plane-tilt" style="font-size:17px"></i>Wyślij ofertę</a>
+      </div>
+    </div>
+
+    <aside style="position:sticky;top:24px;background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:4px">
+      <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:12px">Co się dzieje po wysłaniu?</div>
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+        <div style="display:flex;gap:13px">
+          <div style="display:flex;flex-direction:column;align-items:center;width:36px">
+            <span style="width:36px;height:36px;flex-shrink:0;border-radius:11px;background:rgba(102,255,51,0.07);border:1px solid rgba(102,255,51,0.2);display:flex;align-items:center;justify-content:center"><i class="ph {{ st.icon }}" style="font-size:17px;color:#66FF33"></i></span>
+            <sc-if value="{{ st.hasLine }}" hint-placeholder-val="{{ true }}"><span style="width:2px;flex:1;min-height:14px;background:rgba(255,255,255,0.07);margin:4px 0"></span></sc-if>
+          </div>
+          <div style="padding-bottom:{{ st.pb }}px"><div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ st.title }}</div><div style="font:400 12px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;margin-top:2px">{{ st.desc }}</div></div>
+        </div>
+      </sc-for>
+      <div style="margin-top:10px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:9px"><i class="ph ph-clock" style="font-size:15px;color:#22DD99"></i><span style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Wycena w 24h od przyjęcia paczki.</span></div>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { size:'M', cond:'A' };
+  renderVals(){
+    const mk=(list,key)=>list.map(k=>({ k,
+      bg: this.state[key]===k?'#66FF33':'#16191A',
+      color: this.state[key]===k?'#050807':'#BDBFBD',
+      border: this.state[key]===k?'#66FF33':'rgba(255,255,255,0.08)',
+      onClick:()=>this.setState({[key]:k}) }));
+    const steps=[
+      {icon:'ph-package', title:'1 · Odbieramy', desc:'Kurier InPost na nasz koszt, z Twojego adresu.'},
+      {icon:'ph-shield-check', title:'2 · Autentykujemy', desc:'A&QC: crest, metka, szwy, stan — w 24h.'},
+      {icon:'ph-storefront', title:'3 · Wystawiamy', desc:'Foto studyjne + wycena rynkowa w sklepie.'},
+      {icon:'ph-hand-coins', title:'4 · Wypłacamy', desc:'Środki w portfelu po sprzedaży, wypłata w 1–2 dni.'},
+    ];
+    return {
+      sizes: mk(['XS','S','M','L','XL'],'size'),
+      conds: mk(['A','B','C'],'cond'),
+      steps: steps.map((s,i)=>({ ...s, hasLine:i<steps.length-1, pb:i<steps.length-1?16:0 })),
+    };
+  }
+}
+</script>
+</body>
+</html>

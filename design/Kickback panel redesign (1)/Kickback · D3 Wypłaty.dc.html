@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="D3 · Wypłaty" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="none" active-sub="pf-hist" expanded="portfel" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Portfel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Wypłaty</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · finanse · historia</div>
+          <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.06;letter-spacing:-0.03em">Wypłaty<span style="color:#66FF33">.</span></h1>
+        </div>
+        <a href="Kickback · D1 Portfel.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none;flex-shrink:0" style-hover="background:#1D2120"><i class="ph ph-wallet" style="font-size:15px;color:#66FF33"></i>Wróć do portfela</a>
+      </div>
+
+      <div style="position:sticky;top:76px;z-index:20;display:flex;align-items:center;gap:16px;background:rgba(15,18,16,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 20px">
+        <div style="width:40px;height:40px;border-radius:11px;background:rgba(34,221,153,0.1);display:flex;align-items:center;justify-content:center"><i class="ph ph-hand-coins" style="font-size:20px;color:#22DD99"></i></div>
+        <div style="flex:1"><div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Łącznie w tym roku</div><div style="font:600 20px 'IBM Plex Mono',monospace;letter-spacing:-0.01em;margin-top:1px">14 800 zł</div></div>
+        <div style="display:flex;gap:24px">
+          <div style="text-align:right"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#4A4E4B">Zrealizowane</div><div style="font:500 14px 'IBM Plex Mono',monospace;color:#22DD99">5</div></div>
+          <div style="text-align:right"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#4A4E4B">W toku</div><div style="font:500 14px 'IBM Plex Mono',monospace;color:#FFCC00">2</div></div>
+          <div style="text-align:right"><div style="font:500 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#4A4E4B">Śr. czas</div><div style="font:500 14px 'IBM Plex Mono',monospace;color:#BDBFBD">1,4 dnia</div></div>
+        </div>
+      </div>
+
+      <sc-if value="{{ showContent }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:visible">
+          <div style="display:grid;grid-template-columns:110px 110px minmax(160px,1.3fr) 170px 90px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Zlecono</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Kwota</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Metoda</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Zrealizowano</span>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div style="position:relative;display:grid;grid-template-columns:110px 110px minmax(160px,1.3fr) 170px 90px;gap:12px;align-items:center;min-height:56px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:400 13px 'IBM Plex Mono',monospace;color:#BDBFBD">{{ r.date }}</span>
+              <span style="font:500 14px 'IBM Plex Mono',monospace;justify-self:end">{{ r.amount }}</span>
+              <span style="display:flex;align-items:center;gap:8px;font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B"><i class="ph ph-bank" style="font-size:15px;color:#4A4E4B"></i>PKO BP •• 4921</span>
+              <span style="display:flex;align-items:center;gap:8px">
+                <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+                <sc-if value="{{ r.rejected }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ r.onTip }}" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:#FF5A47;cursor:pointer;border-radius:8px" style-hover="background:rgba(255,90,71,0.1)"><i class="ph ph-info" style="font-size:16px"></i></button>
+                </sc-if>
+              </span>
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B;justify-self:end">{{ r.done }}</span>
+              <sc-if value="{{ r.tipOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;right:120px;top:46px;z-index:30;width:300px;background:#1D2120;border:1px solid rgba(255,90,71,0.25);border-left:3px solid #FF5A47;border-radius:12px;padding:12px 14px;box-shadow:0 18px 44px -14px rgba(0,0,0,0.8);animation:kb-in .16s ease">
+                  <div style="font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#FF5A47;margin-bottom:5px">Powód odrzucenia</div>
+                  <div style="font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">Numer konta nie przeszedł weryfikacji. Zaktualizuj dane w sekcji Portfel → Metoda wypłaty i zleć ponownie.</div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px"><span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">8 wypłat · od marca 2026</span><span style="font:500 12px 'IBM Plex Mono',monospace;color:#4A4E4B">zrealizowane: 14 800 zł</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-hand-coins" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">Brak wypłat</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">Gdy sprzedasz pierwszą koszulkę, środki pojawią się w portfelu — stąd zlecisz wypłatę.</p></div>
+          <a href="Kickback · D1 Portfel.dc.html" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.4);text-decoration:none"><i class="ph ph-wallet" style="font-size:16px"></i>Przejdź do portfela</a>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;pustyStan&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  state = { tip:false };
+  renderVals(){
+    const S={
+      ordered:{label:'Zlecona', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      progress:{label:'W realizacji', c:'#FFCC00', bg:'rgba(255,204,0,0.13)', bd:'rgba(255,204,0,0.3)'},
+      done:{label:'Zrealizowana', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      rejected:{label:'Odrzucona', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+    };
+    const raw=[
+      {date:'30 cze 2026', amount:'2 340 zł', s:'ordered', done:'—'},
+      {date:'24 cze 2026', amount:'800 zł', s:'progress', done:'—'},
+      {date:'15 cze 2026', amount:'3 000 zł', s:'done', done:'16 cze'},
+      {date:'2 cze 2026', amount:'5 000 zł', s:'rejected', done:'—', rej:true},
+      {date:'18 maj 2026', amount:'2 400 zł', s:'done', done:'19 maj'},
+      {date:'30 kwi 2026', amount:'4 100 zł', s:'done', done:'2 maj'},
+      {date:'12 kwi 2026', amount:'2 500 zł', s:'done', done:'13 kwi'},
+      {date:'15 mar 2026', amount:'2 800 zł', s:'done', done:'17 mar'},
+    ];
+    const empty = this.props.pustyStan ?? false;
+    return {
+      rows: raw.map(r=>({ ...r, status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+        rejected:!!r.rej, tipOpen: !!r.rej && this.state.tip,
+        onTip:()=>this.setState(st=>({tip:!st.tip})) })),
+      showContent:!empty, showEmpty:empty,
+    };
+  }
+}
+</script>
+</body>
+</html>

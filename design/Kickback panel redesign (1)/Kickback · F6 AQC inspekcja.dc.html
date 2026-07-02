@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-modal{from{transform:scale(.96) translateY(10px)}to{transform:none}}
+@keyframes kb-fade{from{opacity:1}to{opacity:1}}
+</style>
+</helmet>
+<div data-screen-label="F6 · A&QC inspekcja" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="none" active-sub="aq-q" expanded="aqc" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">A&amp;QC</span><span style="color:#4A4E4B">/</span><span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">KCB-26-C1D8 · poz. 1</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <a href="Kickback · F5 AQC kolejka.dc.html" style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 16px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;text-decoration:none" style-hover="background:#1D2120"><i class="ph ph-arrow-left" style="font-size:15px"></i>Kolejka</a>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+        <div>
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">A&amp;QC · inspekcja pozycji</div>
+          <h1 style="margin:0;font-weight:300;font-size:36px;line-height:1.16;letter-spacing:-0.03em">Juventus 2011/12<span style="color:#66FF33">.</span></h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font:400 12px 'IBM Plex Mono',monospace;color:#4A4E4B"><span>Marcin K. · KCB-26-C1D8</span><span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:rgba(255,90,71,0.15);color:#FF5A47;border:1px solid rgba(255,90,71,0.3)"><i class="ph ph-clock" style="font-size:12px"></i>4 dni w kolejce</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        <div style="aspect-ratio:1/1;border-radius:14px;background:radial-gradient(circle at 50% 32%, #22242A 0%, #0C0F0D 78%),repeating-linear-gradient(135deg,#0F1210 0 11px,#12160f 11px 22px);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B">ref · front</div>
+        <div style="aspect-ratio:1/1;border-radius:14px;background:radial-gradient(circle at 50% 32%, #22242A 0%, #0C0F0D 78%);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B">ref · tył</div>
+        <div style="aspect-ratio:1/1;border-radius:14px;background:radial-gradient(circle at 50% 32%, #22242A 0%, #0C0F0D 78%);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B">ref · crest</div>
+        <div style="aspect-ratio:1/1;border-radius:14px;background:radial-gradient(circle at 50% 32%, #22242A 0%, #0C0F0D 78%);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B">ref · metka</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:start">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px">
+          <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B;margin-bottom:6px">Checklista autentykacji</div>
+          <sc-for list="{{ checks }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid rgba(255,255,255,0.05)">
+              <div style="display:flex;align-items:center;gap:11px;min-width:0">
+                <sc-if value="{{ c.on }}" hint-placeholder-val="{{ true }}"><span style="width:26px;height:26px;flex-shrink:0;border-radius:9px;background:rgba(102,255,51,0.12);border:1px solid rgba(102,255,51,0.3);display:flex;align-items:center;justify-content:center"><i class="ph ph-check" style="font-size:14px;color:#66FF33"></i></span></sc-if>
+                <sc-if value="{{ c.off }}" hint-placeholder-val="{{ false }}"><span style="width:26px;height:26px;flex-shrink:0;border-radius:9px;background:#16191A;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center"><i class="ph ph-minus" style="font-size:13px;color:#4A4E4B"></i></span></sc-if>
+                <div style="min-width:0"><div style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em">{{ c.label }}</div><div style="font:400 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.hint }}</div></div>
+              </div>
+              <button onClick="{{ c.onClick }}" style="width:38px;height:22px;flex-shrink:0;border:0;border-radius:999px;background:{{ c.track }};position:relative;cursor:pointer;transition:background .2s"><span style="position:absolute;top:2px;left:{{ c.knob }};width:18px;height:18px;border-radius:50%;background:#F5F5F3;transition:left .2s"></span></button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px">
+            <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Ocena stanu</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <sc-for list="{{ grades }}" as="g" hint-placeholder-count="3">
+                <button onClick="{{ g.onClick }}" style="flex:1;height:44px;border-radius:12px;border:1px solid {{ g.border }};background:{{ g.bg }};color:{{ g.color }};font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ g.k }}</button>
+              </sc-for>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font:500 12px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.06em;text-transform:uppercase;color:#7B7F7B">Kondycja</span><span style="font:600 13px 'IBM Plex Mono',monospace;color:#66FF33">{{ score }} / 10</span></div>
+              <div style="display:flex;gap:5px">
+                <sc-for list="{{ dots }}" as="d" hint-placeholder-count="10">
+                  <button onClick="{{ d.onClick }}" style="flex:1;height:10px;border:0;border-radius:5px;background:{{ d.bg }};cursor:pointer;transition:background .15s"></button>
+                </sc-for>
+              </div>
+            </div>
+            <textarea placeholder="Uwagi audytora — przetarcia, naszywki, sitodruk…" style="min-height:76px;padding:12px 14px;background:#16191A;border:1px solid rgba(255,255,255,0.08);border-radius:14px;font:400 13px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;outline:none;resize:vertical;transition:.15s" style-focus="border-color:#66FF33;box-shadow:0 0 0 3px rgba(102,255,51,0.15)">Drobne przetarcia sitodruku na plecach. Crest i metka oryginalne.</textarea>
+          </div>
+
+          <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#7B7F7B">Werdykt</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ doneLabel }}</span></div>
+            <button onClick="{{ openPass }}" style="display:flex;align-items:center;justify-content:center;gap:9px;height:52px;border:0;border-radius:14px;font:600 15px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 14px 30px -10px rgba(34,221,153,0.5)" style-hover="transform:translateY(-1px)"><i class="ph ph-check-circle" style="font-size:19px"></i>Pass — wystaw do sprzedaży</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <button onClick="{{ openFail }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border:1px solid rgba(255,90,71,0.3);border-radius:14px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#FF5A47;background:rgba(255,90,71,0.1);cursor:pointer" style-hover="background:rgba(255,90,71,0.18)"><i class="ph ph-x-circle" style="font-size:17px"></i>Fail</button>
+              <a href="Kickback · C3 Kontr-oferta.dc.html" style="display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border:1px solid rgba(74,107,255,0.3);border-radius:14px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7FA0FF;background:rgba(74,107,255,0.1);cursor:pointer;text-decoration:none" style-hover="background:rgba(74,107,255,0.18)"><i class="ph ph-handshake" style="font-size:17px"></i>Kontr-oferta</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:82;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)">
+      <div onClick="{{ stop }}" style="width:520px;max-width:100%;background:#1D2120;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:30px;box-shadow:0 30px 80px -24px rgba(0,0,0,0.8);animation:kb-modal .26s cubic-bezier(.32,.72,0,1)">
+        <div style="width:52px;height:52px;border-radius:15px;background:{{ mIconBg }};border:1px solid {{ mIconBorder }};display:flex;align-items:center;justify-content:center;margin-bottom:18px"><i class="ph {{ mIcon }}" style="font-size:26px;color:{{ mIconColor }}"></i></div>
+        <h3 style="margin:0 0 8px;font-weight:500;font-size:22px;letter-spacing:-0.02em">{{ mTitle }}</h3>
+        <p style="margin:0 0 24px;font:400 14px/1.55 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ mBody }}</p>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px">
+          <button onClick="{{ closeModal }}" style="height:44px;padding:0 20px;border:1px solid rgba(255,255,255,0.09);border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;background:#16191A;cursor:pointer" style-hover="background:#0F1210">Anuluj</button>
+          <button onClick="{{ closeModal }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:{{ mCtaColor }};cursor:pointer;background:{{ mCtaBg }};box-shadow:{{ mCtaShadow }}"><i class="ph ph-check" style="font-size:16px"></i>{{ mCta }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { checks:{crest:true,patch:true,stitch:true,tag:true,size:true,cond:false}, grade:'B', score:6, modal:null };
+  renderVals(){
+    const defs=[
+      {k:'crest', label:'Legit crest', hint:'Haft, proporcje, kolory vs wzornik sezonu'},
+      {k:'patch', label:'Legit patch', hint:'Naszywki ligowe — druk i klej'},
+      {k:'stitch', label:'Legit stitching', hint:'Szwy boczne i lamówki'},
+      {k:'tag', label:'Legit tag', hint:'Metka z kodem produktu — zgodność z bazą'},
+      {k:'size', label:'Rozmiar zgodny', hint:'Wymiary vs deklarowany L'},
+      {k:'cond', label:'Stan potwierdzony', hint:'Zgodność z deklaracją klienta (B)'},
+    ];
+    const s=this.state;
+    const checks=defs.map(d=>({ ...d, on:!!s.checks[d.k], off:!s.checks[d.k],
+      track: s.checks[d.k]?'#22DD99':'#2A2E2C', knob: s.checks[d.k]?'18px':'2px',
+      onClick:()=>this.setState(st=>({checks:{...st.checks,[d.k]:!st.checks[d.k]}})) }));
+    const doneCount=defs.filter(d=>s.checks[d.k]).length;
+    const grades=['A','B','C'].map(k=>({ k,
+      bg: s.grade===k?'rgba(102,255,51,0.13)':'#16191A',
+      color: s.grade===k?'#66FF33':'#BDBFBD',
+      border: s.grade===k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+      onClick:()=>this.setState({grade:k}) }));
+    const dots=Array.from({length:10},(_,i)=>({ key:'d'+i,
+      bg: i<s.score?'linear-gradient(90deg,#6ECC1F,#22DD99)':'#16191A',
+      onClick:()=>this.setState({score:i+1}) }));
+    const M={
+      pass:{mTitle:'Zatwierdzić PASS?', mBody:'Juventus 2011/12 przejdzie do wystawienia w cenie z kontr-oferty (3 100 zł). Klient dostanie powiadomienie.', mIcon:'ph-check-circle', mIconColor:'#22DD99', mIconBg:'rgba(34,221,153,0.12)', mIconBorder:'rgba(34,221,153,0.3)', mCta:'Potwierdź pass', mCtaBg:'linear-gradient(135deg,#6ECC1F,#22DD99)', mCtaColor:'#05140B', mCtaShadow:'0 12px 28px -8px rgba(34,221,153,0.4)'},
+      fail:{mTitle:'Oznaczyć jako FAIL?', mBody:'Pozycja wróci do klienta z uzasadnieniem z pola uwag. Tej decyzji nie cofniesz z poziomu kolejki.', mIcon:'ph-x-circle', mIconColor:'#FF5A47', mIconBg:'rgba(255,90,71,0.12)', mIconBorder:'rgba(255,90,71,0.3)', mCta:'Potwierdź fail', mCtaBg:'rgba(255,90,71,0.14)', mCtaColor:'#FF5A47', mCtaShadow:'none'},
+    };
+    const m=M[s.modal]||M.pass;
+    return {
+      checks, grades, dots, score:String(s.score),
+      doneLabel: doneCount+' / 6 sprawdzone',
+      modal: !!s.modal, ...m,
+      openPass:()=>this.setState({modal:'pass'}),
+      openFail:()=>this.setState({modal:'fail'}),
+      closeModal:()=>this.setState({modal:null}),
+      stop:(e)=>{ e.stopPropagation(); },
+    };
+  }
+}
+</script>
+</body>
+</html>

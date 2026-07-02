@@ -18,11 +18,19 @@ const PLN_INT = new Intl.NumberFormat("pl-PL", {
 
 const NUM = new Intl.NumberFormat("pl-PL");
 
+/* CLDR dla pl-PL nie grupuje liczb 4-cyfrowych ("8240 zł"), a design system
+   wymaga separatora od 1000 ("8 240 zł") — wymuszamy grupowanie ręcznie. */
+function forceGrouping(formatted: string): string {
+  return formatted.replace(/\d{4,}/g, (digits) =>
+    digits.replace(/\B(?=(\d{3})+(?!\d))/g, " "),
+  );
+}
+
 export function formatPLN(cents: number | null | undefined, opts?: { decimals?: boolean }): string {
   if (cents == null) return "—";
   const zl = cents / 100;
   const useDecimals = opts?.decimals ?? zl % 1 !== 0;
-  return useDecimals ? PLN.format(zl) : PLN_INT.format(zl);
+  return forceGrouping(useDecimals ? PLN.format(zl) : PLN_INT.format(zl));
 }
 
 export function formatPLNNumber(cents: number | null | undefined): string {
@@ -93,4 +101,14 @@ export function takeHomeCents(priceCents: number | null | undefined, commissionR
 export function commissionCents(priceCents: number | null | undefined, commissionRate: number): number | null {
   if (priceCents == null) return null;
   return Math.round(priceCents * commissionRate);
+}
+
+/** Polska odmiana rzeczownika po liczbie: plural(22, ["koszulka","koszulki","koszulek"]) → "koszulki".
+ *  Reguła: 1 → one; końcówka 2-4 poza 12-14 → few; reszta → many. */
+export function plural(n: number, [one, few, many]: [string, string, string]): string {
+  if (n === 1) return one;
+  const last = n % 10;
+  const lastTwo = n % 100;
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few;
+  return many;
 }

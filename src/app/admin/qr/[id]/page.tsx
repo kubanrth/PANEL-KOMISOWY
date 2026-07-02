@@ -54,7 +54,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
             <span className="pill pill-blue">stan {p.condition ?? "?"}/10</span>
             <span className="pill pill-mute">{p.status}</span>
           </div>
-          <h1 className="font-bold text-[26px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
+          <h1 className="font-light text-[26px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
             {p.brand} <span className="text-text-soft">·</span> {p.model}
           </h1>
           <div className="mt-2 text-[12px] num text-text-mute">SKU: {p.sku}</div>
@@ -64,7 +64,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
             <div className="grid grid-cols-3 gap-5">
               <div>
                 <div className="text-[11px] text-text-mute">Skanowań</div>
-                <div className="font-bold text-3xl tracking-[-0.04em] num">{qr.scans_count}</div>
+                <div className="font-light text-3xl tracking-[-0.02em] num">{qr.scans_count}</div>
               </div>
               <div>
                 <div className="text-[11px] text-text-mute">Ostatni skan</div>

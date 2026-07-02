@@ -43,7 +43,7 @@ export default async function AdminZmianyCenyPage() {
     >
       <section>
         <div className="label">{pending.length} oczekujących · {resolved.length} zdecydowanych</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
+        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Zmiany ceny.
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
@@ -83,7 +83,7 @@ function RequestsTable({
 }) {
   return (
     <div className="card table-scroll">
-      <div className={`hidden md:grid gap-3 px-4 py-3 label border-b border-border-soft ${
+      <div className={`hidden md:grid gap-3 px-4 h-11 items-center label border-b border-border ${
         showActions
           ? "grid-cols-[minmax(220px,3fr)_140px_120px_120px_120px_140px_160px]"
           : "grid-cols-[minmax(220px,3fr)_140px_120px_120px_120px_140px_120px]"

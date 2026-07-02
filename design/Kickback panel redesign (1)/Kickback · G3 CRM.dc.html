@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div data-screen-label="G3 · CRM" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="admin" mode="default" active-id="crm" expanded="crm" hint-size="260px,1500px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Admin</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">CRM</span><span style="font:600 9px 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#FF5A47;background:rgba(255,90,71,0.1);border:1px solid rgba(255,90,71,0.25);padding:2px 6px;border-radius:999px;text-transform:uppercase;margin-left:4px">Admin</span></div>
+      <div style="flex:1"></div>
+      <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowy lead</button>
+      <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">DA</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Admin · relacje i leady</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.16;letter-spacing:-0.03em">CRM<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:14px;align-items:start;overflow-x:auto">
+        <sc-for list="{{ cols }}" as="col" hint-placeholder-count="5">
+          <div style="background:#0A0D0B;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px"><span style="display:flex;align-items:center;gap:7px;font:600 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.07em;text-transform:uppercase;color:#BDBFBD"><span style="width:7px;height:7px;border-radius:9px;background:{{ col.dot }}"></span>{{ col.title }}</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ col.count }}</span></div>
+            <sc-for list="{{ col.cards }}" as="c" hint-placeholder-count="2">
+              <a href="Kickback · G4 CRM detal.dc.html" style="text-decoration:none;color:inherit;background:#0F1210;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:13px;display:flex;flex-direction:column;gap:9px;cursor:pointer;transition:transform .16s,box-shadow .16s" style-hover="transform:translateY(-2px);box-shadow:0 12px 30px -14px rgba(0,0,0,0.7)">
+                <div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#1B1F1D;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD">{{ c.init }}</span><span style="flex:1;min-width:0;font:500 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</span></div>
+                <div style="font:400 12px/1.4 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ c.last }}</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05)"><span style="display:flex;align-items:center;gap:5px;font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B"><i class="ph ph-chats-circle" style="font-size:12px"></i>{{ c.touch }}</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ c.when }}</span></div>
+              </a>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals(){
+    const cols=[
+      {title:'Nowy', dot:'#4A6BFF', cards:[
+        {init:'JN', name:'Jan N. (Instagram)', last:'Zapytał o wycenę kolekcji Interu', touch:'1 touchpoint', when:'dziś'},
+        {init:'OL', name:'Olga L.', last:'Formularz /q/insta — 4 koszulki', touch:'1 touchpoint', when:'wczoraj'},
+      ]},
+      {title:'W kontakcie', dot:'#66FF33', cards:[
+        {init:'RS', name:'Robert S.', last:'Umówiony telefon na środę 17:00', touch:'3 touchpointy', when:'30 cze'},
+        {init:'MG', name:'Marta G.', last:'Wysłano warunki komisu', touch:'2 touchpointy', when:'29 cze'},
+      ]},
+      {title:'Ofertowanie', dot:'#FFCC00', cards:[
+        {init:'V11', name:'Vintage11 sp. z o.o.', last:'Negocjacja prowizji dla 40+ szt.', touch:'6 touchpointów', when:'28 cze'},
+      ]},
+      {title:'Aktywny', dot:'#22DD99', cards:[
+        {init:'MK', name:'Marcin K.', last:'12 sprzedaży · top klient', touch:'14 touchpointów', when:'dziś'},
+        {init:'AW', name:'Anna W.', last:'B2B · stała współpraca', touch:'11 touchpointów', when:'dziś'},
+      ]},
+      {title:'Nieaktywny', dot:'#7B7F7B', cards:[
+        {init:'KD', name:'Karol D.', last:'Brak odpowiedzi od 90 dni', touch:'4 touchpointy', when:'12 mar'},
+      ]},
+    ];
+    return { cols: cols.map(c=>({ ...c, count:String(c.cards.length) })) };
+  }
+}
+</script>
+</body>
+</html>

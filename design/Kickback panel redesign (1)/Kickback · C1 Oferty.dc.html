@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="kickback-fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050807;-webkit-font-smoothing:antialiased}
+@keyframes kb-in{from{transform:translateY(8px)}to{transform:none}}
+</style>
+</helmet>
+<div data-screen-label="C1 · Oferty" style="display:flex;align-items:stretch;min-height:100vh;background:#050807;font-family:Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">
+
+  <dc-import name="KickbackSidebar" variant="klient" mode="default" active-id="oferty" expanded="oferty" hint-size="260px,1400px" style="flex-shrink:0"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:30;height:64px;flex-shrink:0;display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(5,8,7,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">Panel</span><span style="color:#4A4E4B">/</span><span style="font:500 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3">Oferty</span></div>
+      <div style="flex:1;display:flex;justify-content:center"><div style="width:100%;max-width:400px;height:40px;min-width:0;display:flex;align-items:center;gap:10px;background:#16191A;border-radius:999px;padding:0 16px;border:1px solid rgba(255,255,255,0.06)"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#7B7F7B;flex-shrink:0"></i><span style="flex:1;min-width:0;font:400 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#4A4E4B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Szukaj koszulki, klubu, klienta…</span><span style="flex-shrink:0;font:500 10px 'IBM Plex Mono',monospace;color:#4A4E4B;border:1px solid rgba(255,255,255,0.09);border-radius:6px;padding:2px 6px">⌘K</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <button style="display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 18px;border:0;border-radius:999px;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 10px 24px -8px rgba(34,221,153,0.45)" style-hover="transform:translateY(-1px)"><i class="ph ph-plus" style="font-size:15px"></i>Nowa oferta</button>
+        <button style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-bell" style="font-size:19px"></i><span style="position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:9px;background:#FFCC00;border:1.5px solid #16191A"></span></button>
+        <button style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#16191A;color:#BDBFBD;cursor:pointer" style-hover="background:#1D2120"><i class="ph ph-moon-stars" style="font-size:19px"></i></button>
+        <button style="display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;cursor:pointer" style-hover="background:#1D2120"><span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6ECC1F,#22DD99);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#05140B">MK</span><i class="ph ph-caret-down" style="font-size:13px;color:#7B7F7B"></i></button>
+      </div>
+    </header>
+
+    <main style="flex:1;padding:28px 32px 44px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%">
+      <div>
+        <div style="font:500 11px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;margin-bottom:8px">Panel · zgłoszenia do komisu</div>
+        <h1 style="margin:0;font-weight:300;font-size:38px;line-height:1.06;letter-spacing:-0.03em">Oferty<span style="color:#66FF33">.</span></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px;border-radius:999px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.color }};font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;transition:.15s">{{ t.label }}<span style="font:500 11px 'IBM Plex Mono',monospace;opacity:.75">{{ t.count }}</span></button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#0F1210;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;animation:kb-in .18s ease">
+          <div style="display:grid;grid-template-columns:130px 110px 90px 130px 160px 1fr 44px;gap:12px;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Numer</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Wysłana</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Pozycje</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B;justify-self:end">Wartość szac.</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Status</span>
+            <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#7B7F7B">Pozycje w ofercie</span>
+            <span></span>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <a href="Kickback · C2 Szczegół oferty.dc.html" style="text-decoration:none;color:inherit;display:grid;grid-template-columns:130px 110px 90px 130px 160px 1fr 44px;gap:12px;align-items:center;min-height:58px;padding:6px 20px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;cursor:pointer" style-hover="background:rgba(22,25,26,0.5)">
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#F5F5F3">{{ r.num }}</span>
+              <span style="font:400 12px 'IBM Plex Mono',monospace;color:#7B7F7B">{{ r.date }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;justify-self:end">{{ r.items }}</span>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;justify-self:end">{{ r.value }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 10px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:0.04em;text-transform:uppercase;background:{{ r.sBg }};color:{{ r.sColor }};border:1px solid {{ r.sBorder }};width:fit-content"><span style="width:6px;height:6px;border-radius:9px;background:{{ r.sColor }}"></span>{{ r.status }}</span>
+              <span style="display:flex;align-items:center;gap:6px;min-width:0">
+                <sc-for list="{{ r.crests }}" as="c" hint-placeholder-count="3">
+                  <span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:radial-gradient(circle at 50% 35%, {{ c.bg }} 0%, #0C0F0D 90%);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px">{{ c.l }}</span>
+                </sc-for>
+                <sc-if value="{{ r.more }}" hint-placeholder-val="{{ false }}"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#4A4E4B">{{ r.moreLabel }}</span></sc-if>
+              </span>
+              <i class="ph ph-caret-right" style="font-size:16px;color:#4A4E4B;justify-self:end"></i>
+            </a>
+          </sc-for>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px">
+            <span style="font:400 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B">{{ countLabel }}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:transparent;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#7B7F7B;cursor:pointer" style-hover="background:#16191A;color:#F5F5F3"><i class="ph ph-arrow-left" style="font-size:14px"></i>Poprzednie</button>
+              <span style="font:500 13px 'IBM Plex Mono',monospace;color:#BDBFBD;padding:0 8px">1 / 3</span>
+              <button style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:1px solid rgba(255,255,255,0.08);border-radius:999px;background:#16191A;font:600 13px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#F5F5F3;cursor:pointer" style-hover="background:#1D2120">Następne<i class="ph ph-arrow-right" style="font-size:14px"></i></button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed rgba(255,255,255,0.14);border-radius:18px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;animation:kb-in .2s ease">
+          <div style="width:52px;height:52px;border-radius:16px;background:#16191A;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center"><i class="ph ph-tray" style="font-size:26px;color:#7B7F7B"></i></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><h3 style="margin:0;font-weight:500;font-size:20px;letter-spacing:-0.015em">{{ emptyTitle }}</h3><p style="margin:0;font:400 14px/1.5 Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#BDBFBD;max-width:44ch">{{ emptyBody }}</p></div>
+          <button style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:0;border-radius:999px;font:600 14px Lufga,'Plus Jakarta Sans',system-ui,sans-serif;color:#05140B;cursor:pointer;background:linear-gradient(135deg,#6ECC1F,#22DD99);box-shadow:0 12px 28px -8px rgba(34,221,153,0.4)"><i class="ph ph-plus" style="font-size:16px"></i>Nowa oferta</button>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+ &quot;pustyStan&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Widok&quot;}
+}">
+class Component extends DCLogic {
+  state = { tab:'all' };
+  renderVals(){
+    const S={
+      draft:{label:'Draft', c:'#7B7F7B', bg:'#16191A', bd:'rgba(255,255,255,0.08)'},
+      progress:{label:'W obiegu', c:'#4A6BFF', bg:'rgba(74,107,255,0.13)', bd:'rgba(74,107,255,0.3)'},
+      listed:{label:'Wystawiona', c:'#66FF33', bg:'rgba(102,255,51,0.13)', bd:'rgba(102,255,51,0.28)'},
+      sold:{label:'Sprzedana', c:'#22DD99', bg:'rgba(34,221,153,0.13)', bd:'rgba(34,221,153,0.3)'},
+      rejected:{label:'Odrzucona', c:'#FF5A47', bg:'rgba(255,90,71,0.13)', bd:'rgba(255,90,71,0.3)'},
+    };
+    const C={R:'#3A1D24', B:'#1D2A3A', M:'#2A0F14', L:'#0F2A16', J:'#22242A', P:'#2A2410'};
+    const all=[
+      {num:'KCB-26-C1D8', date:'26 cze', items:'3', value:'~4 700 zł', s:'progress', cr:['J','R','P']},
+      {num:'KCB-26-B9F2', date:'24 cze', items:'1', value:'~1 800 zł', s:'progress', cr:['B']},
+      {num:'KCB-26-A4E7', date:'20 cze', items:'5', value:'~6 200 zł', s:'listed', cr:['R','M','L'], more:'+2'},
+      {num:'KCB-26-9D31', date:'14 cze', items:'2', value:'~2 350 zł', s:'sold', cr:['M','J']},
+      {num:'KCB-26-8C55', date:'8 cze', items:'1', value:'~640 zł', s:'sold', cr:['L']},
+      {num:'KCB-26-7B02', date:'2 cze', items:'4', value:'~5 100 zł', s:'listed', cr:['R','B','J'], more:'+1'},
+      {num:'KCB-26-6A9C', date:'28 maj', items:'1', value:'~950 zł', s:'rejected', cr:['P']},
+      {num:'KCB-26-5F44', date:'—', items:'2', value:'~1 500 zł', s:'draft', cr:['B','L']},
+      {num:'KCB-26-3D77', date:'—', items:'1', value:'~2 100 zł', s:'draft', cr:['M']},
+      {num:'KCB-26-4E18', date:'15 maj', items:'3', value:'~3 900 zł', s:'sold', cr:['R','P','L']},
+    ];
+    const tabDefs=[
+      {k:'all', label:'Wszystkie', count:'21'},
+      {k:'draft', label:'Draft', count:'2'},
+      {k:'progress', label:'W obiegu', count:'9'},
+      {k:'sold', label:'Sprzedane', count:'12'},
+      {k:'rejected', label:'Odrzucone', count:'1'},
+    ];
+    const t=this.state.tab;
+    const forceEmpty=this.props.pustyStan ?? false;
+    const filtered= forceEmpty?[]: all.filter(r=> t==='all' || r.s===t || (t==='listed'&&r.s==='listed'));
+    const rows=filtered.map(r=>({ ...r,
+      status:S[r.s].label, sColor:S[r.s].c, sBg:S[r.s].bg, sBorder:S[r.s].bd,
+      crests:(r.cr||[]).map(k=>({l:k, bg:C[k]})),
+      more:!!r.more, moreLabel:r.more||'',
+    }));
+    const emptyCopy={
+      all:{t:'Brak ofert', b:'Wyślij pierwszą ofertę — odbierzemy, zautentykujemy i wystawimy.'},
+      draft:{t:'Brak szkiców', b:'Zacznij nową ofertę — szkic zapisze się automatycznie.'},
+      progress:{t:'Nic w obiegu', b:'Wszystkie Twoje oferty są już przetworzone.'},
+      sold:{t:'Jeszcze nic nie sprzedałeś', b:'Wystaw pierwszą koszulkę — my zajmiemy się resztą.'},
+      rejected:{t:'Brak odrzuconych', b:'I oby tak zostało.'},
+    }[t];
+    return {
+      tabs: tabDefs.map(d=>({ ...d,
+        bg: t===d.k?'rgba(102,255,51,0.13)':'#16191A',
+        color: t===d.k?'#66FF33':'#BDBFBD',
+        border: t===d.k?'rgba(102,255,51,0.4)':'rgba(255,255,255,0.08)',
+        onClick:()=>this.setState({tab:d.k}) })),
+      rows,
+      hasRows: rows.length>0, noRows: rows.length===0,
+      countLabel: rows.length + ' z 21 ofert',
+      emptyTitle: emptyCopy.t, emptyBody: emptyCopy.b,
+    };
+  }
+}
+</script>
+</body>
+</html>

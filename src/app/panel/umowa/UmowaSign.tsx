@@ -82,7 +82,7 @@ export function UmowaSign({ accountType }: { accountType: "individual" | "busine
       </div>
 
       {/* Demo banner */}
-      <div className="rounded-[12px] bg-amber/10 border border-amber/30 px-4 py-3 text-[13px] text-amber inline-flex items-center gap-3">
+      <div className="rounded-[12px] bg-yellow/8 border border-yellow/25 px-4 py-3 text-[13px] text-yellow inline-flex items-center gap-3">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
         </svg>
@@ -120,14 +120,14 @@ function MethodCard({
     <button
       type="button"
       onClick={onClick}
-      className={`text-left p-6 rounded-[16px] border-2 transition-all ${
-        active ? "border-blue bg-blue/5" : "border-border hover:border-text-mute bg-surface"
+      className={`text-left p-6 rounded-[16px] border-2 transition-colors ${
+        active ? "border-lime/60 bg-lime/5" : "border-border hover:border-text-mute bg-surface"
       }`}
     >
       <div className="flex items-start justify-between">
-        <span className="font-bold text-2xl tracking-[-0.04em] text-blue">{letter}</span>
-        <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-blue bg-blue" : "border-border"} flex items-center justify-center`}>
-          {active && <span className="h-2 w-2 rounded-full bg-white" />}
+        <span className="font-bold text-2xl tracking-[-0.04em] text-lime">{letter}</span>
+        <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-lime bg-lime" : "border-border"} flex items-center justify-center`}>
+          {active && <span className="h-2 w-2 rounded-full bg-on-accent" />}
         </span>
       </div>
       <div className="mt-5 font-semibold text-xl tracking-[-0.025em]">{title}</div>
