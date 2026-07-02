@@ -1,18 +1,33 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { getTheme } from "@/lib/theme";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+/* Lufga (spec FocusFlow): tylko Light + Regular — hierarchia przez skalę,
+   wersaliki i kolor, nie przez pogrubienie. Wagi 500-700 mapowane do Regular. */
+const lufga = localFont({
+  variable: "--font-lufga",
+  src: [
+    { path: "./fonts/Lufga-Light.otf", weight: "300", style: "normal" },
+    { path: "./fonts/Lufga-Regular.otf", weight: "400", style: "normal" },
+    { path: "./fonts/Lufga-Regular.otf", weight: "500", style: "normal" },
+    { path: "./fonts/Lufga-Regular.otf", weight: "600", style: "normal" },
+    { path: "./fonts/Lufga-Regular.otf", weight: "700", style: "normal" },
+  ],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600"],
   display: "swap",
 });
@@ -33,7 +48,7 @@ export default async function RootLayout({
       lang="pl"
       data-theme={theme}
       style={{ colorScheme: theme }}
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${lufga.variable} ${jakarta.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
         {children}

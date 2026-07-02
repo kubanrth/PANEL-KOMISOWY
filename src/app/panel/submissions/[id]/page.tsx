@@ -265,11 +265,11 @@ function ShippingLabel({
   const tracking = "DPD-" + submission.id.replace("SUB-", "62530000") + "-" + new Date(submission.created_at).getFullYear();
 
   return (
-    <div id="ship-label" className="bg-white text-black rounded-[16px] p-7 lg:p-8 print:rounded-none print:shadow-none print:p-6" style={{ fontFamily: "var(--font-geist-mono), monospace" }}>
+    <div id="ship-label" className="bg-white text-black rounded-[16px] p-7 lg:p-8 print:rounded-none print:shadow-none print:p-6" style={{ fontFamily: "var(--font-plex-mono), monospace" }}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">Kickback · Magazyn dostawcy</div>
-          <div className="font-bold text-3xl tracking-[-0.04em] mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="font-bold text-3xl tracking-[-0.04em] mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             Ship to us
           </div>
         </div>
@@ -282,7 +282,7 @@ function ShippingLabel({
       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-black/15 pt-5">
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Nadawca</div>
-          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {senderName}<br />
             {senderAddr || "— adres nieuzupełniony —"}<br />
             {profile.phone || ""}
@@ -290,7 +290,7 @@ function ShippingLabel({
         </div>
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Odbiorca</div>
-          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[12px] mt-1 leading-[1.5]" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             Kickback sp. z o. o.<br />
             Magazyn — A&QC<br />
             ul. Postępu 14<br />
@@ -309,13 +309,13 @@ function ShippingLabel({
       <div className="mt-6 border-t border-black/15 pt-5 flex items-center justify-between">
         <div>
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Zawartość</div>
-          <div className="text-[13px] mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="text-[13px] mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {productCount} {productCount === 1 ? "produkt" : productCount < 5 ? "produkty" : "produktów"} · konsygnacja
           </div>
         </div>
         <div className="text-right">
           <div className="text-[9px] uppercase tracking-[0.2em] text-black/60">Zadeklarowana wartość</div>
-          <div className="font-bold text-2xl tracking-[-0.035em] num mt-1" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <div className="font-bold text-2xl tracking-[-0.035em] num mt-1" style={{ fontFamily: "var(--font-lufga), var(--font-jakarta), sans-serif" }}>
             {formatPLN(totalGross, { decimals: false })}
           </div>
         </div>
