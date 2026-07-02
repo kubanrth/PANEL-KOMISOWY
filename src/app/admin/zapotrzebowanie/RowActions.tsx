@@ -27,7 +27,7 @@ export function RowActions({ row }: { row: DemandListing }) {
       <button
         type="button"
         onClick={() => setEditing(true)}
-        className="text-[11px] text-blue hover:underline"
+        className="text-[11px] text-lime hover:underline"
       >
         Edytuj
       </button>
@@ -124,7 +124,7 @@ function EditDrawer({ row, onClose }: { row: DemandListing; onClose: () => void 
                 type="button"
                 onClick={() => toggleSize(s)}
                 className={`px-2.5 py-1 rounded-[8px] text-[11px] font-medium transition-colors ${
-                  active ? "bg-blue text-white" : "bg-surface text-text-soft hover:text-text border border-border"
+                  active ? "bg-lime text-[#05140B]" : "bg-surface text-text-soft hover:text-text border border-border"
                 }`}
               >
                 {s}

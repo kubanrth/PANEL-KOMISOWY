@@ -64,7 +64,7 @@ export default async function AdminFakturowniaPage() {
     >
       <section>
         <div className="label">Integracja księgowa</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
+        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Fakturownia.
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[64ch]">
@@ -103,7 +103,7 @@ export default async function AdminFakturowniaPage() {
 
         {wmList.length > 0 && (
           <div className="mt-5 card table-scroll">
-            <div className="hidden md:grid grid-cols-[minmax(220px,2fr)_140px_minmax(180px,2fr)_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+            <div className="hidden md:grid grid-cols-[minmax(220px,2fr)_140px_minmax(180px,2fr)_120px_120px] gap-3 px-4 h-11 items-center label border-b border-border">
               <div>Klient</div>
               <div>Warehouse ID</div>
               <div>Nazwa magazynu</div>
@@ -141,7 +141,7 @@ export default async function AdminFakturowniaPage() {
             Push queue ({queueList.length})
           </h2>
           <div className="card table-scroll">
-            <div className="hidden md:grid grid-cols-[minmax(220px,2fr)_70px_minmax(180px,2fr)_120px_120px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+            <div className="hidden md:grid grid-cols-[minmax(220px,2fr)_70px_minmax(180px,2fr)_120px_120px_120px] gap-3 px-4 h-11 items-center label border-b border-border">
               <div>Product ID</div>
               <div>Próby</div>
               <div>Last error</div>
@@ -158,7 +158,7 @@ export default async function AdminFakturowniaPage() {
                 <div className="text-[12px] num">{q.attempts}</div>
                 <div className="text-[11px] text-text-soft truncate">{q.last_error ?? "—"}</div>
                 <div>
-                  <span className={`pill ${q.status === "done" ? "pill-mint" : q.status === "failed" ? "pill-pink" : "pill-amber"}`}>
+                  <span className={`pill ${q.status === "done" ? "pill-mint" : q.status === "failed" ? "pill-coral" : "pill-amber"}`}>
                     {q.status}
                   </span>
                 </div>
@@ -183,7 +183,7 @@ export default async function AdminFakturowniaPage() {
           </div>
         ) : (
           <div className="card table-scroll">
-            <div className="hidden md:grid grid-cols-[minmax(180px,2fr)_140px_80px_120px_minmax(180px,2fr)_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+            <div className="hidden md:grid grid-cols-[minmax(180px,2fr)_140px_80px_120px_minmax(180px,2fr)_120px] gap-3 px-4 h-11 items-center label border-b border-border">
               <div>Event ID</div>
               <div>Kind</div>
               <div>HMAC</div>
@@ -201,7 +201,7 @@ export default async function AdminFakturowniaPage() {
                 </div>
                 <div className="text-[12px] truncate">{e.event_kind}</div>
                 <div className="text-[11px]">
-                  <span className={`pill ${e.signature_valid ? "pill-mint" : "pill-pink"}`}>
+                  <span className={`pill ${e.signature_valid ? "pill-mint" : "pill-coral"}`}>
                     {e.signature_valid ? "OK" : "BAD"}
                   </span>
                 </div>

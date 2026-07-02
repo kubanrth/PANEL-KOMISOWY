@@ -50,7 +50,7 @@ export function BulkImport() {
       <button
         type="button"
         onClick={() => setText(SAMPLE_CSV)}
-        className="text-[11px] text-blue hover:underline"
+        className="text-[11px] text-lime hover:underline"
       >
         Wklej przykład
       </button>

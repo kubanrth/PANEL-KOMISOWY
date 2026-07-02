@@ -114,7 +114,7 @@ export function EditPickRow({ pick }: { pick: KickbackPick }) {
         <button
           type="button"
           onClick={() => setEditing(true)}
-          className="text-[11px] text-blue hover:underline"
+          className="text-[11px] text-lime hover:underline"
         >
           Edytuj
         </button>

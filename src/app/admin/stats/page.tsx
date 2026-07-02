@@ -86,7 +86,7 @@ export default async function AdminStatsPage() {
     <AdminShell user={user} profile={profile} active="stats" breadcrumb={[{ label: "Statystyki" }]}>
       <section>
         <div className="label">Cała platforma</div>
-        <h1 className="mt-4 font-bold text-[28px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">
+        <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Metryki Kickback
         </h1>
       </section>
@@ -95,22 +95,22 @@ export default async function AdminStatsPage() {
       <section className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card-gradient-blue p-6 rounded-[20px] text-white">
           <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">GMV total</div>
-          <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(gmv, { decimals: false })}</div>
+          <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(gmv, { decimals: false })}</div>
           <div className="mt-2 text-white/80 text-[11px]">{totalSold ?? 0} sprzedanych</div>
         </div>
         <div className="card-gradient-purple p-6 rounded-[20px] text-white">
           <div className="text-white/70 text-[11px] font-semibold uppercase tracking-wider">Prowizje (20%)</div>
-          <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(commissions, { decimals: false })}</div>
+          <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(commissions, { decimals: false })}</div>
           <div className="mt-2 text-white/80 text-[11px]">Przychód Kickback</div>
         </div>
         <div className="card p-6">
           <div className="label">GMV · 30 dni</div>
-          <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(gmvMonth, { decimals: false })}</div>
+          <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(gmvMonth, { decimals: false })}</div>
           <div className="mt-2 text-[11px] text-text-mute">{(monthSold ?? []).length} sprzedanych</div>
         </div>
         <div className="card p-6">
           <div className="label">Wypłacone</div>
-          <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(totalPaidOut, { decimals: false })}</div>
+          <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(totalPaidOut, { decimals: false })}</div>
           <div className="mt-2 text-[11px] text-text-mute">+ pending: {formatPLN(pendingPaidOut, { decimals: false })}</div>
         </div>
       </section>
@@ -157,7 +157,7 @@ function Stat({ label, value, accent }: { label: string; value: number; accent?:
   return (
     <div className="card p-5">
       <div className="label">{label}</div>
-      <div className={`mt-2 font-bold text-3xl tracking-[-0.04em] num ${colorCls}`}>{value}</div>
+      <div className={`mt-2 font-light text-3xl tracking-[-0.02em] num ${colorCls}`}>{value}</div>
     </div>
   );
 }

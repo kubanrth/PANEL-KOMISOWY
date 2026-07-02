@@ -51,7 +51,7 @@ export default async function AdminZapotrzebowaniePage() {
     >
       <section>
         <div className="label">{active.length} aktywnych · {inactive.length} archiwum</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
+        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
           Zapotrzebowanie.
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">

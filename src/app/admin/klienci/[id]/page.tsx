@@ -44,7 +44,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
             <span className="pill pill-mute">{target.account_type === "business" ? "Biznesowe" : "Indywidualne"}</span>
             <span className="pill pill-blue">{target.role === "klient" ? "Klient" : target.role}</span>
           </div>
-          <h1 className="font-bold text-[30px] lg:text-[36px] leading-[1.02] tracking-[-0.04em]">{fullName}</h1>
+          <h1 className="font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">{fullName}</h1>
           <p className="mt-3 text-text-mute text-[14px] num">
             ID: {target.id.slice(0, 8)}… · konto od {formatDate(target.created_at)}
           </p>
@@ -53,7 +53,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
         <div className="col-span-12 lg:col-span-5">
           <div className="card-gradient-blue p-6 rounded-[20px] text-white">
             <div className="text-white/70 text-[12px] font-semibold uppercase tracking-wider">Wallet</div>
-            <div className="mt-2 font-bold text-3xl tracking-[-0.04em] num">{formatPLN(balance, { decimals: false })}</div>
+            <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{formatPLN(balance, { decimals: false })}</div>
             <div className="mt-3 grid grid-cols-2 gap-3 pt-3 border-t border-white/15 text-[12px]">
               <div>
                 <div className="text-white/70">Dostępne</div>
@@ -105,7 +105,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
         <div className="flex items-end justify-between mb-5">
           <div>
             <div className="label">Submissions</div>
-            <h2 className="mt-2 font-bold text-2xl tracking-[-0.025em]">{submissions.length} łącznie</h2>
+            <h2 className="mt-2 font-light text-[22px] tracking-[-0.02em]">{submissions.length} łącznie</h2>
           </div>
         </div>
         {submissions.length === 0 ? (
@@ -115,9 +115,9 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
         ) : (
           <div className="space-y-3">
             {submissions.map((s) => (
-              <Link key={s.id} href={`/panel/submissions/${s.id}`} className="card p-5 flex items-center justify-between hover:border-purple/40 transition-colors">
+              <Link key={s.id} href={`/panel/submissions/${s.id}`} className="card p-5 flex items-center justify-between hover:border-lime/30 transition-colors">
                 <div>
-                  <div className="font-mono text-[14px]">{s.id}</div>
+                  <div className="num text-[14px]">{s.id}</div>
                   <div className="text-[12px] text-text-mute mt-1">{formatDate(s.created_at)} · {s.signed_method ?? "—"}</div>
                 </div>
                 <SubmissionStatusPill status={s.status} />
