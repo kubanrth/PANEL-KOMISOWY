@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { PasswordForm } from "./PasswordForm";
 
 export default async function UstawieniaPage() {
@@ -23,12 +24,7 @@ export default async function UstawieniaPage() {
       active="ustawienia"
       breadcrumb={[{ label: "Ustawienia" }]}
     >
-      <section>
-        <div className="label">Konto · {user.email}</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          Ustawienia.
-        </h1>
-      </section>
+      <PageHeader label={`Konto · ${user.email}`} title="Ustawienia" />
 
       <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card-elev p-6">
@@ -74,7 +70,7 @@ export default async function UstawieniaPage() {
             Imię, adres, NIP, dane firmowe — edytuj w osobnej zakładce.
           </p>
           <div className="mt-5">
-            <Link href="/panel/dane" className="text-[13px] text-blue hover:underline">
+            <Link href="/panel/dane" className="text-[13px] text-lime hover:underline">
               Przejdź do danych rozliczeniowych →
             </Link>
           </div>
@@ -88,7 +84,7 @@ function ContactLine({ label, value, href }: { label: string; value: string; hre
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="text-text-mute text-[12px]">{label}</span>
-      <a href={href} className="text-text hover:text-blue transition-colors num">{value}</a>
+      <a href={href} className="text-text hover:text-lime transition-colors num">{value}</a>
     </div>
   );
 }

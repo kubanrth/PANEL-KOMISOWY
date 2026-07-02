@@ -3,6 +3,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate } from "@/lib/format";
 import type { AppDocument } from "@/lib/types";
 
@@ -32,33 +34,28 @@ export default async function UksPage() {
       active="uks"
       breadcrumb={[{ label: "UKS" }]}
     >
-      <section>
-        <div className="label">{docs.length} dokumentów UKS</div>
-        <h1 className="mt-3 font-bold text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.03em]">
-          UKS <span className="text-text-soft">/ Umowy Kupna-Sprzedaży.</span>
-        </h1>
-        <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">
-          Wszystkie zeskanowane UKS, na podstawie których rozliczane są Twoje sprzedaże
-          (dla kont indywidualnych). Pobierz dokument do księgowości.
-        </p>
-      </section>
+      <PageHeader
+        label={`${docs.length} dokumentów · Umowy Kupna-Sprzedaży`}
+        title="UKS"
+        sub="Wszystkie zeskanowane UKS, na podstawie których rozliczane są Twoje sprzedaże (dla kont indywidualnych). Pobierz dokument do księgowości."
+      />
 
       {docs.length === 0 ? (
-        <div className="mt-10 card-bare bg-bg-soft/40 border border-dashed border-border rounded-[20px] p-10 text-center">
-          <div className="font-bold text-xl tracking-[-0.025em]">Brak UKS</div>
-          <p className="mt-2 text-text-soft text-[14px]">
-            UKS są generowane przy rozliczaniu sprzedaży. Sprawdź sekcję Faktury &amp; Rozliczenia.
-          </p>
-          <div className="mt-6">
-            <ButtonLink href="/panel/faktury" size="md">
-              Faktury i rozliczenia <ArrowRight size={16} />
-            </ButtonLink>
-          </div>
+        <div className="mt-8">
+          <EmptyState
+            title="Brak UKS"
+            sub="UKS są generowane przy rozliczaniu sprzedaży. Sprawdź sekcję Faktury i rozliczenia."
+            action={
+              <ButtonLink href="/panel/faktury" size="md">
+                Faktury i rozliczenia <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
         </div>
       ) : (
         <section className="mt-8">
           <div className="card table-scroll">
-            <div className="hidden md:grid grid-cols-[180px_minmax(220px,3fr)_140px_140px_120px] gap-3 px-4 py-3 label border-b border-border-soft">
+            <div className="hidden md:grid grid-cols-[180px_minmax(220px,3fr)_140px_140px_120px] gap-3 px-4 h-11 items-center label border-b border-border">
               <div>Dokument</div>
               <div>Powiązanie</div>
               <div>Podpisano</div>
@@ -68,12 +65,12 @@ export default async function UksPage() {
             {docs.map((d) => (
               <div
                 key={d.id}
-                className="grid grid-cols-[180px_minmax(220px,3fr)_140px_140px_120px] gap-3 px-4 py-3 items-center border-b border-border-soft last:border-0"
+                className="grid grid-cols-[180px_minmax(220px,3fr)_140px_140px_120px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
               >
                 <div className="text-[13px] num font-medium">UKS-{d.id.slice(0, 8).toUpperCase()}</div>
                 <div className="text-[12px] text-text-soft">
                   {d.submission_id ? (
-                    <Link href={`/panel/submissions/${d.submission_id}`} className="text-blue hover:underline num">
+                    <Link href={`/panel/submissions/${d.submission_id}`} className="text-lime hover:underline num">
                       {d.submission_id}
                     </Link>
                   ) : (
@@ -93,7 +90,7 @@ export default async function UksPage() {
                 </div>
                 <div className="text-right">
                   {d.file_url ? (
-                    <a href={d.file_url} target="_blank" rel="noreferrer" className="text-[12px] text-blue hover:underline">
+                    <a href={d.file_url} target="_blank" rel="noreferrer" className="text-[12px] text-lime hover:underline">
                       Pobierz PDF →
                     </a>
                   ) : (

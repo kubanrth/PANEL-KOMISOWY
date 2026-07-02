@@ -31,7 +31,7 @@ export function RevenueSimulator({ currentRevenue30d, currentStockCount, current
         <div>
           <div className="label">Symulator przychodu</div>
           <div className="mt-1 font-semibold text-xl tracking-[-0.025em]">
-            Co jeśli zwiększysz komis o <span className="text-blue num">{pct}%</span>?
+            Co jeśli zwiększysz komis o <span className="text-lime num">{pct}%</span>?
           </div>
         </div>
         <div className="text-right">
@@ -50,7 +50,7 @@ export function RevenueSimulator({ currentRevenue30d, currentStockCount, current
           step={5}
           value={pct}
           onChange={(e) => setPct(Number(e.target.value))}
-          className="w-full accent-blue cursor-pointer"
+          className="w-full accent-lime cursor-pointer"
         />
         <div className="mt-1 flex justify-between text-[10px] text-text-mute num">
           <span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span>

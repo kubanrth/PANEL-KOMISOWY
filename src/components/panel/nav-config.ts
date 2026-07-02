@@ -73,7 +73,6 @@ export const PANEL_SECTIONS: NavSection[] = [
         subs: [
           { key: "magazyn", label: "W sprzedaży", href: "/panel/magazyn", dot: "lime" },
           { key: "komis-wyciagniety", label: "Wycofane z komisu", href: "/panel/komis-wyciagniety", dot: "mute" },
-          { key: "inventory", label: "Eksport", href: "/panel/inventory", dot: "mute" },
         ],
       },
       { key: "zwroty", label: "Zwroty", href: "/panel/zwroty", icon: "ArrowCounterClockwise" },
@@ -94,7 +93,7 @@ export const PANEL_SECTIONS: NavSection[] = [
           { key: "faktury", label: "Faktury", href: "/panel/faktury", dot: "mute" },
         ],
       },
-      { key: "uks", label: "Program lojalnościowy", href: "/panel/uks", icon: "Star" },
+      { key: "uks", label: "UKS", href: "/panel/uks", icon: "FileText" },
     ],
   },
   {
@@ -111,17 +110,7 @@ export const PANEL_SECTIONS: NavSection[] = [
       { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/panel/zapotrzebowanie", icon: "Target", badgeKey: "zapotrzebowanie" },
       { key: "plany", label: "Co warto dodać", href: "/panel/plany", icon: "Sparkle", dotKey: "plany" },
       { key: "promocje", label: "Promocje", href: "/panel/promocje", icon: "Percent" },
-      {
-        key: "analityka",
-        label: "Analityka",
-        href: "/panel/analityka",
-        icon: "ChartLine",
-        subs: [
-          { key: "stats", label: "Statystyki", href: "/panel/stats", dot: "lime" },
-          { key: "analityka", label: "Deep dive", href: "/panel/analityka", dot: "blue" },
-          { key: "my-sales", label: "My sales", href: "/panel/my-sales", dot: "mint" },
-        ],
-      },
+      { key: "analityka", label: "Analityka", href: "/panel/analityka", icon: "ChartLine" },
     ],
   },
 ];
