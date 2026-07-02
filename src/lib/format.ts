@@ -102,3 +102,13 @@ export function commissionCents(priceCents: number | null | undefined, commissio
   if (priceCents == null) return null;
   return Math.round(priceCents * commissionRate);
 }
+
+/** Polska odmiana rzeczownika po liczbie: plural(22, ["koszulka","koszulki","koszulek"]) → "koszulki".
+ *  Reguła: 1 → one; końcówka 2-4 poza 12-14 → few; reszta → many. */
+export function plural(n: number, [one, few, many]: [string, string, string]): string {
+  if (n === 1) return one;
+  const last = n % 10;
+  const lastTwo = n % 100;
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few;
+  return many;
+}

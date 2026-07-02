@@ -225,7 +225,7 @@ function YearChip({ label, active, href }: { label: string; active: boolean; hre
   return (
     <Link
       href={href}
-      className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+      className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
         active
           ? "border-lime/40 bg-lime/10 text-lime"
           : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
@@ -240,7 +240,7 @@ function MonthChip({ label, active, href }: { label: string; active: boolean; hr
   return (
     <Link
       href={href}
-      className={`h-8 px-3 inline-flex items-center rounded-[9px] text-[12px] transition-colors ${
+      className={`h-8 px-3 inline-flex items-center rounded-[9px] text-[12px] transition-colors active:scale-[.98] ${
         active
           ? "bg-surface-3 text-text font-medium"
           : "bg-surface text-text-soft hover:bg-surface-2 hover:text-text"

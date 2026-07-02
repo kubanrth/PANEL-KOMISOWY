@@ -39,6 +39,7 @@ export default async function WalletPage() {
     .from("wallet_transactions")
     .select("*")
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .limit(20);
   const transactions = (txsRaw ?? []) as WalletTransaction[];
 
@@ -117,7 +118,7 @@ export default async function WalletPage() {
               sub="karencja 14 dni po sprzedaży"
             />
             <KpiCard
-              label="Wypłacone łącznie"
+              label="Wypłacone (ost. transakcje)"
               value={formatPLN(paidOutTotal, { decimals: false })}
               mono
               sub="zrealizowane wypłaty"
@@ -254,7 +255,7 @@ function TxRow({ tx, saldo }: { tx: WalletTransaction; saldo: number }) {
   const sign = positive ? "+" : "−";
   const amountDisplay = `${sign} ${formatPLN(Math.abs(tx.amount_cents), { decimals: false })}`;
   const amountCls = positive ? "text-mint" : "text-coral";
-  const { label, variant } = TX_PILL[tx.type];
+  const { label, variant } = TX_PILL[tx.type] ?? { label: tx.type, variant: "mute" as const };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[110px_150px_minmax(220px,1fr)_150px_140px] gap-2 md:gap-3 px-4 py-3.5 md:items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors">

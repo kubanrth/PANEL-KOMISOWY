@@ -13,7 +13,10 @@ const STATUS_PILL: Record<OfferStatus, { variant: PillVariant; label: string }> 
   withdrawn: { variant: "mute", label: "Wycofana" },
 };
 
-export function OfferThread({ offers }: { offers: Offer[] }) {
+/** viewerId: id zalogowanego użytkownika — "Ty" tylko przy wiadomościach,
+    które faktycznie wysłał (responded_by), bo kontry seller-side piszą
+    i klient, i admin. */
+export function OfferThread({ offers, viewerId }: { offers: Offer[]; viewerId?: string }) {
   if (offers.length === 0) {
     return (
       <div className="border border-dashed border-border rounded-[20px] p-8 text-center text-[13px] text-text-soft">
@@ -36,7 +39,7 @@ export function OfferThread({ offers }: { offers: Offer[] }) {
             }`}>
               <div className="flex items-center justify-between gap-3 mb-2">
                 <span className={`label !text-[10px] ${seller ? "!text-lime/80" : ""}`}>
-                  {seller ? "Ty (kontrpropozycja)" : (o.buyer_name ?? "Kupujący")}
+                  {seller ? (viewerId && o.responded_by === viewerId ? "Ty (kontrpropozycja)" : "Strona sprzedająca (kontrpropozycja)") : (o.buyer_name ?? "Kupujący")}
                 </span>
                 <span className="text-[11px] text-text-mute num">{formatDateTime(o.created_at)}</span>
               </div>

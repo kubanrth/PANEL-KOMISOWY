@@ -18,7 +18,7 @@ const SUB_VARIANT: Record<SubmissionStatus, PillVariant> = {
   returned: "coral",
 };
 
-const PROD_VARIANT: Record<ProductStatus, PillVariant> = {
+export const PROD_VARIANT: Record<ProductStatus, PillVariant> = {
   draft: "mute",
   aqc: "blue",
   listed: "lime",

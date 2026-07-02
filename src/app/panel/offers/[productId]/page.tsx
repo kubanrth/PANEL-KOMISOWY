@@ -166,7 +166,7 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
       {offers.length > 0 && (
         <section className="mt-10">
           <div className="label mb-4">Historia negocjacji</div>
-          <OfferThread offers={offers} />
+          <OfferThread offers={offers} viewerId={user.id} />
         </section>
       )}
     </PanelShell>

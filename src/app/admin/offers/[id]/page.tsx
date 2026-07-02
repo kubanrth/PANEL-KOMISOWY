@@ -72,7 +72,7 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
       </section>
 
       <section className="mt-10">
-        <OfferThread offers={offers} />
+        <OfferThread offers={offers} viewerId={user.id} />
       </section>
 
       <section className="mt-8">

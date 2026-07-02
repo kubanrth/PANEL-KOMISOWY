@@ -127,7 +127,7 @@ function MethodCard({
       <div className="flex items-start justify-between">
         <span className="font-bold text-2xl tracking-[-0.04em] text-lime">{letter}</span>
         <span className={`h-5 w-5 rounded-full border-2 ${active ? "border-lime bg-lime" : "border-border"} flex items-center justify-center`}>
-          {active && <span className="h-2 w-2 rounded-full bg-[#05140B]" />}
+          {active && <span className="h-2 w-2 rounded-full bg-on-accent" />}
         </span>
       </div>
       <div className="mt-5 font-semibold text-xl tracking-[-0.025em]">{title}</div>

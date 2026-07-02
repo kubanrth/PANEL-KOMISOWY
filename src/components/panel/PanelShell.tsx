@@ -3,6 +3,7 @@ import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PanelSidebar } from "./PanelSidebar";
 import { PanelMobileNav } from "./PanelMobileNav";
 import { getTheme } from "@/lib/theme";
+import { createClient } from "@/lib/supabase/server";
 import type { NavBadges } from "./nav-config";
 
 export type PanelShellProps = {
@@ -32,6 +33,7 @@ export async function PanelShell({
   children, cta, badges,
 }: PanelShellProps) {
   const theme = await getTheme();
+  const resolvedBadges = { ...(await fetchPanelBadges()), ...badges };
 
   return (
     <div className="min-h-screen lg:flex">
@@ -43,7 +45,7 @@ export async function PanelShell({
         walletAvailable={walletAvailable}
         active={active}
         theme={theme}
-        badges={badges}
+        badges={resolvedBadges}
       />
 
       {/* Desktop sidebar (od lg) */}
@@ -54,7 +56,7 @@ export async function PanelShell({
         walletAvailable={walletAvailable}
         active={active}
         theme={theme}
-        badges={badges}
+        badges={resolvedBadges}
       />
 
       {/* MAIN */}
@@ -120,4 +122,24 @@ function Breadcrumb({
       )}
     </div>
   );
+}
+
+/** Liczniki sidebara — 3 równoległe head-county (RLS zawęża do własnych danych).
+ *  Defensywnie: każdy błąd → brak badge, nigdy 500. Strona może nadpisać przez props. */
+async function fetchPanelBadges(): Promise<Record<string, number | boolean | undefined>> {
+  try {
+    const supabase = await createClient();
+    const [subs, listed, demands] = await Promise.all([
+      supabase.from("submissions").select("*", { count: "exact", head: true }),
+      supabase.from("products").select("*", { count: "exact", head: true }).in("status", ["draft", "aqc", "listed", "offer"]),
+      supabase.from("demand_listings").select("*", { count: "exact", head: true }).eq("active", true),
+    ]);
+    return {
+      submissions: subs.count ?? undefined,
+      magazyn: listed.count ?? undefined,
+      zapotrzebowanie: demands.count ?? undefined,
+    };
+  } catch {
+    return {};
+  }
 }

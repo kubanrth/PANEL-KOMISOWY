@@ -18,10 +18,11 @@ const lufga = localFont({
   display: "swap",
 });
 
+/* Plus Jakarta Sans to variable font — bez listy wag next/font bierze jeden
+   plik z pełną osią wght zamiast 5 statycznych instancji per subset. */
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 

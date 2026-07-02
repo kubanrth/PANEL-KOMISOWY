@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProductThumb } from "@/components/panel/ProductThumb";
-import { formatPLN, formatDateTime, takeHomeCents } from "@/lib/format";
+import { formatPLN, formatDateTime, takeHomeCents, plural } from "@/lib/format";
 import type { Submission, SubmissionStatus, Product, Profile } from "@/lib/types";
 
 /* Szczegół oferty — redesign: PageHeader z numerem, pozioma oś kroków
@@ -132,7 +132,7 @@ export default async function SubmissionDetailPage(props: {
                 {formatPLN(totalGross, { decimals: false })}
               </div>
               <div className="mt-1.5 text-[12px] text-text-soft">
-                Brutto · {products.length} {products.length === 1 ? "pozycja" : products.length < 5 ? "pozycje" : "pozycji"}
+                Brutto · {products.length} {plural(products.length, ["pozycja", "pozycje", "pozycji"])}
               </div>
               <div className="mt-5 pt-4 border-t border-white/10 flex items-baseline justify-between text-[13px]">
                 <span className="text-text-soft">Twój udział (po prowizji {Math.round(submission.commission_rate * 100)}%)</span>

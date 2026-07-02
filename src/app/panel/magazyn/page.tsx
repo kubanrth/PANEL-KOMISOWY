@@ -8,6 +8,7 @@ import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import type { Product, Submission, AqcAudit, Photo, DerivedStatus } from "@/lib/types";
 import { DERIVED_STATUS_LABEL } from "@/lib/types";
 import { deriveStatus } from "@/lib/derived-status";
+import { formatPLN, plural } from "@/lib/format";
 import { MagazynTable, type MagazynRow } from "./MagazynTable";
 
 type Filters = {
@@ -84,8 +85,6 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
       listing_price_cents: p.listing_price_cents ?? p.expected_price_cents ?? 0,
       recommended_price_cents: audit?.recommended_price_cents ?? null,
       published_at: p.published_at,
-      sold_at: p.sold_at,
-      settlement_at: p.settlement_at,
       derived_status: derived,
       days_in_commission: days,
     };
@@ -135,7 +134,7 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
       <PageHeader
         label="Panel · Produkty w komisie"
         title="Magazyn"
-        sub={`${allRows.length} ${plural(allRows.length, ["koszulka", "koszulki", "koszulek"])} fizycznie w Kickback — łączna wartość listingu ${formatValue(totalValue)}.`}
+        sub={`${allRows.length} ${plural(allRows.length, ["koszulka", "koszulki", "koszulek"])} fizycznie w Kickback — łączna wartość listingu ${formatPLN(totalValue, { decimals: false })}.`}
       />
 
       {/* Filter bar — chips statusów z licznikami + pozostałe filtry */}
@@ -227,7 +226,7 @@ function StatusChip({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+      className={`inline-flex items-center gap-2 h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
         active
           ? "border-lime/40 bg-lime/10 text-lime"
           : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
@@ -252,18 +251,11 @@ function ChipGroup({
     <div className="flex items-center gap-1.5 flex-wrap">
       {options.map((o) => {
         const active = (current ?? "") === o.v;
-        const next: Record<string, string> = {};
-        if (existing.sort) next.sort = existing.sort;
-        if (existing.vat) next.vat = existing.vat;
-        if (existing.size) next.size = existing.size;
-        if (existing.status) next.status = existing.status;
-        if (o.v) next[param as string] = o.v; else delete next[param as string];
-        const query = new URLSearchParams(next).toString();
         return (
           <Link
             key={o.v || "any"}
-            href={`/panel/magazyn${query ? "?" + query : ""}`}
-            className={`h-8 px-3 inline-flex items-center rounded-[9px] text-[12px] transition-colors ${
+            href={buildHref({ ...existing, [param]: o.v || undefined })}
+            className={`h-8 px-3 inline-flex items-center rounded-[9px] text-[12px] transition-colors active:scale-[.98] ${
               active
                 ? "bg-surface-3 text-text font-medium"
                 : "bg-surface text-text-soft hover:bg-surface-2 hover:text-text"
@@ -277,14 +269,4 @@ function ChipGroup({
   );
 }
 
-function formatValue(cents: number): string {
-  return `${Math.round(cents / 100).toLocaleString("en-US").replace(/,/g, " ")} zł`;
-}
 
-function plural(n: number, [one, few, many]: [string, string, string]): string {
-  if (n === 1) return one;
-  const last = n % 10;
-  const lastTwo = n % 100;
-  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few;
-  return many;
-}

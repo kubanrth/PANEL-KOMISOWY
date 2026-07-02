@@ -208,6 +208,9 @@ export const LEGACY_ACTIVE_ALIASES: Record<string, string> = {
   panel: "dashboard",
   oferty: "submissions",
   settings: "ustawienia",
+  "my-sales": "sprzedaze",
+  inventory: "magazyn",
+  stats: "analityka",
 };
 
 export function normalizeActive(active: string | undefined): string | undefined {

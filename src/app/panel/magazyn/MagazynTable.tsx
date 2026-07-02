@@ -28,8 +28,6 @@ export type MagazynRow = {
   listing_price_cents: number;
   recommended_price_cents: number | null;
   published_at: string | null;
-  sold_at: string | null;
-  settlement_at: string | null;
   derived_status: DerivedStatus;
   days_in_commission: number;
 };

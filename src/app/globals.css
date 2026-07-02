@@ -144,6 +144,16 @@ html, body {
   border-color: var(--color-border);
 }
 
+/* Spójny focus dla WSZYSTKICH elementów interaktywnych (CLAUDE.md: hover,
+   focus-visible i active bez wyjątków). Przyciski btn-* mają własne ringi —
+   ta reguła łapie resztę: chipy, linki-akcje, ikony, taby. */
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
 /* Tabular numerics + mono dla cen/SKU/dat */
 .num {
   font-family: var(--font-mono);

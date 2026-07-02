@@ -70,8 +70,10 @@ export function SidebarNav({
     }
   }
 
+  const itemByKey = new Map(sections.flatMap((s) => s.items).map((i) => [i.key, i]));
+
   function isOpen(key: string): boolean {
-    const item = sections.flatMap((s) => s.items).find((i) => i.key === key);
+    const item = itemByKey.get(key);
     const activeInside = item ? isItemActive(item, activeKey) : false;
     if (open === null) return activeInside; // przed hydracją localStorage
     return open[key] ?? activeInside;

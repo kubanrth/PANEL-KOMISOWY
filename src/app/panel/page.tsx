@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PanelShell } from "@/components/panel/PanelShell";
-import { Pill, type PillVariant } from "@/components/panel/StatusPill";
+import { Pill, PROD_VARIANT, type PillVariant } from "@/components/panel/StatusPill";
 import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { formatPLN, formatDate } from "@/lib/format";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
@@ -53,13 +53,19 @@ export default async function PanelPage() {
   const submissions = (submissionsRaw ?? []) as Pick<Submission, "id" | "status" | "created_at">[];
   const submissionIds = submissions.map((s) => s.id);
 
-  const { data: productsRaw } = submissionIds.length
-    ? await supabase
-        .from("products")
-        .select("id, submission_id, brand, model, size, status, listing_price_cents, expected_price_cents, sold_at, published_at, updated_at, created_at")
-        .in("submission_id", submissionIds)
-        .order("updated_at", { ascending: false })
-    : { data: [] };
+  // Równolegle: produkty (zależą od submissionIds) i etykiety zapotrzebowania
+  // (zależą tylko od demands) — bez zbędnego round-tripa.
+  const demandsEarly = (demandsRaw ?? []) as DemandListing[];
+  const [{ data: productsRaw }, demandLabels] = await Promise.all([
+    submissionIds.length
+      ? supabase
+          .from("products")
+          .select("id, submission_id, brand, model, size, status, listing_price_cents, expected_price_cents, sold_at, published_at, updated_at, created_at")
+          .in("submission_id", submissionIds)
+          .order("updated_at", { ascending: false })
+      : Promise.resolve({ data: [] }),
+    resolveDemandLabels(supabase, demandsEarly),
+  ]);
   const products = (productsRaw ?? []) as Pick<
     Product,
     "id" | "submission_id" | "brand" | "model" | "size" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "published_at" | "updated_at" | "created_at"
@@ -71,10 +77,7 @@ export default async function PanelPage() {
   const picks = ((picksRaw ?? []) as Pick<KickbackPick, "id" | "title" | "description" | "priority" | "expires_at" | "active" | "cta_href">[])
     .filter((p) => !p.expires_at || new Date(p.expires_at) > new Date())
     .slice(0, 3);
-  const demands = (demandsRaw ?? []) as DemandListing[];
-
-  // Etykiety zapotrzebowania (3 szt.) — dociągamy tylko potrzebne nazwy.
-  const demandLabels = await resolveDemandLabels(supabase, demands);
+  const demands = demandsEarly;
 
   // --- KPI ---
   const listed = products.filter((p) => p.status === "listed");
@@ -123,7 +126,7 @@ export default async function PanelPage() {
     >
       {/* KPI row */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <KpiCard label="Aktywnie w sprzedaży" value={listed.length} delta={listed.length > 0 ? `+${weekBuckets[6]}` : undefined}>
+        <KpiCard label="Aktywnie w sprzedaży" value={listed.length} delta={weekBuckets[6] > 0 ? `+${weekBuckets[6]}` : undefined}>
           {weekBuckets.some((b) => b > 0) && <Sparkline points={weekBuckets} />}
         </KpiCard>
         <KpiCard
@@ -294,32 +297,32 @@ function MoveRow({
     : p.status === "withdrawn" ? "wycofana z komisu"
     : "w przygotowaniu";
 
-  const pill: { v: PillVariant; l: string } =
-    p.status === "listed" ? { v: "lime", l: "W sprzedaży" }
-    : p.status === "sold" ? { v: "mint", l: "Sprzedane" }
-    : p.status === "aqc" ? { v: "blue", l: "A&QC" }
-    : p.status === "offer" ? { v: "yellow", l: "Do decyzji" }
-    : p.status === "returned" ? { v: "coral", l: "Zwrot" }
-    : { v: "mute", l: "Draft" };
+  const SHORT: Partial<Record<typeof p.status, string>> = {
+    listed: "W sprzedaży", sold: "Sprzedane", aqc: "A&QC",
+    offer: "Do decyzji", returned: "Zwrot",
+  };
+  const pill: { v: PillVariant; l: string } = {
+    v: PROD_VARIANT[p.status],
+    l: SHORT[p.status] ?? "Draft",
+  };
 
   if (highlight) {
     return (
       <Link
         href={`/panel/products/${p.id}`}
-        className="block rounded-[16px] p-4 relative overflow-hidden transition-transform hover:-translate-y-0.5"
-        style={{ background: "linear-gradient(135deg, #6ECC1F 0%, #22DD99 100%)" }}
+        className="block rounded-[16px] p-4 relative overflow-hidden transition-transform hover:-translate-y-0.5 [background:var(--gradient-cta)]"
       >
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-[10px] bg-black/20 flex items-center justify-center text-[15px] font-medium text-[#05140B] flex-shrink-0">
+          <div className="h-10 w-10 rounded-[10px] bg-black/20 flex items-center justify-center text-[15px] font-medium text-on-accent flex-shrink-0">
             {title[0]?.toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[14px] font-medium text-[#05140B] truncate">
+            <div className="text-[14px] font-medium text-on-accent truncate">
               {title} — {event}
             </div>
-            <div className="text-[11px] num text-[#05140B]/70 mt-0.5">{formatDate(p.updated_at)}</div>
+            <div className="text-[11px] num text-on-accent/70 mt-0.5">{formatDate(p.updated_at)}</div>
           </div>
-          <span className="pill !bg-black/20 !text-[#05140B] !border-transparent">{pill.l}</span>
+          <span className="pill !bg-black/20 !text-on-accent !border-transparent">{pill.l}</span>
         </div>
       </Link>
     );

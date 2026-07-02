@@ -194,6 +194,8 @@ function statusPill(status: string): { variant: PillVariant; label: string } {
       return { variant: "blue", label: "Wysłane" };
     case "returned":
       return { variant: "coral", label: "Zwrot" };
+    case "failed":
+      return { variant: "coral", label: "Nieudana" };
     default:
       return { variant: "mute", label: "Przygotowane" };
   }

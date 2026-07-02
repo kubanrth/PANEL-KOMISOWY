@@ -197,7 +197,7 @@ function FilterChips({
           <Link
             key={o.v || "any"}
             href={`/panel/zapotrzebowanie${query ? "?" + query : ""}`}
-            className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors ${
+            className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
               active || activeAll
                 ? "border-lime/40 bg-lime/10 text-lime"
                 : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"

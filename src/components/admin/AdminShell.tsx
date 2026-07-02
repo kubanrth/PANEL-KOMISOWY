@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { signOut } from "@/app/panel/actions";
 import { getTheme } from "@/lib/theme";
+import { createClient } from "@/lib/supabase/server";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AdminMobileNav } from "./AdminMobileNav";
 import { SidebarNav } from "@/components/panel/SidebarNav";
@@ -37,10 +38,11 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
   const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials = (profile.first_name?.[0] ?? "") + (profile.last_name?.[0] ?? user.email[0]?.toUpperCase());
   const theme = await getTheme();
+  const resolvedBadges = { ...(await fetchAdminBadges()), ...badges };
 
   return (
     <div className="min-h-screen lg:flex">
-      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} />
+      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} badges={resolvedBadges} />
 
       <aside className="hidden lg:flex flex-col w-[260px] border-r border-border bg-bg sticky top-0 h-screen">
         {/* Header z coral differentiator: jesteś w back-office */}
@@ -59,7 +61,7 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
         </div>
 
         <div className="px-3 py-4 flex-1 overflow-y-auto">
-          <SidebarNav sections={ADMIN_SECTIONS} activeKey={active} badges={badges} storageKey="kb-nav-admin" />
+          <SidebarNav sections={ADMIN_SECTIONS} activeKey={active} badges={resolvedBadges} storageKey="kb-nav-admin" />
         </div>
 
         {/* Bottom sticky group */}
@@ -137,4 +139,23 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
       </div>
     </div>
   );
+}
+
+/** Liczniki kolejek admina — równoległe head-county; błąd → brak badge. */
+async function fetchAdminBadges(): Promise<Record<string, number | boolean | undefined>> {
+  try {
+    const supabase = await createClient();
+    const [aqc, payouts, offers] = await Promise.all([
+      supabase.from("products").select("*", { count: "exact", head: true }).eq("status", "aqc"),
+      supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
+      supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
+    ]);
+    return {
+      aqc: aqc.count ?? undefined,
+      payouts: payouts.count ?? undefined,
+      offers: offers.count ?? undefined,
+    };
+  } catch {
+    return {};
+  }
 }
