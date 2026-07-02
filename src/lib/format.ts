@@ -18,11 +18,19 @@ const PLN_INT = new Intl.NumberFormat("pl-PL", {
 
 const NUM = new Intl.NumberFormat("pl-PL");
 
+/* CLDR dla pl-PL nie grupuje liczb 4-cyfrowych ("8240 zł"), a design system
+   wymaga separatora od 1000 ("8 240 zł") — wymuszamy grupowanie ręcznie. */
+function forceGrouping(formatted: string): string {
+  return formatted.replace(/\d{4,}/g, (digits) =>
+    digits.replace(/\B(?=(\d{3})+(?!\d))/g, " "),
+  );
+}
+
 export function formatPLN(cents: number | null | undefined, opts?: { decimals?: boolean }): string {
   if (cents == null) return "—";
   const zl = cents / 100;
   const useDecimals = opts?.decimals ?? zl % 1 !== 0;
-  return useDecimals ? PLN.format(zl) : PLN_INT.format(zl);
+  return forceGrouping(useDecimals ? PLN.format(zl) : PLN_INT.format(zl));
 }
 
 export function formatPLNNumber(cents: number | null | undefined): string {
