@@ -9,11 +9,11 @@ import "./globals.css";
 const lufga = localFont({
   variable: "--font-lufga",
   src: [
-    { path: "./fonts/Lufga-Light.otf", weight: "300", style: "normal" },
-    { path: "./fonts/Lufga-Regular.otf", weight: "400", style: "normal" },
-    { path: "./fonts/Lufga-Regular.otf", weight: "500", style: "normal" },
-    { path: "./fonts/Lufga-Regular.otf", weight: "600", style: "normal" },
-    { path: "./fonts/Lufga-Regular.otf", weight: "700", style: "normal" },
+    { path: "./fonts/Lufga-Light.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/Lufga-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Lufga-Regular.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Lufga-Regular.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/Lufga-Regular.woff2", weight: "700", style: "normal" },
   ],
   display: "swap",
 });

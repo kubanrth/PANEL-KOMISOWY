@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatPLN } from "@/lib/format";
@@ -18,14 +18,10 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
   const cutoff = Date.now() - days * 86_400_000;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // All products (RLS filters to own)
@@ -141,12 +137,7 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
 
   // For the simulator we pass last-30d revenue and current stock value
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="analityka"
-      breadcrumb={[{ label: "Analityka" }]}
-    >
+    <>
       <PageHeader
         label="Twoje dane sprzedażowe"
         title="Analityka"
@@ -295,7 +286,7 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
           </p>
         )}
       </section>
-    </PanelShell>
+    </>
   );
 }
 

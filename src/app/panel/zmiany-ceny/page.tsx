@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -12,14 +12,10 @@ import { CancelButton } from "./CancelButton";
 
 export default async function ZmianyCenyPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: reqsRaw } = await supabase
@@ -42,12 +38,7 @@ export default async function ZmianyCenyPage() {
   };
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="zmiany-ceny"
-      breadcrumb={[{ label: "Zmiany ceny" }]}
-    >
+    <>
       <PageHeader
         label={`${reqs.length} sugestii zmiany ceny`}
         title="Zmiany ceny"
@@ -145,7 +136,7 @@ export default async function ZmianyCenyPage() {
           </section>
         </>
       )}
-    </PanelShell>
+    </>
   );
 }
 

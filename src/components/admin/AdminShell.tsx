@@ -1,48 +1,30 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { signOut } from "@/app/panel/actions";
 import { getTheme } from "@/lib/theme";
-import { createClient } from "@/lib/supabase/server";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AdminMobileNav } from "./AdminMobileNav";
 import { SidebarNav } from "@/components/panel/SidebarNav";
-import { ADMIN_SECTIONS, type NavBadges } from "@/components/panel/nav-config";
+import { TopbarBreadcrumb } from "@/components/panel/TopbarBreadcrumb";
+import { ADMIN_SECTIONS } from "@/components/panel/nav-config";
+import { requireAdmin } from "@/lib/admin";
+import { getAdminBadges } from "@/lib/supabase/session";
 
-export type AdminShellProps = {
-  user: { email: string };
-  profile: { first_name: string | null; last_name: string | null; role: "klient" | "admin" | "super_admin" };
-  active:
-    | "queue"
-    | "submissions"
-    | "klienci"
-    | "crm"
-    | "aqc"
-    | "offers"
-    | "returns"
-    | "qr"
-    | "payouts"
-    | "inbox"
-    | "stats"
-    | "audit"
-    | "zapotrzebowanie"
-    | "zmiany-ceny"
-    | "co-warto-dodac"
-    | "integrations";
-  breadcrumb?: Array<{ label: string; href?: string }>;
-  children: React.ReactNode;
-  cta?: React.ReactNode;
-  badges?: NavBadges;
-};
+/**
+ * Chrome back-office — renderowany przez app/admin/layout.tsx.
+ * Self-fetching: requireAdmin (cache() dedupe ze stronami) + liczniki kolejek.
+ */
+export async function AdminShell({ children }: { children: React.ReactNode }) {
+  const { user, profile } = await requireAdmin();
+  const [theme, resolvedBadges] = await Promise.all([getTheme(), getAdminBadges()]);
 
-export async function AdminShell({ user, profile, active, breadcrumb, children, cta, badges }: AdminShellProps) {
   const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials = (profile.first_name?.[0] ?? "") + (profile.last_name?.[0] ?? user.email[0]?.toUpperCase());
-  const theme = await getTheme();
-  const resolvedBadges = { ...(await fetchAdminBadges()), ...badges };
 
   return (
     <div className="min-h-screen lg:flex">
-      <AdminMobileNav user={user} profile={profile} active={active} theme={theme} badges={resolvedBadges} />
+      <AdminMobileNav user={user} profile={profile} theme={theme} badges={resolvedBadges} />
 
       <aside className="hidden lg:flex flex-col w-[260px] border-r border-border bg-bg sticky top-0 h-screen">
         {/* Header z coral differentiator: jesteś w back-office */}
@@ -61,7 +43,7 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
         </div>
 
         <div className="px-3 py-4 flex-1 overflow-y-auto">
-          <SidebarNav sections={ADMIN_SECTIONS} activeKey={active} badges={resolvedBadges} storageKey="kb-nav-admin" />
+          <SidebarNav sections={ADMIN_SECTIONS} badges={resolvedBadges} storageKey="kb-nav-admin" />
         </div>
 
         {/* Bottom sticky group */}
@@ -97,65 +79,37 @@ export async function AdminShell({ user, profile, active, breadcrumb, children, 
       <div className="flex-1 min-w-0">
         <header className="hidden lg:flex sticky top-0 z-20 backdrop-blur-md bg-bg/80 border-b border-border-soft">
           <div className="w-full px-6 lg:px-10 h-[64px] flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-[13px] text-text-soft">
-              <Link href="/admin" className="hover:text-text">Admin</Link>
-              {breadcrumb?.map((b, i) => (
-                <span key={i} className="flex items-center gap-2">
-                  <span className="text-text-faint">/</span>
-                  {b.href ? <Link href={b.href} className="hover:text-text">{b.label}</Link> : <span className="text-text">{b.label}</span>}
-                </span>
-              ))}
-            </div>
+            <TopbarBreadcrumb admin />
             <div className="flex items-center gap-3">
-              {cta ?? (
-                <span className="pill pill-mute">
-                  <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-                  Live ops
-                </span>
-              )}
+              <span className="pill pill-mute">
+                <span className="h-1.5 w-1.5 rounded-full bg-mint" />
+                Live ops
+              </span>
             </div>
           </div>
         </header>
 
-        {breadcrumb && breadcrumb.length > 0 && (
-          <div className="lg:hidden px-4 py-3 border-b border-border-soft">
-            <div className="flex items-center gap-2 text-[12px] text-text-soft overflow-x-auto no-scrollbar">
-              <Link href="/admin" className="hover:text-text whitespace-nowrap">Admin</Link>
-              {breadcrumb.map((b, i) => (
-                <span key={i} className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="text-text-faint">/</span>
-                  {b.href ? (
-                    <Link href={b.href} className="hover:text-text">{b.label}</Link>
-                  ) : (
-                    <span className="text-text">{b.label}</span>
-                  )}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
-        <main className="px-4 py-5 lg:px-10 lg:py-12">{children}</main>
+        <main className="px-4 py-5 pb-24 lg:px-10 lg:py-12 lg:pb-12">
+          <Suspense fallback={<AdminSkeleton />}>{children}</Suspense>
+        </main>
       </div>
     </div>
   );
 }
 
-/** Liczniki kolejek admina — równoległe head-county; błąd → brak badge. */
-async function fetchAdminBadges(): Promise<Record<string, number | boolean | undefined>> {
-  try {
-    const supabase = await createClient();
-    const [aqc, payouts, offers] = await Promise.all([
-      supabase.from("products").select("*", { count: "exact", head: true }).eq("status", "aqc"),
-      supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
-      supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
-    ]);
-    return {
-      aqc: aqc.count ?? undefined,
-      payouts: payouts.count ?? undefined,
-      offers: offers.count ?? undefined,
-    };
-  } catch {
-    return {};
-  }
+
+function AdminSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="Ładowanie">
+      <div className="kb-skeleton h-3 w-40" />
+      <div className="mt-4 kb-skeleton h-9 w-72" />
+      <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="kb-skeleton h-[120px] rounded-[20px]" />
+        ))}
+      </div>
+      <div className="mt-8 kb-skeleton h-[320px] rounded-[20px]" />
+    </div>
+  );
 }

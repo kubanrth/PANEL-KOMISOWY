@@ -1,13 +1,12 @@
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 import { StartFlow } from "./StartFlow";
 
 export default async function StartPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
 
   if (!user) redirect("/register?next=/start");
 

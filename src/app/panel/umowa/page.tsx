@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDateTime } from "@/lib/format";
@@ -9,9 +9,7 @@ import { UmowaSign } from "./UmowaSign";
 
 export default async function UmowaPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -26,12 +24,7 @@ export default async function UmowaPage() {
   const signed = Boolean(profile.master_agreement_signed_at);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="umowa"
-      breadcrumb={[{ label: "Umowa Komisowa" }]}
-    >
+    <>
       <PageHeader
         label="Dokument główny"
         title="Umowa Komisowa"
@@ -106,6 +99,6 @@ export default async function UmowaPage() {
           <UmowaSign accountType={accountType} />
         </section>
       )}
-    </PanelShell>
+    </>
   );
 }

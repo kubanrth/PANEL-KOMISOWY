@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { AppNotification } from "@/lib/types";
@@ -12,14 +12,10 @@ import { NotificationItem } from "./NotificationItem";
 
 export default async function NotificationsPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: notificationsRaw } = await supabase
@@ -35,24 +31,19 @@ export default async function NotificationsPage() {
   const groups = groupByDate(notifications);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="notifications"
-      breadcrumb={[{ label: "Powiadomienia" }]}
-      cta={
-        unread.length > 0 ? (
-          <form action={markAllRead}>
-            <button className="btn-ghost h-11 px-5 text-[13px] inline-flex items-center gap-2">
-              Oznacz wszystkie jako przeczytane
-            </button>
-          </form>
-        ) : undefined
-      }
-    >
+    <>
       <PageHeader
         label={unread.length > 0 ? `${unread.length} nieprzeczytanych` : "Wszystko przeczytane"}
         title="Powiadomienia"
+        action={
+          unread.length > 0 ? (
+            <form action={markAllRead}>
+              <button className="btn-ghost h-11 px-5 text-[13px] inline-flex items-center gap-2">
+                Oznacz wszystkie jako przeczytane
+              </button>
+            </form>
+          ) : undefined
+        }
         sub="Każdy event w cyklu Twojej sprzedaży trafia tutaj — wycena, oferta, sprzedaż, wypłata, zwrot."
       />
 
@@ -80,7 +71,7 @@ export default async function NotificationsPage() {
           ))}
         </section>
       )}
-    </PanelShell>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/panel/ProductThumb";
@@ -48,7 +47,7 @@ export default async function AdminAqcQueuePage() {
   });
 
   return (
-    <AdminShell user={user} profile={profile} active="aqc" breadcrumb={[{ label: "A&QC" }]}>
+    <>
       <PageHeader
         label={`${products.length} produktów do audytu`}
         title="A&QC"
@@ -90,6 +89,6 @@ export default async function AdminAqcQueuePage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

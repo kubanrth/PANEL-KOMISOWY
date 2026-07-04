@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
@@ -19,9 +19,7 @@ export default async function SubmissionDetailPage(props: {
   const { id } = await props.params;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -59,12 +57,7 @@ export default async function SubmissionDetailPage(props: {
   const isFresh = submission.status === "signed" || submission.status === "draft";
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="submissions"
-      breadcrumb={[{ label: "Submissions", href: "/panel/submissions" }, { label: submission.id }]}
-    >
+    <>
       {/* Hero */}
       <section>
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
@@ -203,7 +196,7 @@ export default async function SubmissionDetailPage(props: {
           ← Wróć do listy
         </ButtonLink>
       </div>
-    </PanelShell>
+    </>
   );
 }
 

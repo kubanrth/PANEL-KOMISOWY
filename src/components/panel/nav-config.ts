@@ -203,17 +203,58 @@ export function isItemActive(item: NavItem, activeKey: string | undefined): bool
   return item.subs?.some((s) => s.key === activeKey) ?? false;
 }
 
-/** Legacy aliasy (strony sprzed redesignu). */
-export const LEGACY_ACTIVE_ALIASES: Record<string, string> = {
-  panel: "dashboard",
-  oferty: "submissions",
-  settings: "ustawienia",
-  "my-sales": "sprzedaze",
-  inventory: "magazyn",
-  stats: "analityka",
-};
 
-export function normalizeActive(active: string | undefined): string | undefined {
-  if (!active) return undefined;
-  return LEGACY_ACTIVE_ALIASES[active] ?? active;
+/** Wszystkie linki nawigacji (itemy + subitemy) — do dopasowania pathname. */
+function allNavLinks(sections: NavSection[]): Array<{ key: string; href: string; label: string }> {
+  return sections.flatMap((sec) =>
+    sec.items.flatMap((i) => [
+      { key: i.key, href: i.href, label: i.label },
+      ...(i.subs ?? []).map((s) => ({ key: s.key, href: s.href.split("?")[0], label: s.label })),
+    ]),
+  );
+}
+
+/**
+ * Klucz aktywnej pozycji z pathname — najdłuższy pasujący prefiks href.
+ * Fallback dla tras spoza nav (np. /panel/products/[id]) przez PATH_ACTIVE_HINTS.
+ */
+export function activeKeyFromPath(pathname: string, admin = false): string | undefined {
+  const sections = admin ? ADMIN_SECTIONS : [...PANEL_SECTIONS, ...PANEL_BOTTOM];
+  const links = allNavLinks(sections);
+  let best: { key: string; len: number } | undefined;
+  for (const l of links) {
+    if (pathname === l.href || pathname.startsWith(l.href + "/")) {
+      if (!best || l.href.length > best.len) best = { key: l.key, len: l.href.length };
+    }
+  }
+  if (best) return best.key;
+  for (const [prefix, key] of PATH_ACTIVE_HINTS) {
+    if (pathname.startsWith(prefix)) return key;
+  }
+  return undefined;
+}
+
+/** Trasy bez własnej pozycji w nav → którą pozycję podświetlić. */
+const PATH_ACTIVE_HINTS: Array<[string, string]> = [
+  ["/panel/products", "magazyn"],
+  ["/panel/offers", "sprzedaze"],
+  ["/panel/my-sales", "sprzedaze"],
+  ["/panel/inventory", "magazyn"],
+  ["/panel/stats", "analityka"],
+  ["/admin/integrations", "integrations"],
+];
+
+/** Label breadcrumba dla pathname (sekcja z nav-config). */
+export function breadcrumbLabelFromPath(pathname: string, admin = false): string | undefined {
+  const key = activeKeyFromPath(pathname, admin);
+  if (!key) return undefined;
+  const sections = admin ? ADMIN_SECTIONS : [...PANEL_SECTIONS, ...PANEL_BOTTOM];
+  for (const sec of sections) {
+    for (const i of sec.items) {
+      if (i.key === key) return i.label;
+      const sub = (i.subs ?? []).find((s) => s.key === key);
+      if (sub) return sub.label;
+    }
+  }
+  return undefined;
 }

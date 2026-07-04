@@ -3,7 +3,7 @@ import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { signOut } from "@/app/panel/actions";
 import { formatPLN } from "@/lib/format";
-import { PANEL_SECTIONS, PANEL_BOTTOM, normalizeActive, type NavBadges } from "./nav-config";
+import { PANEL_SECTIONS, PANEL_BOTTOM, type NavBadges } from "./nav-config";
 import { SidebarNav } from "./SidebarNav";
 import type { Theme } from "@/lib/theme";
 
@@ -16,7 +16,6 @@ export type PanelSidebarProps = {
   };
   walletBalance: number;
   walletAvailable: number;
-  active: string | undefined;
   theme: Theme;
   badges?: NavBadges;
 };
@@ -26,11 +25,9 @@ export function PanelSidebar({
   profile,
   walletBalance,
   walletAvailable,
-  active,
   theme,
   badges = {},
 }: PanelSidebarProps) {
-  const activeKey = normalizeActive(active);
   const fullName =
     [profile.first_name, profile.last_name].filter(Boolean).join(" ") || user.email;
   const initials =
@@ -52,12 +49,12 @@ export function PanelSidebar({
       </div>
 
       <div className="px-3 py-4 flex-1 overflow-y-auto">
-        <SidebarNav sections={PANEL_SECTIONS} activeKey={activeKey} badges={resolvedBadges} storageKey="kb-nav-panel" />
+        <SidebarNav sections={PANEL_SECTIONS} badges={resolvedBadges} storageKey="kb-nav-panel" />
       </div>
 
       {/* Bottom sticky group */}
       <div className="px-3 pt-3 pb-4 border-t border-border flex-shrink-0">
-        <SidebarNav sections={PANEL_BOTTOM} activeKey={activeKey} badges={resolvedBadges} storageKey="kb-nav-panel-bottom" />
+        <SidebarNav sections={PANEL_BOTTOM} badges={resolvedBadges} storageKey="kb-nav-panel-bottom" />
 
         {/* Wallet quick balance (gdy są środki) */}
         {walletBalance > 0 && (

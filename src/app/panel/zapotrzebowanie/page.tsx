@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
@@ -18,14 +18,10 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
   const sp = await props.searchParams;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   let q = supabase.from("demand_listings").select("*").eq("active", true);
@@ -64,12 +60,7 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
   });
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="zapotrzebowanie"
-      breadcrumb={[{ label: "Zapotrzebowanie" }]}
-    >
+    <>
       <PageHeader
         label={`${demands.length} aktywnych ogłoszeń · bieżące poszukiwania Kickback`}
         title="Zapotrzebowanie"
@@ -170,7 +161,7 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
           </ButtonLink>
         </div>
       </section>
-    </PanelShell>
+    </>
   );
 }
 

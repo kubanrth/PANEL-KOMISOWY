@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -16,14 +16,10 @@ import type { Product } from "@/lib/types";
 
 export default async function PromocjePage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: productsRaw } = await supabase
@@ -66,12 +62,7 @@ export default async function PromocjePage() {
   const rest = sorted.slice(1);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="promocje"
-      breadcrumb={[{ label: "Twoje promocje" }]}
-    >
+    <>
       <PageHeader
         label={`${promoted.length} aktywnych promocji`}
         title="Twoje promocje"
@@ -165,7 +156,7 @@ export default async function PromocjePage() {
           )}
         </>
       )}
-    </PanelShell>
+    </>
   );
 }
 

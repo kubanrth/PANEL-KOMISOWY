@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDateTime } from "@/lib/format";
 import type { AppNotification } from "@/lib/types";
@@ -46,7 +45,7 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
   ];
 
   return (
-    <AdminShell user={user} profile={profile} active="inbox" breadcrumb={[{ label: "Inbox" }]}>
+    <>
       <PageHeader label={`${list.length} powiadomień (max 100)`} title="Inbox" sub="Powiadomienia wszystkich klientów — sprzedaże, oferty, wypłaty, wyceny, zwroty." />
 
       <section className="mt-8">
@@ -94,6 +93,6 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
           })
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

@@ -10,7 +10,7 @@ import { Portal } from "@/components/ui/Portal";
 import { signOut } from "@/app/panel/actions";
 import { formatPLN } from "@/lib/format";
 import {
-  PANEL_SECTIONS, PANEL_BOTTOM, PANEL_TABS, normalizeActive, isItemActive,
+  PANEL_SECTIONS, PANEL_BOTTOM, PANEL_TABS, isItemActive, activeKeyFromPath,
   type NavBadges,
 } from "./nav-config";
 import { SidebarNav } from "./SidebarNav";
@@ -29,7 +29,6 @@ export type PanelMobileNavProps = {
   };
   walletBalance: number;
   walletAvailable: number;
-  active: string | undefined;
   theme: Theme;
   badges?: NavBadges;
 };
@@ -40,11 +39,11 @@ export type PanelMobileNavProps = {
  * „Więcej" otwiera pełnoekranowy sheet z kompletną nawigacją (SidebarNav).
  */
 export function PanelMobileNav({
-  user, profile, walletBalance, walletAvailable, active, theme, badges = {},
+  user, profile, walletBalance, walletAvailable, theme, badges = {},
 }: PanelMobileNavProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const pathname = usePathname();
-  const activeKey = normalizeActive(active);
+  const activeKey = activeKeyFromPath(pathname);
 
   useEffect(() => setMoreOpen(false), [pathname]);
 
@@ -167,7 +166,6 @@ export function PanelMobileNav({
           <div className="px-3 py-4 flex-1 overflow-y-auto">
             <SidebarNav
               sections={PANEL_SECTIONS}
-              activeKey={activeKey}
               badges={resolvedBadges}
               storageKey="kb-nav-panel"
               onNavigate={() => setMoreOpen(false)}
@@ -175,7 +173,6 @@ export function PanelMobileNav({
             <div className="mt-6 pt-4 border-t border-border-soft">
               <SidebarNav
                 sections={PANEL_BOTTOM}
-                activeKey={activeKey}
                 badges={resolvedBadges}
                 storageKey="kb-nav-panel-bottom"
                 onNavigate={() => setMoreOpen(false)}

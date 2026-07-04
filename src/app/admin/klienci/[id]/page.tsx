@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate, formatDateTime } from "@/lib/format";
 import type { Profile, Submission } from "@/lib/types";
@@ -32,12 +31,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
   const fullName = [target.first_name, target.last_name].filter(Boolean).join(" ") || "—";
 
   return (
-    <AdminShell
-      user={user}
-      profile={meProfile}
-      active="klienci"
-      breadcrumb={[{ label: "Klienci", href: "/admin/klienci" }, { label: fullName }]}
-    >
+    <>
       <section className="grid grid-cols-12 gap-8 items-start">
         <div className="col-span-12 lg:col-span-7">
           <div className="flex items-center gap-3 mb-3">
@@ -126,7 +120,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }
 

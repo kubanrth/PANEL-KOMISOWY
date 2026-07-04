@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { DemandListing, Club, NationalTeam, Player } from "@/lib/types";
 import { DemandForm } from "./DemandForm";
@@ -43,12 +42,7 @@ export default async function AdminZapotrzebowaniePage() {
   }
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="zapotrzebowanie"
-      breadcrumb={[{ label: "Zapotrzebowanie" }]}
-    >
+    <>
       <section>
         <div className="label">{active.length} aktywnych · {inactive.length} archiwum</div>
         <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -94,7 +88,7 @@ export default async function AdminZapotrzebowaniePage() {
           <DemandList demands={inactive} labelOf={labelOf} muted />
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
@@ -42,12 +41,7 @@ export default async function AdminQueuePage() {
     .limit(5);
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="queue"
-      badges={{ aqc: pendingAqc ?? 0, payouts: pendingPayouts ?? 0, offers: openOffers ?? 0 }}
-    >
+    <>
       <PageHeader
         label={`Operacje · ${formatDate(new Date())}`}
         title="Queue"
@@ -168,7 +162,7 @@ export default async function AdminQueuePage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }
 

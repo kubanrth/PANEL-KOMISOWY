@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN } from "@/lib/format";
@@ -31,7 +30,7 @@ export default async function AdminQrListPage() {
   const products = (listed ?? []) as Row[];
 
   return (
-    <AdminShell user={user} profile={profile} active="qr" breadcrumb={[{ label: "Generator QR" }]}>
+    <>
       <PageHeader
         label={`${products.length} produktów listed`}
         title="Generator QR"
@@ -95,6 +94,6 @@ export default async function AdminQrListPage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatPLN, formatDate, formatDateTime } from "@/lib/format";
 import { authorizePayout, rejectPayout } from "./actions";
 
@@ -42,7 +41,7 @@ export default async function AdminPayoutsPage() {
   const done = payouts.filter((p) => p.status === "done" || p.status === "failed" || p.status === "cancelled");
 
   return (
-    <AdminShell user={user} profile={profile} active="payouts" breadcrumb={[{ label: "Wypłaty" }]}>
+    <>
       <section>
         <div className="label">{pending.length} oczekuje · {done.length} zakończonych</div>
         <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -127,6 +126,6 @@ export default async function AdminPayoutsPage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

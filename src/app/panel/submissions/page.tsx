@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
@@ -29,16 +29,10 @@ export default async function SubmissionsListPage(props: {
   const tab: TabKey = TABS.some((t) => t.v === sp.status) ? sp.status! : "all";
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: submissionsRaw } = await supabase
@@ -70,12 +64,7 @@ export default async function SubmissionsListPage(props: {
       : submissions.filter((s) => activeTab.statuses!.includes(s.status));
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="submissions"
-      breadcrumb={[{ label: "Submissions" }]}
-    >
+    <>
       <PageHeader
         label={`${submissions.length} ofert · umowy komisowe`}
         title="Oferty"
@@ -194,6 +183,6 @@ export default async function SubmissionsListPage(props: {
           </section>
         </>
       )}
-    </PanelShell>
+    </>
   );
 }

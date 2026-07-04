@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -18,14 +18,10 @@ import { AddBankAccountForm } from "./AddBankAccountForm";
 
 export default async function WalletPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // Wallet summary via RPC
@@ -69,14 +65,7 @@ export default async function WalletPage() {
     .reduce((a, t) => a + Math.abs(t.amount_cents), 0);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      walletBalance={balance}
-      walletAvailable={available}
-      active="wallet"
-      breadcrumb={[{ label: "Wallet" }]}
-    >
+    <>
       <PageHeader
         label={`Wallet · ${formatDate(new Date())}`}
         title="Portfel"
@@ -222,7 +211,7 @@ export default async function WalletPage() {
           </div>
         </div>
       </section>
-    </PanelShell>
+    </>
   );
 }
 

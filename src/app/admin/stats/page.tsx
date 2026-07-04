@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatPLN } from "@/lib/format";
 
 export default async function AdminStatsPage() {
@@ -83,7 +82,7 @@ export default async function AdminStatsPage() {
   const pendingPaidOut = payouts.filter((p) => p.status === "requested" || p.status === "authorized").reduce((acc, p) => acc + p.amount_cents, 0);
 
   return (
-    <AdminShell user={user} profile={profile} active="stats" breadcrumb={[{ label: "Statystyki" }]}>
+    <>
       <section>
         <div className="label">Cała platforma</div>
         <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -148,7 +147,7 @@ export default async function AdminStatsPage() {
           </div>
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }
 

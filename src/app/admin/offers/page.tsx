@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -61,7 +60,7 @@ export default async function AdminOffersPage() {
   const listedNoOffer = (listedProducts ?? []).filter((p) => !seen.has(p.id));
 
   return (
-    <AdminShell user={user} profile={profile} active="offers" breadcrumb={[{ label: "Offers (Zerr)" }]}>
+    <>
       <PageHeader label={`${active.length} aktywnych negocjacji`} title="Offers (Zerr)" sub="Negocjacje cen z kupującymi — oferty, kontr-oferty, akceptacje." />
 
       <section className="mt-8">
@@ -134,6 +133,6 @@ export default async function AdminOffersPage() {
           </div>
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }

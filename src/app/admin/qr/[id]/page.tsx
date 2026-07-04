@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDateTime } from "@/lib/format";
 import QRCode from "qrcode";
@@ -39,15 +38,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
   });
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="qr"
-      breadcrumb={[
-        { label: "Generator QR", href: "/admin/qr" },
-        { label: `${p.brand} · ${p.model}` },
-      ]}
-    >
+    <>
       <section className="grid grid-cols-12 gap-8 items-start">
         <div className="col-span-12 lg:col-span-7">
           <div className="flex items-center gap-3 mb-3">
@@ -129,7 +120,7 @@ export default async function AdminQrDetailPage(props: { params: Promise<{ id: s
       </section>
 
       <PrintScript />
-    </AdminShell>
+    </>
   );
 }
 

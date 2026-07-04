@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -8,14 +8,10 @@ import type { FulfillmentOrder } from "@/lib/types";
 
 export default async function FulfillmentPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // Defensive query: if the table doesn't exist yet (migration 010 partial /
@@ -37,12 +33,7 @@ export default async function FulfillmentPage() {
   const latest = orders[0] ?? null;
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="fulfillment"
-      breadcrumb={[{ label: "Fulfillment" }]}
-    >
+    <>
       {tableMissing && (
         <div className="mb-6 rounded-[14px] bg-yellow/8 border border-yellow/25 p-4 flex items-start gap-3">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
@@ -170,7 +161,7 @@ export default async function FulfillmentPage() {
           </div>
         )}
       </section>
-    </PanelShell>
+    </>
   );
 }
 

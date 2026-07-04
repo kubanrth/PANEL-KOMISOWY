@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatDateTime } from "@/lib/format";
 
 type LogRow = {
@@ -29,7 +28,7 @@ export default async function AdminAuditLogPage() {
   }));
 
   return (
-    <AdminShell user={user} profile={profile} active="audit" breadcrumb={[{ label: "Audit log" }]}>
+    <>
       <section>
         <div className="label">{logs.length} eventów (ostatnie 200)</div>
         <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -75,6 +74,6 @@ export default async function AdminAuditLogPage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

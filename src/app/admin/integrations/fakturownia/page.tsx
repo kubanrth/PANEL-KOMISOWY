@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatDate } from "@/lib/format";
 import type {
   Profile, FakturowniaEvent, FakturowniaWarehouseMap, FakturowniaPushQueueItem,
@@ -56,12 +55,7 @@ export default async function AdminFakturowniaPage() {
   const klientById = new Map(klienci.map((k) => [k.id, k]));
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="integrations"
-      breadcrumb={[{ label: "Integracje", href: "/admin/integrations/fakturownia" }, { label: "Fakturownia" }]}
-    >
+    <>
       <section>
         <div className="label">Integracja księgowa</div>
         <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -221,7 +215,7 @@ export default async function AdminFakturowniaPage() {
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }
 
