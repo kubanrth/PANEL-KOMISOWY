@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatDate } from "@/lib/format";
 
 type ProfileRow = {
@@ -34,7 +33,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
   const admins = allProfiles.filter((p) => p.role !== "klient");
 
   return (
-    <AdminShell user={user} profile={profile} active="klienci" breadcrumb={[{ label: "Klienci" }]}>
+    <>
       <section>
         <div className="label">{klienci.length} klientów · {admins.length} adminów</div>
         <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -107,6 +106,6 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
           </div>
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }

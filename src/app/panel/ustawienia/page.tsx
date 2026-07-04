@@ -1,29 +1,20 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PasswordForm } from "./PasswordForm";
 
 export default async function UstawieniaPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="ustawienia"
-      breadcrumb={[{ label: "Ustawienia" }]}
-    >
+    <>
       <PageHeader label={`Konto · ${user.email}`} title="Ustawienia" />
 
       <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -76,7 +67,7 @@ export default async function UstawieniaPage() {
           </div>
         </div>
       </section>
-    </PanelShell>
+    </>
   );
 }
 

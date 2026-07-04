@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill } from "@/components/panel/StatusPill";
@@ -22,14 +22,10 @@ import { PlanForm } from "./PlanForm";
  */
 export default async function PlanyPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // 1. Klient stock — to compute "what's missing"
@@ -111,12 +107,7 @@ export default async function PlanyPage() {
   );
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="plany"
-      breadcrumb={[{ label: "Plany sprzedaży" }]}
-    >
+    <>
       <PageHeader
         label="Roadmap Twojej sprzedaży"
         title="Plany sprzedaży"
@@ -332,6 +323,6 @@ export default async function PlanyPage() {
           </div>
         </section>
       )}
-    </PanelShell>
+    </>
   );
 }

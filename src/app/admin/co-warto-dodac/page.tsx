@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatDate } from "@/lib/format";
 import type { KickbackPick } from "@/lib/types";
 import { CreatePickForm, EditPickRow } from "./ClientForms";
@@ -18,12 +17,7 @@ export default async function AdminCoWartoDodacPage() {
   const inactive = picks.filter((p) => !p.active);
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="co-warto-dodac"
-      breadcrumb={[{ label: "Co warto dodać" }]}
-    >
+    <>
       <section>
         <div className="label">{active.length} aktywnych · {inactive.length} wyłączonych</div>
         <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -60,7 +54,7 @@ export default async function AdminCoWartoDodacPage() {
           <PicksList picks={inactive} muted />
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }
 

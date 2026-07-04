@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, type ComponentType } from "react";
 import {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
@@ -9,7 +10,7 @@ import {
   Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List,
   type IconProps,
 } from "@phosphor-icons/react";
-import { isItemActive, type NavSection, type NavItem, type NavBadges, type DotColor } from "./nav-config";
+import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type NavBadges, type DotColor } from "./nav-config";
 
 /* Lookup nazw ikon z nav-config → komponenty Phosphor (Regular). */
 const ICONS: Record<string, ComponentType<IconProps>> = {
@@ -35,19 +36,22 @@ const DOT_CLS: Record<DotColor, string> = {
  */
 export function SidebarNav({
   sections,
-  activeKey,
+  activeKey: activeKeyProp,
   badges = {},
   storageKey,
   onNavigate,
 }: {
   sections: NavSection[];
-  activeKey: string | undefined;
+  /** Bez propa: klucz aktywny liczony z pathname (layout-mode). */
+  activeKey?: string | undefined;
   badges?: NavBadges;
   /** np. "kb-nav-panel" / "kb-nav-admin" — pamięć zwijania. */
   storageKey: string;
   /** Mobile sheet zamyka się po kliknięciu w link. */
   onNavigate?: () => void;
 }) {
+  const pathname = usePathname();
+  const activeKey = activeKeyProp ?? activeKeyFromPath(pathname, storageKey.includes("admin"));
   // null = jeszcze nie wczytane (SSR) — do tego czasu: rozwinięty tylko parent aktywnego.
   const [open, setOpen] = useState<Record<string, boolean> | null>(null);
 

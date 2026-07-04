@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -25,14 +25,10 @@ type Row = {
 
 export default async function WydaniaPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // Source 1: sprzedaże (products.status = sold)
@@ -81,12 +77,7 @@ export default async function WydaniaPage() {
   const totalValue = rows.reduce((a, r) => a + r.value_cents, 0);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="wydania"
-      breadcrumb={[{ label: "Wydania magazynowe" }]}
-    >
+    <>
       <PageHeader
         label="Dokumenty WZ"
         title="Wydania magazynowe"
@@ -165,6 +156,6 @@ export default async function WydaniaPage() {
           </section>
         </>
       )}
-    </PanelShell>
+    </>
   );
 }

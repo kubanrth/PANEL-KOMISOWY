@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { DaneForm } from "./DaneForm";
 
 export default async function DanePage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -17,12 +17,7 @@ export default async function DanePage() {
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="dane"
-      breadcrumb={[{ label: "Dane rozliczeniowe" }]}
-    >
+    <>
       <PageHeader
         label={`Konto: ${profile.account_type === "individual" ? "Indywidualne" : "Biznesowe"}`}
         title="Dane rozliczeniowe"
@@ -32,6 +27,6 @@ export default async function DanePage() {
       <section className="mt-8 max-w-[800px]">
         <DaneForm initial={profile} />
       </section>
-    </PanelShell>
+    </>
   );
 }

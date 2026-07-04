@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -62,15 +61,7 @@ export default async function AdminCrmDetailPage(props: {
   ];
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="crm"
-      breadcrumb={[
-        { label: "CRM", href: "/admin/crm" },
-        { label: fullName },
-      ]}
-    >
+    <>
       <section>
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
@@ -124,7 +115,7 @@ export default async function AdminCrmDetailPage(props: {
         {tab === "dokumenty" && <DocsTab documents={documents} />}
         {tab === "audit" && <NotifsTab notifs={notifications} />}
       </section>
-    </AdminShell>
+    </>
   );
 }
 

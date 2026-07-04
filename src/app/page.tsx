@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/supabase/session";
 
 /**
  * Root route — to NIE jest publiczny landing. `/` przekierowuje na panel
@@ -21,7 +22,7 @@ export default async function RootPage() {
   let target = "/login";
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getSessionUser();
 
     if (user) {
       const { data: profile, error } = await supabase

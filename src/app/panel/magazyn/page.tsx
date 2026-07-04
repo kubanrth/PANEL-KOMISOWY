@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
@@ -25,14 +25,10 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
   const sp = await props.searchParams;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: productsRaw } = await supabase
@@ -124,13 +120,7 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
   const totalValue = allRows.reduce((acc, r) => acc + r.listing_price_cents, 0);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="magazyn"
-      breadcrumb={[{ label: "Magazyn" }]}
-      badges={{ magazyn: allRows.length }}
-    >
+    <>
       <PageHeader
         label="Panel · Produkty w komisie"
         title="Magazyn"
@@ -203,7 +193,7 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
           <MagazynTable rows={rows} />
         )}
       </section>
-    </PanelShell>
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -27,14 +27,10 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
   const range = sp.range ?? "all";
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // Defensive: order by sold_at (added in migration 008). If migration not
@@ -126,12 +122,7 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
   }
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="sprzedaze"
-      breadcrumb={[{ label: "Sprzedaże" }]}
-    >
+    <>
       {missingMigration && (
         <div className="mb-6 rounded-[14px] bg-yellow/8 border border-yellow/25 p-4 flex items-start gap-3">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
@@ -303,7 +294,7 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
           </section>
         </>
       )}
-    </PanelShell>
+    </>
   );
 }
 

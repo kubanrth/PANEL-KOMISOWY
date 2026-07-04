@@ -1,21 +1,19 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import type { UserRole } from "@/lib/types";
 
 /**
  * Server-side gate. Returns auth + admin profile or redirects.
  * Use at the top of every /admin/* page.
  */
-export async function requireAdmin() {
+export const requireAdmin = cache(async () => {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login?next=/admin");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, role, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
 
   if (!profile) redirect("/onboarding");
 
@@ -34,4 +32,4 @@ export async function requireAdmin() {
     },
     supabase,
   };
-}
+});

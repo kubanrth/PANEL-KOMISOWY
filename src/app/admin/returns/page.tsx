@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate, daysFromNow } from "@/lib/format";
@@ -44,7 +43,7 @@ export default async function AdminReturnsPage() {
   const resolved = returns.filter((r) => r.resolution !== "pending");
 
   return (
-    <AdminShell user={user} profile={profile} active="returns" breadcrumb={[{ label: "Returns" }]}>
+    <>
       <PageHeader label={`${pending.length} czeka · ${resolved.length} rozwiązanych`} title="Returns" sub="Zwroty od kupujących i wycofania — decyzje i historia." />
 
       {/* Pending */}
@@ -150,6 +149,6 @@ export default async function AdminReturnsPage() {
           ))}
         </div>
       </section>
-    </AdminShell>
+    </>
   );
 }

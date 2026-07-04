@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { Pill, PROD_VARIANT, type PillVariant } from "@/components/panel/StatusPill";
 import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -14,9 +14,7 @@ import type { Product, Submission, KickbackPick, DemandListing } from "@/lib/typ
 
 export default async function PanelPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -110,20 +108,7 @@ export default async function PanelPage() {
   const totalSubmissions = submissions.length;
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      walletBalance={walletBalance}
-      walletAvailable={walletAvailable}
-      active="dashboard"
-      breadcrumb={[{ label: "Przegląd" }]}
-      badges={{
-        submissions: totalSubmissions,
-        magazyn: listed.length,
-        zapotrzebowanie: demands.length,
-        plany: picks.length > 0,
-      }}
-    >
+    <>
       {/* KPI row */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiCard label="Aktywnie w sprzedaży" value={listed.length} delta={weekBuckets[6] > 0 ? `+${weekBuckets[6]}` : undefined}>
@@ -274,7 +259,7 @@ export default async function PanelPage() {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" /></svg>
         <span className="text-[13px]">Tryb demo — bez integracji Autopay/PZ/banku DPD. Oferty zapisywane w DB, pieniądze testowe.</span>
       </div>
-    </PanelShell>
+    </>
   );
 }
 

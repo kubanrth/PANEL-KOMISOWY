@@ -14,7 +14,6 @@ import type { Theme } from "@/lib/theme";
 export type AdminMobileNavProps = {
   user: { email: string };
   profile: { first_name: string | null; last_name: string | null; role: "klient" | "admin" | "super_admin" };
-  active: string;
   theme: Theme;
   badges?: NavBadges;
 };
@@ -25,7 +24,7 @@ export type AdminMobileNavProps = {
  * z desktopowym sidebarem). Bez bottom tabs — back-office na mobile
  * to widok awaryjny, nie primary.
  */
-export function AdminMobileNav({ user, profile, active, theme, badges }: AdminMobileNavProps) {
+export function AdminMobileNav({ user, profile, theme, badges }: AdminMobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -108,7 +107,6 @@ export function AdminMobileNav({ user, profile, active, theme, badges }: AdminMo
         <div className="px-3 py-4 flex-1 overflow-y-auto">
           <SidebarNav
             sections={ADMIN_SECTIONS}
-            activeKey={active}
             badges={badges}
             storageKey="kb-nav-admin"
             onNavigate={() => setOpen(false)}

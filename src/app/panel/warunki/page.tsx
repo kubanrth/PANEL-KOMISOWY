@@ -1,14 +1,14 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 
 type Tile = { title: string; value: string; sub: string; accent?: string };
 
 export default async function WarunkiPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -34,12 +34,7 @@ export default async function WarunkiPage() {
   ];
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="warunki"
-      breadcrumb={[{ label: "Warunki komisowe" }]}
-    >
+    <>
       <PageHeader
         label="Twoje aktualne warunki"
         title="Warunki komisowe"
@@ -75,6 +70,6 @@ export default async function WarunkiPage() {
           </li>
         </ul>
       </section>
-    </PanelShell>
+    </>
   );
 }

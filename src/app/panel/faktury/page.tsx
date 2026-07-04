@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -49,14 +49,10 @@ export default async function FakturyPage(props: { searchParams: Promise<Filters
   const sp = await props.searchParams;
 
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: invoicesRaw } = await supabase
@@ -79,12 +75,7 @@ export default async function FakturyPage(props: { searchParams: Promise<Filters
   if (sp.month) visible = visible.filter((i) => periodOf(i).getMonth() === Number(sp.month) - 1);
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="faktury"
-      breadcrumb={[{ label: "Faktury i rozliczenia" }]}
-    >
+    <>
       <PageHeader
         label={`${invoices.length} dokumentów rozliczeniowych`}
         title="Faktury i rozliczenia"
@@ -209,7 +200,7 @@ export default async function FakturyPage(props: { searchParams: Promise<Filters
           </div>
         )}
       </section>
-    </PanelShell>
+    </>
   );
 }
 

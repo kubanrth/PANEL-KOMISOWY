@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { PriceChangeRequest, Product, Profile } from "@/lib/types";
@@ -35,12 +34,7 @@ export default async function AdminZmianyCenyPage() {
   const resolved = reqs.filter((r) => r.status !== "pending");
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="zmiany-ceny"
-      breadcrumb={[{ label: "Zmiany ceny" }]}
-    >
+    <>
       <section>
         <div className="label">{pending.length} oczekujących · {resolved.length} zdecydowanych</div>
         <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -69,7 +63,7 @@ export default async function AdminZmianyCenyPage() {
           <RequestsTable reqs={resolved} productById={productById} profileById={profileById} />
         </section>
       )}
-    </AdminShell>
+    </>
   );
 }
 

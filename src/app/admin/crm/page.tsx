@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { formatPLN } from "@/lib/format";
 import type { Profile, Product, Submission } from "@/lib/types";
 
@@ -67,12 +66,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
   );
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="crm"
-      breadcrumb={[{ label: "CRM" }]}
-    >
+    <>
       <section>
         <div className="label">{klienci.length} klientów</div>
         <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
@@ -157,7 +151,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
           )}
         </div>
       </section>
-    </AdminShell>
+    </>
   );
 }
 

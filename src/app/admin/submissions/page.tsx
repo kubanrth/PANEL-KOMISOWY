@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -56,7 +55,7 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
   }, {});
 
   return (
-    <AdminShell user={user} profile={profile} active="submissions" breadcrumb={[{ label: "Submissions" }]}>
+    <>
       <PageHeader label={`${all.length} łącznie`} title="Submissions" />
 
       <section className="mt-8">
@@ -133,6 +132,6 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
           </div>
         )}
       </section>
-    </AdminShell>
+    </>
   );
 }

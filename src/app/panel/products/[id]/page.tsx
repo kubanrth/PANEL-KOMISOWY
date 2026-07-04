@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser } from "@/lib/supabase/session";
 import { ProductStatusPill, SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { ButtonLink } from "@/components/ui/Button";
@@ -17,9 +17,7 @@ export default async function ProductDetailPage(props: {
   const { id } = await props.params;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
@@ -50,15 +48,7 @@ export default async function ProductDetailPage(props: {
   const canWithdraw = product.status === "listed" || product.status === "aqc" || product.status === "offer";
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="magazyn"
-      breadcrumb={[
-        { label: "Magazyn", href: "/panel/magazyn" },
-        { label: product.sku ?? `${product.brand} ${product.model}` },
-      ]}
-    >
+    <>
       {/* Hero */}
       <section>
         <div className="flex items-center gap-2.5 mb-4 flex-wrap">
@@ -166,7 +156,7 @@ export default async function ProductDetailPage(props: {
           )}
         </div>
       </section>
-    </PanelShell>
+    </>
   );
 }
 

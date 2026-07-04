@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./env";
@@ -5,8 +6,9 @@ import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./env";
 /**
  * Supabase client for Server Components, Server Actions, Route Handlers.
  * Note: Next.js 16 — cookies() is async, must be awaited.
+ * React cache(): jedna instancja per request (strona+shell+layout).
  */
-export async function createClient() {
+export const createClient = cache(async () => {
   const cookieStore = await cookies();
 
   return createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -26,4 +28,4 @@ export async function createClient() {
       },
     },
   });
-}
+});

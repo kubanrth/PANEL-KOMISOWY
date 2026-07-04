@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { Product, AqcAudit } from "@/lib/types";
@@ -46,12 +45,7 @@ export default async function AdminAqcDetailPage(props: { params: Promise<{ id: 
   const klientName = [profileObj?.first_name, profileObj?.last_name].filter(Boolean).join(" ") || "—";
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="aqc"
-      breadcrumb={[{ label: "A&QC", href: "/admin/aqc" }, { label: `${product.brand} · ${product.model}` }]}
-    >
+    <>
       <section className="grid grid-cols-12 gap-8 items-start">
         <div className="col-span-12 lg:col-span-8">
           <div className="flex items-center gap-3 mb-3">
@@ -83,7 +77,7 @@ export default async function AdminAqcDetailPage(props: { params: Promise<{ id: 
           comparables={(comparables ?? []) as Array<{ brand: string; model: string; condition: number | null; listing_price_cents: number | null; expected_price_cents: number | null; status: string; updated_at: string }>}
         />
       </section>
-    </AdminShell>
+    </>
   );
 }
 

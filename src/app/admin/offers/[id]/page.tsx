@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
-import { AdminShell } from "@/components/admin/AdminShell";
 import { OfferThread } from "@/components/offers/OfferThread";
 import { OfferComposer } from "@/components/offers/OfferComposer";
 import { ProductThumb } from "@/components/panel/ProductThumb";
@@ -35,15 +34,7 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
   const lastBuyerOffer = [...offers].reverse().find((o) => !o.is_seller_message);
 
   return (
-    <AdminShell
-      user={user}
-      profile={profile}
-      active="offers"
-      breadcrumb={[
-        { label: "Offers", href: "/admin/offers" },
-        { label: `${productData.brand} · ${productData.model}` },
-      ]}
-    >
+    <>
       <section className="grid grid-cols-12 gap-6 items-start">
         <div className="col-span-12 lg:col-span-7 flex items-center gap-5">
           <ProductThumb photos={productData.photos} brand={productData.brand} size="lg" />
@@ -87,6 +78,6 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
           />
         </div>
       </section>
-    </AdminShell>
+    </>
   );
 }

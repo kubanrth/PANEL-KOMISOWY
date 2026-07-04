@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { PanelShell } from "@/components/panel/PanelShell";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { OfferThread } from "@/components/offers/OfferThread";
@@ -17,14 +17,10 @@ import { acceptOffer, rejectOffer, sellerCounterOffer } from "../actions";
 export default async function ClientOfferThreadPage(props: { params: Promise<{ productId: string }> }) {
   const { productId } = await props.params;
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: product } = await supabase
@@ -50,16 +46,7 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
   const daysLeft = lastBuyer ? daysFromNow(lastBuyer.expires_at) : null;
 
   return (
-    <PanelShell
-      user={{ email: user.email! }}
-      profile={profile}
-      active="my-sales"
-      breadcrumb={[
-        { label: "Sprzedaże", href: "/panel/sprzedaze" },
-        { label: subData.brand + " · " + subData.model, href: `/panel/products/${productId}` },
-        { label: "Oferty" },
-      ]}
-    >
+    <>
       <section className="flex items-start gap-5">
         <div className="hidden sm:block flex-shrink-0">
           <ProductThumb photos={subData.photos} brand={subData.brand} size="lg" />
@@ -169,6 +156,6 @@ export default async function ClientOfferThreadPage(props: { params: Promise<{ p
           <OfferThread offers={offers} viewerId={user.id} />
         </section>
       )}
-    </PanelShell>
+    </>
   );
 }
