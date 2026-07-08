@@ -27,7 +27,7 @@ export function KpiCard({
   const deltaCls =
     deltaTone === "mint" ? "pill-mint" : deltaTone === "coral" ? "pill-coral" : "pill-mute";
   return (
-    <div className={`card p-5 ${alert ? "ring-1 ring-coral/40" : ""}`}>
+    <div className={`card p-5 h-full flex flex-col ${alert ? "ring-1 ring-coral/40" : ""}`}>
       <div className="flex items-start justify-between gap-2">
         <div className="label">{label}</div>
         {delta && <span className={`pill ${deltaCls} !text-[10px] !px-2`}>{delta}</span>}
@@ -36,7 +36,7 @@ export function KpiCard({
         {value}
       </div>
       {sub && <div className="mt-2 text-[12px] text-text-mute">{sub}</div>}
-      {children && <div className="mt-3">{children}</div>}
+      {children && <div className="mt-auto pt-3">{children}</div>}
     </div>
   );
 }
