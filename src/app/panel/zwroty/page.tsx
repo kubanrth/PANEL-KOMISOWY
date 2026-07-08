@@ -36,11 +36,27 @@ export default async function ZwrotyPage() {
 
   return (
     <>
-      <PageHeader
-        label={`${returns.length} zwrotów łącznie`}
-        title="Zwroty"
-        sub="Produkty wycofane z komisu lub odrzucone."
-      />
+      <div className="flex flex-wrap items-start justify-between gap-5">
+        <PageHeader
+          label={`${returns.length} zwrotów łącznie`}
+          title="Zwroty"
+          sub="Produkty wycofane z komisu lub odrzucone."
+        />
+        <aside className="max-w-[400px] rounded-[14px] bg-yellow/8 border border-yellow/25 p-4 flex gap-3 items-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow mt-0.5 flex-shrink-0" aria-hidden>
+            <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
+          </svg>
+          <div className="text-[12px] leading-[1.55]">
+            <div className="font-medium text-yellow">Przypomnienie!</div>
+            <p className="mt-1 text-text-soft">
+              W przypadku chęci zwrotu komisowanego towaru, który został przekazany na okres
+              krótszy niż 90 dni, zostanie naliczona opłata manipulacyjna w przedziale od{" "}
+              <span className="num text-text">49 zł</span> do <span className="num text-text">500 zł</span> netto.
+              Szczegóły przeprowadzenia procesu znajdują się w Twojej umowie komisowej.
+            </p>
+          </div>
+        </aside>
+      </div>
 
       {returns.length === 0 ? (
         <section className="mt-8">

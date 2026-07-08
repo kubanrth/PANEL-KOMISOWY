@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { KickbackMark } from "@/components/ui/KickbackMark";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
@@ -149,7 +150,10 @@ export default async function PlanyPage() {
                 )}
                 <div className="p-4 flex flex-col flex-1">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="text-[14px] font-medium tracking-[-0.015em] min-w-0 flex-1">{p.title}</div>
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <KickbackMark size={32} />
+                      <div className="text-[14px] font-medium tracking-[-0.015em] min-w-0">{p.title}</div>
+                    </div>
                     <Pill variant={p.priority >= 3 ? "lime" : p.priority === 2 ? "blue" : "mute"}>
                       {p.priority >= 3 ? "Wysoki" : p.priority === 2 ? "Średni" : "Niski"}
                     </Pill>

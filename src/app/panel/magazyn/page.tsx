@@ -121,11 +121,7 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
 
   return (
     <>
-      <PageHeader
-        label="Panel · Produkty w komisie"
-        title="Magazyn"
-        sub={`${allRows.length} ${plural(allRows.length, ["koszulka", "koszulki", "koszulek"])} fizycznie w Kickback — łączna wartość listingu ${formatPLN(totalValue, { decimals: false })}.`}
-      />
+      <PageHeader title="Magazyn" />
 
       {/* Filter bar — chips statusów z licznikami + pozostałe filtry */}
       <section className="mt-7 flex flex-wrap items-center gap-2">
