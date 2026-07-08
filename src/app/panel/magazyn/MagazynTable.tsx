@@ -36,9 +36,34 @@ type Props = {
   rows: MagazynRow[];
 };
 
+/** Feedback per wiersz po submitPrice: pigułka „wysłano" albo błąd przy inpucie. */
+type RowMsg = { kind: "sent" } | { kind: "error"; text: string };
+
+/**
+ * "1200" | "1200,50" | "1 200" | "1.200" | "1.200,50" → grosze.
+ * Przecinek = separator dziesiętny; kropka jest dziesiętna tylko gdy po niej
+ * są 1–2 cyfry (inaczej to separator tysięcy). null = niepoprawne.
+ * Logika skopiowana do scripts/selfcheck.mjs (runnable check).
+ */
+export function parsePriceToCents(raw: string): number | null {
+  const s = raw.replace(/[^\d.,]/g, "");
+  if (!s || (s.match(/,/g) ?? []).length > 1) return null;
+  let normalized: string;
+  if (s.includes(",")) {
+    normalized = s.replace(/\./g, "").replace(",", ".");
+  } else {
+    const parts = s.split(".");
+    normalized = parts.length === 2 && parts[1].length <= 2 ? s : parts.join("");
+  }
+  const value = parseFloat(normalized);
+  if (!Number.isFinite(value) || value <= 0) return null;
+  return Math.round(value * 100);
+}
+
 export function MagazynTable({ rows }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [priceEdits, setPriceEdits] = useState<Record<string, string>>({});
+  const [rowMsg, setRowMsg] = useState<Record<string, RowMsg>>({});
   const [busy, startTransition] = useTransition();
   const [withdrawError, setWithdrawError] = useState<string | null>(null);
   const [withdrawConfirm, setWithdrawConfirm] = useState(false);
@@ -72,20 +97,45 @@ export function MagazynTable({ rows }: Props) {
   }, [selectedRows]);
 
   function submitPrice(id: string) {
-    const raw = priceEdits[id];
-    if (!raw) return;
-    const cents = Math.round(parseFloat(raw.replace(/[^\d.,]/g, "").replace(",", ".")) * 100);
-    if (!Number.isFinite(cents) || cents <= 0) return;
+    const cents = parsePriceToCents(priceEdits[id] ?? "");
+    if (cents === null) {
+      setRowMsg((prev) => ({ ...prev, [id]: { kind: "error", text: "Podaj poprawną cenę, np. 1200 lub 1200,50." } }));
+      return;
+    }
     startTransition(async () => {
-      const result = await requestPriceChange(id, cents);
-      if (result.ok) {
-        setPriceEdits((prev) => {
-          const next = { ...prev };
-          delete next[id];
-          return next;
-        });
+      const result = await requestPriceChange(id, cents).catch(
+        () => ({ ok: false as const, error: "Nie udało się wysłać. Spróbuj ponownie." }),
+      );
+      if (!result.ok) {
+        setRowMsg((prev) => ({ ...prev, [id]: { kind: "error", text: result.error } }));
+        return;
       }
+      setRowMsg((prev) => ({ ...prev, [id]: { kind: "sent" } }));
+      setPriceEdits((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
     });
+  }
+
+  function openPriceEdit(id: string) {
+    setRowMsg((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setPriceEdits((prev) => ({ ...prev, [id]: "" }));
+  }
+
+  function editPriceValue(id: string, value: string) {
+    setRowMsg((prev) => {
+      if (prev[id]?.kind !== "error") return prev;
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setPriceEdits((prev) => ({ ...prev, [id]: value }));
   }
 
   function confirmWithdraw() {
@@ -193,6 +243,7 @@ export function MagazynTable({ rows }: Props) {
           const variant = DERIVED_STATUS_VARIANT[r.derived_status];
           const statusCls = variant === "mint" ? "pill-mint" : variant === "blue" ? "pill-blue" : variant === "amber" ? "pill-amber" : "pill-mute";
           const inEdit = priceEdits[r.id] !== undefined;
+          const msg = rowMsg[r.id];
 
           return (
             <div
@@ -242,34 +293,42 @@ export function MagazynTable({ rows }: Props) {
               </div>
 
               {inEdit && (
-                <div className="mt-3 pl-9 flex items-center gap-2">
-                  <input
-                    className="input !h-9 !text-[13px] flex-1"
-                    placeholder="Nowa cena"
-                    value={priceEdits[r.id]}
-                    onChange={(e) => setPriceEdits({ ...priceEdits, [r.id]: e.target.value })}
-                  />
-                  <button onClick={() => submitPrice(r.id)} disabled={busy} className="btn-primary !h-9 px-3 text-[12px]">
-                    Wyślij
-                  </button>
-                  <button
-                    onClick={() => {
-                      const next = { ...priceEdits };
-                      delete next[r.id];
-                      setPriceEdits(next);
-                    }}
-                    className="text-text-mute hover:text-coral text-[18px] px-2"
-                  >
-                    ×
-                  </button>
+                <div className="mt-3 pl-9">
+                  <div className="flex items-center gap-2">
+                    <input
+                      className="input !h-9 !text-[13px] flex-1"
+                      placeholder="Nowa cena"
+                      value={priceEdits[r.id]}
+                      onChange={(e) => editPriceValue(r.id, e.target.value)}
+                    />
+                    <button onClick={() => submitPrice(r.id)} disabled={busy} className="btn-primary !h-9 px-3 text-[12px]">
+                      Wyślij
+                    </button>
+                    <button
+                      onClick={() => {
+                        const next = { ...priceEdits };
+                        delete next[r.id];
+                        setPriceEdits(next);
+                      }}
+                      className="text-text-mute hover:text-coral text-[18px] px-2"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {msg?.kind === "error" && (
+                    <div className="mt-1.5 text-[12px] text-coral">{msg.text}</div>
+                  )}
                 </div>
               )}
 
               {!inEdit && (
-                <div className="mt-2 pl-9">
+                <div className="mt-2 pl-9 flex items-center gap-2 flex-wrap">
+                  {msg?.kind === "sent" && (
+                    <span className="pill pill-yellow">Wysłano do akceptacji</span>
+                  )}
                   <button
                     type="button"
-                    onClick={() => setPriceEdits({ ...priceEdits, [r.id]: "" })}
+                    onClick={() => openPriceEdit(r.id)}
                     className="text-[12px] text-blue hover:underline"
                   >
                     Zmień cenę
@@ -303,36 +362,46 @@ export function MagazynTable({ rows }: Props) {
 
               <div>
                 {inEdit ? (
-                  <div className="flex items-center gap-1">
-                    <input
-                      className="input !h-8 !py-1 !px-2 !text-[12px] w-[88px]"
-                      placeholder="nowa cena"
-                      value={priceEdits[r.id]}
-                      onChange={(e) => setPriceEdits({ ...priceEdits, [r.id]: e.target.value })}
-                    />
-                    <button onClick={() => submitPrice(r.id)} disabled={busy} className="btn-primary !h-8 !px-2 text-[11px]" title="Wyślij nową cenę">
-                      ✓
-                    </button>
-                    <button
-                      onClick={() => {
-                        const next = { ...priceEdits };
-                        delete next[r.id];
-                        setPriceEdits(next);
-                      }}
-                      className="text-text-mute hover:text-coral text-[14px] px-1"
-                      title="Anuluj"
-                    >
-                      ×
-                    </button>
+                  <div>
+                    <div className="flex items-center gap-1">
+                      <input
+                        className="input !h-8 !py-1 !px-2 !text-[12px] w-[88px]"
+                        placeholder="nowa cena"
+                        value={priceEdits[r.id]}
+                        onChange={(e) => editPriceValue(r.id, e.target.value)}
+                      />
+                      <button onClick={() => submitPrice(r.id)} disabled={busy} className="btn-primary !h-8 !px-2 text-[11px]" title="Wyślij nową cenę">
+                        ✓
+                      </button>
+                      <button
+                        onClick={() => {
+                          const next = { ...priceEdits };
+                          delete next[r.id];
+                          setPriceEdits(next);
+                        }}
+                        className="text-text-mute hover:text-coral text-[14px] px-1"
+                        title="Anuluj"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    {msg?.kind === "error" && (
+                      <div className="mt-1 text-[11px] text-coral">{msg.text}</div>
+                    )}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[13px] num">
-                      {formatPLN(r.listing_price_cents, { decimals: false })}
-                    </span>
-                    <span className={`${arrowColor} text-[12px] font-bold`} title={r.recommended_price_cents ? `Rekomendowana: ${formatPLN(r.recommended_price_cents, { decimals: false })}` : "Brak rekomendacji"}>
-                      {arrowGlyph}
-                    </span>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[13px] num">
+                        {formatPLN(r.listing_price_cents, { decimals: false })}
+                      </span>
+                      <span className={`${arrowColor} text-[12px] font-bold`} title={r.recommended_price_cents ? `Rekomendowana: ${formatPLN(r.recommended_price_cents, { decimals: false })}` : "Brak rekomendacji"}>
+                        {arrowGlyph}
+                      </span>
+                    </div>
+                    {msg?.kind === "sent" && (
+                      <span className="pill pill-yellow mt-1">Wysłano do akceptacji</span>
+                    )}
                   </div>
                 )}
               </div>
@@ -366,7 +435,7 @@ export function MagazynTable({ rows }: Props) {
                 {!inEdit && (
                   <button
                     type="button"
-                    onClick={() => setPriceEdits({ ...priceEdits, [r.id]: "" })}
+                    onClick={() => openPriceEdit(r.id)}
                     title="Zmień cenę"
                     aria-label={`Zmień cenę ${r.brand} ${r.model}`}
                     className="h-8 w-8 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute hover:text-lime transition-colors"

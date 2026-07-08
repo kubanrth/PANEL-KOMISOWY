@@ -32,4 +32,38 @@ for (const [got, want] of moneyCases) {
   if (norm(got) !== want) { console.error(`grouping: ${norm(got)}, oczekiwano ${want}`); process.exit(1); }
 }
 
-console.log("selfcheck OK (plural 12 przypadków, formatPLN 5 przypadków)");
+// --- parsePriceToCents (kopia logiki z MagazynTable.tsx — polskie formaty cen) ---
+function parsePriceToCents(raw) {
+  const s = raw.replace(/[^\d.,]/g, "");
+  if (!s || (s.match(/,/g) ?? []).length > 1) return null;
+  let normalized;
+  if (s.includes(",")) {
+    normalized = s.replace(/\./g, "").replace(",", ".");
+  } else {
+    const parts = s.split(".");
+    normalized = parts.length === 2 && parts[1].length <= 2 ? s : parts.join("");
+  }
+  const value = parseFloat(normalized);
+  if (!Number.isFinite(value) || value <= 0) return null;
+  return Math.round(value * 100);
+}
+const priceCases = [
+  ["1200", 120000],
+  ["1200,50", 120050],
+  ["1 200", 120000],
+  ["1.200", 120000],      // kropka jako separator tysięcy (stary kod: 120)
+  ["1.200,50", 120050],
+  ["12.5", 1250],
+  ["1200 zł", 120000],
+  ["", null],
+  ["abc", null],
+  ["0", null],
+  ["-50", 5000],           // regex zjada minus; server i tak waliduje > 0
+  ["1,2,3", null],
+];
+for (const [input, want] of priceCases) {
+  const got = parsePriceToCents(input);
+  if (got !== want) { console.error(`parsePriceToCents(${JSON.stringify(input)}) = ${got}, oczekiwano ${want}`); process.exit(1); }
+}
+
+console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12 przypadków)");

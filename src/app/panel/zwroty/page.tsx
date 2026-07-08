@@ -39,7 +39,7 @@ export default async function ZwrotyPage() {
       <PageHeader
         label={`${returns.length} zwrotów łącznie`}
         title="Zwroty"
-        sub="Produkty wycofane z komisu lub odrzucone w A&QC. Każdy zwrot ma powód, datę i ewentualną opłatę administracyjną."
+        sub="Produkty wycofane z komisu lub odrzucone."
       />
 
       {returns.length === 0 ? (
@@ -71,7 +71,7 @@ export default async function ZwrotyPage() {
 
           <section className="mt-6">
             <div className="card table-scroll">
-              <div className="hidden md:grid grid-cols-[minmax(240px,3fr)_60px_120px_170px_100px_140px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
+              <div className="hidden md:grid grid-cols-[minmax(200px,3fr)_50px_100px_minmax(220px,2fr)_90px_120px_100px] gap-3 px-4 h-11 label border-b border-border items-center">
                 <div>Produkt</div>
                 <div>Rozm.</div>
                 <div>Cena</div>
@@ -87,7 +87,7 @@ export default async function ZwrotyPage() {
                 return (
                   <div
                     key={r.id}
-                    className="grid grid-cols-1 md:grid-cols-[minmax(240px,3fr)_60px_120px_170px_100px_140px_110px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
+                    className="grid grid-cols-1 md:grid-cols-[minmax(200px,3fr)_50px_100px_minmax(220px,2fr)_90px_120px_100px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {p && <ProductThumb photos={p.photos} brand={p.brand} size="sm" />}
@@ -104,7 +104,7 @@ export default async function ZwrotyPage() {
                     <div className="hidden md:block text-[13px] num">
                       {p ? formatPLN(p.listing_price_cents ?? p.expected_price_cents ?? 0, { decimals: false }) : "—"}
                     </div>
-                    <div className="hidden md:block text-[12px] text-text-soft truncate" title={reasonInfo.description}>
+                    <div className="hidden md:block text-[12px] leading-[1.4] text-text-soft line-clamp-2" title={reasonInfo.description}>
                       {reasonInfo.title}
                     </div>
                     <div className={`hidden md:block text-[13px] num ${r.fee_cents > 0 ? "text-yellow" : "text-text-faint"}`}>

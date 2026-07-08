@@ -6,6 +6,12 @@ import "./globals.css";
 
 /* Lufga (spec FocusFlow): tylko Light + Regular — hierarchia przez skalę,
    wersaliki i kolor, nie przez pogrubienie. Wagi 500-700 mapowane do Regular. */
+const druk = localFont({
+  variable: "--font-druk",
+  src: [{ path: "./fonts/DrukWide-Bold.woff2", weight: "700", style: "normal" }],
+  display: "swap",
+});
+
 const lufga = localFont({
   variable: "--font-lufga",
   src: [
@@ -49,7 +55,7 @@ export default async function RootLayout({
       lang="pl"
       data-theme={theme}
       style={{ colorScheme: theme }}
-      className={`${lufga.variable} ${jakarta.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${lufga.variable} ${jakarta.variable} ${plexMono.variable} ${druk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
         {children}

@@ -18,7 +18,7 @@ export function PageHeader({
     <section className="flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
         {label && <div className="label">{label}</div>}
-        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
+        <h1 className="mt-3 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
           {title.replace(/\.$/, "")}.
         </h1>
         {sub && <p className="mt-3 text-[15px] leading-[1.55] text-text-soft max-w-[60ch]">{sub}</p>}
