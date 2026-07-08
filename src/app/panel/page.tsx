@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/supabase/session";
 import { Pill, PROD_VARIANT, type PillVariant } from "@/components/panel/StatusPill";
 import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
+import { KickbackMark } from "@/components/ui/KickbackMark";
 import { formatPLN, formatDate } from "@/lib/format";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import type { Product, Submission, KickbackPick, DemandListing } from "@/lib/types";
@@ -190,9 +191,7 @@ export default async function PanelPage() {
                 )}
                 {picks.map((p) => (
                   <Link key={p.id} href={p.cta_href ?? "/panel/plany"} className="card p-4 flex items-start gap-3 hover:bg-surface-2/40 transition-colors">
-                    <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border-soft flex items-center justify-center text-[13px] font-medium text-text-soft flex-shrink-0">
-                      {p.title[0]?.toUpperCase()}
-                    </div>
+                    <KickbackMark size={36} />
                     <div className="min-w-0 flex-1">
                       <div className="text-[13px] font-medium truncate">{p.title}</div>
                       {p.description && (
@@ -221,9 +220,7 @@ export default async function PanelPage() {
                 {demands.map((d) => (
                   <Link key={d.id} href="/panel/zapotrzebowanie" className="card p-4 block hover:bg-surface-2/40 transition-colors">
                     <div className="flex items-start gap-3">
-                      <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border-soft flex items-center justify-center text-[13px] font-medium text-text-soft flex-shrink-0">
-                        {(demandLabels.get(d.id) ?? "?")[0]?.toUpperCase()}
-                      </div>
+                      <KickbackMark size={36} />
                       <div className="min-w-0 flex-1">
                         <div className="text-[13px] font-medium truncate">{demandLabels.get(d.id) ?? "—"}</div>
                         <div className="text-[11px] text-text-mute mt-0.5">

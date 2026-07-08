@@ -182,32 +182,6 @@ export default async function WalletPage() {
         )}
       </section>
 
-      {/* Subkonto trust */}
-      <section className="mt-12 grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-5">
-          <div className="label">Bezpieczeństwo środków</div>
-          <h3 className="mt-3 font-light text-[24px] lg:text-[28px] tracking-[-0.02em]">Subkonto bankowe.</h3>
-          <p className="mt-3 max-w-[44ch] text-[14px] leading-[1.65] text-text-soft">
-            Środki klientów Kickback przechowujemy na osobnym subkoncie w Santander Bank Polska — odseparowanym od środków operacyjnych spółki.
-          </p>
-        </div>
-        <div className="col-span-12 lg:col-span-7 grid grid-cols-2 lg:grid-cols-3 gap-3">
-          <div className="card p-5">
-            <div className="label">IBAN subkonta</div>
-            <div className="mt-2 text-[12px] num break-all">PL 84 1090 1014 0000 0000 0042 0042</div>
-          </div>
-          <div className="card p-5">
-            <div className="label">BFG · gwarancja</div>
-            <div className="mt-2 font-light text-[24px] tracking-[-0.02em] num">100k €</div>
-            <div className="mt-1 text-[11px] text-text-mute">na klienta</div>
-          </div>
-          <div className="card p-5">
-            <div className="label">Saldo subkonta</div>
-            <div className="mt-2 font-light text-[24px] tracking-[-0.02em] num">{formatPLN(balance, { decimals: false })}</div>
-            <div className="mt-1 text-[11px] text-text-mute num">{formatDate(new Date())}</div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

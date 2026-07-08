@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { KickbackMark } from "@/components/ui/KickbackMark";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
@@ -101,14 +102,14 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
             {enriched.map(({ d, label, crest }) => (
               <article key={d.id} className="card p-4 flex flex-col">
                 <div className="flex items-start gap-3">
-                  <div className="h-10 w-10 rounded-[10px] bg-surface-2 border border-border-soft flex items-center justify-center flex-shrink-0 overflow-hidden text-[15px] font-medium text-text-soft">
-                    {crest ? (
-                      // eslint-disable-next-line @next/next/no-img-element
+                  {crest ? (
+                    <div className="h-10 w-10 rounded-full bg-surface-2 border border-border-soft flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={crest} alt={label} width={40} height={40} className="w-full h-full object-cover" />
-                    ) : (
-                      label[0]?.toUpperCase() ?? "?"
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <KickbackMark size={40} />
+                  )}
                   <div className="min-w-0 flex-1">
                     <div className="text-[14px] font-medium truncate">{label}</div>
                     <div className="mt-0.5 text-[11px] text-text-mute truncate">
