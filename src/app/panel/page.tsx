@@ -120,7 +120,7 @@ export default async function PanelPage() {
           value={soldThisMonth.length}
           sub={soldMonthSum > 0 ? formatPLN(soldMonthSum, { decimals: false }) : undefined}
         />
-        <Link href="/panel/wallet" className="block">
+        <Link href="/panel/wallet" className="block h-full">
           <KpiCard
             label="Do wypłaty"
             value={formatPLN(walletAvailable, { decimals: false })}
@@ -128,7 +128,7 @@ export default async function PanelPage() {
             delta={walletAvailable > 0 ? "Gotowe" : undefined}
           />
         </Link>
-        <Link href="/panel/zapotrzebowanie" className="block">
+        <Link href="/panel/zapotrzebowanie" className="block h-full">
           <KpiCard label="Nowe zapotrzebowanie" value={demands.length} />
         </Link>
       </section>
