@@ -1,21 +1,18 @@
 /**
- * Okrągły znak Kickback — do rekomendacji (Co warto dodać, Zapotrzebowanie).
- * „K" w Druk Wide na gradiencie CTA, jak ikona aplikacji.
- * ponytail: gdy powstanie dedykowany okrągły znak SVG, podmienić tylko tutaj.
+ * Okrągły znak klubowy Kickback („KICKBACK · EST. 2023") — używany przy
+ * rekomendacjach (Co warto dodać, Zapotrzebowanie, dashboard).
+ * Plik: public/brand_assets/kickback-club-icon.webp (256×256).
  */
 export function KickbackMark({ size = 40, className = "" }: { size?: number; className?: string }) {
   return (
-    <span
-      className={`rounded-full flex items-center justify-center flex-shrink-0 [background:var(--gradient-cta)] ${className}`}
-      style={{ width: size, height: size }}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/brand_assets/kickback-club-icon.webp"
+      alt=""
+      width={size}
+      height={size}
+      className={`rounded-full flex-shrink-0 select-none ${className}`}
       aria-hidden
-    >
-      <span
-        className="font-display font-bold text-on-accent select-none"
-        style={{ fontSize: Math.round(size * 0.42), lineHeight: 1 }}
-      >
-        K
-      </span>
-    </span>
+    />
   );
 }
