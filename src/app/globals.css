@@ -56,7 +56,7 @@
 
   /* Fonts */
   --font-sans:    var(--font-lufga), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-lufga), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-druk), var(--font-lufga), ui-sans-serif, system-ui, sans-serif;
   --font-mono:    var(--font-plex-mono), ui-monospace, monospace;
 
   /* Radius — spójnie z Design Systemem */
@@ -345,6 +345,7 @@ html { scroll-behavior: smooth; }
   transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
 }
 .input::placeholder { color: var(--color-text-faint); }
+.input option { background: var(--color-surface-3); color: var(--color-text); }
 .input:focus {
   border-color: var(--color-lime);
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-lime) 20%, transparent);

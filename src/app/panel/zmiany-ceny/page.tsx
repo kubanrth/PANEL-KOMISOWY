@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
@@ -5,6 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill, type PillVariant } from "@/components/panel/StatusPill";
+import { ProductThumb } from "@/components/panel/ProductThumb";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { PriceChangeRequest, PriceChangeStatus, Product } from "@/lib/types";
@@ -71,67 +73,90 @@ export default async function ZmianyCenyPage() {
             <KpiCard label="Odrzucone" value={counts.rejected} />
           </section>
 
-          {/* Timeline zmian: avatar-badge kto · stara → nowa cena · powód · data */}
+          {/* Tabela kanoniczna (wzór sprzedaze): Produkt · Zmiana · Powód · Status · Data · Akcja */}
           <section className="mt-6">
-            <div className="card p-6">
-              <ol className="space-y-0">
-                {reqs.map((r, i) => {
-                  const p = productById.get(r.product_id);
-                  const last = i === reqs.length - 1;
-                  const who = r.requested_by === user.id ? "TY" : "KICKBACK";
-                  const status = statusPill(r.status);
-                  const cur = r.current_price_cents;
-                  const tone =
-                    cur == null
-                      ? ""
-                      : r.suggested_price_cents < cur
-                        ? "text-coral"
-                        : r.suggested_price_cents > cur
-                          ? "text-mint"
-                          : "";
-                  return (
-                    <li key={r.id} className="relative pl-12 pb-6 last:pb-0">
-                      {!last && (
-                        <span className="absolute left-[14px] top-9 bottom-0 w-px bg-border" aria-hidden />
-                      )}
-                      {/* Avatar-badge: kto zgłosił */}
-                      <span
-                        className="absolute left-0 top-0 h-7 w-7 rounded-full bg-surface-2 border border-border flex items-center justify-center text-[8px] font-semibold tracking-[0.04em] text-text-soft"
-                        aria-hidden
+            <div className="card table-scroll">
+              <div className="hidden md:grid grid-cols-[minmax(200px,2.5fr)_170px_minmax(150px,2fr)_140px_100px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
+                <div>Produkt</div>
+                <div>Zmiana</div>
+                <div>Powód</div>
+                <div>Status</div>
+                <div>Data</div>
+                <div className="text-right">Akcja</div>
+              </div>
+
+              {reqs.map((r) => {
+                const p = productById.get(r.product_id);
+                const status = statusPill(r.status);
+                const cur = r.current_price_cents;
+                const tone =
+                  cur == null
+                    ? ""
+                    : r.suggested_price_cents < cur
+                      ? "text-coral"
+                      : r.suggested_price_cents > cur
+                        ? "text-mint"
+                        : "";
+                return (
+                  <div
+                    key={r.id}
+                    className="grid grid-cols-1 md:grid-cols-[minmax(200px,2.5fr)_170px_minmax(150px,2fr)_140px_100px_110px] gap-x-3 gap-y-2 md:gap-y-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
+                  >
+                    {/* Produkt */}
+                    {p ? (
+                      <Link
+                        href={`/panel/products/${p.id}`}
+                        className="flex items-center gap-3 min-w-0 hover:text-lime transition-colors"
                       >
-                        {who}
+                        <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
+                        <div className="min-w-0">
+                          <div className="text-[13.5px] font-medium truncate">{p.brand} {p.model}</div>
+                          {p.size && <div className="text-[11px] num text-text-mute truncate">{p.size}</div>}
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="flex items-center gap-3 min-w-0 text-[13.5px] text-text-mute">
+                        <ProductThumb photos={null} brand="?" size="sm" />
+                        Produkt usunięty
+                      </div>
+                    )}
+
+                    {/* Zmiana: stara → nowa */}
+                    <div className="text-[13px] num whitespace-nowrap">
+                      <span className="text-text-mute">
+                        {cur != null ? formatPLN(cur, { decimals: false }) : "—"}
                       </span>
+                      <span className={`mx-1.5 ${tone || "text-text-mute"}`}>→</span>
+                      <span className={`font-medium ${tone}`}>
+                        {formatPLN(r.suggested_price_cents, { decimals: false })}
+                      </span>
+                    </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                        <span className="text-[13.5px] font-medium">
-                          {p ? `${p.brand} ${p.model}` : "Produkt usunięty"}
-                        </span>
-                        {p?.size && <span className="text-[11px] num text-text-mute">{p.size}</span>}
-                        <Pill variant={status.variant}>{status.label}</Pill>
-                      </div>
+                    {/* Powód — na mobile tylko gdy jest treść */}
+                    <div
+                      className={`text-[12px] leading-[1.55] text-text-soft line-clamp-2 ${r.notes ? "" : "hidden md:block"}`}
+                    >
+                      {r.notes ?? "—"}
+                    </div>
 
-                      <div className="mt-1.5 text-[14px] num">
-                        <span className="text-text-mute">
-                          {cur != null ? formatPLN(cur, { decimals: false }) : "—"}
-                        </span>
-                        <span className={`mx-2 ${tone || "text-text-mute"}`}>→</span>
-                        <span className={`font-medium ${tone}`}>
-                          {formatPLN(r.suggested_price_cents, { decimals: false })}
-                        </span>
-                      </div>
+                    {/* Status */}
+                    <div>
+                      <Pill variant={status.variant}>{status.label}</Pill>
+                    </div>
 
-                      {r.notes && (
-                        <div className="mt-1 text-[12px] leading-[1.55] text-text-soft">{r.notes}</div>
-                      )}
+                    {/* Data (desktop) */}
+                    <div className="hidden md:block text-[12px] num text-text-soft">
+                      {formatDate(r.created_at)}
+                    </div>
 
-                      <div className="mt-1.5 flex items-center gap-4">
-                        <span className="text-[11px] num text-text-mute">{formatDate(r.created_at)}</span>
-                        {r.status === "pending" && <CancelButton requestId={r.id} />}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
+                    {/* Akcja + data na mobile */}
+                    <div className="flex items-center justify-between md:justify-end gap-3">
+                      <span className="md:hidden text-[11px] num text-text-mute">{formatDate(r.created_at)}</span>
+                      {r.status === "pending" && <CancelButton requestId={r.id} />}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </section>
         </>

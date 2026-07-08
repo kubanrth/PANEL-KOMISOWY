@@ -10,8 +10,8 @@ import type { BankAccount } from "@/lib/types";
 export function WithdrawForm({ available, accounts }: { available: number; accounts: BankAccount[] }) {
   const router = useRouter();
   const [amountInput, setAmountInput] = useState("");
+  // Konto z umowy komisowej — wypłata zawsze na konto domyślne, bez wyboru w UI.
   const defaultAccount = accounts.find((a) => a.is_default) ?? accounts[0];
-  const [bankId, setBankId] = useState(defaultAccount?.id ?? "");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -35,15 +35,15 @@ export function WithdrawForm({ available, accounts }: { available: number; accou
       setError(`Maksymalnie ${formatPLN(available, { decimals: false })}.`);
       return;
     }
-    if (!bankId) {
-      setError("Wybierz konto.");
+    if (!defaultAccount) {
+      setError("Brak przypiętego konta — skontaktuj się z opiekunem.");
       return;
     }
 
     startTransition(async () => {
       const fd = new FormData();
       fd.set("amount_cents", String(amountCents));
-      fd.set("bank_account_id", bankId);
+      fd.set("bank_account_id", defaultAccount.id);
       const res = await requestPayout(fd);
       if (!res.ok) {
         setError(res.error);
@@ -96,22 +96,15 @@ export function WithdrawForm({ available, accounts }: { available: number; accou
       </div>
 
       <div>
-        <label className="input-label" htmlFor="bank">Konto docelowe</label>
-        {accounts.length > 0 ? (
-          <select
-            id="bank"
-            value={bankId}
-            onChange={(e) => setBankId(e.target.value)}
-            className="input"
-          >
-            {accounts.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.bank_name} · {a.iban.slice(0, 6)}…{a.iban.slice(-4)} {a.is_default ? "(domyślne)" : ""}
-              </option>
-            ))}
-          </select>
+        <div className="input-label">Konto docelowe</div>
+        {defaultAccount ? (
+          <div className="text-[13px] text-text-soft num py-2">
+            Konto z umowy: {defaultAccount.bank_name} •••• {defaultAccount.iban.slice(-4)}
+          </div>
         ) : (
-          <div className="text-[13px] text-text-mute">Dodaj najpierw konto w sekcji "Konta bankowe" poniżej.</div>
+          <div className="text-[13px] text-text-mute py-2">
+            Brak przypiętego konta — skontaktuj się z opiekunem.
+          </div>
         )}
       </div>
 

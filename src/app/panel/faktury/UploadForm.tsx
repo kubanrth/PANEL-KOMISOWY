@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { uploadInvoice } from "./actions";
+import { Select } from "@/components/ui/Select";
 
 export function UploadForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -78,11 +79,11 @@ export function UploadForm() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div>
           <label className="input-label">Typ dokumentu</label>
-          <select name="type" defaultValue="faktura_vat" className="input">
+          <Select name="type" defaultValue="faktura_vat">
             <option value="faktura_vat">Faktura VAT</option>
             <option value="uks">UKS</option>
             <option value="inne">Inne</option>
-          </select>
+          </Select>
         </div>
         <div>
           <label className="input-label">Numer dokumentu</label>

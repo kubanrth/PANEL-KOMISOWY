@@ -43,7 +43,8 @@ export async function requestPriceChange(
   });
   if (error) return { ok: false, error: error.message };
 
-  // Notyfikacja admina
+  // Wpis do historii powiadomień klienta — celowo non-blocking (błąd nie
+  // blokuje wniosku). Wymaga policy notifications_insert_own (migracja 014).
   await supabase.from("notifications").insert({
     user_id: user.id, // klient widzi też swoją w historii
     type: "price_reduction_suggestion",

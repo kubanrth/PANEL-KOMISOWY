@@ -7,10 +7,9 @@ import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
-import { formatPLN, formatDate } from "@/lib/format";
+import { formatPLN, formatDate, daysFromNow } from "@/lib/format";
 import type { WalletTransaction, BankAccount } from "@/lib/types";
 import { WithdrawForm } from "./WithdrawForm";
-import { AddBankAccountForm } from "./AddBankAccountForm";
 
 /* Wallet — redesign: hero „Dostępne do wypłaty" na card-gradient-dark + glow-blob,
    2 KPI (W rozliczeniu / Wypłacone łącznie), tabela transakcji z pigułkami typów
@@ -46,6 +45,8 @@ export default async function WalletPage() {
     .order("is_default", { ascending: false })
     .order("created_at", { ascending: false });
   const accounts = (accountsRaw ?? []) as BankAccount[];
+  // Konto z umowy komisowej — jedno, ustalane przez Kickback (query sortuje is_default desc).
+  const defaultAccount = accounts[0];
 
   const isBusiness = profile.account_type === "business";
 
@@ -66,11 +67,11 @@ export default async function WalletPage() {
 
   return (
     <>
-      <PageHeader
-        label={`Wallet · ${formatDate(new Date())}`}
-        title="Portfel"
-        sub="Środki ze sprzedaży trafiają na subkonto w Santander. Po 14-dniowej karencji i weryfikacji dokumentu możesz je wypłacić na konto."
-      />
+      <PageHeader label={`Wallet · ${formatDate(new Date())}`} title="Portfel" />
+      {/* ponytail: własny <p> zamiast PageHeader sub — tekst klienta jest długi, 60ch było za ciasne */}
+      <p className="mt-3 text-[15px] leading-[1.55] text-text-soft max-w-[78ch]">
+        {'W widoku swojego portfela znajdziesz wizualizację skumulowanych środków ze sprzedaży swoich produktów. Nie musisz wykonywać żadnych akcji, aby wypłacić środki. Po okresie karencji, wynoszącym 14 dni, środki wpłyną na Twoje konto maksymalnie w przeciągu 72h. Jeżeli chcesz przyspieszyć ten proces, skorzystaj z przycisku „Wypłać teraz".'}
+      </p>
 
       <section className="mt-8 grid grid-cols-12 gap-6">
         {/* Hero + KPI */}
@@ -82,7 +83,7 @@ export default async function WalletPage() {
                 <span className="label !text-white/55">Dostępne do wypłaty</span>
                 <span className="pill pill-mint">
                   <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-                  Subkonto Santander
+                  Środki ze sprzedaży
                 </span>
               </div>
               <div className="mt-5 num font-light text-[40px] lg:text-[56px] leading-none tracking-[-0.03em] text-mint">
@@ -120,33 +121,28 @@ export default async function WalletPage() {
           <WithdrawForm available={available} accounts={accounts} />
 
           <div className="card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="label">Metody wypłaty</div>
-              <span className="text-[11px] text-text-mute num">{accounts.length}</span>
-            </div>
-            {accounts.length === 0 ? (
-              <p className="text-[13px] text-text-soft mb-4">
-                Brak kont. Dodaj pierwsze, by móc zlecić wypłatę.
-              </p>
+            <div className="label mb-4">Konto z umowy komisowej</div>
+            {defaultAccount ? (
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border flex items-center justify-center text-[10px] num text-text-mute">
+                  {defaultAccount.bank_name.slice(0, 3).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] truncate">{defaultAccount.bank_name}</div>
+                  <div className="text-[11px] text-text-mute num">
+                    {defaultAccount.iban.slice(0, 6)}…{defaultAccount.iban.slice(-4)}
+                  </div>
+                </div>
+                <Pill variant="lime">Z umowy</Pill>
+              </div>
             ) : (
-              <ul className="space-y-3 mb-5">
-                {accounts.map((a) => (
-                  <li key={a.id} className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-[10px] bg-surface-2 border border-border flex items-center justify-center text-[10px] num text-text-mute">
-                      {a.bank_name.slice(0, 3).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] truncate">{a.bank_name}</div>
-                      <div className="text-[11px] text-text-mute num">
-                        {a.iban.slice(0, 6)}…{a.iban.slice(-4)}
-                      </div>
-                    </div>
-                    {a.is_default && <Pill variant="lime">Domyślne</Pill>}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-[13px] text-text-soft">
+                Brak przypiętego konta — skontaktuj się z opiekunem.
+              </p>
             )}
-            <AddBankAccountForm />
+            <p className="mt-4 text-[11px] text-text-mute leading-relaxed">
+              Konto do wypłat ustala Kickback na podstawie umowy komisowej.
+            </p>
           </div>
         </div>
       </section>
@@ -171,8 +167,9 @@ export default async function WalletPage() {
           />
         ) : (
           <div className="card table-scroll">
-            <div className="hidden md:grid grid-cols-[110px_150px_minmax(220px,1fr)_150px_140px] gap-3 px-4 h-11 label border-b border-border items-center">
+            <div className="hidden md:grid grid-cols-[100px_130px_120px_minmax(180px,1fr)_130px_120px] gap-3 px-4 h-11 label border-b border-border items-center">
               <div>Data</div>
+              <div title="Środki blokowane 14 dni (ochrona przed zwrotem)">Data rozliczenia</div>
               <div>Typ</div>
               <div>Operacja</div>
               <div className="text-right">Kwota</div>
@@ -246,9 +243,25 @@ function TxRow({ tx, saldo }: { tx: WalletTransaction; saldo: number }) {
   const amountCls = positive ? "text-mint" : "text-coral";
   const { label, variant } = TX_PILL[tx.type] ?? { label: tx.type, variant: "mute" as const };
 
+  // Data rozliczenia: tylko dla wierszy sprzedażowych; sale_pending w przyszłości → mikrotekst „za X dni".
+  const isSale = tx.type === "sale_pending" || tx.type === "sale_unlocked";
+  const settleDays = tx.type === "sale_pending" ? daysFromNow(tx.available_at) : null;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[110px_150px_minmax(220px,1fr)_150px_140px] gap-2 md:gap-3 px-4 py-3.5 md:items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors">
+    <div className="grid grid-cols-1 md:grid-cols-[100px_130px_120px_minmax(180px,1fr)_130px_120px] gap-2 md:gap-3 px-4 py-3.5 md:items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors">
       <div className="hidden md:block text-[12px] num text-text-soft">{formatDate(tx.created_at)}</div>
+      <div className="hidden md:block">
+        {isSale && tx.available_at ? (
+          <>
+            <div className="text-[12px] num text-text-soft">{formatDate(tx.available_at)}</div>
+            {settleDays !== null && settleDays > 0 && (
+              <div className="text-[10px] text-text-mute">za {settleDays} dni</div>
+            )}
+          </>
+        ) : (
+          <span className="text-[12px] text-text-faint">—</span>
+        )}
+      </div>
       <div className="flex items-center justify-between md:block">
         <Pill variant={variant}>{label}</Pill>
         <span className={`md:hidden text-[14px] num ${amountCls}`}>{amountDisplay}</span>
