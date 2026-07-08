@@ -2,9 +2,15 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
-import type { FulfillmentOrder } from "@/lib/types";
+import type { FulfillmentOrder, Product } from "@/lib/types";
+import { FulfillmentRequestForm, type FulfillmentProduct } from "./FulfillmentRequestForm";
+
+// Statusy produktów dostępnych do zlecenia wysyłki z magazynu.
+const SHIPPABLE = ["listed", "offer", "aqc"] as const;
 
 export default async function FulfillmentPage() {
   const supabase = await createClient();
@@ -14,8 +20,31 @@ export default async function FulfillmentPage() {
   const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  // Defensive query: if the table doesn't exist yet (migration 010 partial /
-  // not applied), surface the error in UI instead of crashing the page.
+  // (a) Produkty klienta w magazynie do wyboru (RLS zawęża do klienta,
+  // jak w magazyn/page.tsx).
+  const { data: productsRaw } = await supabase
+    .from("products")
+    .select("id, brand, model, size, sku, listing_price_cents, expected_price_cents, photos, status")
+    .in("status", [...SHIPPABLE])
+    .order("created_at", { ascending: false });
+
+  const products: FulfillmentProduct[] = (
+    (productsRaw ?? []) as Array<
+      Pick<Product, "id" | "brand" | "model" | "size" | "sku" | "listing_price_cents" | "expected_price_cents" | "photos" | "status">
+    >
+  ).map((p) => ({
+    id: p.id,
+    brand: p.brand,
+    model: p.model,
+    size: p.size,
+    sku: p.sku,
+    price_cents: p.listing_price_cents ?? p.expected_price_cents ?? 0,
+    photos: p.photos,
+    status: p.status,
+  }));
+
+  // (b) + (c) Zlecenia fulfillment — defensywnie: tabela może nie istnieć na
+  // starych env (migracja 010) — pokaż baner zamiast crasha.
   const ordersQuery = await supabase
     .from("fulfillment_orders")
     .select("*")
@@ -24,11 +53,15 @@ export default async function FulfillmentPage() {
   const tableMissing = ordersQuery.error?.code === "42P01"; // relation does not exist
   const orders = (ordersQuery.data ?? []) as FulfillmentOrder[];
 
-  // Monthly summary (current month)
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-  const monthly = orders.filter((o) => new Date(o.created_at).getTime() >= monthStart);
-  const monthlyShippingCost = monthly.reduce((a, o) => a + (o.shipping_cost_cents ?? 0), 0);
+  // Otwarte zlecenia → produkty już zlecone (disabled + pigułka „Zlecone").
+  const busyIds = Array.from(
+    new Set(
+      orders
+        .filter((o) => o.status === "pending" || o.status === "shipped")
+        .map((o) => o.product_id)
+        .filter((id): id is string => id != null),
+    ),
+  );
 
   const latest = orders[0] ?? null;
 
@@ -53,15 +86,32 @@ export default async function FulfillmentPage() {
       <PageHeader
         label="Model fulfillmentowy"
         title="Fulfillment"
-        sub="Pozwól Kickback obsłużyć pakowanie i wysyłkę Twoich zamówień. Na koniec każdego miesiąca otrzymasz fakturę za zrealizowane przesyłki."
+        sub="Zleć wysyłkę towaru z magazynu Kickback — prześlij własny list przewozowy albo podaj dane, a my wygenerujemy etykietę."
       />
 
-      {/* Hero tracker — ostatnie zamówienie */}
+      {/* Zlecanie wysyłki */}
+      <section className="mt-8">
+        {products.length === 0 ? (
+          <EmptyState
+            title="Brak produktów w magazynie"
+            sub="Jak tylko Twoje produkty trafią do magazynu Kickback, zlecisz stąd ich wysyłkę — własną etykietą albo wygenerowaną przez nas."
+            action={
+              <ButtonLink href="/start" size="md">
+                Nowa oferta <ArrowRight size={16} />
+              </ButtonLink>
+            }
+          />
+        ) : (
+          <FulfillmentRequestForm products={products} busyIds={busyIds} />
+        )}
+      </section>
+
+      {/* Hero tracker — ostatnia wysyłka */}
       {latest && (
-        <section className="mt-8">
+        <section className="mt-10">
           <div className="card p-6">
             <div className="flex items-baseline justify-between gap-3 flex-wrap">
-              <div className="label">Ostatnie zamówienie</div>
+              <div className="label">Ostatnia wysyłka</div>
               <div className="text-[11px] num text-text-mute">
                 {formatDate(latest.shipped_at ?? latest.created_at)}
               </div>
@@ -73,7 +123,7 @@ export default async function FulfillmentPage() {
 
             {/* Karta szczegółów */}
             <div className="mt-6 pt-5 border-t border-border-soft grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Detail label="Kupujący" value={latest.buyer_name ?? "—"} />
+              <Detail label="Odbiorca" value={latest.buyer_name ?? "—"} />
               <Detail label="Kurier" value={latest.carrier ?? "—"} />
               <Detail label="Tracking" value={latest.tracking_number ?? "—"} num />
               <Detail
@@ -86,53 +136,20 @@ export default async function FulfillmentPage() {
         </section>
       )}
 
-      <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="card p-6">
-          <div className="label">Umowa fulfillmentowa</div>
-          <div className="mt-2 font-medium text-[17px] tracking-[-0.015em]">Wzór dokumentu</div>
-          <p className="mt-2 text-[13px] leading-[1.55] text-text-soft">
-            Standardowe warunki współpracy w modelu fulfillment. Po akceptacji warunki obowiązują dla
-            wszystkich Twoich zamówień obsługiwanych przez Kickback.
-          </p>
-          <div className="mt-4 flex items-center gap-3 flex-wrap">
-            <Pill variant="mute">PDF wkrótce</Pill>
-            <a
-              href="mailto:hello@kickback.pl?subject=Aktywacja%20fulfillment"
-              className="text-[13px] text-text-soft hover:text-lime transition-colors"
-            >
-              Zapytaj o aktywację →
-            </a>
-          </div>
-        </div>
-
-        <div className="card p-6">
-          <div className="label">Bieżący miesiąc</div>
-          <div className="mt-3 text-[28px] lg:text-[32px] font-light leading-none tracking-[-0.02em] num">
-            {monthly.length}
-            <span className="text-text-mute text-[15px] ml-2 font-normal">zamówień</span>
-          </div>
-          <div className="mt-3 text-[13px] text-text-soft num">
-            Koszt wysyłek: {formatPLN(monthlyShippingCost, { decimals: false })}
-          </div>
-          <div className="mt-1 text-[12px] text-text-mute">
-            Faktura zostanie wystawiona ostatniego dnia miesiąca.
-          </div>
-        </div>
-      </section>
-
+      {/* Historia — Twoje wysyłki */}
       <section className="mt-10">
-        <div className="label mb-3">Historia zamówień</div>
+        <div className="label mb-3">Twoje wysyłki</div>
         {orders.length === 0 ? (
           <div className="border border-dashed border-border rounded-[20px] px-8 py-12 text-center text-[13px] text-text-soft">
             {tableMissing
-              ? "Pojawi się tutaj po uruchomieniu migracji 010 i aktywacji modelu fulfillment u Twojego opiekuna."
-              : "Nie masz jeszcze zamówień w modelu fulfillment. Skontaktuj się z opiekunem żeby aktywować ten model."}
+              ? "Pojawi się tutaj po uruchomieniu migracji 010."
+              : "Nie masz jeszcze wysyłek. Zaznacz produkty powyżej i zleć pierwszą."}
           </div>
         ) : (
           <div className="card table-scroll">
             <div className="hidden md:grid grid-cols-[140px_minmax(180px,2fr)_120px_120px_150px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
               <div>Numer LP</div>
-              <div>Kupujący</div>
+              <div>Odbiorca</div>
               <div>Przewoźnik</div>
               <div>Koszt</div>
               <div>Status</div>
@@ -187,6 +204,8 @@ function statusPill(status: string): { variant: PillVariant; label: string } {
       return { variant: "coral", label: "Zwrot" };
     case "failed":
       return { variant: "coral", label: "Nieudana" };
+    case "pending":
+      return { variant: "blue", label: "W realizacji" };
     default:
       return { variant: "mute", label: "Przygotowane" };
   }

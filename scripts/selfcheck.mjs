@@ -66,4 +66,49 @@ for (const [input, want] of priceCases) {
   if (got !== want) { console.error(`parsePriceToCents(${JSON.stringify(input)}) = ${got}, oczekiwano ${want}`); process.exit(1); }
 }
 
-console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12 przypadków)");
+// --- fulfillment: parseProductIds + kod pocztowy (kopia logiki z panel/fulfillment/actions.ts) ---
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function parseProductIds(raw) {
+  const ids = [...new Set(raw.split(",").map((s) => s.trim()).filter(Boolean))];
+  if (!ids.length || ids.some((id) => !UUID_RE.test(id))) return null;
+  return ids;
+}
+const A = "11111111-2222-3333-4444-555555555555";
+const B = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+const idCases = [
+  ["", null],
+  ["   ", null],
+  ["abc", null],
+  [A, [A]],
+  [`${A},${B}`, [A, B]],
+  [` ${A} , ${B} `, [A, B]],       // trim
+  [`${A},${A},${B}`, [A, B]],      // dedup
+  [`${A},`, [A]],                  // trailing comma
+  [`${A},not-a-uuid`, null],       // jeden zły = całość odrzucona
+];
+for (const [input, want] of idCases) {
+  const got = parseProductIds(input);
+  if (JSON.stringify(got) !== JSON.stringify(want)) {
+    console.error(`parseProductIds(${JSON.stringify(input)}) = ${JSON.stringify(got)}, oczekiwano ${JSON.stringify(want)}`);
+    process.exit(1);
+  }
+}
+
+const POSTAL_RE = /^\d{2}-\d{3}$/;
+const postalCases = [
+  ["00-950", true],
+  ["31-002", true],
+  ["00950", false],
+  ["0-950", false],
+  ["00-95", false],
+  ["00-9500", false],
+  ["ab-cde", false],
+  [" 00-950", false],  // action trimuje przed testem; regex sam nie przepuszcza spacji
+  ["", false],
+];
+for (const [input, want] of postalCases) {
+  const got = POSTAL_RE.test(input);
+  if (got !== want) { console.error(`POSTAL_RE(${JSON.stringify(input)}) = ${got}, oczekiwano ${want}`); process.exit(1); }
+}
+
+console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9 przypadków)");
