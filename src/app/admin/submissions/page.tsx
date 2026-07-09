@@ -70,26 +70,40 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
           <button type="submit" className="btn-primary h-11 px-5 text-[13px]">Szukaj</button>
         </form>
 
-        <div className="flex items-center gap-2 flex-wrap text-[13px]">
-          {FILTERS.map((f) => {
-            const active = f.key === filterKey;
-            const params = new URLSearchParams();
-            if (f.key !== "all") params.set("filter", f.key);
-            if (search) params.set("q", search);
-            const href = params.toString() ? `/admin/submissions?${params}` : "/admin/submissions";
-            return (
-              <Link
-                key={f.key}
-                href={href}
-                className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
-                  active ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
-                }`}
-              >
-                {f.label} <span className={`num ml-1 ${active ? "text-lime/70" : "text-text-mute"}`}>· {counts[f.key]}</span>
-              </Link>
-            );
-          })}
-        </div>
+        {/* Dropdown statusów — natywny <details>, panel frosted glass.
+            ponytail: bez light-dismiss (klik obok nie zamyka) — nawigacja
+            po kliknięciu statusu i tak resetuje details; JS dodać gdy zacznie
+            przeszkadzać. */}
+        <details className="relative inline-block group">
+          <summary className="list-none [&::-webkit-details-marker]:hidden inline-flex items-center gap-2 h-10 px-4 rounded-full text-[13px] font-medium border border-lime/40 bg-lime/10 text-lime cursor-pointer select-none transition-colors hover:bg-lime/15 active:scale-[.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime/60">
+            Status: {FILTERS.find((f) => f.key === filterKey)!.label}
+            <span className="num text-lime/70">· {counts[filterKey]}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-open:rotate-180" aria-hidden>
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </summary>
+          <div className="absolute left-0 top-full mt-2 z-30 min-w-[260px] rounded-[16px] border border-border bg-bg/70 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.55)] p-1.5">
+            {FILTERS.map((f) => {
+              const active = f.key === filterKey;
+              const params = new URLSearchParams();
+              if (f.key !== "all") params.set("filter", f.key);
+              if (search) params.set("q", search);
+              const href = params.toString() ? `/admin/submissions?${params}` : "/admin/submissions";
+              return (
+                <Link
+                  key={f.key}
+                  href={href}
+                  className={`flex items-center justify-between gap-6 px-3.5 h-10 rounded-[11px] text-[13px] font-medium transition-colors ${
+                    active ? "bg-lime/12 text-lime" : "text-text-soft hover:text-text hover:bg-surface-2/70"
+                  }`}
+                >
+                  {f.label}
+                  <span className={`num ${active ? "text-lime/70" : "text-text-mute"}`}>{counts[f.key]}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </details>
       </section>
 
       <section className="mt-6">
