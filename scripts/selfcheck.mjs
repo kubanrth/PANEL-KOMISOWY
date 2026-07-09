@@ -112,3 +112,37 @@ for (const [input, want] of postalCases) {
 }
 
 console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9 przypadków)");
+
+// --- parser webhooka Fakturowni (kopia logiki kind/event_id z route.ts) ---
+{
+  const SALE_KINDS = new Set(["vat", "receipt", "bill", "final", "kp"]);
+  const pick = (o, k) => (typeof o[k] === "string" && o[k].length > 0 ? o[k] : null);
+  const parse = (payload) => {
+    const inv = payload.invoice ?? payload.document ?? payload;
+    const invId = inv.id != null ? String(inv.id) : "";
+    const invKind = pick(inv, "kind") ?? "";
+    const eventName = pick(payload, "event") ?? pick(payload, "event_type") ?? pick(payload, "type") ?? "";
+    const isDestroy = /destroy|delete/i.test(eventName);
+    const isInvoice = invId !== "" && ("positions" in inv || "number" in inv || invKind !== "");
+    let kind = "unknown";
+    if (isInvoice && !isDestroy && (SALE_KINDS.has(invKind) || invKind === "")) kind = "invoice_sale";
+    else if (/mm|movement|magazyn|przesun/i.test(eventName)) kind = "mm_sale";
+    else if (isInvoice) kind = `invoice_${invKind || "other"}${isDestroy ? "_destroy" : ""}`;
+    else if (eventName) kind = eventName;
+    return kind;
+  };
+  const cases = [
+    [{ event: "invoice:create", invoice: { id: 1, kind: "receipt", positions: [] } }, "invoice_sale"],
+    [{ event: "invoice:create", invoice: { id: 2, kind: "vat", number: "F/1" } }, "invoice_sale"],
+    [{ event: "invoice:destroy", invoice: { id: 3, kind: "vat", number: "F/1" } }, "invoice_vat_destroy"],
+    [{ event: "invoice:create", invoice: { id: 4, kind: "proforma", positions: [] } }, "invoice_proforma"],
+    [{ id: 5, kind: "receipt", positions: [] }, "invoice_sale"], // płaski payload
+    [{ event: "client:create", client: { id: 9 } }, "client:create"],
+    [{ event: "warehouse_movement", document: { id: 7 } }, "mm_sale"],
+  ];
+  for (const [p, want] of cases) {
+    const got = parse(p);
+    if (got !== want) { console.error(`fakturownia parse: ${JSON.stringify(p.event ?? p.kind)} → ${got}, oczekiwano ${want}`); process.exit(1); }
+  }
+  console.log("parser webhooka Fakturowni OK (7 przypadków)");
+}

@@ -1,10 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getServiceClient } from "@/lib/supabase/service";
-import { verifyHmacSignature } from "@/lib/integrations/fakturownia/hmac";
+import { verifyBearerToken } from "@/lib/integrations/fakturownia/auth";
 
 /**
- * Fakturownia webhook receiver — przyjmuje wszystkie eventy z Fakturowni
- * i decyduje co zrobić na podstawie kind.
+ * Fakturownia webhook receiver.
+ *
+ * Realne webhooki Fakturowni (zweryfikowane z dokumentacją 2026-07):
+ * eventy TYLKO invoice:create/update/destroy + client:*. Dokumentów MM nie
+ * emitują — sygnałem sprzedaży jest invoice:create (paragon/faktura
+ * wystawiana przez SellAsist przy sprzedaży). Autoryzacja: Bearer token.
+ * Match pozycji: positions[].code == products.sku (push ustawia code=SKU),
+ * fallback positions[].product_id == products.fakturownia_product_id.
  *
  * **KRYTYCZNE:**
  * Zawsze zwracamy HTTP 200. Non-2xx powoduje Fakturownia retry, co
@@ -39,12 +45,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // 1) Raw body — HMAC liczone po niesparsowanym tekście.
   const rawBody = await req.text();
 
-  // 2) Verify HMAC + timestamp window (5 min anti-replay).
-  const verify = verifyHmacSignature(
-    rawBody,
-    req.headers.get("x-fakturownia-timestamp"),
-    req.headers.get("x-fakturownia-signature"),
-  );
+  // 2) Autoryzacja: Bearer token (Fakturownia nie podpisuje HMAC-em).
+  const verify = verifyBearerToken(req.headers.get("authorization"));
 
   if (!verify.ok && verify.reason === "missing_secret") {
     // Misconfiguracja po naszej stronie — to NIE jest atak, więc 503.
@@ -117,8 +119,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   let processError: string | null = null;
 
   try {
-    if (event.kind === "mm_sale" || event.kind === "warehouse_movement") {
-      const r = await handleMmSale(event, eventRowId ?? "");
+    if (event.kind === "invoice_sale" || event.kind === "mm_sale" || event.kind === "warehouse_movement") {
+      const r = await handleSale(event, eventRowId ?? "");
       processStatus = r.ok ? "processed" : "failed";
       processError = r.ok ? null : r.error;
     } else {
@@ -154,7 +156,7 @@ type ParsedEvent = {
   event_id: string;
   kind: string;
   doc_id: string;
-  positions: Array<{ sku: string; quantity: number }>;
+  positions: Array<{ sku: string; fakturowniaProductId: number | null; quantity: number }>;
   raw: Record<string, unknown>;
 };
 
@@ -162,38 +164,50 @@ type ParsedEvent = {
  * Próbuje wyciągnąć kluczowe pola niezależnie od dokładnego shape payloadu.
  * To miejsce do iteracji gdy widzimy realny payload z Fakturowni.
  */
+/** Sprzedażowe rodzaje dokumentów Fakturowni (invoice.kind). */
+const SALE_KINDS = new Set(["vat", "receipt", "bill", "final", "kp"]);
+
 function parseEvent(payload: Record<string, unknown>): ParsedEvent {
-  const event_id =
-    pickString(payload, "event_id") ??
-    pickString(payload, "id") ??
-    "";
+  // Fakturownia może opakować fakturę w { invoice: {...} } albo przysłać płasko.
+  const inv = (payload.invoice ?? payload.document ?? payload) as Record<string, unknown>;
 
-  const kindRaw =
+  const invId = inv.id != null ? String(inv.id) : "";
+  const invKind = pickString(inv, "kind") ?? "";
+  const eventName =
+    pickString(payload, "event") ??
     pickString(payload, "event_type") ??
-    pickString(payload, "kind") ??
     pickString(payload, "type") ??
-    "unknown";
-
-  const doc = (payload.document ?? payload.doc ?? {}) as Record<string, unknown>;
-  const doc_id =
-    pickString(doc, "id") ??
-    pickString(doc, "number") ??
-    pickString(payload, "document_id") ??
     "";
 
-  // Normalizacja kind: każdy MM-doc traktujemy jako warehouse_movement,
-  // dispatcher rozpozna kierunek po source_warehouse_id.
-  const kind = /mm|movement|magazyn|przesun/i.test(kindRaw) ? "mm_sale" : kindRaw;
+  // destroy/update nie są sygnałem sprzedaży — logujemy jako skipped.
+  const isDestroy = /destroy|delete/i.test(eventName);
+  const isInvoice = invId !== "" && ("positions" in inv || "number" in inv || invKind !== "");
 
-  const positionsRaw =
-    (doc.positions as Array<Record<string, unknown>> | undefined) ??
-    (payload.positions as Array<Record<string, unknown>> | undefined) ??
-    [];
+  let kind = "unknown";
+  if (isInvoice && !isDestroy && (SALE_KINDS.has(invKind) || invKind === "")) {
+    kind = "invoice_sale";
+  } else if (/mm|movement|magazyn|przesun/i.test(eventName)) {
+    kind = "mm_sale";
+  } else if (isInvoice) {
+    kind = `invoice_${invKind || "other"}${isDestroy ? "_destroy" : ""}`;
+  } else if (eventName) {
+    kind = eventName;
+  }
 
+  // Idempotencja: Fakturownia nie wysyła event_id — budujemy deterministyczny
+  // z rodzaju + id + updated_at (retry tego samego delivery = ten sam klucz;
+  // invoice:update po zmianie = nowy klucz, ale handler RPC jest idempotentny).
+  const updatedAt = pickString(inv, "updated_at") ?? "";
+  const event_id = invId ? `${eventName || "invoice"}_${invId}_${updatedAt}` : pickString(payload, "event_id") ?? "";
+
+  const doc_id = pickString(inv, "number") ?? invId;
+
+  const positionsRaw = (inv.positions as Array<Record<string, unknown>> | undefined) ?? [];
   const positions = positionsRaw.map((p) => ({
     sku: pickString(p, "code") ?? pickString(p, "sku") ?? pickString(p, "product_code") ?? "",
+    fakturowniaProductId: p.product_id != null && Number.isFinite(Number(p.product_id)) ? Number(p.product_id) : null,
     quantity: Number(p.quantity ?? p.qty ?? 1),
-  })).filter((p) => p.sku);
+  })).filter((p) => p.sku || p.fakturowniaProductId != null);
 
   return { event_id, kind, doc_id, positions, raw: payload };
 }
@@ -207,11 +221,11 @@ function pickString(obj: Record<string, unknown>, key: string): string | null {
 /* Handlers per kind                                       */
 /* ====================================================== */
 
-async function handleMmSale(event: ParsedEvent, eventRowId: string): Promise<
+async function handleSale(event: ParsedEvent, eventRowId: string): Promise<
   { ok: true; processed: number } | { ok: false; error: string }
 > {
   if (event.positions.length === 0) {
-    return { ok: false, error: "no_positions_in_mm_doc" };
+    return { ok: false, error: "no_positions_in_document" };
   }
 
   const supabase = getServiceClient();
@@ -219,15 +233,31 @@ async function handleMmSale(event: ParsedEvent, eventRowId: string): Promise<
   const errors: string[] = [];
 
   for (const pos of event.positions) {
+    // Primary: code == products.sku (push ustawia code=SKU przy tworzeniu
+    // produktu w Fakturowni). Fallback: product_id → fakturownia_product_id.
+    let sku = pos.sku;
+    if (!sku && pos.fakturowniaProductId != null) {
+      const { data: prod } = await supabase
+        .from("products")
+        .select("sku")
+        .eq("fakturownia_product_id", pos.fakturowniaProductId)
+        .maybeSingle();
+      sku = (prod?.sku as string | undefined) ?? "";
+      if (!sku) {
+        errors.push(`product_id=${pos.fakturowniaProductId}: brak w mapowaniu (fakturownia_product_id)`);
+        continue;
+      }
+    }
+
     // RPC atomic + idempotent — ustawia status='sold', trigger DB
-    // handle_product_sold reszta domyka (wallet, notyfikacje, sold_at, settlement_at).
+    // handle_product_sold domyka resztę (wallet, notyfikacje, sold_at, settlement_at).
     const { data, error } = await supabase.rpc("mark_product_sold_from_webhook", {
-      p_sku: pos.sku,
+      p_sku: sku,
       p_mm_doc_id: event.doc_id,
       p_event_id: eventRowId,
     });
     if (error) {
-      errors.push(`${pos.sku}: ${error.message}`);
+      errors.push(`${sku}: ${error.message}`);
       continue;
     }
     if (data) processed += 1;
@@ -245,12 +275,22 @@ async function handleMmSale(event: ParsedEvent, eventRowId: string): Promise<
 
 /** Zachowaj tylko top-level fields żeby nie logować potencjalnych secret leakage. */
 function redact(payload: Record<string, unknown>): Record<string, unknown> {
-  const allowedKeys = ["event_id", "id", "event_type", "kind", "type", "timestamp", "document_id", "document", "positions"];
-  const redacted: Record<string, unknown> = {};
-  for (const k of allowedKeys) {
-    if (k in payload) redacted[k] = payload[k];
-  }
-  return redacted;
+  const inv = (payload.invoice ?? payload.document ?? payload) as Record<string, unknown>;
+  const positions = ((inv.positions as Array<Record<string, unknown>> | undefined) ?? []).map((p) => ({
+    code: p.code ?? null,
+    product_id: p.product_id ?? null,
+    name: p.name ?? null,
+    quantity: p.quantity ?? null,
+  }));
+  // Świadomie BEZ danych kupującego (buyer_*) — RODO/least privilege.
+  return {
+    event: payload.event ?? payload.event_type ?? null,
+    id: inv.id ?? null,
+    kind: inv.kind ?? null,
+    number: inv.number ?? null,
+    updated_at: inv.updated_at ?? null,
+    positions,
+  };
 }
 
 async function tryLogMalformed(rawBody: string, reason: string) {
