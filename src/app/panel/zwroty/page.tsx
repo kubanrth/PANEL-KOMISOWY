@@ -51,7 +51,7 @@ export default async function ZwrotyPage() {
             <p className="mt-1 text-text-soft">
               W przypadku chęci zwrotu komisowanego towaru, który został przekazany na okres
               krótszy niż 90 dni, zostanie naliczona opłata manipulacyjna w przedziale od{" "}
-              <span className="num text-text">49 zł</span> do <span className="num text-text">500 zł</span> netto.
+              <span className="num text-text">49</span> zł do <span className="num text-text">500</span> zł netto.
               Szczegóły przeprowadzenia procesu znajdują się w Twojej umowie komisowej.
             </p>
           </div>

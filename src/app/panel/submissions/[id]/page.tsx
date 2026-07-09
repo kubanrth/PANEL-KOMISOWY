@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { SubmissionStatusPill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProductThumb } from "@/components/panel/ProductThumb";
-import { formatPLN, formatDateTime, takeHomeCents, plural } from "@/lib/format";
+import { formatPLN, formatDateTime, takeHomeCents } from "@/lib/format";
 import type { Submission, SubmissionStatus, Product, Profile } from "@/lib/types";
 
 /* Szczegół oferty — redesign: PageHeader z numerem, pozioma oś kroków
@@ -49,11 +49,6 @@ export default async function SubmissionDetailPage(props: {
     (acc, p) => acc + (p.listing_price_cents ?? p.expected_price_cents ?? 0),
     0,
   );
-  const totalTakeHome = products.reduce(
-    (acc, p) => acc + (takeHomeCents(p.listing_price_cents ?? p.expected_price_cents ?? 0, submission.commission_rate) ?? 0),
-    0,
-  );
-
   const isFresh = submission.status === "signed" || submission.status === "draft";
 
   return (
@@ -117,25 +112,6 @@ export default async function SubmissionDetailPage(props: {
 
         {/* Prawy panel */}
         <aside className="col-span-12 lg:col-span-4 space-y-4">
-          <div className="card-gradient-dark p-6 relative overflow-hidden">
-            <div className="glow-blob" aria-hidden />
-            <div className="relative">
-              <div className="label !text-mint/80">Wartość oferty</div>
-              <div className="mt-2 font-light text-[32px] leading-none tracking-[-0.02em] num text-mint">
-                {formatPLN(totalGross, { decimals: false })}
-              </div>
-              <div className="mt-1.5 text-[12px] text-text-soft">
-                Brutto · {products.length} {plural(products.length, ["pozycja", "pozycje", "pozycji"])}
-              </div>
-              <div className="mt-5 pt-4 border-t border-white/10 flex items-baseline justify-between text-[13px]">
-                <span className="text-text-soft">Twój udział (po prowizji {Math.round(submission.commission_rate * 100)}%)</span>
-                <span className="font-medium text-[17px] tracking-[-0.02em] num text-mint">
-                  {formatPLN(totalTakeHome, { decimals: false })}
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div className="card p-6">
             <div className="label mb-3">Umowa komisowa</div>
             {submission.contract_pdf_url ? (

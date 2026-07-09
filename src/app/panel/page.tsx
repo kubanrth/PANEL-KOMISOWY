@@ -158,7 +158,8 @@ export default async function PanelPage() {
         <section className="mt-8 grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start">
           {/* Twoje ostatnie ruchy */}
           <div>
-            <div className="flex items-baseline justify-between mb-4">
+            {/* h-7 + mb-4 identycznie w obu kolumnach — pierwsze karty równają się do linii */}
+            <div className="flex items-baseline justify-between h-7 mb-4">
               <h2 className="font-light text-[22px] tracking-[-0.02em]">Twoje ostatnie ruchy</h2>
               <Link href="/panel/magazyn" className="text-[13px] text-text-soft hover:text-lime transition-colors">
                 Zobacz wszystkie →
@@ -179,7 +180,7 @@ export default async function PanelPage() {
           {/* Prawa kolumna */}
           <div className="space-y-6">
             <div>
-              <div className="flex items-baseline justify-between mb-3">
+              <div className="flex items-baseline justify-between h-7 mb-4">
                 <h2 className="font-light text-[18px] tracking-[-0.02em]">Co warto dodać</h2>
                 <Link href="/panel/plany" className="text-[12px] text-text-soft hover:text-lime transition-colors">
                   Wszystkie →
