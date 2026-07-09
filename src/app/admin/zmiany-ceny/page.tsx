@@ -37,7 +37,7 @@ export default async function AdminZmianyCenyPage() {
     <>
       <section>
         <div className="label">{pending.length} oczekujących · {resolved.length} zdecydowanych</div>
-        <h1 className="mt-3 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
+        <h1 className="mt-3 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
           Zmiany ceny.
         </h1>
         <p className="mt-3 text-[15px] text-text-soft max-w-[60ch]">

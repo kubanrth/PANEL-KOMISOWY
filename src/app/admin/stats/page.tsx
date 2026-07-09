@@ -85,7 +85,7 @@ export default async function AdminStatsPage() {
     <>
       <section>
         <div className="label">Cała platforma</div>
-        <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
+        <h1 className="mt-4 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
           Metryki Kickback
         </h1>
       </section>

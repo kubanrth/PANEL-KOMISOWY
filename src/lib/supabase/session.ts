@@ -76,13 +76,11 @@ export const getPanelChrome = cache(async () => {
 export const getAdminBadges = cache(async () => {
   const supabase = await createClient();
   try {
-    const [aqc, payouts, offers] = await Promise.all([
-      supabase.from("products").select("*", { count: "exact", head: true }).eq("status", "aqc"),
+    const [payouts, offers] = await Promise.all([
       supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
       supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
     ]);
     return {
-      aqc: aqc.count ?? undefined,
       payouts: payouts.count ?? undefined,
       offers: offers.count ?? undefined,
     } as Record<string, number | boolean | undefined>;

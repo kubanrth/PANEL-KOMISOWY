@@ -11,8 +11,7 @@ import { formatPLN, formatDate } from "@/lib/format";
 import { vatLabel } from "@/lib/types";
 import type { Product } from "@/lib/types";
 
-/* Twoje promocje — redesign: hero banner (card-gradient-dark + glow-blob)
-   z największą obniżką + lista mniejszych bannerów z pigułką AKTYWNA. */
+/* Twoje promocje — lista pozycji z obniżką (bez hero; decyzja klienta 2026-07-09). */
 
 export default async function PromocjePage() {
   const supabase = await createClient();
@@ -90,41 +89,6 @@ export default async function PromocjePage() {
           </section>
 
           {/* Hero — największa obniżka */}
-          {hero && (
-            <section className="mt-6">
-              <div className="card-gradient-dark p-8 lg:p-10 relative overflow-hidden">
-                <div className="glow-blob" aria-hidden />
-                <div className="relative">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <Pill variant="lime">Aktywna</Pill>
-                    <span className="label !text-mint/80">Największa obniżka · −{promoPct(hero)}%</span>
-                  </div>
-                  <div className="mt-5 flex items-center gap-4">
-                    <ProductThumb photos={hero.photos} brand={hero.brand} size="lg" />
-                    <div className="min-w-0">
-                      <h2 className="font-light text-[24px] lg:text-[32px] leading-[1.08] tracking-[-0.02em]">
-                        {hero.brand} {hero.model}
-                      </h2>
-                      <div className="mt-2 flex items-baseline gap-3 flex-wrap">
-                        <span className="text-[22px] lg:text-[26px] num text-mint">
-                          {formatPLN(hero.listing_price_cents ?? 0, { decimals: false })}
-                        </span>
-                        <span className="text-[14px] num text-text-mute line-through">
-                          {formatPLN(hero.expected_price_cents ?? 0, { decimals: false })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 pt-5 border-t border-white/10 flex flex-wrap gap-x-6 gap-y-2 text-[12px] text-text-soft">
-                    <span>Rozm. <span className="num text-text">{hero.size ?? "—"}</span></span>
-                    <span>VAT <span className="num text-text">{vatLabel(hero.vat_rate)}</span></span>
-                    <span>Publikacja <span className="num text-text">{formatDate(hero.published_at ?? hero.created_at)}</span></span>
-                    <span>W promocji <span className="num text-text">{daysSince(hero)} d</span></span>
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
 
           {/* Pozostałe promocje — mniejsze bannery */}
           {rest.length > 0 && (
