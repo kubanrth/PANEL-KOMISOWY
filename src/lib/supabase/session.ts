@@ -54,9 +54,8 @@ export const getPanelChrome = cache(async () => {
   if (!user) return { walletBalance: 0, walletAvailable: 0, badges: {} as Record<string, number | boolean | undefined> };
   const supabase = await createClient();
   try {
-    const [summary, subs, listed, demands] = await Promise.all([
+    const [summary, listed, demands] = await Promise.all([
       supabase.rpc("wallet_summary", { klient: user.id }),
-      supabase.from("submissions").select("*", { count: "exact", head: true }),
       supabase.from("products").select("*", { count: "exact", head: true }).in("status", ["draft", "aqc", "listed", "offer"]),
       supabase.from("demand_listings").select("*", { count: "exact", head: true }).eq("active", true),
     ]);
@@ -64,7 +63,6 @@ export const getPanelChrome = cache(async () => {
       walletBalance: (summary.data?.[0]?.balance_cents as number | undefined) ?? 0,
       walletAvailable: (summary.data?.[0]?.available_cents as number | undefined) ?? 0,
       badges: {
-        submissions: subs.count ?? undefined,
         magazyn: listed.count ?? undefined,
         zapotrzebowanie: demands.count ?? undefined,
       } as Record<string, number | boolean | undefined>,

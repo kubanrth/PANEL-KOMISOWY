@@ -53,17 +53,7 @@ export const PANEL_SECTIONS: NavSection[] = [
   {
     label: "Sprzedaż",
     items: [
-      {
-        key: "submissions",
-        label: "Oferty",
-        href: "/panel/submissions",
-        icon: "Tray",
-        badgeKey: "submissions",
-        subs: [
-          { key: "submissions", label: "W obiegu", href: "/panel/submissions", dot: "blue" },
-          { key: "sprzedaze", label: "Sprzedane", href: "/panel/sprzedaze", dot: "mint" },
-        ],
-      },
+      { key: "sprzedaze", label: "Sprzedaże", href: "/panel/sprzedaze", icon: "Receipt" },
       {
         key: "magazyn",
         label: "Magazyn",
@@ -191,7 +181,7 @@ export type NavBadges = Record<string, number | boolean | undefined>;
 /** Mobile bottom tab bar klienta: 4 taby + FAB w środku (Nowa oferta). */
 export const PANEL_TABS = [
   { key: "dashboard", label: "Przegląd", href: "/panel", icon: "SquaresFour" },
-  { key: "submissions", label: "Oferty", href: "/panel/submissions", icon: "Tray" },
+  { key: "magazyn", label: "Magazyn", href: "/panel/magazyn", icon: "Package" },
   { key: "wallet", label: "Portfel", href: "/panel/wallet", icon: "Wallet" },
   { key: "more", label: "Więcej", href: "#", icon: "List" },
 ] as const;
@@ -236,6 +226,7 @@ export function activeKeyFromPath(pathname: string, admin = false): string | und
 
 /** Trasy bez własnej pozycji w nav → którą pozycję podświetlić. */
 const PATH_ACTIVE_HINTS: Array<[string, string]> = [
+  ["/panel/submissions", "przyjecia"],
   ["/panel/products", "magazyn"],
   ["/panel/offers", "sprzedaze"],
   ["/panel/my-sales", "sprzedaze"],
