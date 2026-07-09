@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/admin";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDateTime } from "@/lib/format";
 import type { AppNotification } from "@/lib/types";
-import Link from "next/link";
+import { FilterDropdown } from "@/components/admin/FilterDropdown";
 
 export default async function AdminInboxPage(props: { searchParams: Promise<{ filter?: string }> }) {
   const { supabase } = await requireAdmin();
@@ -49,23 +49,16 @@ export default async function AdminInboxPage(props: { searchParams: Promise<{ fi
       <PageHeader label={`${list.length} powiadomień (max 100)`} title="Inbox" sub="Powiadomienia wszystkich klientów — sprzedaże, oferty, wypłaty, wyceny, zwroty." />
 
       <section className="mt-8">
-        <div className="flex items-center gap-2 flex-wrap text-[13px]">
-          {TYPE_FILTERS.map((f) => {
-            const active = (filter ?? "") === f.key;
-            const count = f.key ? byType[f.key] || 0 : list.length;
-            return (
-              <Link
-                key={f.key}
-                href={f.key ? `/admin/inbox?filter=${f.key}` : "/admin/inbox"}
-                className={`inline-flex items-center h-9 px-3.5 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
-                  active ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
-                }`}
-              >
-                {f.label} <span className={`num ml-1 ${active ? "text-lime/70" : "text-text-mute"}`}>· {count}</span>
-              </Link>
-            );
-          })}
-        </div>
+        <FilterDropdown
+          prefix="Typ"
+          activeKey={filter ?? ""}
+          options={TYPE_FILTERS.map((f) => ({
+            key: f.key,
+            label: f.label,
+            count: f.key ? byType[f.key] || 0 : list.length,
+            href: f.key ? `/admin/inbox?filter=${f.key}` : "/admin/inbox",
+          }))}
+        />
       </section>
 
       <section className="mt-6 space-y-2">
