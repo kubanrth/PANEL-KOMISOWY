@@ -3,7 +3,7 @@
 import { useEffect, useState, type ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SquaresFour, Tray, Wallet, List, Plus, type IconProps } from "@phosphor-icons/react";
+import { SquaresFour, Package, Wallet, List, Plus, type IconProps } from "@phosphor-icons/react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Portal } from "@/components/ui/Portal";
@@ -17,7 +17,7 @@ import { SidebarNav } from "./SidebarNav";
 import type { Theme } from "@/lib/theme";
 
 const TAB_ICONS: Record<string, ComponentType<IconProps>> = {
-  SquaresFour, Tray, Wallet, List,
+  SquaresFour, Package, Wallet, List,
 };
 
 export type PanelMobileNavProps = {

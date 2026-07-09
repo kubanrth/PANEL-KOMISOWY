@@ -6,7 +6,7 @@ import { useEffect, useState, type ComponentType } from "react";
 import {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
   Star, TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
   Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List,
   type IconProps,
 } from "@phosphor-icons/react";
@@ -16,7 +16,7 @@ import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type Na
 const ICONS: Record<string, ComponentType<IconProps>> = {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
   Star, TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
   Users, Kanban, Money, FileText, Scroll, ChartBar, List,
 };
 
