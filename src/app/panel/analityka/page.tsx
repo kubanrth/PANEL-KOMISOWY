@@ -5,7 +5,7 @@ import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatPLN } from "@/lib/format";
-import type { Product, DemandListing, Club, Player, NationalTeam, InventorySnapshot } from "@/lib/types";
+import type { Product, InventorySnapshot } from "@/lib/types";
 import { RevenueSimulator } from "./RevenueSimulator";
 import { InventoryChart } from "./InventoryChart";
 
@@ -75,65 +75,7 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
   const inStock = all.filter((p) => ["aqc", "listed", "offer"].includes(p.status));
   const currentStockValue = inStock.reduce((acc, p) => acc + (p.listing_price_cents ?? p.expected_price_cents ?? 0), 0);
 
-  // Recommendations — top 3 clubs/players/national_teams from demand_listings
-  // that match what's *missing* from this klient's stock.
-  const { data: demandRaw } = await supabase
-    .from("demand_listings")
-    .select("*")
-    .eq("active", true)
-    .order("published_at", { ascending: false })
-    .limit(20);
-  const demand = (demandRaw ?? []) as DemandListing[];
 
-  const labelLookups = await Promise.all([
-    supabase.from("clubs").select("id, name, crest_url"),
-    supabase.from("national_teams").select("id, name, flag_url"),
-    supabase.from("players").select("id, full_name"),
-  ]);
-  const clubById = new Map((labelLookups[0].data ?? []).map((c) => [c.id, c as Pick<Club, "id" | "name" | "crest_url">]));
-  const teamById = new Map((labelLookups[1].data ?? []).map((t) => [t.id, t as Pick<NationalTeam, "id" | "name" | "flag_url">]));
-  const playerById = new Map((labelLookups[2].data ?? []).map((p) => [p.id, p as Pick<Player, "id" | "full_name">]));
-
-  // Klient's own brand strings (lowercased) — heuristic for "I already have this club".
-  const ownBrands = new Set(all.map((p) => p.brand.toLowerCase().trim()));
-  const demandWithLabels = demand.map((d) => {
-    const label =
-      d.kind === "club" && d.club_id
-        ? clubById.get(d.club_id)?.name
-        : d.kind === "national_team" && d.national_team_id
-          ? teamById.get(d.national_team_id)?.name
-          : d.kind === "player" && d.player_id
-            ? playerById.get(d.player_id)?.full_name
-            : d.raw_label;
-    const alreadyHave = label ? ownBrands.has(label.toLowerCase().trim()) : false;
-    return { d, label: label ?? "—", alreadyHave };
-  });
-  const recsClubs = demandWithLabels.filter((x) => x.d.kind === "club" && !x.alreadyHave).slice(0, 3);
-  const recsTeams = demandWithLabels.filter((x) => x.d.kind === "national_team" && !x.alreadyHave).slice(0, 3);
-  const recsPlayers = demandWithLabels.filter((x) => x.d.kind === "player" && !x.alreadyHave).slice(0, 3);
-
-  // Price recommendations: P50 per brand+model from sold history vs current listings
-  const soldPrices = new Map<string, number[]>();
-  for (const p of all) {
-    if (p.status !== "sold" || !p.listing_price_cents) continue;
-    const k = `${p.brand}|${p.model}`;
-    const arr = soldPrices.get(k) ?? [];
-    arr.push(p.listing_price_cents);
-    soldPrices.set(k, arr);
-  }
-  const priceRecs = inStock
-    .map((p) => {
-      const arr = soldPrices.get(`${p.brand}|${p.model}`) ?? [];
-      if (arr.length < 1) return null;
-      const sorted = [...arr].sort((a, b) => a - b);
-      const p50 = sorted[Math.floor(sorted.length / 2)];
-      const current = p.listing_price_cents ?? p.expected_price_cents ?? 0;
-      const deviation = (current - p50) / p50;
-      return { product: p, p50, current, deviation };
-    })
-    .filter(Boolean)
-    .sort((a, b) => Math.abs(b!.deviation) - Math.abs(a!.deviation))
-    .slice(0, 6) as Array<{ product: Product; p50: number; current: number; deviation: number }>;
 
   // For the simulator we pass last-30d revenue and current stock value
   return (
@@ -208,63 +150,6 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
         />
       </section>
 
-      {/* Widget 4: Sugestie Kickback */}
-      <section className="mt-6 card-elev p-6">
-        <div className="flex items-start justify-between flex-wrap gap-3">
-          <div>
-            <div className="label">Sugestie Kickback</div>
-            <div className="mt-1 font-semibold text-xl tracking-[-0.025em]">Co warto dodać do komisu</div>
-          </div>
-          <ButtonLink href="/panel/zapotrzebowanie" variant="ghost" size="sm">
-            Pełna lista zapotrzebowania
-          </ButtonLink>
-        </div>
-
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <RecCol title="Kluby" items={recsClubs} />
-          <RecCol title="Reprezentacje" items={recsTeams} />
-          <RecCol title="Nazwiska" items={recsPlayers} />
-        </div>
-      </section>
-
-      {/* Widget 5: Rekomendacje cenowe */}
-      <section className="mt-6 card-elev p-6">
-        <div className="flex items-start justify-between flex-wrap gap-3 mb-5">
-          <div>
-            <div className="label">Rekomendacje cenowe</div>
-            <div className="mt-1 font-semibold text-xl tracking-[-0.025em]">Twoja cena vs P50 rynkowe</div>
-          </div>
-          <ButtonLink href="/panel/magazyn" variant="ghost" size="sm">
-            Przejdź do magazynu
-          </ButtonLink>
-        </div>
-        {priceRecs.length === 0 ? (
-          <p className="text-[13px] text-text-soft">
-            Za mało historii sprzedaży tych modeli — rekomendacje pojawią się po kilku transakcjach.
-          </p>
-        ) : (
-          <div className="space-y-2.5">
-            {priceRecs.map(({ product, p50, current, deviation }) => {
-              const pctOff = Math.round(deviation * 100);
-              const color = Math.abs(deviation) < 0.1 ? "text-mint" : Math.abs(deviation) < 0.3 ? "text-amber" : "text-coral";
-              return (
-                <div key={product.id} className="flex items-center justify-between gap-4 py-2 border-b border-border-soft last:border-0">
-                  <div className="min-w-0">
-                    <div className="text-[14px] truncate">{product.brand} · {product.model}</div>
-                    <div className="text-[11px] text-text-mute num">
-                      Twoja: {formatPLN(current, { decimals: false })} · P50: {formatPLN(p50, { decimals: false })}
-                    </div>
-                  </div>
-                  <span className={`font-bold text-sm num ${color}`}>
-                    {pctOff > 0 ? "+" : ""}{pctOff}%
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
       {/* Widget 6: Wartość magazynu w czasie */}
       <section className="mt-6 card-elev p-6">
         <div className="flex items-start justify-between flex-wrap gap-3 mb-5">
@@ -290,32 +175,3 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
   );
 }
 
-function RecCol({
-  title, items,
-}: {
-  title: string;
-  items: Array<{ d: DemandListing; label: string; alreadyHave: boolean }>;
-}) {
-  return (
-    <div>
-      <div className="text-[12px] font-semibold uppercase tracking-wider text-text-mute mb-3">{title}</div>
-      {items.length === 0 ? (
-        <p className="text-[12px] text-text-soft">Brak aktualnych sugestii.</p>
-      ) : (
-        <ul className="space-y-2">
-          {items.map(({ d, label }) => (
-            <li key={d.id} className="text-[13px]">
-              <div className="font-medium">{label}</div>
-              {d.season && <div className="text-[11px] text-text-mute num">sezon {d.season}{d.retro ? " · retro" : ""}</div>}
-              {d.target_price_cents && (
-                <div className="text-[11px] text-mint num">
-                  Możliwa cena: {(d.target_price_cents / 100).toFixed(0)} zł
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}

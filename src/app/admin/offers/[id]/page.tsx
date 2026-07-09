@@ -40,7 +40,7 @@ export default async function AdminOfferThreadPage(props: { params: Promise<{ id
           <ProductThumb photos={productData.photos} brand={productData.brand} size="lg" />
           <div>
             <div className="text-text-mute text-[12px] num">{productData.submissions?.id ?? "—"} · klient: {klientName}</div>
-            <h1 className="font-light text-[26px] tracking-[-0.02em] mt-1">{productData.brand}</h1>
+            <h1 className="font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em] mt-1">{productData.brand}</h1>
             <p className="text-text-soft text-[16px]">{productData.model}</p>
           </div>
         </div>

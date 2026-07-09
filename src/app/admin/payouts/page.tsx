@@ -44,7 +44,7 @@ export default async function AdminPayoutsPage() {
     <>
       <section>
         <div className="label">{pending.length} oczekuje · {done.length} zakończonych</div>
-        <h1 className="mt-4 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
+        <h1 className="mt-4 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
           Wypłaty <span className="text-text-soft">/ autoryzacja.</span>
         </h1>
       </section>

@@ -131,17 +131,18 @@ export const PANEL_BOTTOM: NavSection[] = [
 export const ADMIN_SECTIONS: NavSection[] = [
   {
     label: null,
-    items: [{ key: "queue", label: "Queue", href: "/admin", icon: "SquaresFour" }],
+    items: [
+      { key: "queue", label: "Dashboard", href: "/admin", icon: "SquaresFour" },
+      { key: "stats", label: "Statystyki", href: "/admin/stats", icon: "ChartBar" },
+    ],
   },
   {
     label: "Operacje",
     items: [
       { key: "inbox", label: "Inbox", href: "/admin/inbox", icon: "EnvelopeSimple", badgeKey: "inbox" },
       { key: "submissions", label: "Submissions", href: "/admin/submissions", icon: "Tray", badgeKey: "submissions" },
-      { key: "aqc", label: "A&QC", href: "/admin/aqc", icon: "ShieldCheck", badgeKey: "aqc" },
       { key: "offers", label: "Offers (Zerr)", href: "/admin/offers", icon: "Handshake", badgeKey: "offers" },
       { key: "returns", label: "Returns", href: "/admin/returns", icon: "ArrowCounterClockwise" },
-      { key: "qr", label: "Generator QR", href: "/admin/qr", icon: "QrCode" },
     ],
   },
   {
@@ -170,7 +171,6 @@ export const ADMIN_SECTIONS: NavSection[] = [
     items: [
       { key: "integrations", label: "Fakturownia", href: "/admin/integrations/fakturownia", icon: "FileText", dotKey: "integrations" },
       { key: "audit", label: "Audit log", href: "/admin/audit", icon: "Scroll" },
-      { key: "stats", label: "Statystyki", href: "/admin/stats", icon: "ChartBar" },
     ],
   },
 ];

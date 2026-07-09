@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { ProductThumb } from "@/components/panel/ProductThumb";
-import { SubmissionStatusPill } from "@/components/panel/StatusPill";
-import { formatPLN, formatDate, daysFromNow } from "@/lib/format";
+import { formatPLN, formatDate } from "@/lib/format";
 
 export default async function AdminQueuePage() {
   const { user, profile, supabase } = await requireAdmin();
 
   // Counts
-  const [{ count: pendingAqc }, { count: pendingPayouts }, { count: openOffers }, { count: openReturns }] = await Promise.all([
-    supabase.from("products").select("*", { count: "exact", head: true }).eq("status", "aqc"),
+  const [{ count: pendingPayouts }, { count: openOffers }, { count: openReturns }] = await Promise.all([
     supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
     supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
     supabase.from("returns").select("*", { count: "exact", head: true }).eq("resolution", "pending"),
@@ -25,13 +21,6 @@ export default async function AdminQueuePage() {
     .gte("updated_at", monthStart.toISOString());
   const monthGMV = (monthSold ?? []).reduce((acc, p) => acc + (p.listing_price_cents ?? p.expected_price_cents ?? 0), 0);
 
-  // Active queue (AQC + offers + payouts + returns recent)
-  const { data: aqcQueue } = await supabase
-    .from("products")
-    .select("id, brand, model, condition, expected_price_cents, photos, created_at, submission_id, submissions(id, klient_id)")
-    .eq("status", "aqc")
-    .order("created_at", { ascending: true })
-    .limit(5);
 
   const { data: payoutQueue } = await supabase
     .from("payouts")
@@ -42,80 +31,24 @@ export default async function AdminQueuePage() {
 
   return (
     <>
-      <PageHeader
-        label={`Operacje · ${formatDate(new Date())}`}
-        title="Queue"
-        sub={`${(pendingAqc ?? 0) + (pendingPayouts ?? 0) + (openOffers ?? 0) + (openReturns ?? 0)} spraw czeka na Twoją decyzję.`}
-      />
-
-      {/* KPI strip */}
-      <section className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="A&QC w kolejce" value={pendingAqc ?? 0} sub="produkty do audytu" href="/admin/aqc" />
+      {/* Widok startuje od kafelków akcji — bez nagłówka (decyzja klienta). */}
+      <section className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <KpiCard label="Wypłaty do autoryzacji" value={pendingPayouts ?? 0} sub="oczekuje" href="/admin/payouts" highlight />
         <KpiCard label="Oferty Zerr" value={openOffers ?? 0} sub="aktywne negocjacje" href="/admin/offers" />
         <KpiCard label="Zwroty" value={openReturns ?? 0} sub="czeka na decyzję" href="/admin/returns" />
       </section>
 
       <section className="mt-8 grid grid-cols-2 gap-4">
-        <div className="card-gradient-dark p-6 relative overflow-hidden">
-          <div className="glow-blob" aria-hidden />
-          <div className="relative">
-            <div className="label !text-mint/80">GMV miesiąc</div>
-            <div className="mt-2 font-light text-3xl tracking-[-0.02em] num text-mint">{formatPLN(monthGMV, { decimals: false })}</div>
-            <div className="mt-2 text-text-soft text-[12px]">{(monthSold ?? []).length} sprzedanych w tym miesiącu</div>
-          </div>
+        <div className="card p-6 border-mint/25 bg-mint/5">
+          <div className="label !text-mint">GMV miesiąc</div>
+          <div className="mt-2 font-light text-3xl tracking-[-0.02em] num text-mint">{formatPLN(monthGMV, { decimals: false })}</div>
+          <div className="mt-2 text-text-soft text-[12px]">{(monthSold ?? []).length} sprzedanych w tym miesiącu</div>
         </div>
         <div className="card p-6">
           <div className="label">Twoja rola</div>
           <div className="mt-2 font-light text-3xl tracking-[-0.02em]">{profile.role === "super_admin" ? "Super-admin" : "Admin"}</div>
           <div className="mt-2 text-text-mute text-[12px]">Pełna autoryzacja operacji</div>
         </div>
-      </section>
-
-      {/* AQC queue */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between mb-5">
-          <div>
-            <div className="label">Kolejka A&QC</div>
-            <h2 className="mt-2 font-light text-[22px] tracking-[-0.02em]">Czeka na audyt</h2>
-          </div>
-          <Link href="/admin/aqc" className="text-[13px] text-text-soft hover:text-lime transition-colors">Wszystkie →</Link>
-        </div>
-        {aqcQueue && aqcQueue.length > 0 ? (
-          <div className="space-y-3">
-            {aqcQueue.map((p) => {
-              type Q = typeof aqcQueue[number];
-              const product = p as Q & { submissions?: { id: string } | null };
-              const slaDays = daysFromNow(new Date(new Date(product.created_at).getTime() + 5 * 86_400_000).toISOString());
-              return (
-                <Link
-                  key={product.id}
-                  href={`/admin/aqc/${product.id}`}
-                  className="card p-5 flex items-center gap-4 hover:border-lime/30 transition-colors"
-                >
-                  <ProductThumb photos={product.photos as Q["photos"]} brand={product.brand} size="md" />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-[15px] truncate">{product.brand} · {product.model}</div>
-                    <div className="text-[12px] text-text-mute mt-1 num">
-                      {product.submissions?.id ?? "—"} · stan {product.condition ?? "?"}/10 · {formatDate(product.created_at)}
-                    </div>
-                  </div>
-                  <span className={`pill ${slaDays != null && slaDays < 1 ? "pill-coral" : slaDays != null && slaDays < 2 ? "pill-amber" : "pill-mute"}`}>
-                    SLA {slaDays != null ? `${slaDays}d` : "—"}
-                  </span>
-                  <div className="text-right hidden sm:block">
-                    <div className="text-[11px] text-text-mute">Oczekiwana</div>
-                    <div className="font-semibold text-[14px] num">{formatPLN(product.expected_price_cents ?? 0, { decimals: false })}</div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-8 text-center text-text-soft">
-            Brak produktów w kolejce A&QC.
-          </div>
-        )}
       </section>
 
       {/* Payouts queue */}

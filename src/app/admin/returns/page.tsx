@@ -13,7 +13,9 @@ export default async function AdminReturnsPage() {
     .from("returns")
     .select(`
       id, reason, fee_cents, decision_deadline, resolution, notes, created_at,
-      products ( id, brand, model, photos, condition, submission_id ),
+      products ( id, brand, model, photos, condition, submission_id,
+        submissions ( klient_id, profiles:klient_id ( first_name, last_name ) )
+      ),
       profiles:initiated_by ( first_name, last_name )
     `)
     .order("created_at", { ascending: false });
@@ -28,6 +30,7 @@ export default async function AdminReturnsPage() {
     created_at: string;
     products?: { id: string; brand: string; model: string; photos: Array<{ url: string; name: string }> | null; condition: number | null; submission_id: string } | null;
     profiles?: { first_name: string | null; last_name: string | null } | null;
+    komisant?: string;
   };
 
   type RawRow = Omit<Row, "products" | "profiles"> & {
@@ -39,6 +42,13 @@ export default async function AdminReturnsPage() {
     products: Array.isArray(r.products) ? r.products[0] ?? null : (r.products ?? null),
     profiles: Array.isArray(r.profiles) ? r.profiles[0] ?? null : (r.profiles ?? null),
   }));
+  // Komisant = właściciel produktu (products→submissions→profiles).
+  for (const r of returns) {
+    const sub = (r.products as unknown as { submissions?: { profiles?: { first_name: string | null; last_name: string | null } | { first_name: string | null; last_name: string | null }[] | null } | { profiles?: unknown }[] | null })?.submissions;
+    const subOne = Array.isArray(sub) ? sub[0] : sub;
+    const prof = Array.isArray(subOne?.profiles) ? subOne?.profiles[0] : subOne?.profiles;
+    r.komisant = [prof?.first_name, prof?.last_name].filter(Boolean).join(" ") || "—";
+  }
   const pending = returns.filter((r) => r.resolution === "pending");
   const resolved = returns.filter((r) => r.resolution !== "pending");
 
@@ -60,7 +70,7 @@ export default async function AdminReturnsPage() {
               const deadline = r.decision_deadline ? daysFromNow(r.decision_deadline) : null;
               return (
                 <div key={r.id} className="card p-6 grid grid-cols-12 gap-5 items-center">
-                  <div className="col-span-12 md:col-span-5 flex items-center gap-4">
+                  <div className="col-span-12 md:col-span-4 flex items-center gap-4">
                     {r.products && (
                       <ProductThumb photos={r.products.photos as never} brand={r.products.brand} size="md" />
                     )}
@@ -70,7 +80,12 @@ export default async function AdminReturnsPage() {
                     </div>
                   </div>
 
-                  <div className="col-span-12 md:col-span-4">
+                  <div className="col-span-6 md:col-span-2">
+                    <div className="text-[11px] text-text-mute">Komisant</div>
+                    <div className="text-[13px] font-medium truncate">{r.komisant}</div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-3">
                     <div className="text-[13px] font-semibold">{reasonInfo.title}</div>
                     <div className="text-[12px] text-text-soft mt-0.5 line-clamp-2">{reasonInfo.description}</div>
                   </div>

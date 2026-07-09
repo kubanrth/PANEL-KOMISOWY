@@ -69,7 +69,7 @@ export default async function AdminCrmDetailPage(props: {
               {k.account_type === "individual" ? "Indywidualne" : k.account_type === "business" ? "Biznesowe" : "—"}
               {k.master_agreement_signed_at && " · umowa podpisana"}
             </div>
-            <h1 className="mt-2 font-light text-[28px] lg:text-[36px] leading-[1.05] tracking-[-0.02em]">
+            <h1 className="mt-2 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
               {fullName}
             </h1>
             <p className="mt-1 text-[13px] text-text-mute num">{k.id}</p>
