@@ -81,10 +81,13 @@ export default async function AdminFakturowniaPage() {
         <div className="mt-2 font-mono text-[13px] bg-surface px-3 py-2 rounded-[8px] break-all">
           {webhookUrl ?? <span className="text-text-faint">Ustaw NEXT_PUBLIC_SITE_URL w env</span>}
         </div>
-        <p className="mt-3 text-[12px] text-text-mute">
-          Skopiuj powyższy URL do <span className="text-text">Fakturownia → Ustawienia → Webhooks → POST URL</span>.
-          Wklej secret z env <span className="num">FAKTUROWNIA_WEBHOOK_SECRET</span> do pola Secret.
-          Wybierz event <strong className="text-text">document.created</strong> dla typu MM.
+        <p className="mt-3 text-[12px] text-text-mute leading-[1.6]">
+          W Fakturowni: <span className="text-text">Ustawienia → Ustawienia konta → Integracja → sekcja Webhooki</span>.
+          Wklej powyższy URL, a do pola Secret — wartość z env <span className="num">FAKTUROWNIA_WEBHOOK_SECRET</span>{" "}
+          (Fakturownia wyśle ją jako <span className="num">Authorization: Bearer</span>).
+          Zaznacz event <strong className="text-text">invoice:create</strong> — paragon/faktura wystawiana przy
+          sprzedaży (np. przez SellAsist) oznaczy produkt jako sprzedany po SKU pozycji.
+          Fakturownia nie emituje webhooków dla dokumentów MM.
         </p>
       </section>
 
