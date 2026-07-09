@@ -10,7 +10,6 @@ const FILTERS: Array<{ key: string; label: string; matches: (s: SubmissionStatus
   { key: "draft", label: "Szkic", matches: (s) => s === "draft" },
   { key: "signed", label: "Podpisane", matches: (s) => s === "signed" },
   { key: "in_transit", label: "W transporcie", matches: (s) => s === "in_transit" },
-  { key: "aqc", label: "A&QC", matches: (s) => s === "aqc" },
   { key: "listed", label: "W sprzedaży", matches: (s) => s === "listed" },
   { key: "sold", label: "Sprzedane", matches: (s) => s === "sold" },
   { key: "returned", label: "Zwrot", matches: (s) => s === "returned" },
@@ -82,7 +81,8 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
               <path d="m6 9 6 6 6-6" />
             </svg>
           </summary>
-          <div className="absolute left-0 top-full mt-2 z-30 min-w-[260px] rounded-[16px] border border-border bg-bg/70 backdrop-blur-xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.55)] p-1.5">
+          {/* Frosted glass: mocny blur + saturacja, przezroczyste tło, inset-highlight u góry */}
+          <div className="absolute left-0 top-full mt-2 z-30 min-w-[280px] rounded-[22px] border border-white/10 bg-surface/35 backdrop-blur-2xl backdrop-saturate-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.10),0_28px_70px_-18px_rgba(0,0,0,0.75)] p-2">
             {FILTERS.map((f) => {
               const active = f.key === filterKey;
               const params = new URLSearchParams();
@@ -94,7 +94,7 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
                   key={f.key}
                   href={href}
                   className={`flex items-center justify-between gap-6 px-3.5 h-10 rounded-[11px] text-[13px] font-medium transition-colors ${
-                    active ? "bg-lime/12 text-lime" : "text-text-soft hover:text-text hover:bg-surface-2/70"
+                    active ? "bg-lime/12 text-lime" : "text-text-soft hover:text-text hover:bg-white/8"
                   }`}
                 >
                   {f.label}
