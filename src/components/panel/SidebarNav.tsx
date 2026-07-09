@@ -5,9 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, type ComponentType } from "react";
 import {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
-  Star, TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
-  Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List,
+  TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List,
   type IconProps,
 } from "@phosphor-icons/react";
 import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type NavBadges, type DotColor } from "./nav-config";
@@ -15,9 +14,8 @@ import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type Na
 /* Lookup nazw ikon z nav-config → komponenty Phosphor (Regular). */
 const ICONS: Record<string, ComponentType<IconProps>> = {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
-  Star, TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, ShieldCheck, Handshake, QrCode,
-  Users, Kanban, Money, FileText, Scroll, ChartBar, List,
+  TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, List,
 };
 
 const DOT_CLS: Record<DotColor, string> = {

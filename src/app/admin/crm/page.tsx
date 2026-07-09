@@ -11,7 +11,7 @@ export default async function AdminCrmPage(props: { searchParams: Promise<{ q?: 
   const sp = await props.searchParams;
   const q = (sp.q ?? "").trim().toLowerCase();
 
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: klienciRaw } = await supabase
     .from("profiles")

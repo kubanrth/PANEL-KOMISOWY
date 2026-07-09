@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/admin";
 import { formatPLN } from "@/lib/format";
 
 export default async function AdminStatsPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   // Total counts
   const [

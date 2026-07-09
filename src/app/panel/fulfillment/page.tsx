@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { Pill, type PillVariant } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
-import type { FulfillmentOrder, Product } from "@/lib/types";
+import type { Product } from "@/lib/types";
 import { FulfillmentRequestForm, type FulfillmentProduct } from "./FulfillmentRequestForm";
 
 // Statusy produktów dostępnych do zlecenia wysyłki z magazynu.
@@ -39,7 +39,7 @@ export default async function FulfillmentPage() {
     size: p.size,
     sku: p.sku,
     price_cents: p.listing_price_cents ?? p.expected_price_cents ?? 0,
-    photos: p.photos,
+    photo_url: (p.photos as { url?: string }[] | null)?.[0]?.url ?? null,
     status: p.status,
   }));
 
@@ -47,11 +47,12 @@ export default async function FulfillmentPage() {
   // starych env (migracja 010) — pokaż baner zamiast crasha.
   const ordersQuery = await supabase
     .from("fulfillment_orders")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("id, product_id, buyer_name, recipient_name, recipient_city, tracking_number, carrier, shipping_cost_cents, status, request_type, created_at, shipped_at, delivered_at")
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   const tableMissing = ordersQuery.error?.code === "42P01"; // relation does not exist
-  const orders = (ordersQuery.data ?? []) as FulfillmentOrder[];
+  const orders = (ordersQuery.data ?? []) as unknown as OrderRow[];
 
   // Otwarte zlecenia → produkty już zlecone (disabled + pigułka „Zlecone").
   const busyIds = Array.from(
@@ -123,7 +124,7 @@ export default async function FulfillmentPage() {
 
             {/* Karta szczegółów */}
             <div className="mt-6 pt-5 border-t border-border-soft grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Detail label="Odbiorca" value={latest.buyer_name ?? "—"} />
+              <Detail label="Odbiorca" value={recipientOf(latest)} />
               <Detail label="Kurier" value={latest.carrier ?? "—"} />
               <Detail label="Tracking" value={latest.tracking_number ?? "—"} num />
               <Detail
@@ -163,7 +164,7 @@ export default async function FulfillmentPage() {
                   className="grid grid-cols-1 md:grid-cols-[140px_minmax(180px,2fr)_120px_120px_150px_110px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
                   <div className="text-[12px] num text-text-soft">{o.tracking_number ?? "—"}</div>
-                  <div className="text-[13.5px] font-medium truncate">{o.buyer_name ?? "—"}</div>
+                  <div className="text-[13.5px] font-medium truncate">{recipientOf(o)}</div>
                   <div className="hidden md:block text-[12px] text-text-soft">{o.carrier ?? "—"}</div>
                   <div className="hidden md:block text-[13px] num">
                     {o.shipping_cost_cents != null ? formatPLN(o.shipping_cost_cents, { decimals: false }) : "—"}
@@ -247,6 +248,29 @@ function Tracker({ activeIdx }: { activeIdx: number }) {
       })}
     </div>
   );
+}
+
+/** Odbiorca: sprzedaż = buyer_name; zlecenie klienta = dane z formularza. */
+type OrderRow = {
+  id: string;
+  product_id: string | null;
+  buyer_name: string | null;
+  recipient_name: string | null;
+  recipient_city: string | null;
+  tracking_number: string | null;
+  carrier: string | null;
+  shipping_cost_cents: number | null;
+  status: string;
+  request_type: string | null;
+  created_at: string;
+  shipped_at: string | null;
+  delivered_at: string | null;
+};
+
+function recipientOf(o: { buyer_name: string | null; recipient_name?: string | null; recipient_city?: string | null }): string {
+  if (o.buyer_name) return o.buyer_name;
+  if (o.recipient_name) return o.recipient_city ? `${o.recipient_name} (${o.recipient_city})` : o.recipient_name;
+  return "—";
 }
 
 function Detail({ label, value, num = false }: { label: string; value: string; num?: boolean }) {

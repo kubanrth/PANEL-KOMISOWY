@@ -112,3 +112,6 @@ export function plural(n: number, [one, few, many]: [string, string, string]): s
   if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few;
   return many;
 }
+
+/** Polski kod pocztowy NN-NNN — wspólne dla walidacji client+server. */
+export const POSTAL_RE = /^\d{2}-\d{3}$/;

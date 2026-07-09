@@ -6,7 +6,7 @@ import { RowActions } from "./RowActions";
 import { BulkImport } from "./BulkImport";
 
 export default async function AdminZapotrzebowaniePage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: demandsRaw } = await supabase
     .from("demand_listings")

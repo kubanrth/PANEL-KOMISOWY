@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import type { ProductStatus } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Select } from "@/components/ui/Select";
 import { Pill, ProductStatusPill } from "@/components/panel/StatusPill";
-import { formatPLN, plural } from "@/lib/format";
-import type { Photo, ProductStatus } from "@/lib/types";
+import { formatPLN, plural, POSTAL_RE } from "@/lib/format";
 import { requestFulfillment } from "./actions";
 
 export type FulfillmentProduct = {
@@ -15,13 +15,12 @@ export type FulfillmentProduct = {
   size: string | null;
   sku: string;
   price_cents: number;
-  photos: Photo[];
+  photo_url: string | null;
   status: ProductStatus;
 };
 
 type RequestType = "label_provided" | "generate_label";
 
-const POSTAL_RE = /^\d{2}-\d{3}$/;
 const MAX_LABEL_BYTES = 10 * 1024 * 1024;
 
 export function FulfillmentRequestForm({
@@ -36,8 +35,14 @@ export function FulfillmentRequestForm({
   const busy = new Set(busyIds);
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [mode, setMode] = useState<RequestType>("label_provided");
+  const [mode, setModeRaw] = useState<RequestType>("label_provided");
   const [labelFile, setLabelFile] = useState<File | null>(null);
+  // Zmiana trybu odmontowuje <input type=file> — stan pliku musi iść razem
+  // z nim, inaczej UI pokazuje "załączony" plik, którego nie ma w FormData.
+  const setMode = (m: RequestType) => {
+    setModeRaw(m);
+    setLabelFile(null);
+  };
   const [recipient, setRecipient] = useState({ name: "", address: "", postal: "", city: "" });
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -122,10 +127,11 @@ export function FulfillmentRequestForm({
 
                 {/* Zdjęcie */}
                 <span className="block relative aspect-square rounded-[12px] overflow-hidden bg-surface-2">
-                  {p.photos?.[0]?.url ? (
+                  {p.photo_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={p.photos[0].url}
+                      src={p.photo_url}
+                      loading="lazy"
                       alt={`${p.brand} ${p.model}`}
                       className="absolute inset-0 w-full h-full object-cover"
                     />

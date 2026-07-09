@@ -17,7 +17,7 @@ const FILTERS: Array<{ key: string; label: string; matches: (s: SubmissionStatus
 ];
 
 export default async function AdminSubmissionsPage(props: { searchParams: Promise<{ filter?: string; q?: string }> }) {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
   const { filter, q } = await props.searchParams;
   const filterKey = FILTERS.find((f) => f.key === filter)?.key ?? "all";
   const search = q?.trim() || "";

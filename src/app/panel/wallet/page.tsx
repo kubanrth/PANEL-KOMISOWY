@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
+import { getSessionUser, getOwnProfile, getWalletSummary } from "@/lib/supabase/session";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -23,11 +23,8 @@ export default async function WalletPage() {
   const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  // Wallet summary via RPC
-  const { data: summary } = await supabase.rpc("wallet_summary", { klient: user.id });
-  const balance = (summary?.[0]?.balance_cents as number | undefined) ?? 0;
-  const available = (summary?.[0]?.available_cents as number | undefined) ?? 0;
-  const pending = (summary?.[0]?.pending_cents as number | undefined) ?? 0;
+  // Wallet summary — cache() dzielony z shellem (jedno RPC per request).
+  const { balance, available, pending } = await getWalletSummary();
 
   // Recent transactions
   const { data: txsRaw } = await supabase

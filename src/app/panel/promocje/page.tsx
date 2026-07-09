@@ -42,6 +42,8 @@ export default async function PromocjePage() {
     0,
   );
 
+  const promotedSorted = [...promoted].sort((a, b) => promoPct(b) - promoPct(a));
+
   const avgPct = promoted.length
     ? `${Math.round(
         promoted.reduce(
@@ -56,10 +58,7 @@ export default async function PromocjePage() {
     : "—";
 
   // Hero = największa procentowa obniżka; reszta jako mniejsze bannery.
-  const sorted = [...promoted].sort((a, b) => promoPct(b) - promoPct(a));
-  const hero = sorted[0];
-  const rest = sorted.slice(1);
-
+  
   return (
     <>
       <PageHeader
@@ -91,9 +90,9 @@ export default async function PromocjePage() {
           {/* Hero — największa obniżka */}
 
           {/* Pozostałe promocje — mniejsze bannery */}
-          {rest.length > 0 && (
+          {promotedSorted.length > 0 && (
             <section className="mt-6 space-y-2">
-              {rest.map((p) => (
+              {promotedSorted.map((p) => (
                 <div key={p.id} className="card p-4 flex items-center gap-4 flex-wrap hover:bg-surface-2/40 transition-colors">
                   <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
                   <div className="min-w-0 flex-1">

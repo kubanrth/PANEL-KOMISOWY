@@ -111,7 +111,49 @@ for (const [input, want] of postalCases) {
   if (got !== want) { console.error(`POSTAL_RE(${JSON.stringify(input)}) = ${got}, oczekiwano ${want}`); process.exit(1); }
 }
 
-console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9 przypadków)");
+
+// --- activeKeyFromPath (kopia logiki z src/components/panel/nav-config.ts) ---
+// Nietrywialne: rooty matchują tylko exact, reszta longest-prefix, potem hinty.
+function activeKeyFromPath(pathname, links, hints) {
+  const roots = new Set(["/panel", "/admin"]);
+  let best;
+  for (const l of links) {
+    const match = roots.has(l.href)
+      ? pathname === l.href
+      : pathname === l.href || pathname.startsWith(l.href + "/");
+    if (match && (!best || l.href.length > best.len)) best = { key: l.key, len: l.href.length };
+  }
+  if (best) return best.key;
+  for (const [prefix, key] of hints) if (pathname.startsWith(prefix)) return key;
+  return undefined;
+}
+{
+  const links = [
+    { href: "/panel", key: "dashboard" },
+    { href: "/panel/magazyn", key: "magazyn" },
+    { href: "/panel/wallet", key: "wallet" },
+    { href: "/admin", key: "queue" },
+    { href: "/admin/returns", key: "returns" },
+  ];
+  const hints = [["/panel/products", "magazyn"], ["/admin/integrations", "integrations"]];
+  const navCases = [
+    ["/panel", "dashboard"],                    // root exact
+    ["/panel/magazyn", "magazyn"],
+    ["/panel/magazyn/abc", "magazyn"],          // prefix z separatorem
+    ["/panel/magazynek", undefined],            // prefix BEZ separatora nie łapie
+    ["/panel/products/123", "magazyn"],         // hint działa (root nie zjada trasy)
+    ["/admin/integrations/fakturownia", "integrations"],
+    ["/admin", "queue"],
+    ["/admin/returns", "returns"],
+    ["/login", undefined],
+  ];
+  for (const [path, want] of navCases) {
+    const got = activeKeyFromPath(path, links, hints);
+    if (got !== want) { console.error(`activeKeyFromPath(${path}) = ${got}, oczekiwano ${want}`); process.exit(1); }
+  }
+}
+
+console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9, activeKeyFromPath 9 przypadków)");
 
 // --- parser webhooka Fakturowni (kopia logiki kind/event_id z route.ts) ---
 {

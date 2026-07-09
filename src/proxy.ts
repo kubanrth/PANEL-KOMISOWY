@@ -11,7 +11,7 @@ import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_CONFIGURED } from "@/l
  * is configured.
  */
 export async function proxy(request: NextRequest) {
-  // Webhook endpoints nie mają user-session i mają własną auth (HMAC).
+  // Webhook endpoints nie mają user-session i mają własną auth (Bearer token).
   // Skip proxy żeby nie robić niepotrzebnego Supabase cookie refresh
   // (~80-200ms latency + ryzyko side-effectów na cookies).
   if (request.nextUrl.pathname.startsWith("/api/webhooks/")) {

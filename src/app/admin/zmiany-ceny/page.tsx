@@ -6,7 +6,7 @@ import type { PriceChangeRequest, Product, Profile } from "@/lib/types";
 import { DecideButtons } from "./DecideButtons";
 
 export default async function AdminZmianyCenyPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: reqsRaw } = await supabase
     .from("price_change_requests")

@@ -5,7 +5,7 @@ import type { AppNotification } from "@/lib/types";
 import Link from "next/link";
 
 export default async function AdminInboxPage(props: { searchParams: Promise<{ filter?: string }> }) {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
   const { filter } = await props.searchParams;
 
   // Admin sees ALL notifications (RLS bypass via admin policy)

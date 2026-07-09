@@ -7,7 +7,7 @@ import { RETURN_REASON_LABEL } from "@/lib/types";
 import { resolveReturn } from "./actions";
 
 export default async function AdminReturnsPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: returnsRaw } = await supabase
     .from("returns")

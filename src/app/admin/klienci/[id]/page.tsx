@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
+import { BankAccountForm } from "./BankAccountForm";
 import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate, formatDateTime } from "@/lib/format";
 import type { Profile, Submission } from "@/lib/types";
 
 export default async function AdminClientProfilePage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-  const { user, profile: meProfile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: target } = await supabase
     .from("profiles")
@@ -24,6 +25,13 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
   const submissions = (submissionsRaw ?? []) as Submission[];
 
   const { data: walletSummary } = await supabase.rpc("wallet_summary", { klient: id });
+  const { data: bankAcc } = await supabase
+    .from("bank_accounts")
+    .select("bank_name, iban, is_default")
+    .eq("klient_id", id)
+    .order("is_default", { ascending: false })
+    .limit(1)
+    .maybeSingle();
   const balance = (walletSummary?.[0]?.balance_cents as number | undefined) ?? 0;
   const available = (walletSummary?.[0]?.available_cents as number | undefined) ?? 0;
   const pending = (walletSummary?.[0]?.pending_cents as number | undefined) ?? 0;
@@ -58,6 +66,19 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
                 <div className="font-semibold mt-0.5 num">{formatPLN(pending, { decimals: false })}</div>
               </div>
             </div>
+          </div>
+
+          <div className="card p-5 mt-4">
+            <div className="label mb-1">Konto bankowe (z umowy)</div>
+            {bankAcc ? (
+              <div className="mb-3 text-[13px]">
+                <span className="font-medium">{bankAcc.bank_name}</span>{" "}
+                <span className="num text-text-soft">{String(bankAcc.iban).slice(0, 4)}…{String(bankAcc.iban).slice(-4)}</span>
+              </div>
+            ) : (
+              <div className="mb-3 text-[13px] text-yellow">Brak konta — klient nie może wypłacać środków.</div>
+            )}
+            <BankAccountForm klientId={target.id} />
           </div>
         </div>
       </section>

@@ -5,35 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
-export async function addBankAccount(formData: FormData): Promise<ActionResult> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { ok: false, error: "Sesja wygasła." };
-
-  const bankName = String(formData.get("bank_name") || "").trim();
-  const iban = String(formData.get("iban") || "").trim().replace(/\s+/g, "").toUpperCase();
-  const isDefault = formData.get("is_default") === "on";
-
-  if (!bankName) return { ok: false, error: "Podaj nazwę banku." };
-  if (!/^PL\d{26}$/.test(iban) && !/^[A-Z]{2}\d{2}[A-Z0-9]{4,30}$/.test(iban)) {
-    return { ok: false, error: "Nieprawidłowy IBAN." };
-  }
-
-  if (isDefault) {
-    await supabase.from("bank_accounts").update({ is_default: false }).eq("klient_id", user.id);
-  }
-
-  const { error } = await supabase.from("bank_accounts").insert({
-    klient_id: user.id,
-    bank_name: bankName,
-    iban,
-    is_default: isDefault,
-  });
-
-  if (error) return { ok: false, error: error.message };
-  revalidatePath("/panel/wallet");
-  return { ok: true };
-}
 
 export async function requestPayout(formData: FormData): Promise<ActionResult> {
   const supabase = await createClient();

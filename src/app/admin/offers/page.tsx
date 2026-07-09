@@ -25,7 +25,7 @@ const OFFER_STATUS: Record<string, { v: string; l: string }> = {
 };
 
 export default async function AdminOffersPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   // Latest offer per product (window function would be ideal; simple approach: order desc, dedupe in JS)
   const { data: offersRaw } = await supabase

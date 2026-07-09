@@ -4,7 +4,7 @@ import type { KickbackPick } from "@/lib/types";
 import { CreatePickForm, EditPickRow } from "./ClientForms";
 
 export default async function AdminCoWartoDodacPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: picksRaw } = await supabase
     .from("kickback_picks")

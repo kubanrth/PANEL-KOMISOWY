@@ -17,7 +17,7 @@ type Row = {
 };
 
 export default async function AdminPayoutsPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: payoutsRaw } = await supabase
     .from("payouts")

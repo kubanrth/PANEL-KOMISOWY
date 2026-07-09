@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getSessionUser } from "@/lib/supabase/session";
+import { getSessionUser, getWalletSummary } from "@/lib/supabase/session";
 import { Pill, PROD_VARIANT, type PillVariant } from "@/components/panel/StatusPill";
 import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { KickbackMark } from "@/components/ui/KickbackMark";
@@ -27,13 +27,13 @@ export default async function PanelPage() {
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   // --- dane (wszystkie odczyty defensywne — brak tabeli/RPC ≠ 500) ---
-  const [{ data: submissionsRaw }, { data: summary }, { data: picksRaw }, { data: demandsRaw }] =
+  const [{ data: submissionsRaw }, summary, { data: picksRaw }, { data: demandsRaw }] =
     await Promise.all([
       supabase
         .from("submissions")
         .select("id, status, created_at")
         .order("created_at", { ascending: false }),
-      supabase.rpc("wallet_summary", { klient: user.id }),
+      getWalletSummary(),
       supabase
         .from("kickback_picks")
         .select("id, title, description, priority, expires_at, active, cta_href")
@@ -70,8 +70,8 @@ export default async function PanelPage() {
     "id" | "submission_id" | "brand" | "model" | "size" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "published_at" | "updated_at" | "created_at"
   >[];
 
-  const walletAvailable = (summary?.[0]?.available_cents as number | undefined) ?? 0;
-  const walletBalance = (summary?.[0]?.balance_cents as number | undefined) ?? 0;
+  const walletAvailable = summary.available;
+  const walletBalance = summary.balance;
 
   const picks = ((picksRaw ?? []) as Pick<KickbackPick, "id" | "title" | "description" | "priority" | "expires_at" | "active" | "cta_href">[])
     .filter((p) => !p.expires_at || new Date(p.expires_at) > new Date())
