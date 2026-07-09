@@ -151,7 +151,8 @@ begin
   delete from public.payouts   where klient_id = v_klient and notes = '[DEMO]';
   delete from public.invoices  where klient_id = v_klient and invoice_number like 'DEMO/%';
   delete from public.documents where klient_id = v_klient and file_url like 'https://demo.kickback.pl/%';
-  delete from public.fulfillment_orders where klient_id = v_klient and tracking_number like 'DEMO%';
+  delete from public.fulfillment_orders where klient_id = v_klient and (tracking_number like 'DEMO%'
+    or product_id = any(demo_products));  -- pending (tracking NULL) też musi zniknąć przed delete products (FK SET NULL)
   delete from public.inventory_snapshots where klient_id = v_klient;
   delete from public.demand_listings where id = any(array[dem1,dem2,dem3]);
   delete from public.kickback_picks  where id = any(array[pick1,pick2,pick3]);

@@ -11,8 +11,9 @@ import { timingSafeEqual } from "node:crypto";
  * webhooka (Ustawienia → Ustawienia konta → Integracja → Webhooki).
  *
  * Porównanie stałoczasowe (timingSafeEqual) z FAKTUROWNIA_WEBHOOK_SECRET.
- * Historia: pierwotna implementacja zakładała HMAC-SHA256 + timestamp —
- * zweryfikowane z dokumentacją 2026-07: Bearer jest jedynym mechanizmem.
+ * ponytail: statyczny token = sufit bezpieczeństwa API Fakturowni (brak
+ * HMAC/anty-replay po ich stronie; replay mitygowany idempotentnym event_id).
+ * Upgrade path: rotacja sekretu + IP allowlist Fakturowni w proxy.
  */
 
 const SECRET = process.env.FAKTUROWNIA_WEBHOOK_SECRET ?? "";

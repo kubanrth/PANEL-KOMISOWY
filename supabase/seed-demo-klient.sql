@@ -96,7 +96,8 @@ begin
   delete from public.payouts   where notes = '[DEMO2]';
   delete from public.invoices  where invoice_number like 'DEMO2/%';
   delete from public.documents where file_url like 'https://demo2.kickback.pl/%';
-  delete from public.fulfillment_orders where tracking_number like 'DEMO2%';
+  delete from public.fulfillment_orders where tracking_number like 'DEMO2%'
+    or product_id = any(demo_products);  -- pending (tracking NULL) też musi zniknąć przed delete products (FK SET NULL)
   delete from public.inventory_snapshots where klient_id = v_klient;
   delete from public.products    where id = any(demo_products);
   delete from public.submissions where id in ('SUB-91001','SUB-91002','SUB-91003');

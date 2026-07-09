@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getSessionUser } from "@/lib/supabase/session";
+import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { ProductStatusPill, SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { ButtonLink } from "@/components/ui/Button";
@@ -20,11 +20,7 @@ export default async function ProductDetailPage(props: {
   const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("first_name, last_name, account_type, onboarded_at")
-    .eq("id", user.id)
-    .maybeSingle<Pick<Profile, "first_name" | "last_name" | "account_type" | "onboarded_at">>();
+  const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
   const { data: product } = await supabase

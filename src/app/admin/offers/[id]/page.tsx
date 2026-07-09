@@ -9,7 +9,7 @@ import { adminCounterOffer } from "../actions";
 
 export default async function AdminOfferThreadPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-  const { user, profile, supabase } = await requireAdmin();
+  const { user, supabase } = await requireAdmin();
 
   const { data: product } = await supabase
     .from("products")

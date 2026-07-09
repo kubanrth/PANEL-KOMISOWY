@@ -13,7 +13,7 @@ const STATUS_VARIANT: Record<FakturowniaEvent["status"], "mint" | "amber" | "mut
 };
 
 export default async function AdminFakturowniaPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   // Env status
   const envWebhookSecret = Boolean(process.env.FAKTUROWNIA_WEBHOOK_SECRET);

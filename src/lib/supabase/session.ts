@@ -48,23 +48,48 @@ export const getOwnProfile = cache(async (): Promise<OwnProfile | null> => {
   return (data as OwnProfile | null) ?? null;
 });
 
+/** Podsumowanie portfela — jedno wykonanie per request (strona + shell). */
+export const getWalletSummary = cache(async () => {
+  const user = await getSessionUser();
+  if (!user) return { balance: 0, available: 0, pending: 0 };
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("wallet_summary", { klient: user.id });
+  return {
+    balance: (data?.[0]?.balance_cents as number | undefined) ?? 0,
+    available: (data?.[0]?.available_cents as number | undefined) ?? 0,
+    pending: (data?.[0]?.pending_cents as number | undefined) ?? 0,
+  };
+});
+
 /** Dane chrome'u panelu (wallet + liczniki sidebara) — raz per request. */
 export const getPanelChrome = cache(async () => {
   const user = await getSessionUser();
   if (!user) return { walletBalance: 0, walletAvailable: 0, badges: {} as Record<string, number | boolean | undefined> };
   const supabase = await createClient();
   try {
-    const [summary, listed, demands] = await Promise.all([
-      supabase.rpc("wallet_summary", { klient: user.id }),
-      supabase.from("products").select("*", { count: "exact", head: true }).in("status", ["draft", "aqc", "listed", "offer"]),
+    const [summary, listed, demands, picks] = await Promise.all([
+      getWalletSummary(),
+      // Filtr właściciela jawnie (nie tylko RLS) — admin wchodzący w panel
+      // klienta nie może widzieć globalnego licznika całego komisu.
+      supabase
+        .from("products")
+        .select("*, submissions!inner(klient_id)", { count: "exact", head: true })
+        .in("status", ["draft", "aqc", "listed", "offer"])
+        .eq("submissions.klient_id", user.id),
       supabase.from("demand_listings").select("*", { count: "exact", head: true }).eq("active", true),
+      supabase
+        .from("kickback_picks")
+        .select("*", { count: "exact", head: true })
+        .eq("active", true)
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`),
     ]);
     return {
-      walletBalance: (summary.data?.[0]?.balance_cents as number | undefined) ?? 0,
-      walletAvailable: (summary.data?.[0]?.available_cents as number | undefined) ?? 0,
+      walletBalance: summary.balance,
+      walletAvailable: summary.available,
       badges: {
         magazyn: listed.count ?? undefined,
         zapotrzebowanie: demands.count ?? undefined,
+        plany: (picks.count ?? 0) > 0,
       } as Record<string, number | boolean | undefined>,
     };
   } catch {

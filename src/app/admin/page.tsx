@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin";
 import { formatPLN, formatDate } from "@/lib/format";
 
 export default async function AdminQueuePage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { profile, supabase } = await requireAdmin();
 
   // Counts
   const [{ count: pendingPayouts }, { count: openOffers }, { count: openReturns }] = await Promise.all([

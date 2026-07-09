@@ -13,7 +13,7 @@ type LogRow = {
 };
 
 export default async function AdminAuditLogPage() {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: logsRaw } = await supabase
     .from("audit_log")

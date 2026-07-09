@@ -211,11 +211,15 @@ function allNavLinks(sections: NavSection[]): Array<{ key: string; href: string;
 export function activeKeyFromPath(pathname: string, admin = false): string | undefined {
   const sections = admin ? ADMIN_SECTIONS : [...PANEL_SECTIONS, ...PANEL_BOTTOM];
   const links = allNavLinks(sections);
+  const roots = new Set(["/panel", "/admin"]);
   let best: { key: string; len: number } | undefined;
   for (const l of links) {
-    if (pathname === l.href || pathname.startsWith(l.href + "/")) {
-      if (!best || l.href.length > best.len) best = { key: l.key, len: l.href.length };
-    }
+    // Rooty (/panel, /admin) matchują TYLKO exact — inaczej prefiksowo
+    // łapałyby każdą trasę i PATH_ACTIVE_HINTS nigdy by nie działały.
+    const match = roots.has(l.href)
+      ? pathname === l.href
+      : pathname === l.href || pathname.startsWith(l.href + "/");
+    if (match && (!best || l.href.length > best.len)) best = { key: l.key, len: l.href.length };
   }
   if (best) return best.key;
   for (const [prefix, key] of PATH_ACTIVE_HINTS) {
@@ -229,10 +233,9 @@ const PATH_ACTIVE_HINTS: Array<[string, string]> = [
   ["/panel/submissions", "przyjecia"],
   ["/panel/products", "magazyn"],
   ["/panel/offers", "sprzedaze"],
-  ["/panel/my-sales", "sprzedaze"],
-  ["/panel/inventory", "magazyn"],
-  ["/panel/stats", "analityka"],
   ["/admin/integrations", "integrations"],
+  // (trasy-redirecty jak /panel/my-sales nie potrzebują hintów — pathname
+  // nigdy ich nie zobaczy, redirect() dzieje się server-side)
 ];
 
 /** Label breadcrumba dla pathname (sekcja z nav-config). */

@@ -14,7 +14,7 @@ type ProfileRow = {
 };
 
 export default async function AdminClientsPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
   const { q } = await props.searchParams;
   const search = q?.trim() || "";
 

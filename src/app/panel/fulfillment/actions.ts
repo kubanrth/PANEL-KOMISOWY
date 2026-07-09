@@ -1,12 +1,13 @@
 "use server";
 
+import { POSTAL_RE } from "@/lib/format";
+
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 export type FulfillmentResult = { ok: true; count: number } | { ok: false; error: string };
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const POSTAL_RE = /^\d{2}-\d{3}$/;
 const CARRIERS = ["DPD", "InPost", "DHL", "UPS"] as const;
 /** Statusy produktu, z których można zlecić wysyłkę. */
 const SHIPPABLE = ["listed", "offer", "aqc"] as const;
@@ -148,10 +149,15 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
       .from("shipping-labels")
       .upload(objectName, labelFile, { contentType: LABEL_MAGIC[labelExt].mime, upsert: false });
     if (upErr) return { ok: false, error: `Upload nie powiódł się: ${upErr.message}` };
-    const { data: signed } = await supabase.storage
+    const { data: signed, error: signErr } = await supabase.storage
       .from("shipping-labels")
       .createSignedUrl(objectName, 60 * 60 * 24 * 365);
-    labelUrl = signed?.signedUrl ?? objectName;
+    if (signErr || !signed?.signedUrl) {
+      // Nie zapisujemy surowej ścieżki obiektu — to nie jest URL i magazyn
+      // dostałby 404. Klient może po prostu spróbować ponownie.
+      return { ok: false, error: "Nie udało się przygotować linku do etykiety — spróbuj ponownie." };
+    }
+    labelUrl = signed.signedUrl;
   }
 
   // --- 5. Insert per produkt ---

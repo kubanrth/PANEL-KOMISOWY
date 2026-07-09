@@ -16,7 +16,7 @@ export default async function AdminCrmDetailPage(props: {
 }) {
   const { klient_id } = await props.params;
   const { tab = "submissions" } = await props.searchParams;
-  const { user, profile, supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin();
 
   const { data: klient } = await supabase
     .from("profiles")

@@ -38,11 +38,11 @@ import { verifyBearerToken } from "@/lib/integrations/fakturownia/auth";
  * Fakturownia. Bez tego matching SKU może chybić.
  */
 
-export const runtime = "nodejs"; // Node runtime — potrzeba crypto.createHmac
+export const runtime = "nodejs"; // Node runtime — crypto.timingSafeEqual w auth
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  // 1) Raw body — HMAC liczone po niesparsowanym tekście.
+  // 1) Raw body (przed JSON.parse — spójny podgląd w logu malformed).
   const rawBody = await req.text();
 
   // 2) Autoryzacja: Bearer token (Fakturownia nie podpisuje HMAC-em).
@@ -56,7 +56,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // 3) Parse JSON (best-effort).
+  // 3) Bramka auth PRZED zapisem eventu — deterministyczny event_id liczony
+  //    z payloadu pozwalałby nieuwierzytelnionym requestom "zająć" klucz
+  //    idempotencji i wyciszyć prawdziwe delivery (23505 → skipped).
+  if (!verify.ok) {
+    await tryLogMalformed(rawBody, `auth_${verify.reason}`);
+    return NextResponse.json({ ok: true, note: `auth_${verify.reason}` });
+  }
+
+  // 4) Parse JSON (best-effort).
   let payload: Record<string, unknown> = {};
   try {
     payload = JSON.parse(rawBody) as Record<string, unknown>;
@@ -80,8 +88,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const supabase = getServiceClient();
 
   const redactedPayload = redact(payload);
-  const status = verify.ok ? "processed" : "failed"; // initial — moze sie zmienic
-  const errorMessage = verify.ok ? null : `signature_${verify.reason}`;
 
   const { data: inserted, error: insertErr } = await supabase
     .from("fakturownia_events")
@@ -89,9 +95,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       fakturownia_event_id: event.event_id,
       event_kind: event.kind,
       payload: redactedPayload,
-      signature_valid: verify.ok,
-      status, // tymczasowy, update poniżej
-      error_message: errorMessage,
+      signature_valid: true,
+      status: "processed", // tymczasowy, update poniżej
+      error_message: null,
     })
     .select("id")
     .maybeSingle();
@@ -108,10 +114,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const eventRowId = inserted?.id as string | undefined;
-
-  // 6) Jeśli signature nieprawidłowy — nie ruszamy dalej.
-  if (!verify.ok) {
-    return NextResponse.json({ ok: true, note: `signature_${verify.reason}` });
+  if (!eventRowId) {
+    // Bez uuid wiersza nie wołamy RPC (p_event_id jest typu uuid).
+    return NextResponse.json({ ok: true, note: "event_row_missing" });
   }
 
   // 7) Dispatch wg event kind.
@@ -120,7 +125,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   try {
     if (event.kind === "invoice_sale" || event.kind === "mm_sale" || event.kind === "warehouse_movement") {
-      const r = await handleSale(event, eventRowId ?? "");
+      const r = await handleSale(event, eventRowId);
       processStatus = r.ok ? "processed" : "failed";
       processError = r.ok ? null : r.error;
     } else {
@@ -184,7 +189,9 @@ function parseEvent(payload: Record<string, unknown>): ParsedEvent {
   const isInvoice = invId !== "" && ("positions" in inv || "number" in inv || invKind !== "");
 
   let kind = "unknown";
-  if (isInvoice && !isDestroy && (SALE_KINDS.has(invKind) || invKind === "")) {
+  // Fail-closed: sprzedaż TYLKO gdy kind jawnie sprzedażowy. Faktura bez
+  // pola kind → skipped (do ręcznego przejrzenia w logu), nie sprzedaż.
+  if (isInvoice && !isDestroy && SALE_KINDS.has(invKind)) {
     kind = "invoice_sale";
   } else if (/mm|movement|magazyn|przesun/i.test(eventName)) {
     kind = "mm_sale";
@@ -232,30 +239,52 @@ async function handleSale(event: ParsedEvent, eventRowId: string): Promise<
   let processed = 0;
   const errors: string[] = [];
 
-  for (const pos of event.positions) {
-    // Primary: code == products.sku (push ustawia code=SKU przy tworzeniu
-    // produktu w Fakturowni). Fallback: product_id → fakturownia_product_id.
-    let sku = pos.sku;
-    if (!sku && pos.fakturowniaProductId != null) {
+  // Cap pozycji: faktura zbiorcza nie może zamienić webhooka w timeout
+  // (sekwencyjne RPC). Nadmiar → failed z jasnym komunikatem do replay.
+  const MAX_POSITIONS = 50;
+  const positions = event.positions.slice(0, MAX_POSITIONS);
+  if (event.positions.length > MAX_POSITIONS) {
+    errors.push(`dokument ma ${event.positions.length} pozycji — przetworzono ${MAX_POSITIONS}, resztę obsłuż przez replay`);
+  }
+
+  for (const pos of positions) {
+    // Primary: code == products.sku (push ustawia code=SKU). Fallback:
+    // product_id → fakturownia_product_id — także gdy code jest ustawiony,
+    // ale nie trafia w żaden SKU (np. własny kod katalogowy SellAsist).
+    const resolveByProductId = async (): Promise<string> => {
+      if (pos.fakturowniaProductId == null) return "";
       const { data: prod } = await supabase
         .from("products")
         .select("sku")
         .eq("fakturownia_product_id", pos.fakturowniaProductId)
         .maybeSingle();
-      sku = (prod?.sku as string | undefined) ?? "";
-      if (!sku) {
-        errors.push(`product_id=${pos.fakturowniaProductId}: brak w mapowaniu (fakturownia_product_id)`);
-        continue;
-      }
+      return (prod?.sku as string | undefined) ?? "";
+    };
+
+    let sku = pos.sku || (await resolveByProductId());
+    if (!sku) {
+      errors.push(`product_id=${pos.fakturowniaProductId ?? "?"}: brak w mapowaniu (code/fakturownia_product_id)`);
+      continue;
     }
 
     // RPC atomic + idempotent — ustawia status='sold', trigger DB
     // handle_product_sold domyka resztę (wallet, notyfikacje, sold_at, settlement_at).
-    const { data, error } = await supabase.rpc("mark_product_sold_from_webhook", {
-      p_sku: sku,
-      p_mm_doc_id: event.doc_id,
-      p_event_id: eventRowId,
-    });
+    const markSold = (s: string) =>
+      supabase.rpc("mark_product_sold_from_webhook", {
+        p_sku: s,
+        p_mm_doc_id: event.doc_id,
+        p_event_id: eventRowId,
+      });
+
+    let { data, error } = await markSold(sku);
+    if (error && /sku_not_found/.test(error.message) && pos.sku && pos.fakturowniaProductId != null) {
+      // code nie jest naszym SKU — spróbuj po mapowaniu product_id.
+      const fallbackSku = await resolveByProductId();
+      if (fallbackSku && fallbackSku !== sku) {
+        sku = fallbackSku;
+        ({ data, error } = await markSold(sku));
+      }
+    }
     if (error) {
       errors.push(`${sku}: ${error.message}`);
       continue;
