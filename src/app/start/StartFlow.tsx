@@ -282,48 +282,6 @@ function Step1({
   );
 }
 
-function PricingToggle({
-  value, onChange,
-}: {
-  value: PricingMode;
-  onChange: (v: PricingMode) => void;
-}) {
-  const options: Array<{ v: PricingMode; title: string; sub: string; tag: string }> = [
-    { v: "commission", title: "Prowizja 20%", sub: "Kickback sprzedaje, prowizja od ceny sprzedaży.", tag: "Domyślny" },
-    { v: "payout", title: "Stała wypłata", sub: "Deklarujesz ile chcesz dostać. Sprzedajemy za dowolną cenę powyżej.", tag: "Grail Point" },
-  ];
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {options.map((o) => {
-        const active = value === o.v;
-        return (
-          <button
-            type="button"
-            key={o.v}
-            onClick={() => onChange(o.v)}
-            className={`text-left p-4 rounded-[14px] border-2 transition-colors ${
-              active ? "border-lime/60 bg-lime/5" : "border-border hover:border-text-mute bg-surface"
-            }`}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="font-semibold text-[15px] tracking-[-0.015em]">{o.title}</div>
-              <span className={`h-4 w-4 rounded-full border-2 flex items-center justify-center ${
-                active ? "border-lime bg-lime" : "border-border"
-              }`}>
-                {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
-              </span>
-            </div>
-            <div className="mt-2 text-[12px] text-text-soft leading-[1.45]">{o.sub}</div>
-            <div className="mt-3 inline-flex text-[11px] px-2 py-0.5 rounded-md bg-surface-2 border border-border text-text-mute">
-              {o.tag}
-            </div>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 function ProductCard({
   idx, product, onChange, onRemove, folderHint,
 }: {
@@ -378,12 +336,8 @@ function ProductCard({
         </Field>
       </div>
 
-      {/* Pricing mode */}
-      <div className="mt-6 pt-5 border-t border-border-soft">
-        <div className="input-label mb-3">Model rozliczenia *</div>
-        <PricingToggle value={product.pricingMode} onChange={(v) => onChange({ pricingMode: v })} />
-      </div>
-
+      {/* Model rozliczenia bez wyboru w UI (2026-07-12) — zawsze prowizja 20%;
+          pricingMode/payout zostaje w modelu danych (Grail Point w przyszłości). */}
       <div className="mt-5 grid grid-cols-12 gap-4">
         {isCommission ? (
           <>
