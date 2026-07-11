@@ -6,7 +6,7 @@ import { ProductStatusPill, SubmissionStatusPill } from "@/components/panel/Stat
 import { ProductThumb } from "@/components/panel/ProductThumb";
 import { ButtonLink } from "@/components/ui/Button";
 import { formatPLN, formatDate, takeHomeCents, commissionCents } from "@/lib/format";
-import type { Product, Submission, Profile } from "@/lib/types";
+import { PRODUCT_STAGES, type ProductStage, type Product, type Submission, type Profile } from "@/lib/types";
 
 /* Karta produktu — design C8: galeria 60/40, spec lista, karta ceny
    z podziałem prowizji, pionowy timeline statusów, akcje. */
@@ -137,19 +137,11 @@ export default async function ProductDetailPage(props: {
         </aside>
       </section>
 
-      {/* A&QC */}
+      {/* Etapy przygotowania (aktualizowane przez magazyn Kickback) */}
       <section className="mt-10">
-        <div className="label mb-3">Authentication & Quality Control</div>
+        <div className="label mb-3">Etap przygotowania</div>
         <div className="card p-6">
-          {product.status === "draft" ? (
-            <div className="text-[14px] text-text-soft">
-              Audyt rozpocznie się po dostarczeniu pakunku do magazynu Kickback. Otrzymasz powiadomienie z wyceną w ciągu 3 dni roboczych.
-            </div>
-          ) : (
-            <div className="text-[14px] text-text-soft">
-              Pełen raport A&QC (12 punktów + uzasadnienie) dostępny w kolejnej iteracji panelu.
-            </div>
-          )}
+          <StagePipeline stage={product.stage} />
         </div>
       </section>
     </>
@@ -227,6 +219,35 @@ function Gallery({ product }: { product: Product }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/** Postęp pipeline'u magazynowego — 9 etapów, aktualizuje Kickback. */
+function StagePipeline({ stage }: { stage: ProductStage }) {
+  const idx = Math.max(0, PRODUCT_STAGES.findIndex((s) => s.key === stage));
+  return (
+    <div>
+      <div className="flex items-center gap-1.5" aria-label={`Etap ${idx + 1} z ${PRODUCT_STAGES.length}`}>
+        {PRODUCT_STAGES.map((s, i) => (
+          <div
+            key={s.key}
+            title={s.label}
+            className={`h-1.5 flex-1 rounded-full ${i < idx ? "bg-lime/50" : i === idx ? "bg-lime" : "bg-surface-2"}`}
+          />
+        ))}
+      </div>
+      <div className="mt-3 flex items-baseline justify-between gap-4 flex-wrap">
+        <div className="text-[14px]">
+          <span className="text-text-mute num">{idx + 1}/{PRODUCT_STAGES.length}</span>{" "}
+          <span className="font-medium">{PRODUCT_STAGES[idx].label}</span>
+        </div>
+        <div className="text-[12px] text-text-mute">
+          {stage === "listing"
+            ? "Produkt przeszedł wszystkie etapy i jest wystawiony."
+            : "Etapy aktualizuje magazyn Kickback — zobaczysz tu postęp przygotowania do sprzedaży."}
+        </div>
+      </div>
     </div>
   );
 }

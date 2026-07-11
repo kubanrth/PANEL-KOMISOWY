@@ -107,7 +107,7 @@ export default async function AdminSubmissionsPage(props: { searchParams: Promis
               return (
                 <Link
                   key={s.id}
-                  href={`/panel/submissions/${s.id}`}
+                  href={`/admin/submissions/${s.id}`}
                   className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                 >
                   <div className="col-span-2 num text-[12px] text-text-mute">{s.id}</div>

@@ -26,6 +26,35 @@ export type ProductStatus =
   | "withdrawn"
   | "returned";
 
+/** migration 017 — etap pipeline'u magazynowego (ustawiany przez admina) */
+export type ProductStage =
+  | "introduction"
+  | "verification"
+  | "attributes"
+  | "quality_control"
+  | "valuation_decision"
+  | "dimensions"
+  | "photos"
+  | "description"
+  | "listing";
+
+/** Kolejność = kolejność etapów w pipeline. */
+export const PRODUCT_STAGES: Array<{ key: ProductStage; label: string }> = [
+  { key: "introduction", label: "Introduction" },
+  { key: "verification", label: "Verification" },
+  { key: "attributes", label: "Atrybuty" },
+  { key: "quality_control", label: "Quality Control" },
+  { key: "valuation_decision", label: "Wycena – Decyzja" },
+  { key: "dimensions", label: "Wymiary" },
+  { key: "photos", label: "Zdjęcia" },
+  { key: "description", label: "Opis" },
+  { key: "listing", label: "Listing" },
+];
+
+export const PRODUCT_STAGE_LABEL: Record<ProductStage, string> = Object.fromEntries(
+  PRODUCT_STAGES.map((s) => [s.key, s.label]),
+) as Record<ProductStage, string>;
+
 export type Photo = { url: string; name: string; size?: number };
 
 export type Profile = {
@@ -93,6 +122,8 @@ export type Product = {
   published_at: string | null;
   sold_at: string | null;
   settlement_at: string | null;
+  /** migration 017 — etap pipeline'u magazynowego */
+  stage: ProductStage;
   /** migration 012 — Fakturownia integration */
   sku: string;                 // KCB-{YY}-{6hex}
   fakturownia_product_id: number | null;
