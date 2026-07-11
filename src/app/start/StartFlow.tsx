@@ -233,9 +233,9 @@ function Step1({
           Co <span className="text-text-soft">wysyłasz w tej paczce?</span>
         </h1>
         <p className="mt-4 text-[16px] leading-[1.6] text-text-soft max-w-[60ch]">
-          Dodaj produkty z paczki, którą wyślesz do Kickback. Dla każdej rzeczy wybierz model rozliczenia:
-          prowizja 20% albo stała wypłata. Wycenę listingu otrzymasz po audycie A&amp;QC w panelu Sprzedaże —
-          zwykle w ciągu 3 dni roboczych od dostarczenia.
+          Dodaj produkty z paczki, którą wyślesz do Kickback. Rozliczenie: prowizja 20% od ceny sprzedaży.
+          Wycenę listingu otrzymasz po weryfikacji w panelu Sprzedaże — zwykle w ciągu 3 dni roboczych
+          od dostarczenia.
         </p>
       </div>
 
