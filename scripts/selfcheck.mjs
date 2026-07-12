@@ -153,7 +153,75 @@ function activeKeyFromPath(pathname, links, hints) {
   }
 }
 
-console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9, activeKeyFromPath 9 przypadków)");
+
+// --- parseOfferCsv (kopia logiki z src/lib/offer-csv.ts — formatka „Wgraj przez plik") ---
+function splitCsv(text, delimiter) {
+  const rows = []; let row = []; let field = ""; let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQuotes = false; }
+      else field += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === delimiter) { row.push(field); field = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); field = ""; rows.push(row); row = [];
+    } else field += ch;
+  }
+  row.push(field); rows.push(row);
+  return rows.filter((r) => r.some((f) => f.trim() !== ""));
+}
+function parseOfferCsv(raw) {
+  const text = raw.replace(/^\uFEFF/, "");
+  const firstLine = text.split(/\r?\n/, 1)[0] ?? "";
+  const delimiter = (firstLine.match(/;/g)?.length ?? 0) >= (firstLine.match(/,/g)?.length ?? 0) ? ";" : ",";
+  const rows = splitCsv(text, delimiter);
+  if (rows.length < 2) return { products: [], errors: ["empty"] };
+  const products = []; const errors = [];
+  for (let r = 1; r < rows.length; r++) {
+    const cells = rows[r].map((c) => c.trim());
+    const rowNo = r + 1;
+    const [brand = "", model = "", category = "", size = "", conditionRaw = "", expectedPrice = "", minPrice = "", description = ""] = cells;
+    if (!brand) { errors.push(`Wiersz ${rowNo}: brak marki.`); continue; }
+    if (!model) { errors.push(`Wiersz ${rowNo}: brak modelu.`); continue; }
+    if (!expectedPrice) { errors.push(`Wiersz ${rowNo}: brak ceny oczekiwanej.`); continue; }
+    let condition = 9;
+    if (conditionRaw) {
+      const n = parseInt(conditionRaw, 10);
+      if (Number.isNaN(n) || n < 1 || n > 10) { errors.push(`Wiersz ${rowNo}: stan musi być liczbą 1–10.`); continue; }
+      condition = n;
+    }
+    products.push({ brand, model, category, size, condition, expectedPrice, minPrice, description });
+  }
+  return { products, errors };
+}
+{
+  const H = "Marka*;Model*;Kategoria;Rozmiar;Stan (1-10);Cena oczekiwana (zł)*;Cena minimalna (zł);Opis / uwagi";
+  const csvCases = [
+    // [opis, wejście, oczekiwane produkty, oczekiwane błędy]
+    ["średniki + BOM", "\uFEFF" + H + "\r\nNike;MU Home 1999;Koszulka;L;9;1 600;1 200;ok", 1, 0],
+    ["przecinki", "Marka*,Model*,Kat,R,Stan,Cena,Min,Opis\nAdidas,Arsenal 2003,,,8,2 200,,", 1, 0],
+    ["cudzysłów z separatorem", H + '\nNike;"Home; retro";;;;900;;"opis, z przecinkiem"', 1, 0],
+    ["escaped quote", H + '\nNike;"Model ""X""";;;;500;;', 1, 0],
+    ["brak marki → błąd", H + "\n;Model;;;;100;;", 0, 1],
+    ["brak ceny → błąd", H + "\nNike;Model;;;;;;", 0, 1],
+    ["zły stan → błąd", H + "\nNike;Model;;;15;100;;", 0, 1],
+    ["puste wiersze pomijane", H + "\n\nNike;Model;;;;100;;\n\n", 1, 0],
+    ["domyślny stan 9", H + "\nNike;Model;;;;100;;", 1, 0],
+  ];
+  for (const [name, input, wantP, wantE] of csvCases) {
+    const got = parseOfferCsv(input);
+    if (got.products.length !== wantP || got.errors.length !== wantE) {
+      console.error(`parseOfferCsv[${name}]: products=${got.products.length}/${wantP}, errors=${got.errors.length}/${wantE}`, got.errors);
+      process.exit(1);
+    }
+  }
+  const d9 = parseOfferCsv(H + "\nNike;Model;;;;100;;").products[0];
+  if (d9.condition !== 9) { console.error("parseOfferCsv: domyślny stan != 9"); process.exit(1); }
+}
+
+console.log("selfcheck OK (plural 12, formatPLN 5, parsePriceToCents 12, parseProductIds 9, kod pocztowy 9, activeKeyFromPath 9, parseOfferCsv 9 przypadków)");
 
 // --- parser webhooka Fakturowni (kopia logiki kind/event_id z route.ts) ---
 {
