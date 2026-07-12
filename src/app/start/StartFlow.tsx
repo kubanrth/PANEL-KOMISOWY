@@ -4,8 +4,9 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "@/components/ui/Button";
 import { PhotoDropzone } from "@/components/ui/PhotoDropzone";
-import { formatPLN, parsePriceToCents, takeHomeCents } from "@/lib/format";
+import { formatPLN, parsePriceToCents, takeHomeCents, plural } from "@/lib/format";
 import { createSubmission } from "./actions";
+import { parseOfferCsv, templateCsv, type CsvProduct } from "@/lib/offer-csv";
 import type { Photo, PricingMode } from "@/lib/types";
 
 type Step = 1 | 2;
@@ -58,6 +59,19 @@ export function StartFlow({ accountType: _accountType }: { accountType: "individ
   }
   function removeProduct(idx: number) {
     setProducts((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== idx)));
+  }
+  function importProducts(rows: CsvProduct[]) {
+    const mapped: ProductForm[] = rows.map((r) => ({
+      ...emptyProduct(),
+      brand: r.brand, model: r.model, category: r.category, size: r.size,
+      condition: r.condition, expectedPrice: r.expectedPrice, minPrice: r.minPrice,
+      description: r.description,
+    }));
+    setProducts((prev) => {
+      // Jedyna, nietknięta karta → podmieniamy zamiast doklejać pod spodem.
+      const untouched = prev.length === 1 && !prev[0].brand && !prev[0].model && prev[0].photos.length === 0;
+      return untouched ? mapped : [...prev, ...mapped];
+    });
   }
 
   function validateProducts(): string | null {
@@ -140,6 +154,7 @@ export function StartFlow({ accountType: _accountType }: { accountType: "individ
             products={products}
             updateProduct={updateProduct}
             addProduct={addProduct}
+            importProducts={importProducts}
             removeProduct={removeProduct}
             onNext={() => {
               const err = validateProducts();
@@ -216,11 +231,12 @@ function Stepper({ step }: { step: Step }) {
 
 /* ====================================================== STEP 1: produkty */
 function Step1({
-  products, updateProduct, addProduct, removeProduct, onNext, error, folderHint,
+  products, updateProduct, addProduct, importProducts, removeProduct, onNext, error, folderHint,
 }: {
   products: ProductForm[];
   updateProduct: (idx: number, patch: Partial<ProductForm>) => void;
   addProduct: () => void;
+  importProducts: (rows: CsvProduct[]) => void;
   removeProduct: (idx: number) => void;
   onNext: () => void;
   error: string | null;
@@ -238,6 +254,8 @@ function Step1({
           od dostarczenia.
         </p>
       </div>
+
+      <FileImport onImport={importProducts} />
 
       <div className="space-y-5">
         {products.map((p, idx) => (
@@ -534,6 +552,72 @@ function MetaTile({ label, value }: { label: string; value: string }) {
     <div className="card p-5">
       <div className="label">{label}</div>
       <div className="mt-2 font-semibold text-[15px]">{value}</div>
+    </div>
+  );
+}
+
+/** „Wgraj przez plik" — pobranie formatki CSV + import produktów z pliku. */
+function FileImport({ onImport }: { onImport: (rows: CsvProduct[]) => void }) {
+  const [feedback, setFeedback] = useState<{ added: number; errors: string[] } | null>(null);
+
+  function downloadTemplate() {
+    const blob = new Blob([templateCsv()], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatka-kickback.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    const { products, errors } = parseOfferCsv(await file.text());
+    if (products.length) onImport(products);
+    setFeedback({ added: products.length, errors });
+  }
+
+  return (
+    <div className="card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="font-semibold text-[15px]">Wgraj przez plik</div>
+          <p className="mt-1 text-[12px] text-text-soft leading-[1.5] max-w-[52ch]">
+            Pobierz formatkę, uzupełnij w Excelu (zapisz jako CSV) i wgraj — produkty
+            pojawią się poniżej. Zdjęcia dodasz przy każdej pozycji.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button type="button" onClick={downloadTemplate} className="btn-ghost h-10 px-4 text-[13px]">
+            Pobierz formatkę (CSV)
+          </button>
+          <label className="btn-primary h-10 px-4 text-[13px] inline-flex items-center cursor-pointer">
+            Wgraj plik
+            <input
+              type="file"
+              accept=".csv,text/csv"
+              className="sr-only"
+              onChange={(e) => { void handleFile(e.target.files?.[0]); e.target.value = ""; }}
+            />
+          </label>
+        </div>
+      </div>
+      {feedback && (
+        <div className="mt-3 text-[12px] leading-[1.5]">
+          {feedback.added > 0 && (
+            <div className="text-mint">Dodano {feedback.added} {plural(feedback.added, ["produkt", "produkty", "produktów"])} z pliku.</div>
+          )}
+          {feedback.errors.length > 0 && (
+            <ul className="mt-1 text-coral list-disc pl-4">
+              {feedback.errors.slice(0, 5).map((e) => <li key={e}>{e}</li>)}
+              {feedback.errors.length > 5 && <li>…i {feedback.errors.length - 5} kolejnych.</li>}
+            </ul>
+          )}
+          {feedback.added === 0 && feedback.errors.length === 0 && (
+            <div className="text-text-soft">Plik nie zawierał żadnych produktów.</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
