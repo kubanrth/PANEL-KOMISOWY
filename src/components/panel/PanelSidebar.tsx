@@ -48,7 +48,8 @@ export function PanelSidebar({
         <div className="text-[11px] text-text-mute mt-1.5 px-0.5">Panel komisanta</div>
       </div>
 
-      <div className="px-3 py-4 flex-1 overflow-y-auto">
+      {/* no-scrollbar: menu przewija się kółkiem, ale bez drugiego paska obok strony */}
+      <div className="px-3 py-4 flex-1 overflow-y-auto no-scrollbar">
         <SidebarNav sections={PANEL_SECTIONS} badges={resolvedBadges} storageKey="kb-nav-panel" />
       </div>
 
