@@ -110,6 +110,7 @@ export const PANEL_BOTTOM: NavSection[] = [
   {
     label: null,
     items: [
+      { key: "spotkanie", label: "Umów spotkanie", href: "/panel/spotkanie", icon: "CalendarPlus" },
       { key: "notifications", label: "Powiadomienia", href: "/panel/notifications", icon: "Bell", dotKey: "notifications" },
       {
         key: "ustawienia",
