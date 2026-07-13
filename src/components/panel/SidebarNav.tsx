@@ -6,7 +6,7 @@ import { useEffect, useState, type ComponentType } from "react";
 import {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
   TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List, CalendarPlus,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, CaretDown, List, CalendarPlus, Invoice,
   type IconProps,
 } from "@phosphor-icons/react";
 import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type NavBadges, type DotColor } from "./nav-config";
@@ -15,7 +15,7 @@ import { isItemActive, activeKeyFromPath, type NavSection, type NavItem, type Na
 const ICONS: Record<string, ComponentType<IconProps>> = {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
   TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
-  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, List, CalendarPlus,
+  ChartLine, Bell, GearSix, Receipt, EnvelopeSimple, Handshake, Users, Kanban, Money, FileText, Scroll, ChartBar, List, CalendarPlus, Invoice,
 };
 
 const DOT_CLS: Record<DotColor, string> = {

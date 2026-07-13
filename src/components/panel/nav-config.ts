@@ -80,9 +80,9 @@ export const PANEL_SECTIONS: NavSection[] = [
         dotKey: "wallet",
         subs: [
           { key: "wyplaty", label: "Historia wypłat", href: "/panel/wyplaty", dot: "mint" },
-          { key: "faktury", label: "Faktury", href: "/panel/faktury", dot: "mute" },
         ],
       },
+      { key: "faktury", label: "Faktury", href: "/panel/faktury", icon: "Invoice" },
       { key: "uks", label: "UKS", href: "/panel/uks", icon: "FileText" },
     ],
   },
