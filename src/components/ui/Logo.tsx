@@ -2,7 +2,8 @@ import Link from "next/link";
 
 export function Logo({
   href = "/",
-  showSuffix = true,
+  // Domyślnie bez „/ panel” (poprawka 2026-07-13) — sufiks tylko na życzenie.
+  showSuffix = false,
   className = "",
 }: {
   href?: string;
