@@ -40,7 +40,7 @@ export default async function AdminQueuePage() {
 
   const { data: payoutQueue } = await supabase
     .from("payouts")
-    .select("id, amount_cents, requested_at, klient_id, profiles(first_name, last_name, account_type)")
+    .select("id, amount_cents, requested_at, klient_id, profiles:klient_id(first_name, last_name, account_type)")
     .eq("status", "requested")
     .order("requested_at", { ascending: true })
     .limit(5);
