@@ -9,6 +9,7 @@ import { SubmissionStatusPill } from "@/components/panel/StatusPill";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import type { Submission, Product } from "@/lib/types";
+import { CsvIntake } from "./CsvIntake";
 
 /**
  * Przyjęcia magazynowe = lista submissions w stanie podpisanym/dostarczonym.
@@ -53,10 +54,17 @@ export default async function PrzyjeciaPage() {
   return (
     <>
       <PageHeader
-        label="Dokumenty PZ"
-        title="Przyjęcia magazynowe"
-        sub="Każda Twoja paczka wysłana do Kickback generuje dokument PZ (Przyjęcie Magazynowe). Sprawdź historię, wartości i kliknij PZ żeby zobaczyć pozycje."
+        label="Nowe pozycje + dokumenty PZ"
+        title="Przyjęcia"
+        sub="Dodawaj nowy towar plikiem CSV — to najszybsza droga. Historia dokumentów PZ z Twoich paczek jest niżej."
       />
+
+      {/* Główna funkcja: wgranie CSV z nowymi pozycjami */}
+      <section className="mt-8">
+        <CsvIntake />
+      </section>
+
+      <div className="label mt-12">Dokumenty PZ · historia przyjęć</div>
 
       {subs.length === 0 ? (
         <section className="mt-8">
