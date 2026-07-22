@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "@/components/ui/Button";
 import { PhotoDropzone } from "@/components/ui/PhotoDropzone";
@@ -60,6 +60,19 @@ export function StartFlow({ accountType: _accountType }: { accountType: "individ
   function removeProduct(idx: number) {
     setProducts((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== idx)));
   }
+  // Import z Przyjęć: CSV sparsowany tam ląduje w sessionStorage i
+  // przejmujemy go tu raz, przy wejściu na formularz.
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("kb-csv-import");
+      if (!raw) return;
+      sessionStorage.removeItem("kb-csv-import");
+      const rows = JSON.parse(raw) as CsvProduct[];
+      if (Array.isArray(rows) && rows.length) importProducts(rows);
+    } catch { /* uszkodzony wpis — ignorujemy */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function importProducts(rows: CsvProduct[]) {
     const mapped: ProductForm[] = rows.map((r) => ({
       ...emptyProduct(),
