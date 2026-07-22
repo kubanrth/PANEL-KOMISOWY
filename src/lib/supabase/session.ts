@@ -101,13 +101,20 @@ export const getPanelChrome = cache(async () => {
 export const getAdminBadges = cache(async () => {
   const supabase = await createClient();
   try {
-    const [payouts, offers] = await Promise.all([
+    const [payouts, offers, oferty, wycofania, ceny, wysylki] = await Promise.all([
       supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
       supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("products").select("*", { count: "exact", head: true }).is("listing_price_cents", null).in("status", ["draft", "aqc"]),
+      supabase.from("returns").select("*", { count: "exact", head: true }).eq("resolution", "pending").in("reason", ["withdraw_short_term", "withdraw_long_term", "client_rejection"]),
+      supabase.from("price_change_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("fulfillment_orders").select("*", { count: "exact", head: true }).eq("status", "pending").not("request_type", "is", null),
     ]);
+    const zgloszenia = (wycofania.count ?? 0) + (ceny.count ?? 0) + (wysylki.count ?? 0);
     return {
       payouts: payouts.count ?? undefined,
       offers: offers.count ?? undefined,
+      oferty: oferty.count || undefined,
+      zgloszenia: zgloszenia || undefined,
     } as Record<string, number | boolean | undefined>;
   } catch {
     return {} as Record<string, number | boolean | undefined>;

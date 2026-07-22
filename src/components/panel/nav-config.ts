@@ -141,6 +141,8 @@ export const ADMIN_SECTIONS: NavSection[] = [
     label: "Operacje",
     items: [
       { key: "inbox", label: "Inbox", href: "/admin/inbox", icon: "EnvelopeSimple", badgeKey: "inbox" },
+      { key: "oferty", label: "Oferty produktowe", href: "/admin/oferty", icon: "Tag", badgeKey: "oferty" },
+      { key: "zgloszenia", label: "Zgłoszenia", href: "/admin/zgloszenia", icon: "ClipboardText", badgeKey: "zgloszenia" },
       { key: "submissions", label: "Submissions", href: "/admin/submissions", icon: "Tray", badgeKey: "submissions" },
       { key: "offers", label: "Offers (Zerr)", href: "/admin/offers", icon: "Handshake", badgeKey: "offers" },
       { key: "returns", label: "Returns", href: "/admin/returns", icon: "ArrowCounterClockwise" },
@@ -158,7 +160,6 @@ export const ADMIN_SECTIONS: NavSection[] = [
     items: [
       { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/admin/zapotrzebowanie", icon: "Target" },
       { key: "co-warto-dodac", label: "Co warto dodać", href: "/admin/co-warto-dodac", icon: "Sparkle" },
-      { key: "zmiany-ceny", label: "Zmiany cen", href: "/admin/zmiany-ceny", icon: "ChartLineDown" },
     ],
   },
   {
