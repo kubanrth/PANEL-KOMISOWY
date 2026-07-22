@@ -144,7 +144,7 @@ export type DerivedStatus =
 export const DERIVED_STATUS_LABEL: Record<DerivedStatus, string> = {
   w_trakcie_dostawy: "W trakcie dostawy",
   przyjeto: "Przyjęto na magazyn",
-  zdjecia: "Robione zdjęcia",
+  zdjecia: "Processing",
   oczekuje_publikacji: "Oczekuje na publikację",
   aktywny: "Aktywny w sprzedaży",
 };
