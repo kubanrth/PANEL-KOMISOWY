@@ -10,7 +10,7 @@ import { vatLabel, type DerivedStatus } from "@/lib/types";
 const SHORT_STATUS: Record<DerivedStatus, string> = {
   w_trakcie_dostawy: "W dostawie",
   przyjeto: "Przyjęto",
-  zdjecia: "Zdjęcia",
+  zdjecia: "Processing",
   oczekuje_publikacji: "Oczekuje",
   aktywny: "W sprzedaży",
 };
@@ -218,7 +218,7 @@ export function MagazynTable({ rows }: Props) {
       {/* Table — kolumny wg C4: SKU · Koszulka · Cena · VAT · W sprzedaży · Status · Akcje.
           (Sprzedano/Rozliczenie usunięte — stock nigdy ich nie ma; Publikacja w tooltipie Dni.) */}
       <div className="card table-scroll">
-        <div className="hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_110px] gap-3 px-4 h-11 label border-b border-border items-center">
+        <div className="hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_150px] gap-3 px-4 h-11 label border-b border-border items-center">
           <input type="checkbox" checked={selected.size === rows.length && rows.length > 0} onChange={toggleAll} className="cursor-pointer" aria-label="Zaznacz wszystkie" />
           <div>SKU</div>
           <div>Koszulka</div>
@@ -329,8 +329,9 @@ export function MagazynTable({ rows }: Props) {
                   <button
                     type="button"
                     onClick={() => openPriceEdit(r.id)}
-                    className="text-[12px] text-blue hover:underline"
+                    className="h-8 px-3 rounded-[9px] bg-lime/10 border border-lime/30 text-lime text-[12px] font-medium inline-flex items-center gap-1.5 hover:bg-lime/20 active:scale-[.98] transition-colors"
                   >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg>
                     Zmień cenę
                   </button>
                 </div>
@@ -339,7 +340,7 @@ export function MagazynTable({ rows }: Props) {
 
             {/* Desktop row (md+) — kolumny wg C4 */}
             <div
-              className={`hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_110px] gap-3 px-4 py-3.5 items-center hover:bg-surface-2/40 transition-colors`}
+              className={`hidden md:grid grid-cols-[28px_120px_minmax(220px,3fr)_150px_56px_90px_150px_150px] gap-3 px-4 py-3.5 items-center hover:bg-surface-2/40 transition-colors`}
             >
               <input type="checkbox" checked={checked} onChange={() => toggleRow(r.id)} className="cursor-pointer" aria-label={`Zaznacz ${r.brand} ${r.model}`} />
 
@@ -436,11 +437,11 @@ export function MagazynTable({ rows }: Props) {
                   <button
                     type="button"
                     onClick={() => openPriceEdit(r.id)}
-                    title="Zmień cenę"
                     aria-label={`Zmień cenę ${r.brand} ${r.model}`}
-                    className="h-8 w-8 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute hover:text-lime transition-colors"
+                    className="h-8 px-2.5 rounded-[9px] bg-lime/10 border border-lime/30 text-lime text-[11px] font-medium inline-flex items-center gap-1.5 hover:bg-lime/20 active:scale-[.98] transition-colors whitespace-nowrap"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg>
+                    Zmień cenę
                   </button>
                 )}
               </div>
