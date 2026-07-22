@@ -92,6 +92,9 @@ export function FulfillmentRequestForm({
       {/* Grid produktów */}
       <div>
         <div className="label mb-3">Wybierz produkty do wysyłki</div>
+        <p className="mb-4 -mt-1 text-[12px] text-text-mute">
+          Pokazujemy produkty w sprzedaży z wgranymi packshotami — wybierasz po zdjęciu.
+        </p>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {products.map((p) => {
             const isBusy = busy.has(p.id);

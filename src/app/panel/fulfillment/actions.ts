@@ -10,7 +10,7 @@ export type FulfillmentResult = { ok: true; count: number } | { ok: false; error
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CARRIERS = ["DPD", "InPost", "DHL", "UPS"] as const;
 /** Statusy produktu, z których można zlecić wysyłkę. */
-const SHIPPABLE = ["listed", "offer", "aqc"] as const;
+const SHIPPABLE = ["listed"] as const;
 
 /** Sygnatury plików — Content-Type/rozszerzenie z przeglądarki nie są zaufane. */
 const LABEL_MAGIC: Record<string, { bytes: number[]; mime: string }> = {
@@ -97,7 +97,7 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
   // --- 2. Własność + stan produktów (RLS też filtruje, ale sprawdzamy jawnie) ---
   const { data: productsRaw, error: prodErr } = await supabase
     .from("products")
-    .select("id, brand, model, status, submission_id, submissions!inner(klient_id)")
+    .select("id, brand, model, status, photos, submission_id, submissions!inner(klient_id)")
     .in("id", productIds);
   if (prodErr) return { ok: false, error: prodErr.message };
 
@@ -124,7 +124,14 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
   if (badStatus.length) {
     return {
       ok: false,
-      error: `Nie można zlecić wysyłki dla: ${badStatus.map(label).join(", ")} — status uniemożliwia wysyłkę (dozwolone: w magazynie, z ofertą lub w A&QC).`,
+      error: `Nie można zlecić wysyłki dla: ${badStatus.map(label).join(", ")} — wysyłkę można zlecić tylko dla produktów w sprzedaży.`,
+    };
+  }
+  const noPackshot = products.filter((p) => !((p as unknown as { photos?: unknown[] | null }).photos?.length));
+  if (noPackshot.length) {
+    return {
+      ok: false,
+      error: `Brak packshotów dla: ${noPackshot.map(label).join(", ")} — wysyłkę można zlecić po wgraniu zdjęć produktu.`,
     };
   }
 

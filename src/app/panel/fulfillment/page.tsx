@@ -10,7 +10,8 @@ import type { Product } from "@/lib/types";
 import { FulfillmentRequestForm, type FulfillmentProduct } from "./FulfillmentRequestForm";
 
 // Statusy produktów dostępnych do zlecenia wysyłki z magazynu.
-const SHIPPABLE = ["listed", "offer", "aqc"] as const;
+// Tylko „w sprzedaży" i z packshotem — decyzja 2026-07-13 (intuicyjny wybór po zdjęciach).
+const SHIPPABLE = ["listed"] as const;
 
 export default async function FulfillmentPage() {
   const supabase = await createClient();
@@ -26,6 +27,8 @@ export default async function FulfillmentPage() {
     .from("products")
     .select("id, brand, model, size, sku, listing_price_cents, expected_price_cents, photos, status")
     .in("status", [...SHIPPABLE])
+    .not("photos", "is", null)
+    .neq("photos", "[]")
     .order("created_at", { ascending: false });
 
   const products: FulfillmentProduct[] = (
