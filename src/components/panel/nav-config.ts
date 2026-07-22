@@ -66,7 +66,6 @@ export const PANEL_SECTIONS: NavSection[] = [
         ],
       },
       { key: "zwroty", label: "Zwroty", href: "/panel/zwroty", icon: "ArrowCounterClockwise" },
-      { key: "zmiany-ceny", label: "Zmiany cen", href: "/panel/zmiany-ceny", icon: "ChartLineDown" },
     ],
   },
   {

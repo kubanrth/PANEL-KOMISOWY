@@ -10,6 +10,7 @@ import { DERIVED_STATUS_LABEL } from "@/lib/types";
 import { deriveStatus } from "@/lib/derived-status";
 import { formatPLN, plural } from "@/lib/format";
 import { MagazynTable, type MagazynRow } from "./MagazynTable";
+import { PriceChangesSection } from "./PriceChangesSection";
 
 type Filters = {
   sort?: "newest" | "oldest" | "cheapest" | "expensive";
@@ -189,6 +190,9 @@ export default async function MagazynPage(props: { searchParams: Promise<Filters
           <MagazynTable rows={rows} />
         )}
       </section>
+
+      {/* Dawna zakładka Zmiany cen — scalona tutaj */}
+      <PriceChangesSection userId={user.id} />
     </>
   );
 }
