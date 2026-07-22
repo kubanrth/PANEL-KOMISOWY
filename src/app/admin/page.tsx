@@ -5,12 +5,28 @@ import { formatPLN, formatDate } from "@/lib/format";
 export default async function AdminQueuePage() {
   const { profile, supabase } = await requireAdmin();
 
-  // Counts
-  const [{ count: pendingPayouts }, { count: openOffers }, { count: openReturns }] = await Promise.all([
+  // Wszystkie otwarte zadania admina — jedno miejsce, komplet liczników.
+  const WITHDRAW_REASONS = ["withdraw_short_term", "withdraw_long_term", "client_rejection"];
+  const [
+    { count: pendingPayouts },
+    { count: openOffers },
+    { count: buyerReturns },
+    { count: intakeOffers },
+    { count: priceChanges },
+    { count: withdrawals },
+    { count: fulfillments },
+  ] = await Promise.all([
     supabase.from("payouts").select("*", { count: "exact", head: true }).eq("status", "requested"),
     supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "pending"),
-    supabase.from("returns").select("*", { count: "exact", head: true }).eq("resolution", "pending"),
+    supabase.from("returns").select("*", { count: "exact", head: true }).eq("resolution", "pending").not("reason", "in", `(${WITHDRAW_REASONS.join(",")})`),
+    supabase.from("products").select("*", { count: "exact", head: true }).is("listing_price_cents", null).in("status", ["draft", "aqc"]),
+    supabase.from("price_change_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
+    supabase.from("returns").select("*", { count: "exact", head: true }).eq("resolution", "pending").in("reason", WITHDRAW_REASONS),
+    supabase.from("fulfillment_orders").select("*", { count: "exact", head: true }).eq("status", "pending").not("request_type", "is", null),
   ]);
+  const totalTasks =
+    (pendingPayouts ?? 0) + (openOffers ?? 0) + (buyerReturns ?? 0) + (intakeOffers ?? 0) +
+    (priceChanges ?? 0) + (withdrawals ?? 0) + (fulfillments ?? 0);
 
   // GMV this month
   const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
@@ -31,11 +47,22 @@ export default async function AdminQueuePage() {
 
   return (
     <>
-      {/* Widok startuje od kafelków akcji — bez nagłówka (decyzja klienta). */}
-      <section className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        <KpiCard label="Wypłaty do autoryzacji" value={pendingPayouts ?? 0} sub="oczekuje" href="/admin/payouts" highlight />
-        <KpiCard label="Oferty Zerr" value={openOffers ?? 0} sub="aktywne negocjacje" href="/admin/offers" />
-        <KpiCard label="Zwroty" value={openReturns ?? 0} sub="czeka na decyzję" href="/admin/returns" />
+      {/* Widok startuje od kafelków zadań — bez nagłówka (decyzja klienta).
+          Komplet otwartych spraw: każda kartka = kolejka do rozwiązania. */}
+      <section className="flex items-baseline justify-between mb-4">
+        <div className="label">Do zrobienia</div>
+        <span className={`text-[12px] num ${totalTasks > 0 ? "text-yellow" : "text-text-mute"}`}>
+          {totalTasks} otwartych zadań
+        </span>
+      </section>
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <KpiCard label="Wypłaty do autoryzacji" value={pendingPayouts ?? 0} sub="czeka na zielone światło" href="/admin/payouts" highlight />
+        <KpiCard label="Oferty produktowe" value={intakeOffers ?? 0} sub="wycena: akceptuj / kontroferta" href="/admin/oferty" highlight />
+        <KpiCard label="Zmiany cen" value={priceChanges ?? 0} sub="sugestie komisantów" href="/admin/zgloszenia?typ=cena" highlight />
+        <KpiCard label="Odsyłki" value={withdrawals ?? 0} sub="wycofania z komisu" href="/admin/zgloszenia?typ=odsylka" highlight />
+        <KpiCard label="Fulfillment" value={fulfillments ?? 0} sub="zlecenia wysyłek" href="/admin/zgloszenia?typ=fulfillment" highlight />
+        <KpiCard label="Zwroty od kupujących" value={buyerReturns ?? 0} sub="czeka na decyzję" href="/admin/returns" highlight />
+        <KpiCard label="Oferty Zerr" value={openOffers ?? 0} sub="aktywne negocjacje" href="/admin/offers" highlight />
       </section>
 
       <section className="mt-8 grid grid-cols-2 gap-4">
@@ -103,10 +130,10 @@ function KpiCard({ label, value, sub, href, highlight }: { label: string; value:
   return (
     <Link
       href={href}
-      className={`card p-6 hover:border-lime/40 transition-colors block ${highlight && value > 0 ? "ring-1 ring-coral/40" : ""}`}
+      className={`card p-6 hover:border-lime/40 transition-colors block ${highlight && value > 0 ? "ring-1 ring-yellow/40" : value === 0 ? "opacity-60" : ""}`}
     >
       <div className="label">{label}</div>
-      <div className="mt-3 font-light text-3xl tracking-[-0.02em] num">{value}</div>
+      <div className={`mt-3 font-light text-3xl tracking-[-0.02em] num ${value > 0 ? "text-yellow" : ""}`}>{value}</div>
       <div className="mt-2 text-[12px] text-text-mute">{sub}</div>
     </Link>
   );
