@@ -52,6 +52,16 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
     ? rotations.reduce((a, r) => a + r.avgDays * r.n, 0) / rotations.reduce((a, r) => a + r.n, 0)
     : null;
 
+  // Rotacja komisu: agregaty po atrybutach (RPC SECURITY DEFINER — same liczby,
+  // bez danych jednostkowych innych komisantów). Brak migracji 018 → sekcja z notką.
+  type RotStat = { dim: "brand" | "size" | "player"; label: string; sold_total: number; sold_mine: number };
+  const rotRes = await supabase.rpc("komis_rotation_stats");
+  const rotStats = (rotRes.data ?? []) as RotStat[];
+  const rotAvailable = !rotRes.error;
+  const komisSoldTotal = rotStats.filter((r) => r.dim === "brand").reduce((a, r) => a + r.sold_total, 0);
+  const topOf = (dim: RotStat["dim"]) =>
+    rotStats.filter((r) => r.dim === dim).sort((a, b) => b.sold_total - a.sold_total).slice(0, 5);
+
   // Inventory snapshots for chart
   const { data: snapsRaw } = await supabase
     .from("inventory_snapshots")
@@ -139,6 +149,53 @@ export default async function AnalitykaPage(props: { searchParams: Promise<{ ran
             </div>
           )}
         </div>
+      </section>
+
+      {/* Rotacja komisu — najlepiej sprzedające się atrybuty vs Twoje pozycje */}
+      <section className="mt-6 card-elev p-6">
+        <div className="label">Rotacja komisu · najlepiej sprzedające się atrybuty</div>
+        <p className="mt-1 text-[12px] text-text-mute">
+          Sprzedaż całego komisu ({komisSoldTotal} szt.) w rozbiciu na kluby, rozmiary i nazwiska — kolumna „Twoje" pokazuje Twój udział.
+        </p>
+        {!rotAvailable ? (
+          <div className="mt-5 rounded-[12px] border border-dashed border-border p-6 text-center text-[13px] text-text-soft">
+            Statystyki rotacji będą dostępne po aktualizacji bazy (migracja 018).
+          </div>
+        ) : (
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {([["brand", "Kluby i marki"], ["size", "Rozmiary"], ["player", "Nazwiska"]] as const).map(([dim, title]) => {
+              const rows = topOf(dim);
+              return (
+                <div key={dim}>
+                  <div className="text-[12px] font-semibold uppercase tracking-wider text-text-mute mb-3">{title}</div>
+                  {rows.length === 0 ? (
+                    <div className="text-[12px] text-text-faint">Brak danych sprzedażowych.</div>
+                  ) : (
+                    <div className="space-y-2.5">
+                      {rows.map((r) => {
+                        const pct = komisSoldTotal ? Math.round((r.sold_total / komisSoldTotal) * 100) : 0;
+                        return (
+                          <div key={r.label}>
+                            <div className="flex items-baseline justify-between gap-3 text-[13px]">
+                              <span className="truncate">{r.label}</span>
+                              <span className="num text-text-soft flex-shrink-0">
+                                {r.sold_total} szt · {pct}%
+                                {r.sold_mine > 0 && <span className="text-lime"> · Twoje: {r.sold_mine}</span>}
+                              </span>
+                            </div>
+                            <div className="mt-1 h-1 rounded-full bg-surface-2 overflow-hidden">
+                              <div className="h-full rounded-full bg-lime/60" style={{ width: `${Math.max(pct, 3)}%` }} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Widget 3: Symulator przychodu */}

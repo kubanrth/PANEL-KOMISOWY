@@ -46,7 +46,7 @@ export default async function AdminSubmissionDetailPage(props: { params: Promise
       <div className="mt-4 flex items-center gap-3">
         <SubmissionStatusPill status={submission.status} />
         <Link href={`/admin/klienci/${submission.klient_id}`} className="text-[13px] text-text-soft hover:text-lime transition-colors">
-          Profil klienta →
+          Profil komisanta →
         </Link>
       </div>
 

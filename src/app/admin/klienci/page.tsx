@@ -37,7 +37,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
       <section>
         <div className="label">{klienci.length} klientów · {admins.length} adminów</div>
         <h1 className="mt-4 font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">
-          Klienci
+          Komisanci
         </h1>
       </section>
 
@@ -49,7 +49,7 @@ export default async function AdminClientsPage(props: { searchParams: Promise<{ 
       <section className="mt-8">
         <div className="card table-scroll">
           <div className="grid grid-cols-12 gap-4 px-6 h-11 items-center label border-b border-border">
-            <div className="col-span-4">Klient</div>
+            <div className="col-span-4">Komisant</div>
             <div className="col-span-2">Typ konta</div>
             <div className="col-span-2">Miasto</div>
             <div className="col-span-2">Onboarded</div>
