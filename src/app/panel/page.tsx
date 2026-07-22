@@ -182,7 +182,7 @@ export default async function PanelPage() {
             <div>
               <div className="flex items-baseline justify-between h-7 mb-4">
                 <h2 className="font-light text-[18px] tracking-[-0.02em]">Co warto dodać</h2>
-                <Link href="/panel/plany" className="text-[12px] text-text-soft hover:text-lime transition-colors">
+                <Link href="/panel/zapotrzebowanie" className="text-[12px] text-text-soft hover:text-lime transition-colors">
                   Wszystkie →
                 </Link>
               </div>
@@ -191,7 +191,7 @@ export default async function PanelPage() {
                   <div className="card p-4 text-[13px] text-text-soft">Brak nowych rekomendacji.</div>
                 )}
                 {picks.map((p) => (
-                  <Link key={p.id} href={p.cta_href ?? "/panel/plany"} className="card p-4 flex items-start gap-3 hover:bg-surface-2/40 transition-colors">
+                  <Link key={p.id} href={p.cta_href ?? "/panel/zapotrzebowanie"} className="card p-4 flex items-start gap-3 hover:bg-surface-2/40 transition-colors">
                     <KickbackMark size={36} />
                     <div className="min-w-0 flex-1">
                       <div className="text-[13px] font-medium truncate">{p.title}</div>

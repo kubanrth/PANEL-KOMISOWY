@@ -6,8 +6,9 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { KickbackMark } from "@/components/ui/KickbackMark";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { Pill } from "@/components/panel/StatusPill";
 import { formatPLN, formatDate } from "@/lib/format";
-import type { DemandListing, Club, NationalTeam, Player } from "@/lib/types";
+import type { DemandListing, Club, NationalTeam, Player, KickbackPick } from "@/lib/types";
 
 /* Zapotrzebowanie — redesign: PageHeader, chip-filtry (wzór FilterChips
    ze Sprzedaży), grid 3-kol kart z avatar-badge 40px (herb/litera),
@@ -30,6 +31,18 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
   if (sp.retro === "1") q = q.eq("retro", true);
   const { data: demandsRaw } = await q.order("published_at", { ascending: false }).limit(100);
   const demands = (demandsRaw ?? []) as DemandListing[];
+
+  // Kuratorowane picks („Co warto dodać") — scalone z dawnej zakładki Plany.
+  const { data: picksRaw } = await supabase
+    .from("kickback_picks")
+    .select("*")
+    .eq("active", true)
+    .order("priority", { ascending: false })
+    .order("published_at", { ascending: false })
+    .limit(12);
+  const picks = ((picksRaw ?? []) as KickbackPick[]).filter(
+    (p) => !p.expires_at || new Date(p.expires_at) > new Date(),
+  );
 
   // Resolve labels in parallel — keep it cheap
   const [clubs, teams, players] = await Promise.all([
@@ -63,10 +76,61 @@ export default async function ZapotrzebowaniePage(props: { searchParams: Promise
   return (
     <>
       <PageHeader
-        label={`${demands.length} aktywnych ogłoszeń · bieżące poszukiwania Kickback`}
-        title="Zapotrzebowanie"
-        sub="Aktywne ogłoszenia — koszulki, których aktualnie poszukujemy. Masz pasującą pozycję? Dodaj ją do najbliższej Oferty."
+        label={`${picks.length + demands.length} rekomendacji · kuratorowane + zapotrzebowanie`}
+        title="Rekomendacje"
+        sub="Pełen podgląd rekomendacji nowych produktów: co warto dodać do komisu i czego aktualnie poszukujemy. Masz pasującą pozycję? Dodaj ją do najbliższej Oferty."
       />
+
+      {/* Co warto dodać — kuratorowane picks */}
+      <section className="mt-8">
+        <div className="flex items-baseline justify-between gap-3 mb-4">
+          <div className="label">Co warto dodać · kuratorowane przez Kickback</div>
+          {picks.length > 0 && <span className="text-[11px] num text-text-mute">{picks.length}</span>}
+        </div>
+        {picks.length === 0 ? (
+          <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-6 text-center text-[13px] text-text-soft">
+            Brak nowych kuratorowanych rekomendacji.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            {picks.map((p) => (
+              <article key={p.id} className="card overflow-hidden flex flex-col">
+                {p.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.image_url} alt="" width={400} height={300} className="w-full aspect-[4/3] object-cover border-b border-border-soft" />
+                )}
+                <div className="p-4 flex flex-col flex-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <KickbackMark size={32} />
+                      <div className="text-[14px] font-medium tracking-[-0.015em] min-w-0">{p.title}</div>
+                    </div>
+                    <Pill variant={p.priority >= 3 ? "lime" : p.priority === 2 ? "blue" : "mute"}>
+                      {p.priority >= 3 ? "Wysoki" : p.priority === 2 ? "Średni" : "Niski"}
+                    </Pill>
+                  </div>
+                  {p.category && <div className="mt-1 text-[11px] text-text-mute">{p.category}</div>}
+                  {p.description && (
+                    <p className="mt-2 text-[12px] text-text-soft leading-[1.5] line-clamp-2 flex-1">{p.description}</p>
+                  )}
+                  {(p.cta_label && p.cta_href) || p.expires_at ? (
+                    <div className="mt-4 pt-3 border-t border-border-soft flex items-center justify-between gap-3">
+                      {p.cta_label && p.cta_href ? (
+                        <ButtonLink href={p.cta_href} variant="ghost" size="sm">{p.cta_label}</ButtonLink>
+                      ) : <span />}
+                      {p.expires_at && (
+                        <span className="text-[10px] num text-text-faint whitespace-nowrap">Wygasa {formatDate(p.expires_at)}</span>
+                      )}
+                    </div>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <div className="label mt-10">Zapotrzebowanie · czego szukamy</div>
 
       {/* Chip-filtry: rodzaj + retro */}
       <section className="mt-7 flex flex-wrap items-center gap-2">
