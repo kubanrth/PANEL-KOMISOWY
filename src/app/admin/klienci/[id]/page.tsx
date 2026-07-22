@@ -44,7 +44,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
         <div className="col-span-12 lg:col-span-7">
           <div className="flex items-center gap-3 mb-3">
             <span className="pill pill-mute">{target.account_type === "business" ? "Biznesowe" : "Indywidualne"}</span>
-            <span className="pill pill-blue">{target.role === "klient" ? "Klient" : target.role}</span>
+            <span className="pill pill-blue">{target.role === "klient" ? "Komisant" : target.role}</span>
           </div>
           <h1 className="font-display font-bold uppercase text-[18px] lg:text-[24px] leading-[1.15] tracking-[0.01em]">{fullName}</h1>
           <p className="mt-3 text-text-mute text-[14px] num">
@@ -76,7 +76,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
                 <span className="num text-text-soft">{String(bankAcc.iban).slice(0, 4)}…{String(bankAcc.iban).slice(-4)}</span>
               </div>
             ) : (
-              <div className="mb-3 text-[13px] text-yellow">Brak konta — klient nie może wypłacać środków.</div>
+              <div className="mb-3 text-[13px] text-yellow">Brak konta — komisant nie może wypłacać środków.</div>
             )}
             <BankAccountForm klientId={target.id} />
           </div>
@@ -125,7 +125,7 @@ export default async function AdminClientProfilePage(props: { params: Promise<{ 
         </div>
         {submissions.length === 0 ? (
           <div className="card-bare bg-bg-soft/40 border border-dashed border-border rounded-[16px] p-8 text-center text-text-soft">
-            Klient nie ma jeszcze żadnej Submission.
+            Komisant nie ma jeszcze żadnej Submission.
           </div>
         ) : (
           <div className="space-y-3">

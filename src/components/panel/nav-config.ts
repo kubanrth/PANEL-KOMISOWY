@@ -151,7 +151,7 @@ export const ADMIN_SECTIONS: NavSection[] = [
   {
     label: "Relacje",
     items: [
-      { key: "klienci", label: "Klienci", href: "/admin/klienci", icon: "Users" },
+      { key: "klienci", label: "Komisanci", href: "/admin/klienci", icon: "Users" },
       { key: "crm", label: "CRM", href: "/admin/crm", icon: "Kanban" },
     ],
   },
