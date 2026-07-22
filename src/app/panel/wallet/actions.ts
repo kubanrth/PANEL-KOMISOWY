@@ -6,27 +6,32 @@ import { createClient } from "@/lib/supabase/server";
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
 
-export async function requestPayout(formData: FormData): Promise<ActionResult> {
+export async function requestPayoutForProducts(productIds: string[]): Promise<ActionResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "Sesja wygasła." };
 
-  const amountCentsRaw = String(formData.get("amount_cents") || "0");
-  const bankAccountId = String(formData.get("bank_account_id") || "");
-  const amountCents = parseInt(amountCentsRaw, 10);
+  const ids = (productIds ?? []).filter((id) => /^[0-9a-f-]{36}$/i.test(id));
+  if (!ids.length) return { ok: false, error: "Zaznacz co najmniej jedną pozycję." };
 
-  if (!Number.isFinite(amountCents) || amountCents <= 0) {
-    return { ok: false, error: "Podaj kwotę wypłaty." };
-  }
-  if (!bankAccountId) return { ok: false, error: "Wybierz konto bankowe." };
+  // Konto z umowy komisowej — jedno, ustala Kickback.
+  const { data: account } = await supabase
+    .from("bank_accounts")
+    .select("id")
+    .eq("klient_id", user.id)
+    .order("is_default", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!account) return { ok: false, error: "Brak konta bankowego z umowy — skontaktuj się z opiekunem." };
 
-  const { error } = await supabase.rpc("request_payout", {
-    amount_cents: amountCents,
-    bank_account: bankAccountId,
+  const { error } = await supabase.rpc("request_payout_for_products", {
+    product_ids: ids,
+    bank_account: account.id,
   });
-
   if (error) return { ok: false, error: error.message };
+
   revalidatePath("/panel/wallet");
+  revalidatePath("/panel/wyplaty");
   return { ok: true };
 }
 
