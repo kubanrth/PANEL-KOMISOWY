@@ -97,8 +97,8 @@ export default async function FulfillmentPage() {
       <section className="mt-8">
         {products.length === 0 ? (
           <EmptyState
-            title="Brak produktów w magazynie"
-            sub="Jak tylko Twoje produkty trafią do magazynu Kickback, zlecisz stąd ich wysyłkę — własną etykietą albo wygenerowaną przez nas."
+            title="Brak produktów do wysyłki"
+            sub="Pokazujemy tylko pozycje w sprzedaży z wgranymi packshotami. Gdy Twoje produkty zostaną wystawione i sfotografowane, zlecisz stąd ich wysyłkę — własną etykietą albo wygenerowaną przez nas."
             action={
               <ButtonLink href="/start" size="md">
                 Nowa oferta <ArrowRight size={16} />
