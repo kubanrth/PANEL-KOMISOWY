@@ -48,7 +48,7 @@ export type NavSection = {
 export const PANEL_SECTIONS: NavSection[] = [
   {
     label: null,
-    items: [{ key: "dashboard", label: "Przegląd", href: "/panel", icon: "SquaresFour" }],
+    items: [{ key: "dashboard", label: "Dashboard", href: "/panel", icon: "SquaresFour" }],
   },
   {
     label: "Sprzedaż",
@@ -179,7 +179,7 @@ export type NavBadges = Record<string, number | boolean | undefined>;
 
 /** Mobile bottom tab bar klienta: 4 taby + FAB w środku (Nowa oferta). */
 export const PANEL_TABS = [
-  { key: "dashboard", label: "Przegląd", href: "/panel", icon: "SquaresFour" },
+  { key: "dashboard", label: "Dashboard", href: "/panel", icon: "SquaresFour" },
   { key: "magazyn", label: "Magazyn", href: "/panel/magazyn", icon: "Package" },
   { key: "wallet", label: "Portfel", href: "/panel/wallet", icon: "Wallet" },
   { key: "more", label: "Więcej", href: "#", icon: "List" },

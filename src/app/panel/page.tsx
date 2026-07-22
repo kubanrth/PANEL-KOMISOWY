@@ -5,7 +5,7 @@ import { getSessionUser, getWalletSummary } from "@/lib/supabase/session";
 import { Pill, PROD_VARIANT, type PillVariant } from "@/components/panel/StatusPill";
 import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { KickbackMark } from "@/components/ui/KickbackMark";
-import { formatPLN, formatDate } from "@/lib/format";
+import { formatPLN, formatDate, plural } from "@/lib/format";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import type { Product, Submission, KickbackPick, DemandListing } from "@/lib/types";
 
@@ -80,6 +80,12 @@ export default async function PanelPage() {
 
   // --- KPI ---
   const listed = products.filter((p) => p.status === "listed");
+  // Pełna wartość komisu: wszystkie pozycje fizycznie w komisie (poza sprzedanymi/zwróconymi/wycofanymi).
+  const inCommission = products.filter((p) => !["sold", "returned", "withdrawn"].includes(p.status));
+  const commissionValue = inCommission.reduce(
+    (acc, p) => acc + (p.listing_price_cents ?? p.expected_price_cents ?? 0),
+    0,
+  );
   const now = new Date();
   const soldThisMonth = products.filter(
     (p) =>
@@ -103,15 +109,24 @@ export default async function PanelPage() {
     }).length;
   });
 
-  // --- Timeline „Twoje ostatnie ruchy" — z produktów, sortowane po updated_at ---
-  const moves = products.slice(0, 8);
+  // --- „Ostatnie sprzedaże" — sprzedane pozycje, najnowsze najpierw ---
+  const moves = products
+    .filter((p) => p.status === "sold")
+    .sort((a, b) => new Date(b.sold_at ?? b.updated_at).getTime() - new Date(a.sold_at ?? a.updated_at).getTime())
+    .slice(0, 8);
 
   const totalSubmissions = submissions.length;
 
   return (
     <>
       {/* KPI row */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <section className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <KpiCard
+          label="Wartość komisu"
+          value={formatPLN(commissionValue, { decimals: false })}
+          mono
+          sub={`${inCommission.length} ${plural(inCommission.length, ["pozycja", "pozycje", "pozycji"])} u Kickback`}
+        />
         <KpiCard label="Aktywnie w sprzedaży" value={listed.length} delta={weekBuckets[6] > 0 ? `+${weekBuckets[6]}` : undefined}>
           {weekBuckets.some((b) => b > 0) && <Sparkline points={weekBuckets} />}
         </KpiCard>
@@ -156,23 +171,23 @@ export default async function PanelPage() {
         </section>
       ) : (
         <section className="mt-8 grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6 items-start">
-          {/* Twoje ostatnie ruchy */}
+          {/* Ostatnie sprzedaże */}
           <div>
             {/* h-7 + mb-4 identycznie w obu kolumnach — pierwsze karty równają się do linii */}
             <div className="flex items-baseline justify-between h-7 mb-4">
-              <h2 className="font-light text-[22px] tracking-[-0.02em]">Twoje ostatnie ruchy</h2>
-              <Link href="/panel/magazyn" className="text-[13px] text-text-soft hover:text-lime transition-colors">
+              <h2 className="font-light text-[22px] tracking-[-0.02em]">Ostatnie sprzedaże</h2>
+              <Link href="/panel/sprzedaze" className="text-[13px] text-text-soft hover:text-lime transition-colors">
                 Zobacz wszystkie →
               </Link>
             </div>
             <div className="space-y-2">
               {moves.length === 0 && (
                 <div className="card p-6 text-[14px] text-text-soft">
-                  Jeszcze nic się nie dzieje — Twoje produkty są w przygotowaniu.
+                  Jeszcze nic się nie sprzedało — Twoje produkty czekają na kupców.
                 </div>
               )}
               {moves.map((p, i) => (
-                <MoveRow key={p.id} product={p} highlight={i === 0 && p.status === "listed"} />
+                <MoveRow key={p.id} product={p} highlight={i === 0} />
               ))}
             </div>
           </div>
