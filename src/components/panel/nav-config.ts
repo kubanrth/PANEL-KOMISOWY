@@ -97,9 +97,7 @@ export const PANEL_SECTIONS: NavSection[] = [
   {
     label: "Insights",
     items: [
-      { key: "zapotrzebowanie", label: "Zapotrzebowanie", href: "/panel/zapotrzebowanie", icon: "Target", badgeKey: "zapotrzebowanie" },
-      { key: "plany", label: "Co warto dodać", href: "/panel/plany", icon: "Sparkle", dotKey: "plany" },
-      { key: "promocje", label: "Promocje", href: "/panel/promocje", icon: "Percent" },
+      { key: "zapotrzebowanie", label: "Rekomendacje", href: "/panel/zapotrzebowanie", icon: "Target", badgeKey: "zapotrzebowanie", dotKey: "plany" },
       { key: "analityka", label: "Analityka", href: "/panel/analityka", icon: "ChartLine" },
     ],
   },
