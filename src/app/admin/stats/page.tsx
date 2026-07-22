@@ -18,7 +18,7 @@ export default async function AdminStatsPage() {
   const [txRes, prodRes, profRes, payoutRes, subCountRes, returnsCountRes] = await Promise.all([
     supabase.from("wallet_transactions").select("klient_id, amount_cents, type"),
     supabase.from("products").select("status, listing_price_cents, expected_price_cents, sold_at, submissions!inner ( klient_id, commission_rate )"),
-    supabase.from("profiles").select("id, first_name, last_name").eq("role", "klient"),
+    supabase.from("profiles").select("id, first_name, last_name, role"),
     supabase.from("payouts").select("amount_cents, status"),
     supabase.from("submissions").select("*", { count: "exact", head: true }),
     supabase.from("returns").select("*", { count: "exact", head: true }),
@@ -74,7 +74,10 @@ export default async function AdminStatsPage() {
   const payoutsInFlight = payouts.filter((p) => p.status === "requested" || p.status === "authorized").reduce((a, p) => a + p.amount_cents, 0);
 
   // ---- Tabela per komisant (portfel ∪ produkty) ----
-  const nameById = new Map((profRes.data ?? []).map((p) => [p.id, [p.first_name, p.last_name].filter(Boolean).join(" ") || "—"]));
+  // Nazwiska dla WSZYSTKICH profili (demo admina też ma produkty) — licznik komisantów osobno.
+  const profiles = profRes.data ?? [];
+  const klienciCount = profiles.filter((p) => p.role === "klient").length;
+  const nameById = new Map(profiles.map((p) => [p.id, [p.first_name, p.last_name].filter(Boolean).join(" ") || "—"]));
   const klientIds = new Set([...byKlient.keys(), ...walletByKlient.keys()]);
   const rows = Array.from(klientIds)
     .map((id) => ({
@@ -140,7 +143,7 @@ export default async function AdminStatsPage() {
           </div>
           <div className="card p-6">
             <div className="label">Komisanci</div>
-            <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{(profRes.data ?? []).length}</div>
+            <div className="mt-2 font-light text-3xl tracking-[-0.02em] num">{klienciCount}</div>
             <div className="mt-2 text-[11px] text-text-mute">{subCountRes.count ?? 0} {plural(subCountRes.count ?? 0, ["submission", "submissions", "submissions"])} · {returnsCountRes.count ?? 0} zwrotów</div>
           </div>
           <div className="card p-6">
