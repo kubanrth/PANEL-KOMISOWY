@@ -7,6 +7,7 @@ import { KpiCard, Sparkline } from "@/components/ui/KpiCard";
 import { KickbackMark } from "@/components/ui/KickbackMark";
 import { formatPLN, formatDate, plural } from "@/lib/format";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
+import { getSiteImagesBySkus } from "@/lib/site-images";
 import type { Product, Submission, KickbackPick, DemandListing } from "@/lib/types";
 
 /* Dashboard klienta — design B1 wariant 1a (ops-first):
@@ -59,7 +60,7 @@ export default async function PanelPage() {
     submissionIds.length
       ? supabase
           .from("products")
-          .select("id, submission_id, brand, model, size, status, listing_price_cents, expected_price_cents, sold_at, published_at, updated_at, created_at")
+          .select("id, submission_id, brand, model, size, sku, photos, status, listing_price_cents, expected_price_cents, sold_at, published_at, updated_at, created_at")
           .in("submission_id", submissionIds)
           .order("updated_at", { ascending: false })
       : Promise.resolve({ data: [] }),
@@ -67,7 +68,7 @@ export default async function PanelPage() {
   ]);
   const products = (productsRaw ?? []) as Pick<
     Product,
-    "id" | "submission_id" | "brand" | "model" | "size" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "published_at" | "updated_at" | "created_at"
+    "id" | "submission_id" | "brand" | "model" | "size" | "sku" | "photos" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "published_at" | "updated_at" | "created_at"
   >[];
 
   const walletAvailable = summary.available;
@@ -114,6 +115,11 @@ export default async function PanelPage() {
     .filter((p) => p.status === "sold")
     .sort((a, b) => new Date(b.sold_at ?? b.updated_at).getTime() - new Date(a.sold_at ?? a.updated_at).getTime())
     .slice(0, 8);
+  // Packshoty ze sklepu www po SKU — dla pozycji bez zdjęć w panelu.
+  const siteImages = await getSiteImagesBySkus(
+    moves.filter((p) => !(p.photos?.length)).map((p) => p.sku),
+  );
+  const imgFor = (p: (typeof moves)[number]) => p.photos?.[0]?.url ?? siteImages.get(p.sku) ?? null;
 
   const totalSubmissions = submissions.length;
 
@@ -187,7 +193,7 @@ export default async function PanelPage() {
                 </div>
               )}
               {moves.map((p, i) => (
-                <MoveRow key={p.id} product={p} highlight={i === 0} />
+                <MoveRow key={p.id} product={p} img={imgFor(p)} highlight={i === 0} />
               ))}
             </div>
           </div>
@@ -280,9 +286,11 @@ export default async function PanelPage() {
    Najświeższa pozycja w sprzedaży = wyróżnienie gradientem (wzór B1 1a). */
 function MoveRow({
   product: p,
+  img,
   highlight,
 }: {
   product: Pick<Product, "id" | "brand" | "model" | "size" | "status" | "listing_price_cents" | "expected_price_cents" | "updated_at">;
+  img: string | null;
   highlight: boolean;
 }) {
   const title = `${p.brand} ${p.model}`.trim();
@@ -311,8 +319,13 @@ function MoveRow({
         className="block rounded-[16px] p-4 relative overflow-hidden transition-transform hover:-translate-y-0.5 [background:var(--gradient-cta)]"
       >
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-[10px] bg-black/20 flex items-center justify-center text-[15px] font-medium text-on-accent flex-shrink-0">
-            {title[0]?.toUpperCase()}
+          <div className="relative h-12 w-12 rounded-[12px] bg-black/20 overflow-hidden flex items-center justify-center text-[15px] font-medium text-on-accent flex-shrink-0">
+            {img ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+              title[0]?.toUpperCase()
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-[14px] font-medium text-on-accent truncate">
@@ -331,8 +344,13 @@ function MoveRow({
       href={`/panel/products/${p.id}`}
       className="card p-4 flex items-center gap-3 hover:bg-surface-2/40 transition-colors"
     >
-      <div className="h-10 w-10 rounded-[10px] bg-surface-2 border border-border-soft flex items-center justify-center text-[15px] font-medium text-text-soft flex-shrink-0">
-        {title[0]?.toUpperCase()}
+      <div className="relative h-12 w-12 rounded-[12px] bg-surface-2 border border-border-soft overflow-hidden flex items-center justify-center text-[15px] font-medium text-text-soft flex-shrink-0">
+        {img ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={img} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          title[0]?.toUpperCase()
+        )}
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-[14px] truncate">

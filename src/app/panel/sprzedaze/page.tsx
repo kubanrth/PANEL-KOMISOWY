@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductThumb } from "@/components/panel/ProductThumb";
+import { getSiteImagesBySkus } from "@/lib/site-images";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { formatPLN, formatDate } from "@/lib/format";
 import { vatLabel } from "@/lib/types";
@@ -120,6 +121,13 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
     const [y, m] = key.split("-").map(Number);
     return `${MONTHS_PL[m]} ${y}`;
   }
+
+  // Packshoty ze sklepu www po SKU — zamiast literkowych ikon.
+  const siteImages = await getSiteImagesBySkus(
+    sales.filter((p) => !(p.photos?.length)).map((p) => p.sku),
+  );
+  const thumbPhotos = (p: (typeof sales)[number]) =>
+    p.photos?.length ? p.photos : (siteImages.get(p.sku) ? [{ url: siteImages.get(p.sku)!, name: "packshot" }] : null);
 
   return (
     <>
@@ -245,7 +253,7 @@ export default async function SprzedazePage(props: { searchParams: Promise<Filte
                           className="grid grid-cols-1 md:grid-cols-[minmax(220px,3fr)_60px_130px_56px_100px_70px_110px_170px] gap-3 px-4 py-3.5 items-center border-b border-border-soft last:border-0 hover:bg-surface-2/40 transition-colors"
                         >
                           <Link href={`/panel/products/${p.id}`} className="flex items-center gap-3 min-w-0 hover:text-lime transition-colors">
-                            <ProductThumb photos={p.photos} brand={p.brand} size="sm" />
+                            <ProductThumb photos={thumbPhotos(p)} brand={p.brand} size="sm" />
                             <div className="min-w-0">
                               <div className="text-[13.5px] font-medium truncate">{p.brand} {p.model}</div>
                               <div className="text-[11px] num text-text-mute truncate">{p.sku}</div>
