@@ -293,7 +293,7 @@ export function MagazynTable({ rows }: Props) {
               </div>
 
               {inEdit && (
-                <div className="mt-3 pl-9">
+                <div className="mt-3 pl-9 kb-in">
                   <div className="flex items-center gap-2">
                     <input
                       className="input !h-9 !text-[13px] flex-1"
@@ -363,7 +363,7 @@ export function MagazynTable({ rows }: Props) {
 
               <div>
                 {inEdit ? (
-                  <div>
+                  <div className="kb-in">
                     <div className="flex items-center gap-1">
                       <input
                         className="input !h-8 !py-1 !px-2 !text-[12px] w-[88px]"

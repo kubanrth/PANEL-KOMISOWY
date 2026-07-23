@@ -180,7 +180,7 @@ export default async function PanelPage() {
                 Zobacz wszystkie →
               </Link>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 kb-stagger">
               {moves.length === 0 && (
                 <div className="card p-6 text-[14px] text-text-soft">
                   Jeszcze nic się nie sprzedało — Twoje produkty czekają na kupców.

@@ -173,7 +173,8 @@ function NavRow({
         </Link>
       </div>
 
-      {hasSubs && expanded && (
+      {hasSubs && (
+        <div className={`kb-collapse ${expanded ? "is-open" : ""}`}>
         <ul className="mt-1 pb-1 space-y-0.5">
           {item.subs!.map((sub) => {
             const subActive = sub.key === activeKey;
@@ -199,6 +200,7 @@ function NavRow({
             );
           })}
         </ul>
+        </div>
       )}
     </li>
   );

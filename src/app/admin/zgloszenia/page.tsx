@@ -94,7 +94,7 @@ export default async function AdminZgloszeniaPage(props: { searchParams: Promise
         />
       </section>
 
-      <section className="mt-6 space-y-3">
+      <section className="mt-6 space-y-3 kb-stagger">
         {/* ---- Odsyłka ---- */}
         {seg === "odsylka" && (withdrawals.length === 0 ? (
           <Empty text="Brak oczekujących wycofań." />
