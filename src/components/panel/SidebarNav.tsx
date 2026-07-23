@@ -135,7 +135,7 @@ function NavRow({
     : "text-text-soft hover:text-text hover:bg-surface-2/60";
 
   return (
-    {/* Bez p-1 przy rozwinięciu — padding zwężał wiersz i napisy „malały”. */}
+    // Bez p-1 przy rozwinięciu — padding zwężał wiersz i napisy „malały".
     <li className={hasSubs && expanded ? "bg-surface/60 rounded-[14px]" : ""}>
       <div className={`relative flex items-center rounded-[12px] transition-colors ${rowCls}`}>
         {/* lime lewa krawędź aktywnego */}
