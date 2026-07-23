@@ -77,7 +77,7 @@ export default async function AdminOfertyPage() {
                 </div>
                 <div className="text-[12px] text-text-mute">{g.items.length} {plural(g.items.length, ["pozycja", "pozycje", "pozycji"])}</div>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-3 kb-stagger">
                 {g.items.map((p) => (
                   <div key={p.id} className="card p-5 flex flex-wrap items-center gap-4">
                     <ProductThumb photos={p.photos as never} brand={p.brand} size="md" />

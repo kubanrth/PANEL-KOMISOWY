@@ -247,7 +247,7 @@ function ProductAccordion({
         </svg>
       </summary>
 
-      <div className="px-5 pb-5 pt-4 border-t border-border-soft">
+      <div className="kb-reveal px-5 pb-5 pt-4 border-t border-border-soft">
         <div className="sm:hidden mb-3">
           <ProductStatusPill status={product.status} />
         </div>

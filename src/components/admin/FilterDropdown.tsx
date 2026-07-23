@@ -31,7 +31,7 @@ export function FilterDropdown({
         </svg>
       </summary>
       {/* Frosted glass: mocny blur + saturacja, przezroczyste tło, inset-highlight u góry */}
-      <div className="absolute left-0 top-full mt-2 z-30 min-w-[280px] rounded-[22px] border border-white/10 bg-surface/35 backdrop-blur-2xl backdrop-saturate-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.10),0_28px_70px_-18px_rgba(0,0,0,0.75)] p-2">
+      <div className="kb-pop absolute left-0 top-full mt-2 z-30 min-w-[280px] rounded-[22px] border border-white/10 bg-surface/35 backdrop-blur-2xl backdrop-saturate-150 [box-shadow:inset_0_1px_0_rgba(255,255,255,0.10),0_28px_70px_-18px_rgba(0,0,0,0.75)] p-2">
         {options.map((o) => (
           <Link
             key={o.key}

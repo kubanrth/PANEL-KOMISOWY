@@ -97,7 +97,7 @@ export function PayoutPicker({ rows, isBusiness }: { rows: PayoutRow[]; isBusine
       {/* Podsumowanie + wymóg dokumentu + zlecenie */}
       <div className="px-4 py-4 bg-surface-2/30 border-t border-border">
         {selected.size > 0 && (
-          <div className="mb-3 rounded-[12px] bg-blue/8 border border-blue/25 px-4 py-3 text-[12.5px] leading-[1.55] text-text-soft">
+          <div className="kb-in mb-3 rounded-[12px] bg-blue/8 border border-blue/25 px-4 py-3 text-[12.5px] leading-[1.55] text-text-soft">
             {isBusiness ? (
               <>
                 Do wypłaty za zaznaczone pozycje <span className="font-medium text-text">wystaw fakturę na {formatPLN(sum, { decimals: false })}</span>{" "}
