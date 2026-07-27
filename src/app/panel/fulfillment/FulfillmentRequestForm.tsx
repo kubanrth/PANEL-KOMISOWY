@@ -93,7 +93,7 @@ export function FulfillmentRequestForm({
       <div>
         <div className="label mb-3">Wybierz produkty do wysyłki</div>
         <p className="mb-4 -mt-1 text-[12px] text-text-mute">
-          Pokazujemy produkty w sprzedaży z wgranymi packshotami — wybierasz po zdjęciu.
+          Zaznacz pozycje z Twojego stanu w magazynie Kickback — wyślemy je do Twojego kupującego.
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {products.map((p) => {
