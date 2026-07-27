@@ -28,6 +28,7 @@ const TYPE_BADGE: Record<NotificationType, { label: string; cls: string; dot: st
   payout_failed:            { label: "Wypłata FAIL",  cls: "pill-coral", dot: "bg-coral" },
   return_decision:          { label: "Zwrot",         cls: "pill-coral", dot: "bg-coral" },
   document_required:        { label: "Dokument",      cls: "pill-yellow",dot: "bg-yellow" },
+  fulfillment_requested:    { label: "Fulfillment",   cls: "pill-blue",  dot: "bg-blue-soft" },
 };
 
 export function NotificationItem({ notification }: { notification: AppNotification }) {
