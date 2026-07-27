@@ -262,7 +262,8 @@ export type NotificationType =
   | "payout_done"
   | "payout_failed"
   | "return_decision"
-  | "document_required";
+  | "document_required"
+  | "fulfillment_requested";
 
 export type AppNotification = {
   id: string;

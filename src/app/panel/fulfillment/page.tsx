@@ -10,8 +10,10 @@ import type { Product } from "@/lib/types";
 import { FulfillmentRequestForm, type FulfillmentProduct } from "./FulfillmentRequestForm";
 
 // Statusy produktów dostępnych do zlecenia wysyłki z magazynu.
-// Tylko „w sprzedaży" i z packshotem — decyzja 2026-07-13 (intuicyjny wybór po zdjęciach).
-const SHIPPABLE = ["listed"] as const;
+// Wszystko, co fizycznie leży u Kickback i nie jest sprzedane przez nas
+// (przywrócenie pełnego zakresu 2026-07-27 — komisant wysyła do SWOJEGO
+// kupującego, zdjęcia w panelu nie są warunkiem).
+const SHIPPABLE = ["listed", "offer"] as const;
 
 export default async function FulfillmentPage() {
   const supabase = await createClient();
@@ -27,8 +29,6 @@ export default async function FulfillmentPage() {
     .from("products")
     .select("id, brand, model, size, sku, listing_price_cents, expected_price_cents, photos, status")
     .in("status", [...SHIPPABLE])
-    .not("photos", "is", null)
-    .neq("photos", "[]")
     .order("created_at", { ascending: false });
 
   const products: FulfillmentProduct[] = (
@@ -98,7 +98,7 @@ export default async function FulfillmentPage() {
         {products.length === 0 ? (
           <EmptyState
             title="Brak produktów do wysyłki"
-            sub="Pokazujemy tylko pozycje w sprzedaży z wgranymi packshotami. Gdy Twoje produkty zostaną wystawione i sfotografowane, zlecisz stąd ich wysyłkę — własną etykietą albo wygenerowaną przez nas."
+            sub="Gdy Twoje produkty trafią do magazynu Kickback i zostaną wystawione, zlecisz stąd ich wysyłkę bezpośrednio do swojego kupującego — własną etykietą albo wygenerowaną przez nas."
             action={
               <ButtonLink href="/start" size="md">
                 Nowa oferta <ArrowRight size={16} />
