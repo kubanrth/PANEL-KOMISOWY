@@ -458,15 +458,19 @@ html { scroll-behavior: smooth; }
 
 @media print {
   body { background: #FFFFFF !important; color: #000000 !important; }
-  body > *:not(:has(#ship-label)) { display: none !important; }
+  body > *:not(:has(#ship-label)):not(:has(#print-area)) { display: none !important; }
   header, footer, nav, aside, .print\:hidden { display: none !important; }
-  #ship-label {
+  #ship-label, #print-area, #print-area * {
     background: #FFFFFF !important;
     color: #000000 !important;
     box-shadow: none !important;
+  }
+  #ship-label {
     border-radius: 0 !important;
     padding: 24px !important;
     page-break-inside: avoid;
   }
+  /* Drukuj tylko dokument: chowamy wszystko wokół #print-area (sidebar/header idą przez :has wyżej) */
+  #print-area { margin: 0 !important; }
   @page { size: A4; margin: 12mm; }
 }

@@ -5,8 +5,9 @@ import { getSessionUser, getOwnProfile } from "@/lib/supabase/session";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { formatDate } from "@/lib/format";
-import type { AppDocument } from "@/lib/types";
+import { formatDate, formatPLN } from "@/lib/format";
+import { UksUploadForm } from "./UksUploadForm";
+import type { AppDocument, Product } from "@/lib/types";
 
 export default async function UksPage() {
   const supabase = await createClient();
@@ -16,12 +17,21 @@ export default async function UksPage() {
   const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  const { data: docsRaw } = await supabase
-    .from("documents")
-    .select("*")
-    .eq("type", "umowa_ks")
-    .order("created_at", { ascending: false });
+  const [{ data: docsRaw }, { data: soldRaw }] = await Promise.all([
+    supabase
+      .from("documents")
+      .select("*")
+      .eq("type", "umowa_ks")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("products")
+      .select("id, brand, model, size, sku, listing_price_cents, expected_price_cents, sold_at")
+      .eq("status", "sold")
+      .order("sold_at", { ascending: false })
+      .limit(20),
+  ]);
   const docs = (docsRaw ?? []) as AppDocument[];
+  const sold = (soldRaw ?? []) as Pick<Product, "id" | "brand" | "model" | "size" | "sku" | "listing_price_cents" | "expected_price_cents" | "sold_at">[];
 
   return (
     <>
@@ -31,11 +41,49 @@ export default async function UksPage() {
         sub="Wszystkie zeskanowane UKS, na podstawie których rozliczane są Twoje sprzedaże (dla kont indywidualnych). Pobierz dokument do księgowości."
       />
 
+      {/* Wgraj / Wygeneruj — rozliczenie UKS */}
+      <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        <div className="card p-6">
+          <div className="font-semibold text-[15px]">Wgraj podpisany UKS</div>
+          <p className="mt-1 mb-4 text-[12px] text-text-soft leading-[1.5]">
+            Masz już podpisaną umowę (skan lub PDF)? Wgraj ją — trafi do dokumentów rozliczeniowych.
+          </p>
+          <UksUploadForm />
+        </div>
+
+        <div className="card p-6">
+          <div className="font-semibold text-[15px]">Wygeneruj UKS</div>
+          <p className="mt-1 mb-4 text-[12px] text-text-soft leading-[1.5]">
+            Przygotujemy umowę z danych panelu dla sprzedanej pozycji — wydrukuj, podpisz i wgraj skan obok.
+          </p>
+          {sold.length === 0 ? (
+            <div className="text-[13px] text-text-mute border border-dashed border-border rounded-[12px] px-4 py-5 text-center">
+              Brak sprzedanych pozycji — UKS generuje się dla sprzedaży.
+            </div>
+          ) : (
+            <div className="space-y-1.5 max-h-[280px] overflow-y-auto no-scrollbar">
+              {sold.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/panel/uks/generuj?product=${p.id}`}
+                  className="flex items-center justify-between gap-3 px-3.5 h-11 rounded-[11px] text-[13px] hover:bg-surface-2/60 transition-colors"
+                >
+                  <span className="truncate">{p.brand} · {p.model}{p.size ? ` · ${p.size}` : ""}</span>
+                  <span className="num text-text-mute flex-shrink-0">
+                    {formatPLN(p.listing_price_cents ?? p.expected_price_cents ?? 0, { decimals: false })} →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       {docs.length === 0 ? (
         <div className="mt-8">
           <EmptyState
             title="Brak UKS"
-            sub="UKS są generowane przy rozliczaniu sprzedaży. Sprawdź sekcję Faktury i rozliczenia."
+            sub="UKS są generowane przy rozliczaniu sprzedaży — wygeneruj lub wgraj pierwszy powyżej."
             action={
               <ButtonLink href="/panel/faktury" size="md">
                 Faktury i rozliczenia <ArrowRight size={16} />
