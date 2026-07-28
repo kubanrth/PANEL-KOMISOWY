@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ComponentType } from "react";
+import { useState, type ComponentType } from "react";
 import {
   SquaresFour, Tray, Package, ArrowCounterClockwise, ChartLineDown, Wallet,
   TrayArrowDown, ArrowSquareOut, Truck, Target, Sparkle, Percent,
@@ -30,7 +30,10 @@ const DOT_CLS: Record<DotColor, string> = {
 /**
  * Nawigacja sidebara (klient + admin) wg zatwierdzonego designu:
  * sekcje uppercase → itemy 44px z ikoną + badge → expandable subitemy
- * z kropką. Stan zwijania w localStorage per storageKey.
+ * z kropką. Rozwijanie: hover/focus (akordeon — jedna grupa naraz,
+ * poprzednia zwija się, gdy otwiera się następna). Bez klikania
+ * i bez przypinania stanu (decyzja 2026-07-28); grupa aktywnej trasy
+ * jest rozwinięta, gdy nic nie jest hoverowane.
  */
 export function SidebarNav({
   sections,
@@ -50,39 +53,19 @@ export function SidebarNav({
 }) {
   const pathname = usePathname();
   const activeKey = activeKeyProp ?? activeKeyFromPath(pathname, storageKey.includes("admin"));
-  // null = jeszcze nie wczytane (SSR) — do tego czasu: rozwinięty tylko parent aktywnego.
-  const [open, setOpen] = useState<Record<string, boolean> | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(storageKey);
-      setOpen(raw ? JSON.parse(raw) : {});
-    } catch {
-      setOpen({});
-    }
-  }, [storageKey]);
-
-  function toggle(key: string) {
-    const next = { ...(open ?? {}), [key]: !isOpen(key) };
-    setOpen(next);
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
-    } catch {
-      /* private mode — trzymamy stan tylko w pamięci */
-    }
-  }
+  // Akordeon: klucz grupy pod kursorem/fokusem; null → rozwinięta grupa aktywnej trasy.
+  const [hoverKey, setHoverKey] = useState<string | null>(null);
 
   const itemByKey = new Map(sections.flatMap((s) => s.items).map((i) => [i.key, i]));
 
   function isOpen(key: string): boolean {
+    if (hoverKey !== null) return hoverKey === key;
     const item = itemByKey.get(key);
-    const activeInside = item ? isItemActive(item, activeKey) : false;
-    if (open === null) return activeInside; // przed hydracją localStorage
-    return open[key] ?? activeInside;
+    return item ? isItemActive(item, activeKey) : false;
   }
 
   return (
-    <nav aria-label="Nawigacja">
+    <nav aria-label="Nawigacja" onMouseLeave={() => setHoverKey(null)}>
       {sections.map((section, si) => (
         <div key={section.label ?? `s${si}`} className={si > 0 ? "mt-6" : ""}>
           {section.label && (
@@ -96,7 +79,7 @@ export function SidebarNav({
                 activeKey={activeKey}
                 badges={badges}
                 expanded={isOpen(item.key)}
-                onToggle={() => toggle(item.key)}
+                onHover={() => setHoverKey(item.key)}
                 onNavigate={onNavigate}
               />
             ))}
@@ -112,14 +95,14 @@ function NavRow({
   activeKey,
   badges,
   expanded,
-  onToggle,
+  onHover,
   onNavigate,
 }: {
   item: NavItem;
   activeKey: string | undefined;
   badges: NavBadges;
   expanded: boolean;
-  onToggle: () => void;
+  onHover: () => void;
   onNavigate?: () => void;
 }) {
   const Icon = ICONS[item.icon] ?? SquaresFour;
@@ -136,22 +119,24 @@ function NavRow({
 
   return (
     // Bez p-1 przy rozwinięciu — padding zwężał wiersz i napisy „malały".
-    <li className={hasSubs && expanded ? "bg-surface/60 rounded-[14px]" : ""}>
+    // Hover/fokus na całym wierszu rozwija grupę (akordeon) — bez klikania.
+    <li
+      className={hasSubs && expanded ? "bg-surface/60 rounded-[14px]" : ""}
+      onMouseEnter={hasSubs ? onHover : undefined}
+      onFocusCapture={hasSubs ? onHover : undefined}
+    >
       <div className={`relative flex items-center rounded-[12px] transition-colors ${rowCls}`}>
         {/* lime lewa krawędź aktywnego */}
         {selfActive && (
           <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-lime" aria-hidden />
         )}
         {hasSubs && (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-expanded={expanded}
-            aria-label={`${expanded ? "Zwiń" : "Rozwiń"} ${item.label}`}
-            className="ml-2 h-7 w-7 flex-shrink-0 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute hover:text-text transition-colors"
+          <span
+            aria-hidden
+            className="ml-2 h-7 w-7 flex-shrink-0 rounded-[9px] bg-surface-2 border border-border-soft flex items-center justify-center text-text-mute"
           >
             <CaretDown size={12} className={`transition-transform ${expanded ? "" : "-rotate-90"}`} />
-          </button>
+          </span>
         )}
         <Link
           href={item.href}
