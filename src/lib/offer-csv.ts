@@ -10,8 +10,8 @@ export type CsvProduct = {
   category: string;
   size: string;
   condition: number;
-  expectedPrice: string;
-  minPrice: string;
+  /** Kwota, którą komisant otrzyma po akceptacji oferty (payout). */
+  price: string;
   description: string;
 };
 
@@ -28,8 +28,7 @@ export const CSV_HEADERS = [
   "Kategoria",
   "Rozmiar",
   "Stan (1-10)",
-  "Cena oczekiwana (zł)*",
-  "Cena minimalna (zł)",
+  "Kwota dla Ciebie (zł)*",
   "Opis / uwagi",
 ] as const;
 
@@ -79,11 +78,11 @@ export function parseOfferCsv(raw: string): CsvParseResult {
   for (let r = 1; r < rows.length; r++) {
     const cells = rows[r].map((c) => c.trim());
     const rowNo = r + 1;
-    const [brand = "", model = "", category = "", size = "", conditionRaw = "", expectedPrice = "", minPrice = "", description = ""] = cells;
+    const [brand = "", model = "", category = "", size = "", conditionRaw = "", price = "", description = ""] = cells;
 
     if (!brand) { errors.push(`Wiersz ${rowNo}: brak marki.`); continue; }
     if (!model) { errors.push(`Wiersz ${rowNo}: brak modelu.`); continue; }
-    if (!expectedPrice) { errors.push(`Wiersz ${rowNo}: brak ceny oczekiwanej.`); continue; }
+    if (!price) { errors.push(`Wiersz ${rowNo}: brak kwoty dla Ciebie.`); continue; }
 
     let condition = 9;
     if (conditionRaw) {
@@ -92,7 +91,7 @@ export function parseOfferCsv(raw: string): CsvParseResult {
       condition = n;
     }
 
-    products.push({ brand, model, category, size, condition, expectedPrice, minPrice, description });
+    products.push({ brand, model, category, size, condition, price, description });
   }
 
   return { products, errors };
@@ -100,6 +99,6 @@ export function parseOfferCsv(raw: string): CsvParseResult {
 
 /** Treść formatki do pobrania (średniki — otwiera się wprost w polskim Excelu). */
 export function templateCsv(): string {
-  const example = ["Nike", "Manchester United Home 1999", "Koszulka", "L", "9", "1 600", "1 200", "Oryginalna metka, stan bardzo dobry"];
+  const example = ["Nike", "Manchester United Home 1999", "Koszulka", "L", "9", "1 600", "Oryginalna metka, stan bardzo dobry"];
   return "﻿" + [CSV_HEADERS.join(";"), example.join(";")].join("\r\n");
 }

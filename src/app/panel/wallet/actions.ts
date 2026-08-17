@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
 
-export async function requestPayoutForProducts(productIds: string[]): Promise<ActionResult> {
+export async function requestPayoutForProducts(productIds: string[], uksNumber?: string): Promise<ActionResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "Sesja wygasła." };
@@ -24,9 +24,11 @@ export async function requestPayoutForProducts(productIds: string[]): Promise<Ac
     .maybeSingle();
   if (!account) return { ok: false, error: "Brak konta bankowego z umowy — skontaktuj się z opiekunem." };
 
+  const uks = (uksNumber ?? "").trim().slice(0, 64) || null;
   const { error } = await supabase.rpc("request_payout_for_products", {
     product_ids: ids,
     bank_account: account.id,
+    uks_number: uks,
   });
   if (error) return { ok: false, error: error.message };
 

@@ -34,7 +34,7 @@ export default async function AdminZgloszeniaPage(props: { searchParams: Promise
       .order("created_at", { ascending: true }),
     supabase
       .from("fulfillment_orders")
-      .select("id, product_id, status, request_type, label_url, recipient_name, recipient_city, recipient_postal_code, recipient_address_line, recipient_phone, notes, tracking_number, carrier, created_at, klient_id, products ( brand, model, photos ), profiles:klient_id ( first_name, last_name )")
+      .select("id, product_id, status, request_type, label_url, recipient_name, recipient_city, recipient_postal_code, recipient_address_line, recipient_phone, delivery_method, paczkomat_code, shipping_cost_cents, notes, tracking_number, carrier, created_at, klient_id, products ( brand, model, photos ), profiles:klient_id ( first_name, last_name )")
       .in("status", ["pending", "shipped"])
       .not("request_type", "is", null)
       .order("created_at", { ascending: true }),
@@ -181,8 +181,12 @@ export default async function AdminZgloszeniaPage(props: { searchParams: Promise
                     </div>
                     {f.recipient_name && (
                       <div className="mt-1 text-[12px] text-text-soft">
-                        → {f.recipient_name}, {f.recipient_address_line}, {f.recipient_postal_code} {f.recipient_city}
+                        → {f.recipient_name},{" "}
+                        {f.delivery_method === "paczkomat"
+                          ? `Paczkomat ${f.paczkomat_code} (InPost)`
+                          : `${f.recipient_address_line}, ${f.recipient_postal_code} ${f.recipient_city}`}
                         {f.recipient_phone ? ` · tel. ${f.recipient_phone}` : ""}
+                        {typeof f.shipping_cost_cents === "number" ? ` · koszt ${(f.shipping_cost_cents / 100).toFixed(2).replace(".", ",")} zł` : ""}
                       </div>
                     )}
                     {f.notes && <div className="mt-1 text-[12px] text-text-mute italic line-clamp-2">„{f.notes}"</div>}

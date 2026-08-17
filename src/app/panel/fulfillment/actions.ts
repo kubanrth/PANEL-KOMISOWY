@@ -1,6 +1,7 @@
 "use server";
 
 import { POSTAL_RE } from "@/lib/format";
+import { FULFILLMENT_COSTS, type DeliveryMethod } from "./costs";
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -60,6 +61,8 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
   let recipientPostal: string | null = null;
   let recipientCity: string | null = null;
   let carrier: string | null = null;
+  let deliveryMethod: DeliveryMethod | null = null;
+  let paczkomatCode: string | null = null;
 
   if (requestType === "label_provided") {
     const file = formData.get("label");
@@ -78,20 +81,37 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
     labelExt = ext;
   } else {
     recipientName = String(formData.get("recipient_name") || "").trim() || null;
-    recipientAddress = String(formData.get("recipient_address_line") || "").trim() || null;
-    recipientCity = String(formData.get("recipient_city") || "").trim() || null;
-    const postal = String(formData.get("recipient_postal_code") || "").trim();
-    if (!recipientName || !recipientAddress || !recipientCity) {
-      return { ok: false, error: "Uzupełnij dane odbiorcy: imię i nazwisko, adres oraz miasto." };
-    }
-    if (!POSTAL_RE.test(postal)) return { ok: false, error: "Kod pocztowy w formacie 00-000." };
-    recipientPostal = postal;
     recipientPhone = String(formData.get("recipient_phone") || "").trim() || null;
-    const carrierRaw = String(formData.get("carrier") || "");
-    if (carrierRaw && !(CARRIERS as readonly string[]).includes(carrierRaw)) {
-      return { ok: false, error: "Nieznany przewoźnik. Dostępne: DPD, InPost, DHL, UPS." };
+    const dm = String(formData.get("delivery_method") || "courier");
+    if (dm !== "courier" && dm !== "paczkomat") return { ok: false, error: "Nieznana metoda dostawy." };
+    deliveryMethod = dm;
+    if (!recipientName) return { ok: false, error: "Podaj imię i nazwisko odbiorcy." };
+
+    if (dm === "paczkomat") {
+      paczkomatCode = String(formData.get("paczkomat_code") || "").trim().toUpperCase() || null;
+      // Kod maszyny InPost: 2-5 liter miasta + cyfry + opcjonalna litera (np. WAW123A, KRA05M).
+      if (!paczkomatCode || !/^[A-Z]{2,5}\d{2,5}[A-Z]{0,2}$/.test(paczkomatCode)) {
+        return { ok: false, error: "Podaj poprawny kod paczkomatu (np. WAW123A)." };
+      }
+      if (!recipientPhone) return { ok: false, error: "Paczkomat wymaga telefonu odbiorcy (kod odbioru SMS)." };
+      carrier = "InPost";
+    } else {
+      recipientAddress = String(formData.get("recipient_address_line") || "").trim() || null;
+      recipientCity = String(formData.get("recipient_city") || "").trim() || null;
+      const postal = String(formData.get("recipient_postal_code") || "").trim();
+      if (!recipientAddress || !recipientCity) {
+        return { ok: false, error: "Uzupełnij dane odbiorcy: adres oraz miasto." };
+      }
+      if (!POSTAL_RE.test(postal)) return { ok: false, error: "Kod pocztowy w formacie 00-000." };
+      recipientPostal = postal;
     }
-    carrier = carrierRaw || null;
+    if (dm === "courier") {
+      const carrierRaw = String(formData.get("carrier") || "");
+      if (carrierRaw && !(CARRIERS as readonly string[]).includes(carrierRaw)) {
+        return { ok: false, error: "Nieznany przewoźnik. Dostępne: DPD, InPost, DHL, UPS." };
+      }
+      carrier = carrierRaw || null;
+    }
   }
 
   // --- 2. Własność + stan produktów (RLS też filtruje, ale sprawdzamy jawnie) ---
@@ -180,6 +200,11 @@ export async function requestFulfillment(formData: FormData): Promise<Fulfillmen
     recipient_postal_code: recipientPostal,
     recipient_city: recipientCity,
     carrier,
+    delivery_method: deliveryMethod,
+    paczkomat_code: paczkomatCode,
+    // Koszt widoczny dla komisanta od momentu zlecenia (cennik w costs.ts).
+    shipping_cost_cents:
+      requestType === "label_provided" ? FULFILLMENT_COSTS.label_provided : FULFILLMENT_COSTS[deliveryMethod ?? "courier"],
     notes,
     requested_by: user.id,
   }));
