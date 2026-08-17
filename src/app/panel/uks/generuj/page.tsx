@@ -15,9 +15,15 @@ import type { Product } from "@/lib/types";
 // Dane kupującego (komis) — te same co na etykiecie nadania.
 const BUYER = ["Kickback sp. z o. o.", "ul. Postępu 14", "02-676 Warszawa"];
 
-export default async function GenerujUksPage(props: { searchParams: Promise<{ product?: string }> }) {
-  const { product: productId } = await props.searchParams;
-  if (!productId) redirect("/panel/uks");
+export default async function GenerujUksPage(props: { searchParams: Promise<{ product?: string; products?: string }> }) {
+  const sp = await props.searchParams;
+  // Jedna umowa na wiele pozycji: ?products=id1,id2 (legacy: ?product=id).
+  const ids = (sp.products ?? sp.product ?? "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter((x) => /^[0-9a-f-]{36}$/i.test(x))
+    .slice(0, 50);
+  if (ids.length === 0) redirect("/panel/uks");
 
   const supabase = await createClient();
   const user = await getSessionUser();
@@ -25,13 +31,14 @@ export default async function GenerujUksPage(props: { searchParams: Promise<{ pr
   const profile = await getOwnProfile();
   if (!profile?.onboarded_at) redirect("/onboarding");
 
-  // RLS zawęża do produktów klienta — cudzy id da 404, nie wyciek.
-  const { data: product } = await supabase
+  // RLS zawęża do produktów klienta — cudze id po prostu nie wrócą.
+  type Row = Pick<Product, "id" | "brand" | "model" | "size" | "sku" | "condition" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "submission_id">;
+  const { data: productsRaw } = await supabase
     .from("products")
     .select("id, brand, model, size, sku, condition, status, listing_price_cents, expected_price_cents, sold_at, submission_id")
-    .eq("id", productId)
-    .maybeSingle<Pick<Product, "id" | "brand" | "model" | "size" | "sku" | "condition" | "status" | "listing_price_cents" | "expected_price_cents" | "sold_at" | "submission_id">>();
-  if (!product) notFound();
+    .in("id", ids);
+  const items = (productsRaw ?? []) as Row[];
+  if (items.length === 0) notFound();
 
   const { data: fullProfile } = await supabase
     .from("profiles")
@@ -39,7 +46,8 @@ export default async function GenerujUksPage(props: { searchParams: Promise<{ pr
     .eq("id", user.id)
     .maybeSingle();
 
-  const price = product.listing_price_cents ?? product.expected_price_cents ?? 0;
+  const priceOf = (p: Row) => p.listing_price_cents ?? p.expected_price_cents ?? 0;
+  const total = items.reduce((a, p) => a + priceOf(p), 0);
   const sellerName = fullProfile?.account_type === "business" && fullProfile.company_name
     ? fullProfile.company_name
     : [fullProfile?.first_name, fullProfile?.last_name].filter(Boolean).join(" ") || "—";
@@ -48,14 +56,16 @@ export default async function GenerujUksPage(props: { searchParams: Promise<{ pr
   const sellerId = fullProfile?.account_type === "business"
     ? (fullProfile?.nip ? `NIP: ${fullProfile.nip}` : null)
     : (fullProfile?.pesel_or_id ? `PESEL / nr dok.: ${fullProfile.pesel_or_id}` : null);
-  const docDate = product.sold_at ?? new Date().toISOString();
-  const docNo = `UKS/${product.sku}`;
+  const docDate = items[0].sold_at ?? new Date().toISOString();
+  const docNo = items.length === 1 ? `UKS/${items[0].sku}` : `UKS/${items[0].sku}+${items.length - 1}`;
 
   return (
     <>
       <div className="print:hidden">
         <PageHeader
-          label={`${product.sku} · ${product.brand} ${product.model}`}
+          label={items.length === 1
+            ? `${items[0].sku} · ${items[0].brand} ${items[0].model}`
+            : `${items.length} pozycji · łącznie ${formatPLN(total, { decimals: false })}`}
           title="Umowa Kupna-Sprzedaży"
           sub="Wydrukuj dokument, podpisz i wgraj skan w zakładce UKS. Dane stron i przedmiotu uzupełniliśmy z panelu."
         />
@@ -99,19 +109,36 @@ export default async function GenerujUksPage(props: { searchParams: Promise<{ pr
           <div className="mt-8">
             <div className="text-[10px] uppercase tracking-[0.18em] text-black/50">§1 · Przedmiot umowy</div>
             <p className="mt-2">
-              Sprzedający przenosi na Kupującego własność rzeczy używanej:{" "}
-              <strong>{product.brand} {product.model}</strong>
-              {product.size ? <>, rozmiar <strong>{product.size}</strong></> : null}
-              {product.condition ? <>, stan <strong>{product.condition}/10</strong></> : null}
-              {" "}(nr kat. <span style={{ fontFamily: "monospace" }}>{product.sku}</span>),
-              a Kupujący rzecz tę nabywa za cenę określoną w §2.
+              Sprzedający przenosi na Kupującego własność następujących rzeczy używanych,
+              a Kupujący rzeczy te nabywa za cenę określoną w §2:
             </p>
+            <table className="mt-3 w-full text-[12px]" style={{ borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  {["Lp.", "Przedmiot", "Rozmiar", "Stan", "Nr kat.", "Cena"].map((h, i) => (
+                    <th key={h} className="border border-black/30 px-2 py-1.5 font-semibold" style={{ textAlign: i >= 5 ? "right" : "left" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((p, i) => (
+                  <tr key={p.id}>
+                    <td className="border border-black/30 px-2 py-1.5">{i + 1}</td>
+                    <td className="border border-black/30 px-2 py-1.5"><strong>{p.brand} {p.model}</strong></td>
+                    <td className="border border-black/30 px-2 py-1.5">{p.size ?? "—"}</td>
+                    <td className="border border-black/30 px-2 py-1.5">{p.condition ? `${p.condition}/10` : "—"}</td>
+                    <td className="border border-black/30 px-2 py-1.5" style={{ fontFamily: "monospace" }}>{p.sku}</td>
+                    <td className="border border-black/30 px-2 py-1.5" style={{ textAlign: "right" }}>{formatPLN(priceOf(p))}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className="mt-6">
             <div className="text-[10px] uppercase tracking-[0.18em] text-black/50">§2 · Cena</div>
             <p className="mt-2">
-              Cena sprzedaży wynosi <strong>{formatPLN(price)}</strong> (słownie: ……………………………………………………).
+              Łączna cena sprzedaży wynosi <strong>{formatPLN(total)}</strong> (słownie: ……………………………………………………).
               Zapłata nastąpi przelewem na rachunek Sprzedającego wskazany w umowie komisowej.
             </p>
           </div>

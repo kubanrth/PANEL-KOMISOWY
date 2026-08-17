@@ -7,6 +7,7 @@ import { Select } from "@/components/ui/Select";
 import { Pill, ProductStatusPill } from "@/components/panel/StatusPill";
 import { formatPLN, plural, POSTAL_RE } from "@/lib/format";
 import { requestFulfillment } from "./actions";
+import { FULFILLMENT_COSTS, type DeliveryMethod } from "./costs";
 
 export type FulfillmentProduct = {
   id: string;
@@ -44,6 +45,8 @@ export function FulfillmentRequestForm({
     setLabelFile(null);
   };
   const [recipient, setRecipient] = useState({ name: "", address: "", postal: "", city: "" });
+  const [delivery, setDelivery] = useState<DeliveryMethod>("courier");
+  const [paczkomat, setPaczkomat] = useState("");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -61,10 +64,12 @@ export function FulfillmentRequestForm({
   const modeValid =
     mode === "label_provided"
       ? labelFile != null && labelFile.size <= MAX_LABEL_BYTES
-      : recipient.name.trim() !== "" &&
-        recipient.address.trim() !== "" &&
-        POSTAL_RE.test(recipient.postal) &&
-        recipient.city.trim() !== "";
+      : delivery === "paczkomat"
+        ? recipient.name.trim() !== "" && paczkomat.trim().length >= 5
+        : recipient.name.trim() !== "" &&
+          recipient.address.trim() !== "" &&
+          POSTAL_RE.test(recipient.postal) &&
+          recipient.city.trim() !== "";
   const canSubmit = count > 0 && modeValid && !pending;
 
   function submit(formData: FormData) {
@@ -72,6 +77,10 @@ export function FulfillmentRequestForm({
     setSuccess(false);
     formData.set("product_ids", Array.from(selected).join(","));
     formData.set("request_type", mode);
+    if (mode === "generate_label") {
+      formData.set("delivery_method", delivery);
+      if (delivery === "paczkomat") formData.set("paczkomat_code", paczkomat.trim().toUpperCase());
+    }
     startTransition(async () => {
       const res = await requestFulfillment(formData);
       if (!res.ok) {
@@ -214,6 +223,25 @@ export function FulfillmentRequestForm({
           </label>
         ) : (
           <div className="mt-4 card p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Metoda dostawy */}
+            <div className="md:col-span-2 flex flex-wrap gap-2">
+              {([
+                ["courier", "Kurier na adres", FULFILLMENT_COSTS.courier],
+                ["paczkomat", "Paczkomat InPost", FULFILLMENT_COSTS.paczkomat],
+              ] as Array<[DeliveryMethod, string, number]>).map(([m, label, cost]) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setDelivery(m)}
+                  aria-pressed={delivery === m}
+                  className={`inline-flex items-center gap-2 h-10 px-4 rounded-full text-[13px] font-medium border transition-colors active:scale-[.98] ${
+                    delivery === m ? "border-lime/40 bg-lime/10 text-lime" : "border-border bg-surface text-text-soft hover:text-text hover:bg-surface-2"
+                  }`}
+                >
+                  {label} <span className="num opacity-70">{formatPLN(cost)}</span>
+                </button>
+              ))}
+            </div>
             <div>
               <label className="input-label" htmlFor="ff-name">Imię i nazwisko odbiorcy</label>
               <input
@@ -227,15 +255,35 @@ export function FulfillmentRequestForm({
               />
             </div>
             <div>
-              <label className="input-label" htmlFor="ff-phone">Telefon (opcjonalnie)</label>
+              <label className="input-label" htmlFor="ff-phone">
+                Telefon {delivery === "paczkomat" ? "(kod odbioru SMS)" : "(opcjonalnie)"}
+              </label>
               <input
                 id="ff-phone"
                 name="recipient_phone"
                 type="tel"
                 className="input"
                 placeholder="+48 600 000 000"
+                required={delivery === "paczkomat"}
               />
             </div>
+            {delivery === "paczkomat" && (
+              <div className="md:col-span-2">
+                <label className="input-label" htmlFor="ff-paczkomat">Kod paczkomatu</label>
+                <input
+                  id="ff-paczkomat"
+                  className="input"
+                  placeholder="WAW123A"
+                  required
+                  value={paczkomat}
+                  onChange={(e) => setPaczkomat(e.target.value)}
+                />
+                <div className="mt-1 text-[12px] text-text-mute">
+                  Znajdziesz go na <a href="https://inpost.pl/znajdz-paczkomat" target="_blank" rel="noreferrer" className="text-lime hover:underline">mapie InPost</a>.
+                </div>
+              </div>
+            )}
+            {delivery === "courier" && (<>
             <div className="md:col-span-2">
               <label className="input-label" htmlFor="ff-address">Adres (ulica i numer)</label>
               <input
@@ -286,6 +334,7 @@ export function FulfillmentRequestForm({
                 <option value="UPS">UPS</option>
               </Select>
             </div>
+            </>)}
           </div>
         )}
       </div>
@@ -316,7 +365,17 @@ export function FulfillmentRequestForm({
         </div>
       )}
 
-      <div className="flex items-center justify-end">
+      {/* Koszt po stronie komisanta — zawsze widoczny przed zleceniem */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="text-[13px] text-text-soft">
+          Koszt wysyłki:{" "}
+          <span className="num font-medium text-text">
+            {formatPLN(mode === "label_provided" ? FULFILLMENT_COSTS.label_provided : FULFILLMENT_COSTS[delivery])}
+          </span>
+          {mode === "label_provided"
+            ? " — nadajesz własną etykietą, my tylko pakujemy."
+            : " — potrącimy z Twojej najbliższej wypłaty."}
+        </div>
         <button type="submit" disabled={!canSubmit} className="btn-primary h-12 px-7 text-[14px]">
           {pending ? "Wysyłanie…" : `Zleć wysyłkę (${count})`}
         </button>

@@ -23,6 +23,7 @@ export type PayoutRow = {
 
 export function PayoutPicker({ rows, isBusiness }: { rows: PayoutRow[]; isBusiness: boolean }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [uksNr, setUksNr] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
@@ -105,10 +106,30 @@ export function PayoutPicker({ rows, isBusiness }: { rows: PayoutRow[]; isBusine
               </>
             ) : (
               <>
-                Zlecenie wygeneruje <span className="font-medium text-text">UKS (Umowę Kupna-Sprzedaży)</span> za zaznaczone pozycje —
+                Rozliczenie: <span className="font-medium text-text">UKS (Umowa Kupna-Sprzedaży)</span> za zaznaczone pozycje —
                 podpiszesz ją w zakładce <Link href="/panel/uks" className="text-lime hover:underline">UKS</Link>.
               </>
             )}
+            {/* Alternatywa: gotowa UKS zamiast faktury / auto-generowania */}
+            <div className="mt-2.5 pt-2.5 border-t border-blue/15 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span className="text-text-mute">Masz już UKS?</span>
+              <Link
+                href={`/panel/uks/generuj?products=${Array.from(selected).join(",")}`}
+                className="text-lime hover:underline"
+              >
+                Wygeneruj dla zaznaczonych →
+              </Link>
+              <Link href="/panel/uks" className="text-lime hover:underline">Wgraj podpisaną →</Link>
+              <label className="inline-flex items-center gap-2">
+                <span className="text-text-mute">albo nr UKS:</span>
+                <input
+                  value={uksNr}
+                  onChange={(e) => setUksNr(e.target.value)}
+                  placeholder="UKS/KCB-26-…"
+                  className="input !h-8 !py-0 text-[12px] w-[180px]"
+                />
+              </label>
+            </div>
           </div>
         )}
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -129,7 +150,7 @@ export function PayoutPicker({ rows, isBusiness }: { rows: PayoutRow[]; isBusine
             disabled={selected.size === 0 || pending}
             onClick={() =>
               start(async () => {
-                const res = await requestPayoutForProducts(Array.from(selected));
+                const res = await requestPayoutForProducts(Array.from(selected), uksNr);
                 if (res.ok) {
                   setSelected(new Set());
                   setMsg({ ok: true, text: "Wypłata zlecona — czeka na autoryzację Kickback." });

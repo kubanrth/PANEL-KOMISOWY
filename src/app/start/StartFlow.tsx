@@ -34,7 +34,7 @@ const emptyProduct = (): ProductForm => ({
   size: "",
   condition: 9,
   description: "",
-  pricingMode: "commission",
+  pricingMode: "payout",
   expectedPrice: "",
   minPrice: "",
   payoutPrice: "",
@@ -77,7 +77,7 @@ export function StartFlow({ accountType: _accountType }: { accountType: "individ
     const mapped: ProductForm[] = rows.map((r) => ({
       ...emptyProduct(),
       brand: r.brand, model: r.model, category: r.category, size: r.size,
-      condition: r.condition, expectedPrice: r.expectedPrice, minPrice: r.minPrice,
+      condition: r.condition, payoutPrice: r.price,
       description: r.description,
     }));
     setProducts((prev) => {
@@ -342,20 +342,20 @@ function ProductCard({
 
       <div className="grid grid-cols-12 gap-4">
         <Field className="col-span-12 md:col-span-7" label="Marka *">
-          <input className="input" placeholder="Maison Margiela" value={product.brand}
+          <input className="input" placeholder="Nike" value={product.brand}
             onChange={(e) => onChange({ brand: e.target.value })} />
         </Field>
         <Field className="col-span-12 md:col-span-5" label="Kategoria">
-          <input className="input" placeholder="Obuwie · Loafers" value={product.category}
+          <input className="input" placeholder="Koszulka" value={product.category}
             onChange={(e) => onChange({ category: e.target.value })} />
         </Field>
 
         <Field className="col-span-12 md:col-span-7" label="Model *">
-          <input className="input" placeholder="Tabi (Replica)" value={product.model}
+          <input className="input" placeholder="Manchester United Home 1999" value={product.model}
             onChange={(e) => onChange({ model: e.target.value })} />
         </Field>
         <Field className="col-span-6 md:col-span-3" label="Rozmiar">
-          <input className="input" placeholder="EU 42" value={product.size}
+          <input className="input" placeholder="L" value={product.size}
             onChange={(e) => onChange({ size: e.target.value })} />
         </Field>
         <Field className="col-span-6 md:col-span-2" label="Stan *">
@@ -383,13 +383,13 @@ function ProductCard({
           </>
         ) : (
           <>
-            <Field className="col-span-12 md:col-span-6" label="Chcę otrzymać * (zł)">
-              <input className="input" placeholder="3 000" value={product.payoutPrice}
+            <Field className="col-span-12 md:col-span-6" label="Kwota dla Ciebie * (zł)">
+              <input className="input" placeholder="1 600" value={product.payoutPrice}
                 onChange={(e) => onChange({ payoutPrice: e.target.value })} />
             </Field>
             <div className="col-span-12 md:col-span-6 self-end text-[12px] text-text-mute leading-[1.5] pb-2">
-              Sprzedajemy za dowolną cenę powyżej tej kwoty.
-              Marża Kickback = cena sprzedaży − Twoja wypłata.
+              Tyle otrzymasz, jeśli zaakceptujemy tę pozycję na etapie oferty.
+              Cenę sprzedaży ustala Kickback.
             </div>
           </>
         )}

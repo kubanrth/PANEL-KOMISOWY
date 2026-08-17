@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate, formatPLN } from "@/lib/format";
 import { UksUploadForm } from "./UksUploadForm";
+import { UksGeneratePicker } from "./UksGeneratePicker";
 import type { AppDocument, Product } from "@/lib/types";
 
 export default async function UksPage() {
@@ -61,20 +62,15 @@ export default async function UksPage() {
               Brak sprzedanych pozycji — UKS generuje się dla sprzedaży.
             </div>
           ) : (
-            <div className="space-y-1.5 max-h-[280px] overflow-y-auto no-scrollbar">
-              {sold.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/panel/uks/generuj?product=${p.id}`}
-                  className="flex items-center justify-between gap-3 px-3.5 h-11 rounded-[11px] text-[13px] hover:bg-surface-2/60 transition-colors"
-                >
-                  <span className="truncate">{p.brand} · {p.model}{p.size ? ` · ${p.size}` : ""}</span>
-                  <span className="num text-text-mute flex-shrink-0">
-                    {formatPLN(p.listing_price_cents ?? p.expected_price_cents ?? 0, { decimals: false })} →
-                  </span>
-                </Link>
-              ))}
-            </div>
+            <UksGeneratePicker
+              items={sold.map((p) => ({
+                id: p.id,
+                brand: p.brand,
+                model: p.model,
+                size: p.size,
+                price_cents: p.listing_price_cents ?? p.expected_price_cents ?? 0,
+              }))}
+            />
           )}
         </div>
       </section>
